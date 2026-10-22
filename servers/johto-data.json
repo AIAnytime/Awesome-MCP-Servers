@@ -1,0 +1,8 @@
+{
+  "name": "Johto Data",
+  "url": "https://johto-x402-api.johtodata.workers.dev/llms.txt",
+  "category": "finance",
+  "transport": "http",
+  "description": "Pay-per-call business data for agents: one $0.011 `tenders` call returns 40 fresh tender and contract notices across EU, UK, France and Australia, and `sanctions-screen` checks OFAC SDN and UK lists for $0.0025 per call, plus SEC 8-K/13F and Japan invoice checks. No account or API key: `tools/list` and every `sample:true` call are free, paid calls settle over x402 (USDC on Base). Endpoint: `https://johto-x402-api.johtodata.workers.dev/mcp` · [OpenAPI](https://johto-x402-api.johtodata.workers.dev/openapi.json)",
+  "endpoint": "https://johto-x402-api.johtodata.workers.dev/mcp"
+}
