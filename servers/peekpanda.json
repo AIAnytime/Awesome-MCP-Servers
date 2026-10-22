@@ -1,0 +1,8 @@
+{
+  "name": "PeekPanda",
+  "url": "https://github.com/fdarkaou/peekpanda-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "iOS competitor intelligence: Meta ads, App Store keyword rankings and viral content for any iOS app. Requires a PeekPanda account (OAuth or API key). Endpoint: `https://mcp.peekpanda.com/mcp` · [Docs](https://peekpanda.com/docs/mcp)",
+  "endpoint": "https://mcp.peekpanda.com/mcp"
+}
