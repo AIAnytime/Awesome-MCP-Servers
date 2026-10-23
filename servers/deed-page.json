@@ -1,0 +1,8 @@
+{
+  "name": "deed.page",
+  "url": "https://deed.page/docs",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Static hosting for agents: publish an HTML file or static folder to a permanent public URL, then update it in place with the returned owner token. Free plan with no account or API key. Endpoint: `https://deed.page/mcp` · [Skill](https://github.com/f-o-x11/deed-page-skill)",
+  "endpoint": "https://deed.page/mcp"
+}
