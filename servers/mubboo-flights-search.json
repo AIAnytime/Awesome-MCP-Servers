@@ -1,0 +1,9 @@
+{
+  "name": "Mubboo Flights Search",
+  "url": "https://github.com/Mubboo-Ai/mubboo-flights-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Free, no-key airport lookup, trip-input validation and ready-to-open flight-search links into a travel comparison website covering 800+ airlines and 100+ booking sites, with options such as Booking.com, Trip.com, Expedia and Agoda depending on route, dates and market. MCP tools: `find_airports`, `prepare_flight_search`, `get_service_info`; no live fares, availability, booking or payments.",
+  "endpoint": "https://mubboo.flights/api/mcp",
+  "registry": "flights.mubboo/flight-search"
+}

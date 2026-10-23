@@ -1,0 +1,9 @@
+{
+  "name": "Expiry Watch",
+  "url": "https://boringutils.com/expiry-watch#mcp",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Read-only TLS certificate and domain-registration expiry checks for public hostnames, without an account or API key. Endpoint: `https://boringutils.com/api/mcp`",
+  "endpoint": "https://boringutils.com/api/mcp",
+  "registry": "io.github.hal-boring-utils/expiry-watch"
+}
