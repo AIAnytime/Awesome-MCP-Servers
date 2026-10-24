@@ -1,0 +1,7 @@
+{
+  "name": "toolkb-mcp",
+  "url": "https://github.com/jack-reson8/toolkb-mcp",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Local server that turns YouTube videos and playlists (transcripts with timestamps), web pages (main content as Markdown) and App Store reviews into text for the model; no API key or account. Install: `npx -y github:jack-reson8/toolkb-mcp`"
+}
