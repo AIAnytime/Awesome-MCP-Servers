@@ -1,0 +1,127 @@
+{
+ "server": "Datacircle",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "list_apis",
+   "title": "List the GTM APIs",
+   "description": "The GTM APIs on Datacircle's sheet, each with how many plans and providers it has. Pass an API's name to search_plans.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_plans",
+   "title": "Search the API plans",
+   "description": "The sheet's rows, one for each plan of each call, each with every key of the sheet's JSON download: its provider, plan, billing, $ per 1,000 (perThousand), score out of 100 (score), rate limits, speed, the fields it returns and the pages we read it from. total counts every row found, plans holds up to limit of them from offset. What each key means: https://datacircle.dev/fields",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "api": {
+      "type": "string",
+      "enum": [
+       "Employee profile",
+       "Cached employee profile",
+       "Person enrichment",
+       "Employee lookalikes",
+       "Employee recommendations",
+       "Employee search",
+       "Cached employee search",
+       "People search",
+       "Cached people search",
+       "Employee email",
+       "Cached employee email",
+       "Email validation",
+       "Cached email validation",
+       "Reverse email lookup",
+       "Cached reverse email lookup",
+       "Employee phone",
+       "Cached employee phone",
+       "Phone validation",
+       "Cached phone validation",
+       "Company profile",
+       "Cached company profile",
+       "Company enrichment",
+       "Cached company enrichment",
+       "Company technologies",
+       "Cached company technologies",
+       "Company hierarchy",
+       "Company search",
+       "Cached company search",
+       "Company discovery",
+       "Cached company discovery",
+       "Company lookalikes",
+       "Job search",
+       "Cached job search",
+       "Job postings",
+       "Cached job postings",
+       "Job details",
+       "Job posting details",
+       "Job lookalikes",
+       "Company jobs",
+       "Company job count",
+       "Leadership changes",
+       "Cached leadership changes",
+       "Post search",
+       "Post details",
+       "Employee posts",
+       "Cached employee posts",
+       "Employee articles",
+       "Company posts",
+       "Cached company posts",
+       "Post comments",
+       "Post reactions",
+       "Post reposts",
+       "Employee comments",
+       "Employee reactions",
+       "Company headcount",
+       "Cached company headcount",
+       "Company funding",
+       "Cached company funding"
+      ],
+      "description": "The API, its name as list_apis gives it. Every API when left out."
+     },
+     "query": {
+      "type": "string",
+      "description": "Words that must all appear in the provider's or plan's name, ignoring case and accents."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "score",
+       "provider",
+       "price"
+      ],
+      "description": "score, the default: best first, as on the sheet at datacircle.dev, each API's plans together, unscored plans last. provider: A to Z. price: $ per 1,000, lowest first."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "How many plans to give, 1 to 50. 10 when left out."
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "How many found plans to skip first. 0 when left out."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

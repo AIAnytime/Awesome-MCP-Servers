@@ -1,0 +1,897 @@
+{
+ "server": "Growo child growth",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "birth_size_percentile",
+   "title": "Size at birth for gestational age",
+   "description": "Where a birth measurement sits on the Olsen 2010 intrauterine curves, for the number of completed weeks of pregnancy. This answers a different question from the growth charts: not how a child grows over time, but how big they were on the day they were born given how long the pregnancy ran. A 2.2 kg baby at 34 weeks and a 2.2 kg baby at 40 weeks are not the same situation, and the WHO charts cannot tell them apart. Returns the percentile, the z-score and the SGA/AGA/LGA category, which is a statistical classification and not a diagnosis.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "measure",
+     "sex",
+     "gestationalWeeks",
+     "value"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "measure": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "length",
+       "head"
+      ],
+      "description": "Birth weight, birth length, or head circumference at birth."
+     },
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "Biological sex, as the growth charts are published separately for each."
+     },
+     "gestationalWeeks": {
+      "type": "integer",
+      "minimum": 23,
+      "maximum": 41,
+      "description": "Completed weeks of pregnancy at delivery, 23-41. Use the obstetric gestational age, not corrected age."
+     },
+     "value": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "The measurement. Birth weight in GRAMS (3400, not 3.4) as the published tables and delivery rooms both quote it; length and head circumference in centimetres."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "bmi_percentile",
+   "title": "BMI-for-age percentile",
+   "description": "Computes BMI from weight and height, then places it on the BMI-for-age chart for the child's sex and age: the WHO standards under 24 months, the CDC 2000 growth charts from 24 months to 240 months (20 years), the split the CDC advises. From 24 months the result also carries the CDC percentile range it falls in (below the 5th, 5th to below the 85th, 85th to below the 95th, 95th and above). BMI in childhood is read against age and sex, never against the adult 18.5–25 bands. Same functions and tables as the child BMI calculator on usegrowo.com. Returns no interpretation.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "sex",
+     "ageMonths",
+     "weightKg",
+     "heightCm"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "Biological sex, as the growth charts are published separately for each."
+     },
+     "ageMonths": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 240,
+      "description": "Age in months, 0 to 240 (20 years). Use age since birth; WHO is read below 24 months, CDC from 24."
+     },
+     "weightKg": {
+      "type": "number",
+      "minimum": 2,
+      "maximum": 150,
+      "description": "Weight in kg, 2 to 150."
+     },
+     "heightCm": {
+      "type": "number",
+      "minimum": 45,
+      "maximum": 200,
+      "description": "Height or length in cm, 45 to 200."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "child_age",
+   "title": "A child's exact age",
+   "description": "The exact calendar age from a birth date: whole years, months and leftover days, plus the total in months, weeks and days. Use it for 'how old is my baby in months', 'age in weeks' and for turning a birth date into an age in months. This is the age since birth, not the age corrected for prematurity. Dates are YYYY-MM-DD.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "birthDate"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "birthDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of birth, YYYY-MM-DD."
+     },
+     "asOf": {
+      "type": "string",
+      "format": "date",
+      "description": "Date to calculate on, YYYY-MM-DD. Defaults to today in UTC; pass the user's own date to avoid being a day off near midnight."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "convert_measurement",
+   "title": "Convert a baby's weight or length between units",
+   "description": "Converts a weight (kg, g, lb, oz) or a length (cm, m, in, ft) to every common unit, so a measurement quoted in pounds and ounces or feet and inches can go into the growth tools, which take kg and cm. For '7 lb 4 oz' pass value 7, unit lb, extra 4; for '2 ft 3 in' pass value 2, unit ft, extra 3.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "kind",
+     "value",
+     "unit"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "length"
+      ],
+      "description": "weight or length."
+     },
+     "value": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The number in the given unit."
+     },
+     "unit": {
+      "type": "string",
+      "enum": [
+       "kg",
+       "g",
+       "lb",
+       "oz",
+       "cm",
+       "m",
+       "in",
+       "ft"
+      ],
+      "description": "kg, g, lb, oz for weight; cm, m, in, ft for length."
+     },
+     "extra": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Ounces to add when unit is lb, or inches to add when unit is ft."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "corrected_age",
+   "title": "Corrected (adjusted) age for a premature baby",
+   "description": "The corrected age of a baby born before 37 weeks: the age since birth minus the weeks the baby was early. Use it for 'what is my preemie's corrected / adjusted age', for reading milestones, and for choosing the age at which to plot growth. Takes the birth date and the gestational age at birth and returns the corrected age, the age since birth, the original due date, and the date by which correction usually stops (about 24 months since birth). Before the due date there is no corrected age, and the result says how many days remain. A baby born at 37 weeks or later needs no correction. Dates are calendar dates (YYYY-MM-DD).",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "birthDate",
+     "gestationalWeeks"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "birthDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of birth, YYYY-MM-DD."
+     },
+     "gestationalWeeks": {
+      "type": "integer",
+      "minimum": 22,
+      "maximum": 42,
+      "description": "Completed weeks of pregnancy at birth. A baby born at 32 weeks and 3 days: 32."
+     },
+     "gestationalDays": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 6,
+      "default": 0,
+      "description": "Extra days beyond the completed weeks. A baby born at 32 weeks and 3 days: 3."
+     },
+     "asOf": {
+      "type": "string",
+      "format": "date",
+      "description": "The date to calculate the age on, YYYY-MM-DD. Defaults to today in UTC; pass the user's own date to avoid being a day off near midnight."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "development_milestones",
+   "title": "Motor milestones for an age",
+   "description": "WHO motor-development windows that are open, already closed or not yet due at a given age, plus the nearest CDC well-child checkpoint months. Windows are 1st–99th percentile ranges from the WHO Motor Development Study — a child inside a window is within the normal range.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "ageMonths"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "ageMonths": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Age in months. Use corrected age for a preterm infant.",
+      "maximum": 60
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "fetch",
+   "title": "Read a Growo article or calculator page",
+   "description": "Retrieve the full text (Markdown) of a Growo article or calculator page by the id that search returned. The result includes the page url.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "An id from search, which is the page path (for example /insights/preterm-baby-growth-corrected-age)."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "growth_percentile",
+   "title": "Growth percentile",
+   "description": "Where one measurement of a child sits on the WHO or CDC growth reference chart. Returns the percentile, the z-score and the 3rd/15th/50th/85th/97th percentile values at that age, using the same LMS tables as the calculator on usegrowo.com. Returns no interpretation.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "metric",
+     "sex",
+     "ageMonths",
+     "value"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "metric": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "height",
+       "head",
+       "bmi"
+      ],
+      "description": "weight (kg), height/length (cm), head circumference (cm) or BMI (kg/m²)."
+     },
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "Biological sex, as the growth charts are published separately for each."
+     },
+     "ageMonths": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Age in months. Use corrected age for a preterm infant."
+     },
+     "value": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "The measurement, in metric units: kg for weight, cm for height and head."
+     },
+     "standard": {
+      "type": "string",
+      "enum": [
+       "who",
+       "cdc"
+      ],
+      "default": "who",
+      "description": "Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "growth_reference_range",
+   "title": "Growth reference range",
+   "description": "The 3rd/15th/50th/85th/97th percentile values for a given age and sex — the reference band itself, with no child's measurement involved. Use this to answer 'what is normal for this age'.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "metric",
+     "sex",
+     "ageMonths"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "metric": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "height",
+       "head",
+       "bmi"
+      ]
+     },
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "Biological sex, as the growth charts are published separately for each."
+     },
+     "ageMonths": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Age in months. Use corrected age for a preterm infant."
+     },
+     "standard": {
+      "type": "string",
+      "enum": [
+       "who",
+       "cdc"
+      ],
+      "default": "who",
+      "description": "Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "growth_trend",
+   "title": "Change between two measurements",
+   "description": "What moved between two measurements of the same child: the percentile and z-score at each point, how far the position shifted, and how many of the drawn 3rd/15th/50th/85th/97th lines were crossed. Band crossings are the unit that matters — one is common while a child settles onto their own curve, two downward is the pattern clinicians review. NOT a velocity percentile: WHO's separate Growth Velocity Standards are not implemented here, so this reports movement across the attained-growth chart and never claims a percentile for the rate of gain itself.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "metric",
+     "sex",
+     "from",
+     "to"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "metric": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "height",
+       "head",
+       "bmi"
+      ]
+     },
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "Biological sex, as the growth charts are published separately for each."
+     },
+     "standard": {
+      "type": "string",
+      "enum": [
+       "who",
+       "cdc"
+      ],
+      "default": "who",
+      "description": "Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5."
+     },
+     "from": {
+      "type": "object",
+      "required": [
+       "ageMonths",
+       "value"
+      ],
+      "additionalProperties": false,
+      "description": "The earlier measurement.",
+      "properties": {
+       "ageMonths": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Age in months. Use corrected age for a preterm infant."
+       },
+       "value": {
+        "type": "number",
+        "exclusiveMinimum": 0
+       }
+      }
+     },
+     "to": {
+      "type": "object",
+      "required": [
+       "ageMonths",
+       "value"
+      ],
+      "additionalProperties": false,
+      "description": "The later measurement. Its age must be greater than the first.",
+      "properties": {
+       "ageMonths": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Age in months. Use corrected age for a preterm infant."
+       },
+       "value": {
+        "type": "number",
+        "exclusiveMinimum": 0
+       }
+      }
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "growth_velocity",
+   "title": "Growth velocity between two measurements",
+   "description": "How fast a child grew between two measurements: the change, and the rate per day, per week and per 30 days. Use it for 'how many grams a day is my baby gaining' and 'how many cm did my child grow'. Weight in grams, length and head circumference in centimetres, dates as YYYY-MM-DD. It states the rate and does not compare it with a reference.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "metric",
+     "firstValue",
+     "firstDate",
+     "secondValue",
+     "secondDate"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "metric": {
+      "type": "string",
+      "enum": [
+       "weight",
+       "length",
+       "head"
+      ],
+      "description": "weight (grams), length (cm) or head circumference (cm)."
+     },
+     "firstValue": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "The earlier measurement."
+     },
+     "firstDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the earlier measurement, YYYY-MM-DD."
+     },
+     "secondValue": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "The later measurement."
+     },
+     "secondDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the later measurement, YYYY-MM-DD."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "newborn_weight_change",
+   "title": "Change from birth weight",
+   "description": "How far a baby's weight is from the birth weight: the change in grams and in percent, and whether the baby is back at or above birth weight. Use it for 'how much weight has my newborn lost', 'newborn weight loss percentage' and 'has my baby regained birth weight'. It is arithmetic on two numbers and does not say whether the change is expected. Grams only: 3400, not 3.4.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "birthWeightG",
+     "currentWeightG"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "birthWeightG": {
+      "type": "number",
+      "minimum": 300,
+      "maximum": 7000,
+      "description": "Birth weight in grams."
+     },
+     "currentWeightG": {
+      "type": "number",
+      "minimum": 300,
+      "maximum": 12000,
+      "description": "The later weight in grams."
+     },
+     "ageDays": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 365,
+      "description": "Optional: the baby's age in days at the later weight, echoed back."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ponderal_index",
+   "title": "Ponderal index",
+   "description": "The ponderal index (Rohrer's index) from weight and length: 100 x weight in grams / length in cm cubed, with the same quantity in kg per cubic metre. It is a newborn proportion measure; BMI-for-age is the usual measure for older children. It returns the number and does not place it against a range.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "weightKg",
+     "lengthCm"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "weightKg": {
+      "type": "number",
+      "minimum": 0.3,
+      "maximum": 20,
+      "description": "Weight in kilograms."
+     },
+     "lengthCm": {
+      "type": "number",
+      "minimum": 25,
+      "maximum": 120,
+      "description": "Length (lying) or height in centimetres."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search",
+   "title": "Search Growo's articles and calculators",
+   "description": "Search Growo's physician-written articles and calculators on baby and child growth, percentiles, growth charts, premature babies (corrected age), head circumference, sleep, feeding and development. Returns a short list of results, each with an id, a title and the page URL. Each id can be read in full with fetch. The articles are educational and not medical advice.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "What to look for, in plain words (e.g. 'baby dropped percentiles', 'corrected age premature')."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr",
+       "es",
+       "fr",
+       "de",
+       "pt",
+       "ar",
+       "hi",
+       "bn",
+       "ur",
+       "id",
+       "ru",
+       "ja",
+       "ko",
+       "zh",
+       "vi",
+       "fa"
+      ],
+      "default": "en",
+      "description": "Language of the pages to search. Not every article exists in every language."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 8,
+      "description": "Maximum number of results."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "target_height",
+   "title": "Mid-parental (target) height",
+   "description": "The adult height a child is expected to reach, estimated from both parents' heights with Tanner's mid-parental method: (mother + father +13 cm for a boy, -13 cm for a girl) / 2, with a range of 8.5 cm either side. Use it for 'how tall will my child be', 'mid-parental height' and 'child height predictor' questions. It is a statistical range, not a forecast for one child, and says nothing about the child's height today. Optionally, with the child's age (24-240 months) and current height, it adds a CDC projection: today's z-score on the CDC 2000 stature-for-age chart carried to age 20, with a range of one standard deviation either side; a height more than 5 SD from the CDC median for the age is refused as an entry error. Centimetres only: convert feet and inches first (5 ft 10 in = 177.8 cm).",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "sex",
+     "motherHeightCm",
+     "fatherHeightCm"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "sex": {
+      "type": "string",
+      "enum": [
+       "boy",
+       "girl"
+      ],
+      "description": "The child's sex: the formula adds or subtracts 13 cm accordingly."
+     },
+     "motherHeightCm": {
+      "type": "number",
+      "minimum": 120,
+      "maximum": 230,
+      "description": "Mother's height in centimetres."
+     },
+     "fatherHeightCm": {
+      "type": "number",
+      "minimum": 120,
+      "maximum": 230,
+      "description": "Father's height in centimetres."
+     },
+     "childAgeMonths": {
+      "type": "number",
+      "minimum": 24,
+      "maximum": 240,
+      "description": "Optional, with childHeightCm: the child's age in months (2 to 20 years), for the CDC projection."
+     },
+     "childHeightCm": {
+      "type": "number",
+      "minimum": 60,
+      "maximum": 210,
+      "description": "Optional, with childAgeMonths: the child's current height in centimetres, measured standing."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "zscore_percentile",
+   "title": "Convert between a z-score and a percentile",
+   "description": "Converts a z-score (standard deviations from the median) to a percentile and a percentile to a z-score on the normal curve, the relationship growth charts use. Pass exactly one of zScore or percentile. It converts the number and does not say what it means for a child.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "zScore": {
+      "type": "number",
+      "minimum": -8,
+      "maximum": 8,
+      "description": "A z-score; returns the percentile."
+     },
+     "percentile": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 100,
+      "description": "A percentile; returns the z-score."
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "en",
+       "tr"
+      ],
+      "default": "en",
+      "description": "Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "prompts": [
+  {
+   "name": "check_growth_percentile",
+   "title": "Where is my child on the growth chart?",
+   "description": "Place a child's weight, height or head circumference on the WHO or CDC chart."
+  },
+  {
+   "name": "corrected_age_for_premature_baby",
+   "title": "Corrected age for a premature baby",
+   "description": "The corrected (adjusted) age of a baby born before 37 weeks."
+  },
+  {
+   "name": "expected_adult_height",
+   "title": "How tall will my child be?",
+   "description": "The mid-parental (Tanner) estimate of adult height with its range."
+  },
+  {
+   "name": "change_between_two_measurements",
+   "title": "What changed between two measurements?",
+   "description": "Percentile movement and growth rate between two dated measurements."
+  }
+ ]
+}

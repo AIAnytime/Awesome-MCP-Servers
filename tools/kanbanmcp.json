@@ -1,0 +1,2017 @@
+{
+ "server": "KanbanMCP",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "block",
+   "title": "Block a card",
+   "description": "Ends your run because you cannot continue, with a typed reason. The card leaves Running and your claim ends. Use it only for something outside your control. A card that does not suit you is for release. For a failed verify command, use kind verify_failed with command and output: the card returns to Ready.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "dependency",
+       "needs_input",
+       "capability",
+       "transient",
+       "auth",
+       "waiting",
+       "verify_failed"
+      ],
+      "description": "Why you cannot continue."
+     },
+     "reason": {
+      "type": "string",
+      "description": "Say it for the next reader. Include no secrets. Needed unless verify_failed."
+     },
+     "question": {
+      "type": "string",
+      "description": "The question. Needed with needs_input."
+     },
+     "options": {
+      "type": "array",
+      "description": "For needs_input: 2 to 6 answers, as in raise. Mark your advice. None means Approve or Decline.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "id": {
+         "type": "string"
+        },
+        "label": {
+         "type": "string"
+        },
+        "detail": {
+         "type": "string"
+        },
+        "recommended": {
+         "type": "boolean"
+        }
+       },
+       "required": [
+        "label"
+       ]
+      }
+     },
+     "until": {
+      "type": "string",
+      "description": "A time (ISO) when the card comes back to you."
+     },
+     "on": {
+      "type": "string",
+      "description": "For waiting: the card to wait for."
+     },
+     "command": {
+      "type": "string",
+      "description": "For verify_failed: the command that ran."
+     },
+     "output": {
+      "type": "string",
+      "description": "For verify_failed: what it printed. Strip secrets first."
+     },
+     "runId": {
+      "type": "string",
+      "description": "Run id from claim_next."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId",
+     "kind"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "claim_next",
+   "title": "Claim the next card",
+   "description": "Claims the next Ready card for you, starts a run and moves the card to Running. Pass cardId to work one exact card. Add peek to check first, with no claim, and reading true to hold a card while you read it. With no filter, a call takes the next Ready card that is yours or unassigned. A card assigned to another persona never comes to you. state review claims a card waiting in Review, and the card then shows Reviewing. If you start sub-agents, give each one its own runtimeHandle.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": "string",
+      "description": "Work this one card: a number like ABC-12, or an id. The filters are ignored."
+     },
+     "cardIds": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Cards to claim as one batch. Send more to add to it."
+     },
+     "batchTitle": {
+      "type": "string",
+      "description": "With cardIds: a batch title."
+     },
+     "efforts": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "With cardIds: card to low, medium or high, if unset."
+     },
+     "reading": {
+      "type": "boolean",
+      "description": "With cardId: a reading claim. The card does not move."
+     },
+     "labels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Only cards with any of these labels."
+     },
+     "state": {
+      "type": "string",
+      "description": "ready (the default) or review."
+     },
+     "column": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "assignee": {
+      "type": "string",
+      "description": "me (only yours), a persona name, none (unassigned only) or any."
+     },
+     "effort": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "low, medium, high or none (no effort set): any of these."
+     },
+     "minPriority": {
+      "type": "number",
+      "description": "Only cards with at least this priority."
+     },
+     "exclude": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Cards to skip, by id or number."
+     },
+     "peek": {
+      "type": "boolean",
+      "description": "Claim nothing; show the result."
+     },
+     "acknowledgeOverlap": {
+      "type": "boolean",
+      "description": "Claim a card whose files overlap a running card."
+     },
+     "runtimeHandle": {
+      "type": "string",
+      "description": "A short name for this agent or sub-agent. Use a different one for each sub-agent."
+     },
+     "context": {
+      "type": "string",
+      "enum": [
+       "full"
+      ],
+      "description": "Pass full to get every piece of context again."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "comment",
+   "title": "Comment on a card",
+   "description": "Adds a comment to a card's thread, or several with comments; to read a card first, claim it with claim_next, cardId and reading true. To ask a teammate, write @ and the persona's name; a plain name notifies nobody. At three agent comments in a row, stop and leave it to a person. Write short. Use 20 words or fewer in a sentence. Put the result first, then the reason, then what you need.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "body": {
+      "type": "string",
+      "description": "The comment. @name notifies a person or persona."
+     },
+     "idempotencyKey": {
+      "type": "string",
+      "description": "The same key again adds one comment. Items in comments take it too."
+     },
+     "runId": {
+      "type": "string",
+      "description": "Run id from claim_next."
+     },
+     "verdict": {
+      "type": "string",
+      "enum": [
+       "approve",
+       "approve_with_changes",
+       "reject"
+      ],
+      "description": "Your review result. Send it on the comment that ends a review of a card in Review. Everyone who looks at the card sees it."
+     },
+     "comments": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "description": "Several comments: each has cardId and body. An item may take verdict."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "complete",
+   "title": "Finish a card with a handoff",
+   "description": "Ends your run with a handoff. The card moves to Done. It goes to Review when a question on it still waits for a person. It also goes to Review when the board needs a person's sign-off and your persona may not mark work done. Your claim ends. In a batch it ends that card only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "summary": {
+      "type": "string",
+      "description": "What you did and why, including options you ruled out."
+     },
+     "metadata": {
+      "type": "object",
+      "description": "The handoff: files_changed, verification (what you ran and saw), residual_risk (text, or \"none\").",
+      "properties": {
+       "files_changed": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "verification": {
+        "type": "string"
+       },
+       "residual_risk": {
+        "type": "string"
+       }
+      }
+     },
+     "done": {
+      "type": "boolean",
+      "description": "Mark it Done. Only has an effect where a person signs off."
+     },
+     "changes": {
+      "type": "boolean",
+      "description": "On a claim from Review: send the card back to Ready. summary gives the steps."
+     },
+     "prUrl": {
+      "type": "string",
+      "description": "Pull request URL (https), saved on the card you hold."
+     },
+     "runId": {
+      "type": "string",
+      "description": "Run id from claim_next."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId",
+     "summary",
+     "metadata"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_board",
+   "title": "Create a board",
+   "description": "Create a new board in the workspace. The board gets the default columns and is private.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "The board's name."
+     },
+     "slug": {
+      "type": "string",
+      "description": "The address part. Chosen from the name when left out."
+     }
+    },
+    "required": [
+     "name"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_card",
+   "title": "Create a card",
+   "description": "Creates a card with all its fields in one call. Pass copyFrom to copy another card. Pass cards to create several at once. It lands in Triage unless you pass state or column. Each card counts toward the plan's limit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string"
+     },
+     "body": {
+      "type": "string",
+      "description": "The description (markdown)."
+     },
+     "acceptance": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "What done means. Null clears it."
+     },
+     "verifyCommand": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "The command that proves it."
+     },
+     "priority": {
+      "type": "number",
+      "description": "3 urgent, 2 high, 1 normal, 0 low."
+     },
+     "assignee": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A persona name. Null clears it."
+     },
+     "owner": {
+      "type": "string",
+      "description": "A person (name or id) to own a card with no owner."
+     },
+     "ownerNote": {
+      "type": "string",
+      "description": "Why, for that person."
+     },
+     "tenant": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A group, such as a client."
+     },
+     "effort": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "low, medium or high."
+     },
+     "estimate": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "XS, S, M, L or XL. Needs the board's estimates setting."
+     },
+     "labels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "The whole set. addLabels and removeLabels change some."
+     },
+     "addLabels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "removeLabels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "dueAt": {
+      "type": [
+       "string",
+       "number",
+       "null"
+      ],
+      "description": "A due date. Needs the board's due dates setting."
+     },
+     "snoozeUntil": {
+      "type": [
+       "string",
+       "number",
+       "null"
+      ],
+      "description": "Hide the card until this date. Null clears it."
+     },
+     "park": {
+      "type": "boolean",
+      "description": "With snoozeUntil: park in Snoozed. Default true."
+     },
+     "checklist": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "description": "The whole checklist: {text, done} items."
+     },
+     "modelHint": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A model the work suits."
+     },
+     "workspaceHint": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "Where the work happens."
+     },
+     "touchPaths": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Files it will touch."
+     },
+     "skillPins": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Skills to load first."
+     },
+     "branch": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "prUrl": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "The pull request (https)."
+     },
+     "expedite": {
+      "type": "boolean",
+      "description": "Let the card pass the WIP cap and be claimed first."
+     },
+     "recur": {
+      "type": [
+       "object",
+       "null"
+      ],
+      "description": "Repeat the card: every (daily, weekly, monthly), at, to. Null stops it."
+     },
+     "goalMode": {
+      "type": "boolean",
+      "description": "Keep going until the acceptance criteria hold."
+     },
+     "maxTurns": {
+      "type": [
+       "number",
+       "null"
+      ],
+      "description": "Turns in goal mode. Null clears it."
+     },
+     "maxRuntimeMs": {
+      "type": [
+       "number",
+       "null"
+      ],
+      "description": "Longest run in milliseconds. Null clears it."
+     },
+     "circuitLimit": {
+      "type": "number",
+      "description": "Failures that stop claims of the card."
+     },
+     "state": {
+      "type": "string",
+      "description": "later, triage, todo, ready, running, blocked, review or done."
+     },
+     "column": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "idempotencyKey": {
+      "type": "string",
+      "description": "The same key again returns the same card."
+     },
+     "parents": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Cards that must finish first, by number or key."
+     },
+     "comment": {
+      "type": "string",
+      "description": "An opening comment. @name notifies."
+     },
+     "copyFrom": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "A card to copy. Fields you pass replace its."
+     },
+     "unique": {
+      "type": "boolean",
+      "description": "Refuse if a similar card exists."
+     },
+     "claim": {
+      "type": "boolean",
+      "description": "Take the new card in the same call. The reply is the claim."
+     },
+     "verbose": {
+      "type": "boolean",
+      "description": "Return the whole card."
+     },
+     "cards": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "description": "Several cards: each takes the fields above."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_column",
+   "title": "Delete a column",
+   "description": "Remove a column. If it holds cards, name another column to receive them.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "columnId": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "into": {
+      "type": "string",
+      "description": "The column that receives its cards. Needed when it holds any."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "columnId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "edit_column",
+   "title": "Add or edit a column",
+   "description": "Adds a column, or changes one. Without columnId it adds one at the end: pass state, which tells agents what its cards mean. With columnId it renames the column, moves it, or both. A column's state never changes.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "columnId": {
+      "type": "string",
+      "description": "The column to change, by id. Leave it out to add a column."
+     },
+     "state": {
+      "type": "string",
+      "description": "later, triage, todo, ready, running, blocked, review or done."
+     },
+     "label": {
+      "type": "string",
+      "description": "The label. Blank gives the state's name."
+     },
+     "position": {
+      "type": "number",
+      "description": "Place in the board order, from 0. Left out when adding, the column goes last."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "events_since",
+   "title": "Read recent activity",
+   "description": "Reads board activity after a cursor. Call it between steps to see what changed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cursor": {
+      "type": "number",
+      "description": "The last event id you saw. Default 0."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_cards",
+   "title": "Find cards",
+   "description": "Finds cards on one board. Leave out boardId to search every board you reach. It gives one short row per card, with no description or comments.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Words to find, and tokens: priority: (urgent, high, normal, low), effort: (high, medium, low, none), label:. Repeat priority: or effort: to match any."
+     },
+     "state": {
+      "type": "string",
+      "description": "later, triage, todo, ready, running, blocked, review or done."
+     },
+     "column": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "label": {
+      "type": "string"
+     },
+     "assignee": {
+      "type": "string",
+      "description": "A persona name, me or none."
+     },
+     "owner": {
+      "type": "string",
+      "description": "A person's name or id, me or none."
+     },
+     "updatedSince": {
+      "type": "number",
+      "description": "Only cards active since this time (ms)."
+     },
+     "commentedBy": {
+      "type": "string",
+      "description": "A persona name or me."
+     },
+     "notCommentedBy": {
+      "type": "string",
+      "description": "A persona name or me."
+     },
+     "hasComments": {
+      "type": "boolean"
+     },
+     "mentionsMe": {
+      "type": "boolean",
+      "description": "Only cards with an unread mention of you."
+     },
+     "unansweredQuestion": {
+      "type": "boolean",
+      "description": "Only cards with an open question."
+     },
+     "quiet": {
+      "type": "boolean",
+      "description": "Only claims whose agent went quiet."
+     },
+     "includeArchived": {
+      "type": "boolean"
+     },
+     "limit": {
+      "type": "number"
+     },
+     "cursor": {
+      "type": "string",
+      "description": "nextCursor from the last page."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "One board, by id or slug. Leave it out for every board."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_context",
+   "title": "Get your context",
+   "description": "Sends everything you work from again: the protocol, the workspace brief, this board's brief, your persona's brief and a digest of the rules. Call it after a context reset or compaction, in a new session, or when a heartbeat says contextChanged.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "runtimeHandle": {
+      "type": "string",
+      "description": "A short name for this agent or sub-agent. Use a different one for each sub-agent."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_setup",
+   "title": "Get set up",
+   "description": "Your first call on a new connection. It says what this connection can do and what exists: the boards you reach, who you act as, and which briefs are missing. It gives the steps to set yourself up and the questions to ask. Part \"rules\" returns the exact rule and skill to install. Part \"briefs\" returns how to write the briefs.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "part": {
+      "type": "string",
+      "description": "rules or briefs. Leave it out for the setup steps."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "The board the rules are for (id or slug), on a workspace link."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "heartbeat",
+   "title": "Check in on a claim",
+   "description": "Keeps your claim alive, a reading claim too. Call it about every 5 minutes. A comment with your runId counts too. A master agent sends heartbeat for each sub-agent's card, with that cardId and runtimeHandle. Pass busyFor before a long command, and checked, added and a one-line note to report progress. In a batch, one beat keeps every card.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "runId": {
+      "type": "string",
+      "description": "Run id from claim_next."
+     },
+     "runtimeHandle": {
+      "type": "string",
+      "description": "A short name for this agent or sub-agent. Use a different one for each sub-agent."
+     },
+     "busyFor": {
+      "type": "number",
+      "description": "Minutes a long command will take."
+     },
+     "checked": {
+      "type": "array",
+      "items": {
+       "type": [
+        "string",
+        "number"
+       ]
+      },
+      "description": "Checklist items you finished: positions (from 1) or texts."
+     },
+     "added": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "New checklist items."
+     },
+     "note": {
+      "type": "string",
+      "description": "One line on your progress."
+     },
+     "prUrl": {
+      "type": "string",
+      "description": "Pull request URL (https), saved on the card you hold."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "inbox",
+   "title": "Read your inbox",
+   "description": "Reads what waits for you: answers to your questions, and comments that @mention you or your personas. Marks both as seen. Call it when an attention note says so, or to search what was already decided.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "since": {
+      "type": "number",
+      "description": "Only answers after this time (milliseconds)."
+     },
+     "query": {
+      "type": "string",
+      "description": "Words that must appear in the question or the answer."
+     },
+     "days": {
+      "type": "number",
+      "description": "Only answers and mentions from the last N days."
+     },
+     "mine": {
+      "type": "boolean",
+      "description": "Only answers to what you raised or the cards you hold."
+     },
+     "all": {
+      "type": "boolean",
+      "description": "Include mentions you have already seen."
+     },
+     "limit": {
+      "type": "number",
+      "description": "How many answers and mentions to return."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "label",
+   "title": "Change a label",
+   "description": "Changes a label on every card that carries it: delete, rename, merge into another label, or archive. Call it without confirm first. The answer says how many cards carry the label, and nothing changes. Change a label only when a person or your task asks you to. Never to tidy up. To apply, pass confirm true and a short reason.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "enum": [
+       "delete",
+       "rename",
+       "merge",
+       "archive"
+      ],
+      "description": "What to do to the label."
+     },
+     "name": {
+      "type": "string",
+      "description": "The label."
+     },
+     "into": {
+      "type": "string",
+      "description": "Merge target, or the new name for rename."
+     },
+     "confirm": {
+      "type": "boolean",
+      "description": "Apply it. Left out, nothing changes."
+     },
+     "reason": {
+      "type": "string",
+      "description": "Why, in one line. Needed with confirm."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "action",
+     "name"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "link",
+   "title": "Link or unlink two cards",
+   "description": "Makes one card the blocking parent of another. The child waits until the parent reaches Done. Pass remove true to take the link away again.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "parentId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "childId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "remove": {
+      "type": "boolean",
+      "description": "True removes the link. Left out, it adds one."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "parentId",
+     "childId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_boards",
+   "title": "List boards",
+   "description": "Lists the boards this connection reaches, with each board's id, slug, columns and card counts. Read-only.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "move_card",
+   "title": "Move a card",
+   "description": "Moves a card to a state or to an exact column. Pass summary with a move to Ready to send the card back for changes. Pass clearWait to let agents claim the card again now.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "state": {
+      "type": "string",
+      "description": "later, triage, todo, ready, running, blocked, review or done."
+     },
+     "column": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "columnId": {
+      "type": "string",
+      "description": "A column, by id or label."
+     },
+     "confirm": {
+      "type": "boolean",
+      "description": "Needed to move a card into Done or Blocked."
+     },
+     "summary": {
+      "type": "string",
+      "description": "With a move to Ready: send the card back for changes, and say what to change."
+     },
+     "clearWait": {
+      "type": "boolean",
+      "description": "Let agents claim the card again now. Clears its saved pull request link and its wait. With no state or column, it moves nothing."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "promote",
+   "title": "Turn a question into a card",
+   "description": "Turns a raised signal into a Triage card and marks the signal resolved.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "signalId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "The question's id."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "signalId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "raise",
+   "title": "Raise a question or note",
+   "description": "Files a signal: assumption (the default), question, concern, rule proposal, deferred or observation. Only blocking parks your card: keep it for a choice you cannot undo. Offer options only with type question, and mark your advice. If you are sure, act and finish the card. If not, ask a teammate in a comment with @name. Use raise only when a person must decide.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "assumption, question, concern, rule (a rule proposal), deferred or observation. Default assumption, or question when you send options."
+     },
+     "severity": {
+      "type": "string",
+      "enum": [
+       "info",
+       "low",
+       "normal",
+       "high"
+      ],
+      "description": "How much it matters."
+     },
+     "title": {
+      "type": "string",
+      "description": "The question as one full sentence. A person reads this first."
+     },
+     "body": {
+      "type": "string",
+      "description": "The facts behind the question, in a few lines. Do not paste the card."
+     },
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "sessionId": {
+      "type": "string",
+      "description": "Groups the notes from one session."
+     },
+     "needsPerson": {
+      "type": "boolean",
+      "description": "Only a person may answer."
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "approval",
+       "open"
+      ],
+      "description": "approval: a yes or no from a person. Use it for every yes or no, so the person sees Approve and Decline. open: any answer. Default open."
+     },
+     "to": {
+      "type": "string",
+      "description": "The person to ask, by name or id."
+     },
+     "blocking": {
+      "type": "boolean",
+      "description": "Park your card until someone answers."
+     },
+     "options": {
+      "type": "array",
+      "description": "The answers you offer. Offer them for every choice. The person may still write their own.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "id": {
+         "type": "string",
+         "description": "Short id. Made from the label if left out."
+        },
+        "label": {
+         "type": "string",
+         "description": "Short text."
+        },
+        "detail": {
+         "type": "string",
+         "description": "Its cost."
+        },
+        "recommended": {
+         "type": "boolean",
+         "description": "Your advice. One at most."
+        }
+       },
+       "required": [
+        "label"
+       ]
+      }
+     },
+     "select": {
+      "type": "string",
+      "enum": [
+       "one",
+       "many"
+      ],
+      "description": "one: single. many: several. Default one."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "severity",
+     "title"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "release",
+   "title": "Hand a card back",
+   "description": "Ends a reading claim, or hands back a card you hold when it does not suit you, or not now. It goes back where it was and counts for nothing. You do not get it again, unless you pass until. In a batch it hands back that card only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "reason": {
+      "type": "string",
+      "description": "Why it does not suit you. Include no secrets."
+     },
+     "to": {
+      "type": "string",
+      "description": "A persona that may suit it; it is mentioned in a comment."
+     },
+     "until": {
+      "type": "string",
+      "description": "A time (ISO) when the card comes back to you."
+     },
+     "effort": {
+      "type": "string",
+      "enum": [
+       "low",
+       "medium",
+       "high"
+      ],
+      "description": "The effort the card needs, so a stronger agent takes it."
+     },
+     "runId": {
+      "type": "string",
+      "description": "Run id from claim_next."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "request_review",
+   "title": "Send a card to review",
+   "description": "Ends your run and sends the card to Review for a person to check, whatever the board's Done rules are. Takes the same handoff as complete. It clears the assignee. Pass reviewer to name who reviews.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "summary": {
+      "type": "string",
+      "description": "What you did and why, and what to check."
+     },
+     "metadata": {
+      "type": "object",
+      "description": "The handoff: files_changed, verification (what you ran and saw), residual_risk (text, or \"none\").",
+      "properties": {
+       "files_changed": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "verification": {
+        "type": "string"
+       },
+       "residual_risk": {
+        "type": "string"
+       }
+      }
+     },
+     "reviewer": {
+      "type": "string",
+      "description": "Who should review it."
+     },
+     "owner": {
+      "type": "string",
+      "description": "A person (name or id) to own a card with no owner."
+     },
+     "ownerNote": {
+      "type": "string",
+      "description": "Why, for that person."
+     },
+     "column": {
+      "type": "string",
+      "description": "A Review column, by id or label."
+     },
+     "prUrl": {
+      "type": "string",
+      "description": "Pull request URL (https), saved on the card you hold."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId",
+     "summary",
+     "metadata"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "resolve",
+   "title": "Answer or close a question",
+   "description": "Closes a question. With answer, it answers a teammate's question when you know the answer. Without answer, it closes a question you raised, with a note, when you no longer need it answered. Only a person may close a question that has needsPerson. A card parked on it returns to Ready.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "signalId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "The question's id."
+     },
+     "answer": {
+      "type": "string",
+      "description": "The answer. Needs Worker. Leave it out to close your own question."
+     },
+     "note": {
+      "type": "string",
+      "description": "Without answer: why you no longer need an answer."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "signalId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "rules",
+   "title": "Check or report your rules",
+   "description": "Keeps your installed rules in step. With ruleId, it records where you installed a rule and its hash. Call it once per file after you install a rule from get_setup (part \"rules\"). Without ruleId, it tells you which rules you hold are stale. Pass their ids and hashes before you finish work or after a sync.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "ruleId": {
+      "type": "string",
+      "description": "The rule's id. Give it to record where you installed it."
+     },
+     "client": {
+      "type": "string",
+      "description": "Your tool's name."
+     },
+     "path": {
+      "type": "string",
+      "description": "Where you wrote it."
+     },
+     "hash": {
+      "type": "string",
+      "description": "The rule's hash, as delivered."
+     },
+     "rules": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "ruleId": {
+         "type": "string"
+        },
+        "hash": {
+         "type": "string"
+        }
+       }
+      },
+      "description": "Without ruleId: the rules you installed, id and hash."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_brief",
+   "title": "Set a brief",
+   "description": "Replaces a brief: this board's brief, or with scope workspace the workspace brief that every board's agents read. Use it only after the person sees the draft and says yes. How to write it: call get_setup with part \"briefs\".",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "scope": {
+      "type": "string",
+      "enum": [
+       "board",
+       "workspace"
+      ],
+      "description": "board (the default) or workspace."
+     },
+     "body": {
+      "type": "string",
+      "description": "The whole brief, in markdown. It replaces the old one."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "body"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "show",
+   "title": "Show a card",
+   "description": "Reads one card with its comments, questions and answers, prior runs and capacity. Read-only; it needs no claim or persona.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "commentsBefore": {
+      "type": "number",
+      "description": "Older comments: commentsBefore from an earlier answer."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "stop_run",
+   "title": "Stop a running claim",
+   "description": "Ends the active run on a card now. The claim ends and the card goes back to Ready. Use it when an agent is stuck, wrong, or must be cut off. In a batch it stops that card only; batch true stops all.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "batch": {
+      "type": "boolean",
+      "description": "Stop the whole batch. Left out, only this card stops."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "toggle_task",
+   "title": "Toggle a checklist item",
+   "description": "Flips a checklist item on a card between done and not done, or sets it to a given state. Pick the item by position or by text.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "index": {
+      "type": "number",
+      "description": "The item's position, from 1."
+     },
+     "text": {
+      "type": "string",
+      "description": "The item's text, instead of a position."
+     },
+     "done": {
+      "type": "boolean",
+      "description": "Set it to this instead of flipping it."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "undo",
+   "title": "Undo the last change to a card",
+   "description": "Reverts the card's latest recorded change. Calling it again redoes the change.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    },
+    "required": [
+     "cardId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "update_card",
+   "title": "Update a card",
+   "description": "Changes any of a card's fields in one call, and archives or restores it (archived). Fields you leave out stay as they are. Pass updates to change several cards at once. Pass checklist as {add, remove} to change items in place. To move a card use move_card. A field that changed since you read the card refuses the call: call show, then write again.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "cardId": {
+      "type": [
+       "string",
+       "number"
+      ],
+      "description": "Card id, number (12) or key (WEB-12)."
+     },
+     "title": {
+      "type": "string"
+     },
+     "body": {
+      "type": "string",
+      "description": "The description (markdown)."
+     },
+     "acceptance": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "What done means. Null clears it."
+     },
+     "verifyCommand": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "The command that proves it."
+     },
+     "priority": {
+      "type": "number",
+      "description": "3 urgent, 2 high, 1 normal, 0 low."
+     },
+     "assignee": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A persona name. Null clears it."
+     },
+     "owner": {
+      "type": "string",
+      "description": "A person (name or id) to own a card with no owner."
+     },
+     "ownerNote": {
+      "type": "string",
+      "description": "Why, for that person."
+     },
+     "tenant": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A group, such as a client."
+     },
+     "effort": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "low, medium or high."
+     },
+     "estimate": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "XS, S, M, L or XL. Needs the board's estimates setting."
+     },
+     "labels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "The whole set. addLabels and removeLabels change some."
+     },
+     "addLabels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "removeLabels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "dueAt": {
+      "type": [
+       "string",
+       "number",
+       "null"
+      ],
+      "description": "A due date. Needs the board's due dates setting."
+     },
+     "snoozeUntil": {
+      "type": [
+       "string",
+       "number",
+       "null"
+      ],
+      "description": "Hide the card until this date. Null clears it."
+     },
+     "park": {
+      "type": "boolean",
+      "description": "With snoozeUntil: park in Snoozed. Default true."
+     },
+     "checklist": {
+      "type": [
+       "array",
+       "object"
+      ],
+      "items": {
+       "type": "object"
+      },
+      "description": "An array replaces the list with {text, done} items. An object changes it: {add: [texts], remove: [positions from 1, or texts]}."
+     },
+     "modelHint": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "A model the work suits."
+     },
+     "workspaceHint": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "Where the work happens."
+     },
+     "touchPaths": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Files it will touch."
+     },
+     "skillPins": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Skills to load first."
+     },
+     "branch": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "prUrl": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "description": "The pull request (https)."
+     },
+     "expedite": {
+      "type": "boolean",
+      "description": "Let the card pass the WIP cap and be claimed first."
+     },
+     "recur": {
+      "type": [
+       "object",
+       "null"
+      ],
+      "description": "Repeat the card: every (daily, weekly, monthly), at, to. Null stops it."
+     },
+     "goalMode": {
+      "type": "boolean",
+      "description": "Keep going until the acceptance criteria hold."
+     },
+     "maxTurns": {
+      "type": [
+       "number",
+       "null"
+      ],
+      "description": "Turns in goal mode. Null clears it."
+     },
+     "maxRuntimeMs": {
+      "type": [
+       "number",
+       "null"
+      ],
+      "description": "Longest run in milliseconds. Null clears it."
+     },
+     "circuitLimit": {
+      "type": "number",
+      "description": "Failures that stop claims of the card."
+     },
+     "archived": {
+      "type": "boolean",
+      "description": "True archives, false restores."
+     },
+     "version": {
+      "type": "number",
+      "description": "The card version show gave you. Left out, this connection's last read counts."
+     },
+     "updates": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "description": "Several cards: each has cardId and the fields above."
+     },
+     "verbose": {
+      "type": "boolean",
+      "description": "Return the whole card."
+     },
+     "boardId": {
+      "type": "string",
+      "description": "Board id or slug."
+     },
+     "persona": {
+      "type": "string",
+      "description": "The persona to act as."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "update_persona",
+   "title": "Update a persona",
+   "description": "Changes one persona's name, title, description or brief. Use it only while you act as the person (leave persona out), who must be an owner or admin. A connection that acts as a persona cannot use it. Use it after the person sees the text and says yes. It never changes whether a persona may mark work done.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "description": "The persona to change: its name or id."
+     },
+     "name": {
+      "type": "string",
+      "description": "The new name."
+     },
+     "title": {
+      "type": "string",
+      "description": "The new title."
+     },
+     "description": {
+      "type": "string",
+      "description": "What the persona is for. Other agents read it in the team list."
+     },
+     "brief": {
+      "type": "string",
+      "description": "The whole new brief, in markdown. It replaces the old one."
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [],
+ "prompts": [
+  {
+   "name": "pull-work",
+   "description": "Claim the next card and work it through to a handoff."
+  },
+  {
+   "name": "sync-rules",
+   "description": "Install the board's rules the way your environment expects."
+  },
+  {
+   "name": "catch-up",
+   "description": "See what changed and what is waiting before you start."
+  },
+  {
+   "name": "plan",
+   "description": "Turn a request into cards. Does not start the work."
+  },
+  {
+   "name": "standup",
+   "description": "Summarize what changed on the board since the last session."
+  },
+  {
+   "name": "review",
+   "description": "Say whether a card is ready for a person to accept."
+  }
+ ]
+}

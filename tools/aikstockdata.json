@@ -1,0 +1,321 @@
+{
+ "server": "aikstockdata",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "get_data_urls",
+   "title": "공개 데이터 URL (Open data URLs)",
+   "description": "Direct URLs for every public dataset (JSON/CSV) — no signup, no API key. Call this BEFORE concluding something is unavailable: the tool list is not the extent of the data. Returns the endpoint catalog (quotes, disclosures, rankings, per-stock JSON, search index) plus the 30-trading-day dated archive with the exact dates held per pattern. Most AI fetch tools cut responses near 150 KB and a truncated JSON is unparseable — the catalog names a smaller alternative for every large file, so read that instead of guessing. | 전체 공개 데이터(JSON·CSV) 직링크 카탈로그 — 무가입·무키. **없다고 결론내기 전에 먼저 부르세요**: 도구 목록이 데이터의 전부가 아닙니다. 최근 30영업일 날짜별 아카이브(패턴별 보유 날짜 포함)도 함께 냅니다. 대부분의 AI 가 응답을 150KB 안팎에서 자르고 잘린 JSON 은 파싱되지 않습니다 — 큰 파일마다 소형 대체본이 카탈로그에 적혀 있으니 그쪽을 쓰세요.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_disclosure_impact",
+   "title": "공시 유형별 이후 주가 (Post-filing price path)",
+   "description": "Answers \"what usually happened after this kind of filing?\" — median MARKET-ADJUSTED return at +1/+5/+20 trading days per DART filing type (+20 only where that type has enough samples — see h20_status), with 95% intervals, sample window and n. A historical record, not a forecast. Coverage: every listed stock in the FSC price feed (no ETFs/ETNs); markets and counts are in index.json coverage and in each response footer. | \"이 공시 나오면 보통 어땠나\"에 답합니다 — 공시 유형별로 접수 이후 1·5·20거래일 뒤까지(20거래일은 표본이 찬 유형만) 시장 등락을 뺀 수익률 중앙값·95% 구간·표본기간. 과거 기록이며 예측·추천이 아닙니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "label": {
+      "type": "string",
+      "description": "filing type in Korean, e.g. 배당 결정 | 공시 유형(선택)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_disclosures",
+   "title": "공시 목록 (Disclosures with receipt times)",
+   "description": "Answers \"what was filed, and when exactly?\" — DART filings with RECEIPT TIME (HH:MM) and session (pre-open / intraday / after-close), filterable by date, type and importance. OpenDART's filing-list API returns the receipt date only; we add the HH:MM. About half of tracked filings arrive AFTER the close (daily counts: /data/public/press_owl_filings.csv), so that day's price move is not a reaction to them. date=today serves the 15:00 intraday collection (no importance scores yet); any other date serves the ranked list of the last 7 days. | \"무슨 공시가 몇 시에 났나\"에 답합니다 — 접수 시각(HH:MM)과 장 구분까지. 공개 공시 목록 API(OpenDART)는 접수 날짜까지만 줍니다 — 시:분은 저희가 모읍니다. 날짜·유형·중요도로 거를 수 있습니다. 추적 유형 기준 **절반 안팎이 장 마감 후** 접수라(날짜별은 press_owl_filings.csv) 그날 등락은 그 공시의 반응이 아닙니다. date=오늘이면 15:00 장중 수집본(아직 중요도 점수 없음), 다른 날짜면 최근 7일 상위 목록입니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "date": {
+      "type": "string",
+      "description": "YYYYMMDD (예: 20260910). \"today\" 도 받습니다 — 오늘(KST)로 풀어 장중 수집본을 줍니다. 생략하면 최근 7일 중요도 상위 목록입니다. | YYYYMMDD, or \"today\" for the intraday snapshot; omit for the last 7 days by importance."
+     },
+     "session": {
+      "type": "string",
+      "description": "pre_open | intraday | after_close"
+     },
+     "label": {
+      "type": "string",
+      "description": "공시 유형 부분일치(예: 배당, 자사주)"
+     },
+     "min_score": {
+      "type": "number",
+      "description": "중요도 점수 하한(장중 수집본에는 점수가 없습니다)"
+     },
+     "limit": {
+      "type": "number",
+      "description": "최대 건수(기본 20, 최대 100)"
+     },
+     "include_unlisted": {
+      "type": "boolean",
+      "description": "장중 수집본에서 비상장 법인·우리가 발행하지 않는 종목의 공시(채권 신고서 등)까지 볼지. 기본 false — 상장 종목(in_universe)만. | include filings of unlisted issuers in the intraday snapshot (default false)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_earnings",
+   "title": "잠정·정기 실적 (Quarterly earnings, incl. preliminary)",
+   "description": "Earnings from DART, INCLUDING preliminary (잠정) results filed ~2 weeks before the regular report. Each row says whether the figure is year-to-date cumulative or a single quarter. Pass a code for one stock's history, or omit it for the largest caps. get_stock shows the regular report and flags a newer preliminary filing when one exists; this tool gives the preliminary figures in full. | DART 실적 — 정기보고서보다 2주 빠른 잠정실적 포함. 행마다 누적인지 단독 분기인지 적습니다. code 를 주면 그 종목 이력, 생략하면 시총 상위. get_stock 은 정기보고서 수치에 더 최신 잠정실적이 있다는 표시를 붙이고, 잠정 수치 전체는 이 도구가 줍니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "6-digit ticker, optional | 6자리 종목코드(선택)"
+     },
+     "limit": {
+      "type": "number",
+      "description": "max rows, default 15 | 최대 건수(기본 15)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_earnings_calendar",
+   "title": "실적 캘린더 (Earnings calendar & new filings)",
+   "description": "Answers \"who has filed this quarter's results, who hasn't, and what came in since last time?\" — filed / not-yet lists against the statutory deadline, plus a diff of filings new since the previous publish. Built for stateless agents: polling this replaces a webhook. | \"누가 냈고 누가 아직인가 · 지난번 이후 새로 뜬 건 뭔가\"에 답합니다. 법정 마감 D-day 와 직전 발행 대비 신규 목록까지. 상태를 못 들고 다니는 에이전트를 위한 도구입니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "view": {
+      "type": "string",
+      "description": "summary(기본) | not_yet(미접수 목록) | filed(접수 목록) | new(직전 발행 이후 신규)"
+     },
+     "limit": {
+      "type": "number",
+      "description": "목록 최대 건수(기본 20, 최대 100)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_history",
+   "title": "종목 일별 시세 (Daily price history)",
+   "description": "Answers \"is this stock near its high or deep in a drawdown, and is volume unusual?\" — the stock's accumulated daily CLOSES, plus period high/low, drawdown from the high, and volume vs the 60-day average. Close-based (this history file carries daily closes only; the latest day's high/low is in the stock file), so it will differ from an HTS 52-week range. | \"전 구간 고점 대비 얼마나 빠졌나·거래량이 평소보다 많나\"에 답합니다 — 보유 구간 전체의 **종가 기준** 고저·낙폭·거래량 배수. 장중 고저가 아니라 HTS 52주 범위와 다를 수 있습니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "6-digit ticker | 6자리 종목코드"
+     },
+     "days": {
+      "type": "number",
+      "description": "recent N days to list, default 20, max 60 — for the full history read /data/public/s/{code}_history.json | 나열할 최근 일수(기본 20, **최대 60**. 전체 이력은 s/{code}_history.json)"
+     }
+    },
+    "required": [
+     "code"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_market_summary",
+   "title": "지수·등락 폭 (Index & breadth)",
+   "description": "Index levels (KOSPI/KOSDAQ close, change, %) and up/down breadth — nothing else. Prices are the previous session's T+1 settled close, never real-time. Index and breadth routinely disagree — the index is cap-weighted, breadth is one vote per stock — which is why both are returned; do not infer one from the other. For the full daily digest (disclosures, rankings, movers) use get_today(). | 지수와 등락 폭만 봅니다. 하루 전체 요약은 get_today(), 조건별 종목 목록은 list_stocks().",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_rankings",
+   "title": "랭킹 조회 (Rankings)",
+   "description": "Answers \"which stocks scored highest on measured DART financials?\" — kind='growth' is 성장 TOP8 (max 8 rows), kind='quiet' is 조용한 실적주. Scores come from a published formula over ACTUAL filed financials only — no prices, no analyst estimates. Mechanical, not stock picks. For 52-week high/low or turnaround LISTS use list_stocks(). | \"실측 재무로 점수가 높은 종목\"에 답합니다 — growth 는 최대 8건, quiet 는 조용한 실적주. 시세·전망치를 쓰지 않고 DART 실측 재무만 씁니다. 52주 신고저·흑자전환 목록은 list_stocks().",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "growth",
+       "quiet"
+      ],
+      "description": "'growth' (성장 TOP8) or 'quiet' (조용한 실적주)"
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Number of rows, 1-20 (default 8). | 반환 개수"
+     }
+    },
+    "required": [
+     "kind"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_stock",
+   "title": "종목 상세 (Stock detail)",
+   "description": "One Korean stock by 6-digit code: T+1 confirmed close & change, market cap, latest financials from the latest periodic report (revenue / operating income / net income, with YoY; Korean reports are cumulative year-to-date, so H1 = Jan-Jun, not Q2 alone), PER(TTM) and PBR computed from public filings, and ranking signals. Two as-of dates move independently — price (quote_as_of) and filings (disclosure_through); the response header carries both, do not merge them into one \"today\". null means not provided, never 0. Name → code: search_stock. Daily price history (accumulating): get_history. Filings with receipt times: get_disclosures. Screening a list: list_stocks. | 6자리 코드로 한 종목 — 확정 종가·등락·시총·최근 정기보고서 실적(전년비 · 반기는 1~6월 누적)·PER(TTM)·PBR·랭킹 신호. 기준일이 둘이고 따로 움직입니다(시세·공시) — 응답 머리말에 둘 다 실리니 하나로 합치지 마세요. null 은 '미제공'이며 0이 아닙니다. 이름으로 찾기는 search_stock, 일별 시세는 get_history, 접수 시각이 있는 공시는 get_disclosures, 조건 목록은 list_stocks.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "6-digit ticker as a STRING with leading zeros kept — '000020', not 20. e.g. '005930' (삼성전자). Unknown but well-formed code returns a short note (not an error); a malformed one tells you to use search_stock. | 6자리 종목코드 **문자열**(앞자리 0 유지 — '000020'을 20으로 읽으면 안 맞습니다). 형식이 맞는데 없는 코드면 오류가 아니라 안내를 돌려주고, 형식이 틀리면 search_stock 을 안내합니다."
+     }
+    },
+    "required": [
+     "code"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_today",
+   "title": "오늘의 시장 요약 (Today's market digest)",
+   "description": "Start here for \"how was the Korean market today?\" — index levels, breadth, 52-week high/low counts, top-3 disclosures, growth top-3, movers and disclosure-type counts in one call. Then drill down with get_stock / list_stocks / get_disclosures. Coverage: every listed stock in the FSC price feed (no ETFs/ETNs); markets and counts are in index.json coverage and in each response footer. | \"오늘 시장 어땠어?\"의 출발점 — 지수·등락 폭·주요 공시·성장 랭킹·등락률 상하위를 한 번에. 이어서 get_stock / list_stocks / get_disclosures 로 파고들면 됩니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_stocks",
+   "title": "조건으로 종목 목록 (Screen stocks by condition)",
+   "description": "Return the LIST of stocks matching a condition — turnaround to profit, 52-week high/low, growth or quiet-performer rankings — with optional market-cap range and a cap-to-operating-income multiple ceiling. Other tools give counts; this one gives the names. new_high/new_low return at most 30 names per side (the published list); the full count is in get_market_summary(). | 조건에 맞는 종목 목록을 돌려줍니다 — 흑자전환·52주 신고저·성장/조용한 실적주. 시총 범위와 시총÷연환산영업이익 배수 상한도 걸 수 있습니다. 다른 도구가 개수를 준다면 이건 목록을 줍니다. 52주 신고가·신저가는 발행 목록이 쪽마다 최대 30종목이고, 전체 수는 get_market_summary 가 줍니다.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filter": {
+      "type": "string",
+      "description": "turnaround(흑자전환) | new_high(52주 신고가) | new_low(52주 신저가) | growth(성장 TOP) | quiet(조용한 실적주) | all(전체). 기본 turnaround"
+     },
+     "max_multiple": {
+      "type": "number",
+      "description": "시총÷연환산영업이익 상한(예: 10). 영업이익 흑자 종목만 남습니다"
+     },
+     "min_cap_eok": {
+      "type": "number",
+      "description": "시가총액 하한(억원)"
+     },
+     "max_cap_eok": {
+      "type": "number",
+      "description": "시가총액 상한(억원)"
+     },
+     "sort": {
+      "type": "string",
+      "description": "cap(시총 큰 순, 기본) | multiple(배수 낮은 순) | change(등락률 높은 순) | turnover(거래대금 큰 순) | drawdown(낙폭 큰 순)"
+     },
+     "limit": {
+      "type": "number",
+      "description": "최대 건수(기본 20, 최대 100)"
+     },
+     "max_turnover_pctile": {
+      "type": "number",
+      "description": "거래대금 백분위 상한(0~100). 예: 30 이면 거래대금 하위 30% — 소외주"
+     },
+     "min_turnover_pctile": {
+      "type": "number",
+      "description": "거래대금 백분위 하한(0~100). 예: 70 이면 거래대금 상위 30%"
+     },
+     "min_drawdown_pct": {
+      "type": "number",
+      "description": "52주(최근 250거래일) 고점 대비 낙폭 하한(%, 양수로). 예: 30 이면 52주 최고 종가 대비 30% 이상 하락한 종목만. ★전 구간(상장 이후) 최대낙폭(MDD)과 다릅니다 — 그쪽은 /mdd 장입니다"
+     },
+     "max_drawdown_pct": {
+      "type": "number",
+      "description": "52주(최근 250거래일) 고점 대비 낙폭 상한(%, 양수로). 예: 10 이면 52주 고점 근처(10% 이내)만"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_stock",
+   "title": "종목 검색 (Search stocks)",
+   "description": "Find a ticker from part of the name — Korean or Latin, case-insensitive — or a 6-digit code, across every listed stock we publish (no ETFs; markets are named in the response footer). Korean readings of Latin names also match ('네이버' finds NAVER, '케이티' finds KT/KTis), and so do common Korean nicknames for large caps ('삼전' finds 삼성전자, '하닉' SK하이닉스). Large caps also match their official English name ('Samsung Electronics', 'SK hynix'; 'samsung' lists the Samsung group); smaller stocks need the Korean name. Up to 10 matches, market-cap sorted. | 이름 일부(한글·영문 모두, 대소문자 무시)나 6자리 코드로 찾습니다. 영문 이름의 한글 읽기('네이버'→NAVER, '케이티'→KT·KTis)와 흔한 줄임말('삼전'→삼성전자, '하닉'→SK하이닉스)도 매치됩니다. 대형주는 공식 영문 이름으로도 찾습니다('Samsung Electronics'·'SK hynix'). 그 밖의 종목은 한국어 이름으로 찾으세요. 수록 전 종목 · 시총순 최대 10건.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Stock name or code fragment, e.g. '삼성' or '005930'. | 종목명 또는 6자리 코드의 일부"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

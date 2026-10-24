@@ -1,0 +1,174 @@
+{
+ "server": "Whale Coupons",
+ "checked": "2026-10-20",
+ "tools": [
+  {
+   "name": "find_coupons",
+   "title": "Find coupon codes for a store",
+   "description": "Use this when the user wants a coupon, promo, discount or voucher code for a specific online store or brand, or shares a store's website or product page URL and asks about saving on it. Accepts a store name (\"Airwheel Luggage\"), a domain (\"airwheel-luggage.com\") or a full product URL. Returns up to 3 matching stores, each with the code, the discount, how to apply it, minimum order if any, an affiliate shop link and the Whale Coupons store page. If no store has that name the result says so (found=false); when the words describe a product, stores that sell it may be returned instead (match=\"product\"). Never invent or guess a code. Covers thousands of independent online stores, updated daily; large general marketplaces are not covered. For a product type rather than a store (e.g. \"headphones\") use search_stores. Do not use for price comparison, product reviews, order tracking or buying on the user's behalf.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "store": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300,
+      "description": "Store or brand name, website domain, or a product/store page URL, exactly as the user gave it. Examples: \"Saguaro Barefoot Shoes\", \"saguaro.com\", \"https://www.saguaro.com/products/...\". Do not add words like 'coupon' or 'code'."
+     }
+    },
+    "required": [
+     "store"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_store",
+   "title": "Get one store's coupon details",
+   "description": "Use this only when you already have a Whale Coupons store slug from an earlier result (the \"slug\" field, e.g. \"airwheel-luggage\") and need that store's full coupon details again. Returns the code, discount, how to apply it, minimum order if any, affiliate shop link and store page. For a store name, domain or URL use find_coupons instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Store slug exactly as returned in a previous result, e.g. \"airwheel-luggage\"."
+     }
+    },
+    "required": [
+     "slug"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_categories",
+   "title": "List store categories",
+   "description": "Use this when the user asks what kinds of stores or products Whale Coupons has codes for. Returns each category with its number of stores and its Whale Coupons page. Not needed before search_stores or list_largest_discounts, whose category parameter already lists the valid names.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_largest_discounts",
+   "title": "List the largest percentage discounts",
+   "description": "Use this when the user asks which stores have the biggest discounts or \"best deals\", optionally within a category (e.g. \"biggest beauty discounts\", \"codes for at least 30% off\"). Returns stores whose Whale Coupons code gives at least min_discount percent off, sorted from largest to smallest, with code, discount, how to apply it, affiliate shop link and store page. Fixed-amount discounts (e.g. $30 off) are not included because they can't be ranked by percentage. Do not use for a specific named store (use find_coupons).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "min_discount": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 15,
+      "description": "Minimum percentage off, 0-100. Default 15. Use the number the user mentions, e.g. 30 for 'at least 30% off'."
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "Automotive",
+       "Baby & kids",
+       "Beauty",
+       "Electronics",
+       "Fashion",
+       "Food & drink",
+       "Health & wellness",
+       "Home & kitchen",
+       "Learning",
+       "Other",
+       "Pets",
+       "Sports & outdoors",
+       "Toys & hobbies",
+       "Travel"
+      ],
+      "description": "Optional. Restrict results to one category."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25,
+      "default": 10,
+      "description": "Maximum number of stores to return (1-25)."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_stores",
+   "title": "Search stores with coupon codes",
+   "description": "Use this when the user wants discount codes for a kind of product or a shopping category rather than one named store, for example \"coupon for running shoes\", \"promo codes for skincare\", \"deals on coffee\" or \"discount codes for pet stores\". Matches store names and the products each store lists on its own site first, then other stores in the categories the product words point to (e.g. headphones -> Electronics), and returns up to 25 stores with their code, discount, how to apply it, affiliate shop link and store page. Give query, category, or both. If nothing matches, the result names a category to try. Do not use for one named store (use find_coupons) or for ranking by size of discount (use list_largest_discounts).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Product type, keyword or partial store name, e.g. \"running shoes\", \"skincare\", \"coffee\". Optional when category is given."
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "Automotive",
+       "Baby & kids",
+       "Beauty",
+       "Electronics",
+       "Fashion",
+       "Food & drink",
+       "Health & wellness",
+       "Home & kitchen",
+       "Learning",
+       "Other",
+       "Pets",
+       "Sports & outdoors",
+       "Toys & hobbies",
+       "Travel"
+      ],
+      "description": "Optional. Restrict results to one category."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25,
+      "default": 10,
+      "description": "Maximum number of stores to return (1-25)."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

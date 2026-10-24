@@ -1,0 +1,179 @@
+{
+ "server": "MEDIAPRONET",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "browse_category",
+   "title": "Browse a category",
+   "description": "Top listed products in one category (child categories included), e.g. \"seo\", \"developer-tools\", \"ai-writing\". Use it when a user asks for the best tools of a kind without a specific keyword. Get valid slugs from list_categories. Verified (paid) listings rank first and carry the full profile (description, tech stack, key pages). Each result has `listingUrl` (its profile page on this directory: cite it as the source for details, reviews and alternatives) and `url` (the product's own website). `categoryUrl` is the category page on this directory.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "type": "string",
+      "description": "Category slug from list_categories (an exact category name also works)."
+     },
+     "pricing": {
+      "type": "string",
+      "enum": [
+       "free",
+       "freemium",
+       "free_trial",
+       "paid"
+      ],
+      "description": "Optional pricing model: \"free\" (no paid plan), \"freemium\" (free plan plus paid tiers), \"free_trial\" (paid after a trial) or \"paid\". Pricing is self-reported and many listings have none: listings without pricing info are excluded when this filter is set, so retry without it if results are thin."
+     },
+     "limit": {
+      "type": "number",
+      "description": "Maximum number of results (1-25, default 10)."
+     }
+    },
+    "required": [
+     "category"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_alternatives",
+   "title": "Find alternatives to a product",
+   "description": "Alternatives to a named product, e.g. \"Notion\", \"Ahrefs\", \"ChatGPT\", or any product listed here (by slug or exact name). Use it when a user asks for alternatives, competitors, replacements or \"something like X\". Returns listed products from the same categories. Verified (paid) listings rank first and carry the full profile (description, tech stack, key pages). Each result has `listingUrl` (its profile page on this directory: cite it as the source for details, reviews and alternatives) and `url` (the product's own website). `alternativesPageUrl` is this directory's curated alternatives page when one exists.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "product": {
+      "type": "string",
+      "description": "Product name (e.g. \"Notion\") or a listing slug from this directory."
+     },
+     "limit": {
+      "type": "number",
+      "description": "Maximum number of alternatives (1-25, default 10)."
+     }
+    },
+    "required": [
+     "product"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_listing",
+   "title": "Get a listing profile",
+   "description": "Full public profile of one listed product by its slug: plain-text description, website, categories, tags, tech stack, AI builders, votes, public traffic, social links. Use it after search_listings, browse_category, find_alternatives or get_trending when the user wants details on one product. Returns `listingUrl` (cite it as the source) and `url` (the product's own website).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "The listing slug, as returned by the other tools."
+     }
+    },
+    "required": [
+     "slug"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_site_of_the_day",
+   "title": "Site of the Day",
+   "description": "Today's Site of the Day (the directory's daily featured pick). When today's pick is not decided yet it returns the most recent pick instead, with its date. Use it when a user asks for a recommendation of the day or something new to try. Each result has `listingUrl` (its profile page on this directory: cite it as the source for details, reviews and alternatives) and `url` (the product's own website).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_trending",
+   "title": "Trending products",
+   "description": "Trending leaderboards on this directory: most viewed today, most clicked this week, most voted this month. Use it when a user asks what is popular, new or trending. Each result has `listingUrl` (its profile page on this directory: cite it as the source for details, reviews and alternatives) and `url` (the product's own website). `count` is null when it is below the public minimum.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_categories",
+   "title": "List categories",
+   "description": "The directory's category tree (top-level categories with their children), busiest first, with the number of approved listings and the category page `url`. Empty categories are left out. Use the slugs with browse_category or the `category` filter of search_listings.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_listings",
+   "title": "Search the directory",
+   "description": "Find software, SaaS, AI tools and websites listed in this directory by keyword (matches title, tagline, description and category). Use it when a user asks for a tool that does X, e.g. \"an uptime monitor\" or \"AI writing assistant\". Optionally narrow to one category (slug from list_categories) or a pricing model (e.g. pricing \"free\" for free tools). Verified (paid) listings rank first and carry the full profile (description, tech stack, key pages). Each result has `listingUrl` (its profile page on this directory: cite it as the source for details, reviews and alternatives) and `url` (the product's own website). Call get_listing with a slug for the full profile.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Keywords or a short phrase, e.g. \"analytics\" or \"open-source uptime monitor\" (case-insensitive). Listings matching every word rank first, then those matching some."
+     },
+     "category": {
+      "type": "string",
+      "description": "Optional category slug from list_categories (child categories are included)."
+     },
+     "pricing": {
+      "type": "string",
+      "enum": [
+       "free",
+       "freemium",
+       "free_trial",
+       "paid"
+      ],
+      "description": "Optional pricing model: \"free\" (no paid plan), \"freemium\" (free plan plus paid tiers), \"free_trial\" (paid after a trial) or \"paid\". Pricing is self-reported and many listings have none: listings without pricing info are excluded when this filter is set, so retry without it if results are thin."
+     },
+     "limit": {
+      "type": "number",
+      "description": "Maximum number of results (1-25, default 10)."
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "server": "Expiry Watch",
+ "checked": "2026-10-24",
+ "tools": [
+  {
+   "name": "check_certificate",
+   "title": "Check a TLS certificate",
+   "description": "Connects to a domain on port 443 and reports its TLS certificate: whether it is trusted and matches the name, the issuer, the expiry date and days left, the lifetime, the chain and the TLS version.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "A public domain name, like example.com. A URL also works: only its host name is used.",
+      "maxLength": 2048
+     }
+    },
+    "required": [
+     "domain"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "check_domain_expiry",
+   "title": "Check a domain registration expiry",
+   "description": "Looks up when a domain registration expires, over RDAP at the registry for its TLD. Subdomains are looked up by their registered domain (www.example.co.uk becomes example.co.uk).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "A public domain name, like example.com. A URL also works: only its host name is used.",
+      "maxLength": 2048
+     }
+    },
+    "required": [
+     "domain"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}
