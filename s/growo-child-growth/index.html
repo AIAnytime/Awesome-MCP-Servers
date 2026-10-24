@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Growo child growth MCP server: status, tools and setup</title>
+<meta name="description" content="Growo child growth MCP server. Answered an MCP handshake without credentials and listed 16 tools. Read-only child growth reference tools: WHO and CDC percentiles, BMI-for-age, birth size,...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/growo-child-growth/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="Growo child growth MCP server: status, tools and setup">
+<meta property="og:description" content="Growo child growth MCP server. Answered an MCP handshake without credentials and listed 16 tools. Read-only child growth reference tools: WHO and CDC percentiles, BMI-for-age, birth size,...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/growo-child-growth/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Growo child growth MCP server: status, tools and setup">
+<meta name="twitter:description" content="Growo child growth MCP server. Answered an MCP handshake without credentials and listed 16 tools. Read-only child growth reference tools: WHO and CDC percentiles, BMI-for-age, birth size,...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "Growo child growth", "description": "Read-only child growth reference tools: WHO and CDC percentiles, BMI-for-age, birth size, corrected age and mid-parental height; no account or API key. Endpoint: https://mcp.usegrowo.com/", "url": "https://mcp.aianytime.net/s/growo-child-growth/", "sameAs": "https://usegrowo.com/mcp", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Knowledge, memory & context)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "1.5.0", "featureList": ["birth_size_percentile", "bmi_percentile", "child_age", "convert_measurement", "corrected_age", "development_milestones", "fetch", "growth_percentile", "growth_reference_range", "growth_trend", "growth_velocity", "newborn_weight_change", "ponderal_index", "search", "target_height", "zscore_percentile"], "dateModified": "2026-10-24T08:09:18Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Knowledge, memory & context", "item": "https://mcp.aianytime.net/c/knowledge-memory/"}, {"@type": "ListItem", "position": 3, "name": "Growo child growth", "item": "https://mcp.aianytime.net/s/growo-child-growth/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a></p>
+<h1>Growo child growth</h1>
+<p class="lede">Read-only child growth reference tools: WHO and CDC percentiles, BMI-for-age, birth size, corrected age and mid-parental height; no account or API key. Endpoint: <code>https://mcp.usegrowo.com/</code></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 16 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://usegrowo.com/mcp" rel="nofollow noopener">https://usegrowo.com/mcp</a></dd><dt>Endpoint</dt><dd><code>https://mcp.usegrowo.com/</code></dd><dt>MCP Registry</dt><dd><code>com.usegrowo/growo-growth</code></dd><dt>Reports itself as</dt><dd>growo-growth 1.5.0</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>16</dd><dt>Context cost</dt><dd>about 5,263 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>no change seen since first check</dd><dt>Handshake time</dt><dd>90 ms</dd><dt>Last checked</dt><dd>2026-10-24 08:09:18 UTC</dd><dt>Listed since</dt><dd>2026-10-23</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 90 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>16 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>prompts, tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-10-24T08:09:18Z">2026-10-24 08:09:18 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">2 daily checks so far. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http growo-child-growth https://mcp.usegrowo.com/</code><button class="copy" data-copy="claude mcp add --transport http growo-child-growth https://mcp.usegrowo.com/">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://mcp.usegrowo.com/</code><button class="copy" data-copy="https://mcp.usegrowo.com/">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://mcp.usegrowo.com/&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://mcp.usegrowo.com/&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=growo-child-growth&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9tY3AudXNlZ3Jvd28uY29tLyJ9">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22growo-child-growth%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//mcp.usegrowo.com/%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;growo-child-growth&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;growo-child-growth&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;serverUrl&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;serverUrl&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://mcp.usegrowo.com/</code><button class="copy" data-copy="https://mcp.usegrowo.com/">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;growo-child-growth&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://mcp.usegrowo.com/&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">16</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-10-24. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/growo-child-growth.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="birth_size_percentile where a birth measurement sits on the olsen 2010 intrauterine curves, for the number of completed weeks of pregnancy. this answers a different question from the growth charts: not how a child grows over time, but how big they were on the day they were born given how long the pregnancy ran. a 2.2 kg baby at 34 weeks and a 2.2 kg baby at 40 weeks are not the same situation, and the who charts cannot"><summary><code>birth_size_percentile</code><span class="hint read">read-only</span><span>Where a birth measurement sits on the Olsen 2010 intrauterine curves, for the number of completed weeks of …</span></summary><p class="desc">Where a birth measurement sits on the Olsen 2010 intrauterine curves, for the number of completed weeks of pregnancy. This answers a different question from the growth charts: not how a child grows over time, but how big they were on the day they were born given how long the pregnancy ran. A 2.2 kg baby at 34 weeks and a 2.2 kg baby at 40 weeks are not the same situation, and the WHO charts cannot tell them apart. Returns the percentile, the z-score and the SGA/AGA/LGA category, which is a statistical classification and not a diagnosis.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>measure</code></td><td>string</td><td>required</td><td>Birth weight, birth length, or head circumference at birth. One of: weight, length, head</td></tr><tr><td><code>sex</code></td><td>string</td><td>required</td><td>Biological sex, as the growth charts are published separately for each. One of: boy, girl</td></tr><tr><td><code>gestationalWeeks</code></td><td>integer</td><td>required</td><td>Completed weeks of pregnancy at delivery, 23-41. Use the obstetric gestational age, not corrected age.</td></tr><tr><td><code>value</code></td><td>number</td><td>required</td><td>The measurement. Birth weight in GRAMS (3400, not 3.4) as the published tables and delivery rooms both quote it; length and head circumference in centimetres.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;birth_size_percentile&quot;,
+    &quot;arguments&quot;: {
+      &quot;measure&quot;: &quot;weight&quot;,
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;gestationalWeeks&quot;: 0,
+      &quot;value&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="bmi_percentile computes bmi from weight and height, then places it on the bmi-for-age chart for the child&#x27;s sex and age: the who standards under 24 months, the cdc 2000 growth charts from 24 months to 240 months (20 years), the split the cdc advises. from 24 months the result also carries the cdc percentile range it falls in (below the 5th, 5th to below the 85th, 85th to below the 95th, 95th and above). bmi in c"><summary><code>bmi_percentile</code><span class="hint read">read-only</span><span>Computes BMI from weight and height, then places it on the BMI-for-age chart for the child&#x27;s sex and age: the …</span></summary><p class="desc">Computes BMI from weight and height, then places it on the BMI-for-age chart for the child&#x27;s sex and age: the WHO standards under 24 months, the CDC 2000 growth charts from 24 months to 240 months (20 years), the split the CDC advises. From 24 months the result also carries the CDC percentile range it falls in (below the 5th, 5th to below the 85th, 85th to below the 95th, 95th and above). BMI in childhood is read against age and sex, never against the adult 18.5–25 bands. Same functions and tables as the child BMI calculator on usegrowo.com. Returns no interpretation.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>sex</code></td><td>string</td><td>required</td><td>Biological sex, as the growth charts are published separately for each. One of: boy, girl</td></tr><tr><td><code>ageMonths</code></td><td>number</td><td>required</td><td>Age in months, 0 to 240 (20 years). Use age since birth; WHO is read below 24 months, CDC from 24.</td></tr><tr><td><code>weightKg</code></td><td>number</td><td>required</td><td>Weight in kg, 2 to 150.</td></tr><tr><td><code>heightCm</code></td><td>number</td><td>required</td><td>Height or length in cm, 45 to 200.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;bmi_percentile&quot;,
+    &quot;arguments&quot;: {
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;ageMonths&quot;: 0,
+      &quot;weightKg&quot;: 0,
+      &quot;heightCm&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="child_age the exact calendar age from a birth date: whole years, months and leftover days, plus the total in months, weeks and days. use it for &#x27;how old is my baby in months&#x27;, &#x27;age in weeks&#x27; and for turning a birth date into an age in months. this is the age since birth, not the age corrected for prematurity. dates are yyyy-mm-dd."><summary><code>child_age</code><span class="hint read">read-only</span><span>The exact calendar age from a birth date: whole years, months and leftover days, plus the total in months, …</span></summary><p class="desc">The exact calendar age from a birth date: whole years, months and leftover days, plus the total in months, weeks and days. Use it for &#x27;how old is my baby in months&#x27;, &#x27;age in weeks&#x27; and for turning a birth date into an age in months. This is the age since birth, not the age corrected for prematurity. Dates are YYYY-MM-DD.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>birthDate</code></td><td>string</td><td>required</td><td>Date of birth, YYYY-MM-DD.</td></tr><tr><td><code>asOf</code></td><td>string</td><td>optional</td><td>Date to calculate on, YYYY-MM-DD. Defaults to today in UTC; pass the user&#x27;s own date to avoid being a day off near midnight.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;child_age&quot;,
+    &quot;arguments&quot;: {
+      &quot;birthDate&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="convert_measurement converts a weight (kg, g, lb, oz) or a length (cm, m, in, ft) to every common unit, so a measurement quoted in pounds and ounces or feet and inches can go into the growth tools, which take kg and cm. for &#x27;7 lb 4 oz&#x27; pass value 7, unit lb, extra 4; for &#x27;2 ft 3 in&#x27; pass value 2, unit ft, extra 3."><summary><code>convert_measurement</code><span class="hint read">read-only</span><span>Converts a weight (kg, g, lb, oz) or a length (cm, m, in, ft) to every common unit, so a measurement quoted …</span></summary><p class="desc">Converts a weight (kg, g, lb, oz) or a length (cm, m, in, ft) to every common unit, so a measurement quoted in pounds and ounces or feet and inches can go into the growth tools, which take kg and cm. For &#x27;7 lb 4 oz&#x27; pass value 7, unit lb, extra 4; for &#x27;2 ft 3 in&#x27; pass value 2, unit ft, extra 3.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>kind</code></td><td>string</td><td>required</td><td>weight or length. One of: weight, length</td></tr><tr><td><code>value</code></td><td>number</td><td>required</td><td>The number in the given unit.</td></tr><tr><td><code>unit</code></td><td>string</td><td>required</td><td>kg, g, lb, oz for weight; cm, m, in, ft for length. One of: kg, g, lb, oz, cm, m, in, ft</td></tr><tr><td><code>extra</code></td><td>number</td><td>optional</td><td>Ounces to add when unit is lb, or inches to add when unit is ft.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;convert_measurement&quot;,
+    &quot;arguments&quot;: {
+      &quot;kind&quot;: &quot;weight&quot;,
+      &quot;value&quot;: 0,
+      &quot;unit&quot;: &quot;kg&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="corrected_age the corrected age of a baby born before 37 weeks: the age since birth minus the weeks the baby was early. use it for &#x27;what is my preemie&#x27;s corrected / adjusted age&#x27;, for reading milestones, and for choosing the age at which to plot growth. takes the birth date and the gestational age at birth and returns the corrected age, the age since birth, the original due date, and the date by which correctio"><summary><code>corrected_age</code><span class="hint read">read-only</span><span>The corrected age of a baby born before 37 weeks: the age since birth minus the weeks the baby was early. Use …</span></summary><p class="desc">The corrected age of a baby born before 37 weeks: the age since birth minus the weeks the baby was early. Use it for &#x27;what is my preemie&#x27;s corrected / adjusted age&#x27;, for reading milestones, and for choosing the age at which to plot growth. Takes the birth date and the gestational age at birth and returns the corrected age, the age since birth, the original due date, and the date by which correction usually stops (about 24 months since birth). Before the due date there is no corrected age, and the result says how many days remain. A baby born at 37 weeks or later needs no correction. Dates are calendar dates (YYYY-MM-DD).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>birthDate</code></td><td>string</td><td>required</td><td>Date of birth, YYYY-MM-DD.</td></tr><tr><td><code>gestationalWeeks</code></td><td>integer</td><td>required</td><td>Completed weeks of pregnancy at birth. A baby born at 32 weeks and 3 days: 32.</td></tr><tr><td><code>gestationalDays</code></td><td>integer</td><td>optional</td><td>Extra days beyond the completed weeks. A baby born at 32 weeks and 3 days: 3.</td></tr><tr><td><code>asOf</code></td><td>string</td><td>optional</td><td>The date to calculate the age on, YYYY-MM-DD. Defaults to today in UTC; pass the user&#x27;s own date to avoid being a day off near midnight.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;corrected_age&quot;,
+    &quot;arguments&quot;: {
+      &quot;birthDate&quot;: &quot;...&quot;,
+      &quot;gestationalWeeks&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="development_milestones who motor-development windows that are open, already closed or not yet due at a given age, plus the nearest cdc well-child checkpoint months. windows are 1st–99th percentile ranges from the who motor development study — a child inside a window is within the normal range."><summary><code>development_milestones</code><span class="hint read">read-only</span><span>WHO motor-development windows that are open, already closed or not yet due at a given age, plus the nearest …</span></summary><p class="desc">WHO motor-development windows that are open, already closed or not yet due at a given age, plus the nearest CDC well-child checkpoint months. Windows are 1st–99th percentile ranges from the WHO Motor Development Study — a child inside a window is within the normal range.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>ageMonths</code></td><td>number</td><td>required</td><td>Age in months. Use corrected age for a preterm infant.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;development_milestones&quot;,
+    &quot;arguments&quot;: {
+      &quot;ageMonths&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="fetch retrieve the full text (markdown) of a growo article or calculator page by the id that search returned. the result includes the page url."><summary><code>fetch</code><span class="hint read">read-only</span><span>Retrieve the full text (Markdown) of a Growo article or calculator page by the id that search returned. The …</span></summary><p class="desc">Retrieve the full text (Markdown) of a Growo article or calculator page by the id that search returned. The result includes the page url.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>string</td><td>required</td><td>An id from search, which is the page path (for example /insights/preterm-baby-growth-corrected-age).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;fetch&quot;,
+    &quot;arguments&quot;: {
+      &quot;id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="growth_percentile where one measurement of a child sits on the who or cdc growth reference chart. returns the percentile, the z-score and the 3rd/15th/50th/85th/97th percentile values at that age, using the same lms tables as the calculator on usegrowo.com. returns no interpretation."><summary><code>growth_percentile</code><span class="hint read">read-only</span><span>Where one measurement of a child sits on the WHO or CDC growth reference chart. Returns the percentile, the …</span></summary><p class="desc">Where one measurement of a child sits on the WHO or CDC growth reference chart. Returns the percentile, the z-score and the 3rd/15th/50th/85th/97th percentile values at that age, using the same LMS tables as the calculator on usegrowo.com. Returns no interpretation.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>metric</code></td><td>string</td><td>required</td><td>weight (kg), height/length (cm), head circumference (cm) or BMI (kg/m²). One of: weight, height, head, bmi</td></tr><tr><td><code>sex</code></td><td>string</td><td>required</td><td>Biological sex, as the growth charts are published separately for each. One of: boy, girl</td></tr><tr><td><code>ageMonths</code></td><td>number</td><td>required</td><td>Age in months. Use corrected age for a preterm infant.</td></tr><tr><td><code>value</code></td><td>number</td><td>required</td><td>The measurement, in metric units: kg for weight, cm for height and head.</td></tr><tr><td><code>standard</code></td><td>string</td><td>optional</td><td>Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5. One of: who, cdc</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;growth_percentile&quot;,
+    &quot;arguments&quot;: {
+      &quot;metric&quot;: &quot;weight&quot;,
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;ageMonths&quot;: 0,
+      &quot;value&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="growth_reference_range the 3rd/15th/50th/85th/97th percentile values for a given age and sex — the reference band itself, with no child&#x27;s measurement involved. use this to answer &#x27;what is normal for this age&#x27;."><summary><code>growth_reference_range</code><span class="hint read">read-only</span><span>The 3rd/15th/50th/85th/97th percentile values for a given age and sex — the reference band itself, with no …</span></summary><p class="desc">The 3rd/15th/50th/85th/97th percentile values for a given age and sex — the reference band itself, with no child&#x27;s measurement involved. Use this to answer &#x27;what is normal for this age&#x27;.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>metric</code></td><td>string</td><td>required</td><td>One of: weight, height, head, bmi</td></tr><tr><td><code>sex</code></td><td>string</td><td>required</td><td>Biological sex, as the growth charts are published separately for each. One of: boy, girl</td></tr><tr><td><code>ageMonths</code></td><td>number</td><td>required</td><td>Age in months. Use corrected age for a preterm infant.</td></tr><tr><td><code>standard</code></td><td>string</td><td>optional</td><td>Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5. One of: who, cdc</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;growth_reference_range&quot;,
+    &quot;arguments&quot;: {
+      &quot;metric&quot;: &quot;weight&quot;,
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;ageMonths&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="growth_trend what moved between two measurements of the same child: the percentile and z-score at each point, how far the position shifted, and how many of the drawn 3rd/15th/50th/85th/97th lines were crossed. band crossings are the unit that matters — one is common while a child settles onto their own curve, two downward is the pattern clinicians review. not a velocity percentile: who&#x27;s separate growth veloci"><summary><code>growth_trend</code><span class="hint read">read-only</span><span>What moved between two measurements of the same child: the percentile and z-score at each point, how far the …</span></summary><p class="desc">What moved between two measurements of the same child: the percentile and z-score at each point, how far the position shifted, and how many of the drawn 3rd/15th/50th/85th/97th lines were crossed. Band crossings are the unit that matters — one is common while a child settles onto their own curve, two downward is the pattern clinicians review. NOT a velocity percentile: WHO&#x27;s separate Growth Velocity Standards are not implemented here, so this reports movement across the attained-growth chart and never claims a percentile for the rate of gain itself.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>metric</code></td><td>string</td><td>required</td><td>One of: weight, height, head, bmi</td></tr><tr><td><code>sex</code></td><td>string</td><td>required</td><td>Biological sex, as the growth charts are published separately for each. One of: boy, girl</td></tr><tr><td><code>standard</code></td><td>string</td><td>optional</td><td>Reference standard. WHO (0–5 years) describes how healthy breastfed children grow and is the international default; CDC (0–20 years) describes how US children grew in the 1970s–90s and is used in the US and past age 5. One of: who, cdc</td></tr><tr><td><code>from</code></td><td>object</td><td>required</td><td>The earlier measurement.</td></tr><tr><td><code>to</code></td><td>object</td><td>required</td><td>The later measurement. Its age must be greater than the first.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;growth_trend&quot;,
+    &quot;arguments&quot;: {
+      &quot;metric&quot;: &quot;weight&quot;,
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;from&quot;: {},
+      &quot;to&quot;: {}
+    }
+  }
+}</code></pre></details><details class="tool" data-text="growth_velocity how fast a child grew between two measurements: the change, and the rate per day, per week and per 30 days. use it for &#x27;how many grams a day is my baby gaining&#x27; and &#x27;how many cm did my child grow&#x27;. weight in grams, length and head circumference in centimetres, dates as yyyy-mm-dd. it states the rate and does not compare it with a reference."><summary><code>growth_velocity</code><span class="hint read">read-only</span><span>How fast a child grew between two measurements: the change, and the rate per day, per week and per 30 days. …</span></summary><p class="desc">How fast a child grew between two measurements: the change, and the rate per day, per week and per 30 days. Use it for &#x27;how many grams a day is my baby gaining&#x27; and &#x27;how many cm did my child grow&#x27;. Weight in grams, length and head circumference in centimetres, dates as YYYY-MM-DD. It states the rate and does not compare it with a reference.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>metric</code></td><td>string</td><td>required</td><td>weight (grams), length (cm) or head circumference (cm). One of: weight, length, head</td></tr><tr><td><code>firstValue</code></td><td>number</td><td>required</td><td>The earlier measurement.</td></tr><tr><td><code>firstDate</code></td><td>string</td><td>required</td><td>Date of the earlier measurement, YYYY-MM-DD.</td></tr><tr><td><code>secondValue</code></td><td>number</td><td>required</td><td>The later measurement.</td></tr><tr><td><code>secondDate</code></td><td>string</td><td>required</td><td>Date of the later measurement, YYYY-MM-DD.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;growth_velocity&quot;,
+    &quot;arguments&quot;: {
+      &quot;metric&quot;: &quot;weight&quot;,
+      &quot;firstValue&quot;: 0,
+      &quot;firstDate&quot;: &quot;...&quot;,
+      &quot;secondValue&quot;: 0,
+      &quot;secondDate&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="newborn_weight_change how far a baby&#x27;s weight is from the birth weight: the change in grams and in percent, and whether the baby is back at or above birth weight. use it for &#x27;how much weight has my newborn lost&#x27;, &#x27;newborn weight loss percentage&#x27; and &#x27;has my baby regained birth weight&#x27;. it is arithmetic on two numbers and does not say whether the change is expected. grams only: 3400, not 3.4."><summary><code>newborn_weight_change</code><span class="hint read">read-only</span><span>How far a baby&#x27;s weight is from the birth weight: the change in grams and in percent, and whether the baby is …</span></summary><p class="desc">How far a baby&#x27;s weight is from the birth weight: the change in grams and in percent, and whether the baby is back at or above birth weight. Use it for &#x27;how much weight has my newborn lost&#x27;, &#x27;newborn weight loss percentage&#x27; and &#x27;has my baby regained birth weight&#x27;. It is arithmetic on two numbers and does not say whether the change is expected. Grams only: 3400, not 3.4.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>birthWeightG</code></td><td>number</td><td>required</td><td>Birth weight in grams.</td></tr><tr><td><code>currentWeightG</code></td><td>number</td><td>required</td><td>The later weight in grams.</td></tr><tr><td><code>ageDays</code></td><td>integer</td><td>optional</td><td>Optional: the baby&#x27;s age in days at the later weight, echoed back.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;newborn_weight_change&quot;,
+    &quot;arguments&quot;: {
+      &quot;birthWeightG&quot;: 0,
+      &quot;currentWeightG&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="ponderal_index the ponderal index (rohrer&#x27;s index) from weight and length: 100 x weight in grams / length in cm cubed, with the same quantity in kg per cubic metre. it is a newborn proportion measure; bmi-for-age is the usual measure for older children. it returns the number and does not place it against a range."><summary><code>ponderal_index</code><span class="hint read">read-only</span><span>The ponderal index (Rohrer&#x27;s index) from weight and length: 100 x weight in grams / length in cm cubed, with …</span></summary><p class="desc">The ponderal index (Rohrer&#x27;s index) from weight and length: 100 x weight in grams / length in cm cubed, with the same quantity in kg per cubic metre. It is a newborn proportion measure; BMI-for-age is the usual measure for older children. It returns the number and does not place it against a range.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>weightKg</code></td><td>number</td><td>required</td><td>Weight in kilograms.</td></tr><tr><td><code>lengthCm</code></td><td>number</td><td>required</td><td>Length (lying) or height in centimetres.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;ponderal_index&quot;,
+    &quot;arguments&quot;: {
+      &quot;weightKg&quot;: 0,
+      &quot;lengthCm&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search search growo&#x27;s physician-written articles and calculators on baby and child growth, percentiles, growth charts, premature babies (corrected age), head circumference, sleep, feeding and development. returns a short list of results, each with an id, a title and the page url. each id can be read in full with fetch. the articles are educational and not medical advice."><summary><code>search</code><span class="hint read">read-only</span><span>Search Growo&#x27;s physician-written articles and calculators on baby and child growth, percentiles, growth …</span></summary><p class="desc">Search Growo&#x27;s physician-written articles and calculators on baby and child growth, percentiles, growth charts, premature babies (corrected age), head circumference, sleep, feeding and development. Returns a short list of results, each with an id, a title and the page URL. Each id can be read in full with fetch. The articles are educational and not medical advice.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>What to look for, in plain words (e.g. &#x27;baby dropped percentiles&#x27;, &#x27;corrected age premature&#x27;).</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language of the pages to search. Not every article exists in every language. One of: en, tr, es, fr, de, pt, ar, hi …</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="target_height the adult height a child is expected to reach, estimated from both parents&#x27; heights with tanner&#x27;s mid-parental method: (mother + father +13 cm for a boy, -13 cm for a girl) / 2, with a range of 8.5 cm either side. use it for &#x27;how tall will my child be&#x27;, &#x27;mid-parental height&#x27; and &#x27;child height predictor&#x27; questions. it is a statistical range, not a forecast for one child, and says nothing about the "><summary><code>target_height</code><span class="hint read">read-only</span><span>The adult height a child is expected to reach, estimated from both parents&#x27; heights with Tanner&#x27;s …</span></summary><p class="desc">The adult height a child is expected to reach, estimated from both parents&#x27; heights with Tanner&#x27;s mid-parental method: (mother + father +13 cm for a boy, -13 cm for a girl) / 2, with a range of 8.5 cm either side. Use it for &#x27;how tall will my child be&#x27;, &#x27;mid-parental height&#x27; and &#x27;child height predictor&#x27; questions. It is a statistical range, not a forecast for one child, and says nothing about the child&#x27;s height today. Optionally, with the child&#x27;s age (24-240 months) and current height, it adds a CDC projection: today&#x27;s z-score on the CDC 2000 stature-for-age chart carried to age 20, with a range of one standard deviation either side; a height more than 5 SD from the CDC median for the age is refused as an entry error. Centimetres only: convert feet and inches first (5 ft 10 in = 177.8 cm).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>sex</code></td><td>string</td><td>required</td><td>The child&#x27;s sex: the formula adds or subtracts 13 cm accordingly. One of: boy, girl</td></tr><tr><td><code>motherHeightCm</code></td><td>number</td><td>required</td><td>Mother&#x27;s height in centimetres.</td></tr><tr><td><code>fatherHeightCm</code></td><td>number</td><td>required</td><td>Father&#x27;s height in centimetres.</td></tr><tr><td><code>childAgeMonths</code></td><td>number</td><td>optional</td><td>Optional, with childHeightCm: the child&#x27;s age in months (2 to 20 years), for the CDC projection.</td></tr><tr><td><code>childHeightCm</code></td><td>number</td><td>optional</td><td>Optional, with childAgeMonths: the child&#x27;s current height in centimetres, measured standing.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;target_height&quot;,
+    &quot;arguments&quot;: {
+      &quot;sex&quot;: &quot;boy&quot;,
+      &quot;motherHeightCm&quot;: 0,
+      &quot;fatherHeightCm&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="zscore_percentile converts a z-score (standard deviations from the median) to a percentile and a percentile to a z-score on the normal curve, the relationship growth charts use. pass exactly one of zscore or percentile. it converts the number and does not say what it means for a child."><summary><code>zscore_percentile</code><span class="hint read">read-only</span><span>Converts a z-score (standard deviations from the median) to a percentile and a percentile to a z-score on the …</span></summary><p class="desc">Converts a z-score (standard deviations from the median) to a percentile and a percentile to a z-score on the normal curve, the relationship growth charts use. Pass exactly one of zScore or percentile. It converts the number and does not say what it means for a child.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>zScore</code></td><td>number</td><td>optional</td><td>A z-score; returns the percentile.</td></tr><tr><td><code>percentile</code></td><td>number</td><td>optional</td><td>A percentile; returns the z-score.</td></tr><tr><td><code>locale</code></td><td>string</td><td>optional</td><td>Language for the disclaimer and any clinician note. Pass the language you will answer the user in: these are clinical safety texts written by a physician, and they should reach the reader as written rather than translated by the model. One of: en, tr</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;zscore_percentile&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details></div><h3>Prompts <span class="count">4</span></h3><ul class="plain"><li><code>check_growth_percentile</code> Place a child&#x27;s weight, height or head circumference on the WHO or CDC chart.</li><li><code>corrected_age_for_premature_baby</code> The corrected (adjusted) age of a baby born before 37 weeks.</li><li><code>expected_adult_height</code> The mid-parental (Tanner) estimate of adult height with its range.</li><li><code>change_between_two_measurements</code> Percentile movement and growth rate between two dated measurements.</li></ul>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/growo-child-growth.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/growo-child-growth.svg)](https://mcp.aianytime.net/s/growo-child-growth/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/growo-child-growth.svg)](https://mcp.aianytime.net/s/growo-child-growth/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/growo-child-growth.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Knowledge, memory &amp; context</h2>
+<ul class="chips"><li><a href="../hyperconsciousness/">Hyperconsciousness</a></li><li><a href="../koru/">Koru</a></li><li><a href="../liminal/">Liminal</a></li><li><a href="../mnemoverse/">Mnemoverse</a></li><li><a href="../neither/">Neither</a></li><li><a href="../orano/">ORANO</a></li><li><a href="../../c/knowledge-memory/">All of Knowledge, memory &amp; context</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>

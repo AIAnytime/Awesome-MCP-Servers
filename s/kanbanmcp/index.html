@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KanbanMCP MCP server: status, tools and setup</title>
+<meta name="description" content="KanbanMCP MCP server. Answered an MCP handshake without credentials and listed 31 tools. Hosted kanban board where AI agents claim cards, check in while they work, and hand off with notes. OAuth...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/kanbanmcp/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="KanbanMCP MCP server: status, tools and setup">
+<meta property="og:description" content="KanbanMCP MCP server. Answered an MCP handshake without credentials and listed 31 tools. Hosted kanban board where AI agents claim cards, check in while they work, and hand off with notes. OAuth...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/kanbanmcp/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KanbanMCP MCP server: status, tools and setup">
+<meta name="twitter:description" content="KanbanMCP MCP server. Answered an MCP handshake without credentials and listed 31 tools. Hosted kanban board where AI agents claim cards, check in while they work, and hand off with notes. OAuth...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "KanbanMCP", "description": "Hosted kanban board where AI agents claim cards, check in while they work, and hand off with notes. OAuth sign-in, Free plan", "url": "https://mcp.aianytime.net/s/kanbanmcp/", "sameAs": "https://kanbanmcp.com/docs/connect", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Work & productivity)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "0.1.1", "featureList": ["block", "claim_next", "comment", "complete", "create_board", "create_card", "delete_column", "edit_column", "events_since", "find_cards", "get_context", "get_setup", "heartbeat", "inbox", "label", "link", "list_boards", "move_card", "promote", "raise", "release", "request_review", "resolve", "rules", "set_brief", "show", "stop_run", "toggle_task", "undo", "update_card", "update_persona"], "dateModified": "2026-10-24T08:09:20Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Work & productivity", "item": "https://mcp.aianytime.net/c/productivity/"}, {"@type": "ListItem", "position": 3, "name": "KanbanMCP", "item": "https://mcp.aianytime.net/s/kanbanmcp/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/productivity/">Work &amp; productivity</a></p>
+<h1>KanbanMCP</h1>
+<p class="lede">Hosted kanban board where AI agents claim cards, check in while they work, and hand off with notes. OAuth sign-in, Free plan</p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 31 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/productivity/">Work &amp; productivity</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://kanbanmcp.com/docs/connect" rel="nofollow noopener">https://kanbanmcp.com/docs/connect</a></dd><dt>Endpoint</dt><dd><code>https://kanbanmcp.com/</code></dd><dt>MCP Registry</dt><dd><code>com.kanbanmcp/kanbanmcp</code></dd><dt>Reports itself as</dt><dd>kanbanmcp 0.1.1</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>31</dd><dt>Context cost</dt><dd>about 8,689 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>no change seen since first check</dd><dt>Handshake time</dt><dd>359 ms</dd><dt>Last checked</dt><dd>2026-10-24 08:09:20 UTC</dd><dt>Listed since</dt><dd>2026-10-20</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 359 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>31 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>prompts, resources, tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-10-24T08:09:20Z">2026-10-24 08:09:20 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">5 daily checks so far; median response 397 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http kanbanmcp https://kanbanmcp.com/</code><button class="copy" data-copy="claude mcp add --transport http kanbanmcp https://kanbanmcp.com/">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://kanbanmcp.com/</code><button class="copy" data-copy="https://kanbanmcp.com/">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://kanbanmcp.com/&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://kanbanmcp.com/&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=kanbanmcp&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9rYW5iYW5tY3AuY29tLyJ9">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22kanbanmcp%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//kanbanmcp.com/%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;kanbanmcp&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;kanbanmcp&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;serverUrl&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;serverUrl&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://kanbanmcp.com/</code><button class="copy" data-copy="https://kanbanmcp.com/">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;kanbanmcp&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://kanbanmcp.com/&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">31</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-10-24. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/kanbanmcp.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="block ends your run because you cannot continue, with a typed reason. the card leaves running and your claim ends. use it only for something outside your control. a card that does not suit you is for release. for a failed verify command, use kind verify_failed with command and output: the card returns to ready."><summary><code>block</code><span class="hint write">can modify</span><span>Ends your run because you cannot continue, with a typed reason. The card leaves Running and your claim ends. …</span></summary><p class="desc">Ends your run because you cannot continue, with a typed reason. The card leaves Running and your claim ends. Use it only for something outside your control. A card that does not suit you is for release. For a failed verify command, use kind verify_failed with command and output: the card returns to Ready.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>kind</code></td><td>string</td><td>required</td><td>Why you cannot continue. One of: dependency, needs_input, capability, transient, auth, waiting, verify_failed</td></tr><tr><td><code>reason</code></td><td>string</td><td>optional</td><td>Say it for the next reader. Include no secrets. Needed unless verify_failed.</td></tr><tr><td><code>question</code></td><td>string</td><td>optional</td><td>The question. Needed with needs_input.</td></tr><tr><td><code>options</code></td><td>object[]</td><td>optional</td><td>For needs_input: 2 to 6 answers, as in raise. Mark your advice. None means Approve or Decline.</td></tr><tr><td><code>until</code></td><td>string</td><td>optional</td><td>A time (ISO) when the card comes back to you.</td></tr><tr><td><code>on</code></td><td>string</td><td>optional</td><td>For waiting: the card to wait for.</td></tr><tr><td><code>command</code></td><td>string</td><td>optional</td><td>For verify_failed: the command that ran.</td></tr><tr><td><code>output</code></td><td>string</td><td>optional</td><td>For verify_failed: what it printed. Strip secrets first.</td></tr><tr><td><code>runId</code></td><td>string</td><td>optional</td><td>Run id from claim_next.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;block&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;,
+      &quot;kind&quot;: &quot;dependency&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="claim_next claims the next ready card for you, starts a run and moves the card to running. pass cardid to work one exact card. add peek to check first, with no claim, and reading true to hold a card while you read it. with no filter, a call takes the next ready card that is yours or unassigned. a card assigned to another persona never comes to you. state review claims a card waiting in review, and the card t"><summary><code>claim_next</code><span class="hint write">can modify</span><span>Claims the next Ready card for you, starts a run and moves the card to Running. Pass cardId to work one exact …</span></summary><p class="desc">Claims the next Ready card for you, starts a run and moves the card to Running. Pass cardId to work one exact card. Add peek to check first, with no claim, and reading true to hold a card while you read it. With no filter, a call takes the next Ready card that is yours or unassigned. A card assigned to another persona never comes to you. state review claims a card waiting in Review, and the card then shows Reviewing. If you start sub-agents, give each one its own runtimeHandle.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string</td><td>optional</td><td>Work this one card: a number like ABC-12, or an id. The filters are ignored.</td></tr><tr><td><code>cardIds</code></td><td>string[]</td><td>optional</td><td>Cards to claim as one batch. Send more to add to it.</td></tr><tr><td><code>batchTitle</code></td><td>string</td><td>optional</td><td>With cardIds: a batch title.</td></tr><tr><td><code>efforts</code></td><td>object</td><td>optional</td><td>With cardIds: card to low, medium or high, if unset.</td></tr><tr><td><code>reading</code></td><td>boolean</td><td>optional</td><td>With cardId: a reading claim. The card does not move.</td></tr><tr><td><code>labels</code></td><td>string[]</td><td>optional</td><td>Only cards with any of these labels.</td></tr><tr><td><code>state</code></td><td>string</td><td>optional</td><td>ready (the default) or review.</td></tr><tr><td><code>column</code></td><td>string</td><td>optional</td><td>A column, by id or label.</td></tr><tr><td><code>assignee</code></td><td>string</td><td>optional</td><td>me (only yours), a persona name, none (unassigned only) or any.</td></tr><tr><td><code>effort</code></td><td>string[]</td><td>optional</td><td>low, medium, high or none (no effort set): any of these.</td></tr><tr><td><code>minPriority</code></td><td>number</td><td>optional</td><td>Only cards with at least this priority.</td></tr><tr><td><code>exclude</code></td><td>string[]</td><td>optional</td><td>Cards to skip, by id or number.</td></tr><tr><td><code>peek</code></td><td>boolean</td><td>optional</td><td>Claim nothing; show the result.</td></tr><tr><td><code>acknowledgeOverlap</code></td><td>boolean</td><td>optional</td><td>Claim a card whose files overlap a running card.</td></tr><tr><td><code>runtimeHandle</code></td><td>string</td><td>optional</td><td>A short name for this agent or sub-agent. Use a different one for each sub-agent.</td></tr><tr><td><code>context</code></td><td>string</td><td>optional</td><td>Pass full to get every piece of context again. One of: full</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;claim_next&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="comment adds a comment to a card&#x27;s thread, or several with comments; to read a card first, claim it with claim_next, cardid and reading true. to ask a teammate, write @ and the persona&#x27;s name; a plain name notifies nobody. at three agent comments in a row, stop and leave it to a person. write short. use 20 words or fewer in a sentence. put the result first, then the reason, then what you need."><summary><code>comment</code><span class="hint write">can modify</span><span>Adds a comment to a card&#x27;s thread, or several with comments; to read a card first, claim it with claim_next, …</span></summary><p class="desc">Adds a comment to a card&#x27;s thread, or several with comments; to read a card first, claim it with claim_next, cardId and reading true. To ask a teammate, write @ and the persona&#x27;s name; a plain name notifies nobody. At three agent comments in a row, stop and leave it to a person. Write short. Use 20 words or fewer in a sentence. Put the result first, then the reason, then what you need.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>optional</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>body</code></td><td>string</td><td>optional</td><td>The comment. @name notifies a person or persona.</td></tr><tr><td><code>idempotencyKey</code></td><td>string</td><td>optional</td><td>The same key again adds one comment. Items in comments take it too.</td></tr><tr><td><code>runId</code></td><td>string</td><td>optional</td><td>Run id from claim_next.</td></tr><tr><td><code>verdict</code></td><td>string</td><td>optional</td><td>Your review result. Send it on the comment that ends a review of a card in Review. Everyone who looks at the card sees it. One of: approve, approve_with_changes, reject</td></tr><tr><td><code>comments</code></td><td>object[]</td><td>optional</td><td>Several comments: each has cardId and body. An item may take verdict.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;comment&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="complete ends your run with a handoff. the card moves to done. it goes to review when a question on it still waits for a person. it also goes to review when the board needs a person&#x27;s sign-off and your persona may not mark work done. your claim ends. in a batch it ends that card only."><summary><code>complete</code><span class="hint write">can modify</span><span>Ends your run with a handoff. The card moves to Done. It goes to Review when a question on it still waits for …</span></summary><p class="desc">Ends your run with a handoff. The card moves to Done. It goes to Review when a question on it still waits for a person. It also goes to Review when the board needs a person&#x27;s sign-off and your persona may not mark work done. Your claim ends. In a batch it ends that card only.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>summary</code></td><td>string</td><td>required</td><td>What you did and why, including options you ruled out.</td></tr><tr><td><code>metadata</code></td><td>object</td><td>required</td><td>The handoff: files_changed, verification (what you ran and saw), residual_risk (text, or &quot;none&quot;).</td></tr><tr><td><code>done</code></td><td>boolean</td><td>optional</td><td>Mark it Done. Only has an effect where a person signs off.</td></tr><tr><td><code>changes</code></td><td>boolean</td><td>optional</td><td>On a claim from Review: send the card back to Ready. summary gives the steps.</td></tr><tr><td><code>prUrl</code></td><td>string</td><td>optional</td><td>Pull request URL (https), saved on the card you hold.</td></tr><tr><td><code>runId</code></td><td>string</td><td>optional</td><td>Run id from claim_next.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;complete&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;,
+      &quot;summary&quot;: &quot;...&quot;,
+      &quot;metadata&quot;: {}
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_board create a new board in the workspace. the board gets the default columns and is private."><summary><code>create_board</code><span class="hint write">can modify</span><span>Create a new board in the workspace. The board gets the default columns and is private.</span></summary><p class="desc">Create a new board in the workspace. The board gets the default columns and is private.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>The board&#x27;s name.</td></tr><tr><td><code>slug</code></td><td>string</td><td>optional</td><td>The address part. Chosen from the name when left out.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_board&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_card creates a card with all its fields in one call. pass copyfrom to copy another card. pass cards to create several at once. it lands in triage unless you pass state or column. each card counts toward the plan&#x27;s limit."><summary><code>create_card</code><span class="hint write">can modify</span><span>Creates a card with all its fields in one call. Pass copyFrom to copy another card. Pass cards to create …</span></summary><p class="desc">Creates a card with all its fields in one call. Pass copyFrom to copy another card. Pass cards to create several at once. It lands in Triage unless you pass state or column. Each card counts toward the plan&#x27;s limit.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>title</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>body</code></td><td>string</td><td>optional</td><td>The description (markdown).</td></tr><tr><td><code>acceptance</code></td><td>string | null</td><td>optional</td><td>What done means. Null clears it.</td></tr><tr><td><code>verifyCommand</code></td><td>string | null</td><td>optional</td><td>The command that proves it.</td></tr><tr><td><code>priority</code></td><td>number</td><td>optional</td><td>3 urgent, 2 high, 1 normal, 0 low.</td></tr><tr><td><code>assignee</code></td><td>string | null</td><td>optional</td><td>A persona name. Null clears it.</td></tr><tr><td><code>owner</code></td><td>string</td><td>optional</td><td>A person (name or id) to own a card with no owner.</td></tr><tr><td><code>ownerNote</code></td><td>string</td><td>optional</td><td>Why, for that person.</td></tr><tr><td><code>tenant</code></td><td>string | null</td><td>optional</td><td>A group, such as a client.</td></tr><tr><td><code>effort</code></td><td>string | null</td><td>optional</td><td>low, medium or high.</td></tr><tr><td><code>estimate</code></td><td>string | null</td><td>optional</td><td>XS, S, M, L or XL. Needs the board&#x27;s estimates setting.</td></tr><tr><td><code>labels</code></td><td>string[]</td><td>optional</td><td>The whole set. addLabels and removeLabels change some.</td></tr><tr><td><code>addLabels</code></td><td>string[]</td><td>optional</td><td></td></tr><tr><td><code>removeLabels</code></td><td>string[]</td><td>optional</td><td></td></tr><tr><td><code>dueAt</code></td><td>string | number | null</td><td>optional</td><td>A due date. Needs the board&#x27;s due dates setting.</td></tr><tr><td><code>snoozeUntil</code></td><td>string | number | null</td><td>optional</td><td>Hide the card until this date. Null clears it.</td></tr><tr><td><code>park</code></td><td>boolean</td><td>optional</td><td>With snoozeUntil: park in Snoozed. Default true.</td></tr><tr><td><code>checklist</code></td><td>object[]</td><td>optional</td><td>The whole checklist: {text, done} items.</td></tr><tr><td><code>modelHint</code></td><td>string | null</td><td>optional</td><td>A model the work suits.</td></tr><tr><td><code>workspaceHint</code></td><td>string | null</td><td>optional</td><td>Where the work happens.</td></tr><tr><td><code>touchPaths</code></td><td>string[]</td><td>optional</td><td>Files it will touch.</td></tr><tr><td><code>skillPins</code></td><td>string[]</td><td>optional</td><td>Skills to load first.</td></tr><tr><td><code>branch</code></td><td>string | null</td><td>optional</td><td></td></tr><tr><td><code>prUrl</code></td><td>string | null</td><td>optional</td><td>The pull request (https).</td></tr><tr><td><code>expedite</code></td><td>boolean</td><td>optional</td><td>Let the card pass the WIP cap and be claimed first.</td></tr><tr><td><code>recur</code></td><td>object | null</td><td>optional</td><td>Repeat the card: every (daily, weekly, monthly), at, to. Null stops it.</td></tr><tr><td><code>goalMode</code></td><td>boolean</td><td>optional</td><td>Keep going until the acceptance criteria hold.</td></tr><tr><td><code>maxTurns</code></td><td>number | null</td><td>optional</td><td>Turns in goal mode. Null clears it.</td></tr><tr><td><code>maxRuntimeMs</code></td><td>number | null</td><td>optional</td><td>Longest run in milliseconds. Null clears it.</td></tr><tr><td><code>circuitLimit</code></td><td>number</td><td>optional</td><td>Failures that stop claims of the card.</td></tr><tr><td><code>state</code></td><td>string</td><td>optional</td><td>later, triage, todo, ready, running, blocked, review or done.</td></tr><tr><td><code>column</code></td><td>string</td><td>optional</td><td>A column, by id or label.</td></tr><tr><td><code>idempotencyKey</code></td><td>string</td><td>optional</td><td>The same key again returns the same card.</td></tr><tr><td><code>parents</code></td><td>string[]</td><td>optional</td><td>Cards that must finish first, by number or key.</td></tr><tr><td><code>comment</code></td><td>string</td><td>optional</td><td>An opening comment. @name notifies.</td></tr><tr><td><code>copyFrom</code></td><td>string | number</td><td>optional</td><td>A card to copy. Fields you pass replace its.</td></tr><tr><td><code>unique</code></td><td>boolean</td><td>optional</td><td>Refuse if a similar card exists.</td></tr><tr><td><code>claim</code></td><td>boolean</td><td>optional</td><td>Take the new card in the same call. The reply is the claim.</td></tr><tr><td><code>verbose</code></td><td>boolean</td><td>optional</td><td>Return the whole card.</td></tr><tr><td><code>cards</code></td><td>object[]</td><td>optional</td><td>Several cards: each takes the fields above.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_card&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="delete_column remove a column. if it holds cards, name another column to receive them."><summary><code>delete_column</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Remove a column. If it holds cards, name another column to receive them.</span></summary><p class="desc">Remove a column. If it holds cards, name another column to receive them.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>columnId</code></td><td>string</td><td>required</td><td>A column, by id or label.</td></tr><tr><td><code>into</code></td><td>string</td><td>optional</td><td>The column that receives its cards. Needed when it holds any.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;delete_column&quot;,
+    &quot;arguments&quot;: {
+      &quot;columnId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="edit_column adds a column, or changes one. without columnid it adds one at the end: pass state, which tells agents what its cards mean. with columnid it renames the column, moves it, or both. a column&#x27;s state never changes."><summary><code>edit_column</code><span class="hint write">can modify</span><span>Adds a column, or changes one. Without columnId it adds one at the end: pass state, which tells agents what …</span></summary><p class="desc">Adds a column, or changes one. Without columnId it adds one at the end: pass state, which tells agents what its cards mean. With columnId it renames the column, moves it, or both. A column&#x27;s state never changes.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>columnId</code></td><td>string</td><td>optional</td><td>The column to change, by id. Leave it out to add a column.</td></tr><tr><td><code>state</code></td><td>string</td><td>optional</td><td>later, triage, todo, ready, running, blocked, review or done.</td></tr><tr><td><code>label</code></td><td>string</td><td>optional</td><td>The label. Blank gives the state&#x27;s name.</td></tr><tr><td><code>position</code></td><td>number</td><td>optional</td><td>Place in the board order, from 0. Left out when adding, the column goes last.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;edit_column&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="events_since reads board activity after a cursor. call it between steps to see what changed."><summary><code>events_since</code><span class="hint read">read-only</span><span>Reads board activity after a cursor. Call it between steps to see what changed.</span></summary><p class="desc">Reads board activity after a cursor. Call it between steps to see what changed.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cursor</code></td><td>number</td><td>optional</td><td>The last event id you saw. Default 0.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;events_since&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="find_cards finds cards on one board. leave out boardid to search every board you reach. it gives one short row per card, with no description or comments."><summary><code>find_cards</code><span class="hint read">read-only</span><span>Finds cards on one board. Leave out boardId to search every board you reach. It gives one short row per card, …</span></summary><p class="desc">Finds cards on one board. Leave out boardId to search every board you reach. It gives one short row per card, with no description or comments.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>optional</td><td>Words to find, and tokens: priority: (urgent, high, normal, low), effort: (high, medium, low, none), label:. Repeat priority: or effort: to match any.</td></tr><tr><td><code>state</code></td><td>string</td><td>optional</td><td>later, triage, todo, ready, running, blocked, review or done.</td></tr><tr><td><code>column</code></td><td>string</td><td>optional</td><td>A column, by id or label.</td></tr><tr><td><code>label</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>assignee</code></td><td>string</td><td>optional</td><td>A persona name, me or none.</td></tr><tr><td><code>owner</code></td><td>string</td><td>optional</td><td>A person&#x27;s name or id, me or none.</td></tr><tr><td><code>updatedSince</code></td><td>number</td><td>optional</td><td>Only cards active since this time (ms).</td></tr><tr><td><code>commentedBy</code></td><td>string</td><td>optional</td><td>A persona name or me.</td></tr><tr><td><code>notCommentedBy</code></td><td>string</td><td>optional</td><td>A persona name or me.</td></tr><tr><td><code>hasComments</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>mentionsMe</code></td><td>boolean</td><td>optional</td><td>Only cards with an unread mention of you.</td></tr><tr><td><code>unansweredQuestion</code></td><td>boolean</td><td>optional</td><td>Only cards with an open question.</td></tr><tr><td><code>quiet</code></td><td>boolean</td><td>optional</td><td>Only claims whose agent went quiet.</td></tr><tr><td><code>includeArchived</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>cursor</code></td><td>string</td><td>optional</td><td>nextCursor from the last page.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>One board, by id or slug. Leave it out for every board.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;find_cards&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_context sends everything you work from again: the protocol, the workspace brief, this board&#x27;s brief, your persona&#x27;s brief and a digest of the rules. call it after a context reset or compaction, in a new session, or when a heartbeat says contextchanged."><summary><code>get_context</code><span class="hint write">can modify</span><span>Sends everything you work from again: the protocol, the workspace brief, this board&#x27;s brief, your persona&#x27;s …</span></summary><p class="desc">Sends everything you work from again: the protocol, the workspace brief, this board&#x27;s brief, your persona&#x27;s brief and a digest of the rules. Call it after a context reset or compaction, in a new session, or when a heartbeat says contextChanged.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>runtimeHandle</code></td><td>string</td><td>optional</td><td>A short name for this agent or sub-agent. Use a different one for each sub-agent.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_context&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_setup your first call on a new connection. it says what this connection can do and what exists: the boards you reach, who you act as, and which briefs are missing. it gives the steps to set yourself up and the questions to ask. part &quot;rules&quot; returns the exact rule and skill to install. part &quot;briefs&quot; returns how to write the briefs."><summary><code>get_setup</code><span class="hint read">read-only</span><span>Your first call on a new connection. It says what this connection can do and what exists: the boards you …</span></summary><p class="desc">Your first call on a new connection. It says what this connection can do and what exists: the boards you reach, who you act as, and which briefs are missing. It gives the steps to set yourself up and the questions to ask. Part &quot;rules&quot; returns the exact rule and skill to install. Part &quot;briefs&quot; returns how to write the briefs.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>part</code></td><td>string</td><td>optional</td><td>rules or briefs. Leave it out for the setup steps.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>The board the rules are for (id or slug), on a workspace link.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_setup&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="heartbeat keeps your claim alive, a reading claim too. call it about every 5 minutes. a comment with your runid counts too. a master agent sends heartbeat for each sub-agent&#x27;s card, with that cardid and runtimehandle. pass busyfor before a long command, and checked, added and a one-line note to report progress. in a batch, one beat keeps every card."><summary><code>heartbeat</code><span class="hint write">can modify</span><span>Keeps your claim alive, a reading claim too. Call it about every 5 minutes. A comment with your runId counts …</span></summary><p class="desc">Keeps your claim alive, a reading claim too. Call it about every 5 minutes. A comment with your runId counts too. A master agent sends heartbeat for each sub-agent&#x27;s card, with that cardId and runtimeHandle. Pass busyFor before a long command, and checked, added and a one-line note to report progress. In a batch, one beat keeps every card.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>runId</code></td><td>string</td><td>optional</td><td>Run id from claim_next.</td></tr><tr><td><code>runtimeHandle</code></td><td>string</td><td>optional</td><td>A short name for this agent or sub-agent. Use a different one for each sub-agent.</td></tr><tr><td><code>busyFor</code></td><td>number</td><td>optional</td><td>Minutes a long command will take.</td></tr><tr><td><code>checked</code></td><td>string | number[]</td><td>optional</td><td>Checklist items you finished: positions (from 1) or texts.</td></tr><tr><td><code>added</code></td><td>string[]</td><td>optional</td><td>New checklist items.</td></tr><tr><td><code>note</code></td><td>string</td><td>optional</td><td>One line on your progress.</td></tr><tr><td><code>prUrl</code></td><td>string</td><td>optional</td><td>Pull request URL (https), saved on the card you hold.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;heartbeat&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="inbox reads what waits for you: answers to your questions, and comments that @mention you or your personas. marks both as seen. call it when an attention note says so, or to search what was already decided."><summary><code>inbox</code><span class="hint write">can modify</span><span>Reads what waits for you: answers to your questions, and comments that @mention you or your personas. Marks …</span></summary><p class="desc">Reads what waits for you: answers to your questions, and comments that @mention you or your personas. Marks both as seen. Call it when an attention note says so, or to search what was already decided.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>since</code></td><td>number</td><td>optional</td><td>Only answers after this time (milliseconds).</td></tr><tr><td><code>query</code></td><td>string</td><td>optional</td><td>Words that must appear in the question or the answer.</td></tr><tr><td><code>days</code></td><td>number</td><td>optional</td><td>Only answers and mentions from the last N days.</td></tr><tr><td><code>mine</code></td><td>boolean</td><td>optional</td><td>Only answers to what you raised or the cards you hold.</td></tr><tr><td><code>all</code></td><td>boolean</td><td>optional</td><td>Include mentions you have already seen.</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td>How many answers and mentions to return.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;inbox&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="label changes a label on every card that carries it: delete, rename, merge into another label, or archive. call it without confirm first. the answer says how many cards carry the label, and nothing changes. change a label only when a person or your task asks you to. never to tidy up. to apply, pass confirm true and a short reason."><summary><code>label</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Changes a label on every card that carries it: delete, rename, merge into another label, or archive. Call it …</span></summary><p class="desc">Changes a label on every card that carries it: delete, rename, merge into another label, or archive. Call it without confirm first. The answer says how many cards carry the label, and nothing changes. Change a label only when a person or your task asks you to. Never to tidy up. To apply, pass confirm true and a short reason.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>action</code></td><td>string</td><td>required</td><td>What to do to the label. One of: delete, rename, merge, archive</td></tr><tr><td><code>name</code></td><td>string</td><td>required</td><td>The label.</td></tr><tr><td><code>into</code></td><td>string</td><td>optional</td><td>Merge target, or the new name for rename.</td></tr><tr><td><code>confirm</code></td><td>boolean</td><td>optional</td><td>Apply it. Left out, nothing changes.</td></tr><tr><td><code>reason</code></td><td>string</td><td>optional</td><td>Why, in one line. Needed with confirm.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;label&quot;,
+    &quot;arguments&quot;: {
+      &quot;action&quot;: &quot;delete&quot;,
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="link makes one card the blocking parent of another. the child waits until the parent reaches done. pass remove true to take the link away again."><summary><code>link</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Makes one card the blocking parent of another. The child waits until the parent reaches Done. Pass remove …</span></summary><p class="desc">Makes one card the blocking parent of another. The child waits until the parent reaches Done. Pass remove true to take the link away again.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>parentId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>childId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>remove</code></td><td>boolean</td><td>optional</td><td>True removes the link. Left out, it adds one.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;link&quot;,
+    &quot;arguments&quot;: {
+      &quot;parentId&quot;: &quot;...&quot;,
+      &quot;childId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_boards lists the boards this connection reaches, with each board&#x27;s id, slug, columns and card counts. read-only."><summary><code>list_boards</code><span class="hint read">read-only</span><span>Lists the boards this connection reaches, with each board&#x27;s id, slug, columns and card counts. Read-only.</span></summary><p class="desc">Lists the boards this connection reaches, with each board&#x27;s id, slug, columns and card counts. Read-only.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_boards&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="move_card moves a card to a state or to an exact column. pass summary with a move to ready to send the card back for changes. pass clearwait to let agents claim the card again now."><summary><code>move_card</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Moves a card to a state or to an exact column. Pass summary with a move to Ready to send the card back for …</span></summary><p class="desc">Moves a card to a state or to an exact column. Pass summary with a move to Ready to send the card back for changes. Pass clearWait to let agents claim the card again now.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>state</code></td><td>string</td><td>optional</td><td>later, triage, todo, ready, running, blocked, review or done.</td></tr><tr><td><code>column</code></td><td>string</td><td>optional</td><td>A column, by id or label.</td></tr><tr><td><code>columnId</code></td><td>string</td><td>optional</td><td>A column, by id or label.</td></tr><tr><td><code>confirm</code></td><td>boolean</td><td>optional</td><td>Needed to move a card into Done or Blocked.</td></tr><tr><td><code>summary</code></td><td>string</td><td>optional</td><td>With a move to Ready: send the card back for changes, and say what to change.</td></tr><tr><td><code>clearWait</code></td><td>boolean</td><td>optional</td><td>Let agents claim the card again now. Clears its saved pull request link and its wait. With no state or column, it moves nothing.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;move_card&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="promote turns a raised signal into a triage card and marks the signal resolved."><summary><code>promote</code><span class="hint write">can modify</span><span>Turns a raised signal into a Triage card and marks the signal resolved.</span></summary><p class="desc">Turns a raised signal into a Triage card and marks the signal resolved.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>signalId</code></td><td>string | number</td><td>required</td><td>The question&#x27;s id.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;promote&quot;,
+    &quot;arguments&quot;: {
+      &quot;signalId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="raise files a signal: assumption (the default), question, concern, rule proposal, deferred or observation. only blocking parks your card: keep it for a choice you cannot undo. offer options only with type question, and mark your advice. if you are sure, act and finish the card. if not, ask a teammate in a comment with @name. use raise only when a person must decide."><summary><code>raise</code><span class="hint write">can modify</span><span>Files a signal: assumption (the default), question, concern, rule proposal, deferred or observation. Only …</span></summary><p class="desc">Files a signal: assumption (the default), question, concern, rule proposal, deferred or observation. Only blocking parks your card: keep it for a choice you cannot undo. Offer options only with type question, and mark your advice. If you are sure, act and finish the card. If not, ask a teammate in a comment with @name. Use raise only when a person must decide.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>type</code></td><td>string</td><td>optional</td><td>assumption, question, concern, rule (a rule proposal), deferred or observation. Default assumption, or question when you send options.</td></tr><tr><td><code>severity</code></td><td>string</td><td>required</td><td>How much it matters. One of: info, low, normal, high</td></tr><tr><td><code>title</code></td><td>string</td><td>required</td><td>The question as one full sentence. A person reads this first.</td></tr><tr><td><code>body</code></td><td>string</td><td>optional</td><td>The facts behind the question, in a few lines. Do not paste the card.</td></tr><tr><td><code>cardId</code></td><td>string | number</td><td>optional</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>sessionId</code></td><td>string</td><td>optional</td><td>Groups the notes from one session.</td></tr><tr><td><code>needsPerson</code></td><td>boolean</td><td>optional</td><td>Only a person may answer.</td></tr><tr><td><code>kind</code></td><td>string</td><td>optional</td><td>approval: a yes or no from a person. Use it for every yes or no, so the person sees Approve and Decline. open: any answer. Default open. One of: approval, open</td></tr><tr><td><code>to</code></td><td>string</td><td>optional</td><td>The person to ask, by name or id.</td></tr><tr><td><code>blocking</code></td><td>boolean</td><td>optional</td><td>Park your card until someone answers.</td></tr><tr><td><code>options</code></td><td>object[]</td><td>optional</td><td>The answers you offer. Offer them for every choice. The person may still write their own.</td></tr><tr><td><code>select</code></td><td>string</td><td>optional</td><td>one: single. many: several. Default one. One of: one, many</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;raise&quot;,
+    &quot;arguments&quot;: {
+      &quot;severity&quot;: &quot;info&quot;,
+      &quot;title&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="release ends a reading claim, or hands back a card you hold when it does not suit you, or not now. it goes back where it was and counts for nothing. you do not get it again, unless you pass until. in a batch it hands back that card only."><summary><code>release</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Ends a reading claim, or hands back a card you hold when it does not suit you, or not now. It goes back where …</span></summary><p class="desc">Ends a reading claim, or hands back a card you hold when it does not suit you, or not now. It goes back where it was and counts for nothing. You do not get it again, unless you pass until. In a batch it hands back that card only.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>reason</code></td><td>string</td><td>optional</td><td>Why it does not suit you. Include no secrets.</td></tr><tr><td><code>to</code></td><td>string</td><td>optional</td><td>A persona that may suit it; it is mentioned in a comment.</td></tr><tr><td><code>until</code></td><td>string</td><td>optional</td><td>A time (ISO) when the card comes back to you.</td></tr><tr><td><code>effort</code></td><td>string</td><td>optional</td><td>The effort the card needs, so a stronger agent takes it. One of: low, medium, high</td></tr><tr><td><code>runId</code></td><td>string</td><td>optional</td><td>Run id from claim_next.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;release&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="request_review ends your run and sends the card to review for a person to check, whatever the board&#x27;s done rules are. takes the same handoff as complete. it clears the assignee. pass reviewer to name who reviews."><summary><code>request_review</code><span class="hint write">can modify</span><span>Ends your run and sends the card to Review for a person to check, whatever the board&#x27;s Done rules are. Takes …</span></summary><p class="desc">Ends your run and sends the card to Review for a person to check, whatever the board&#x27;s Done rules are. Takes the same handoff as complete. It clears the assignee. Pass reviewer to name who reviews.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>summary</code></td><td>string</td><td>required</td><td>What you did and why, and what to check.</td></tr><tr><td><code>metadata</code></td><td>object</td><td>required</td><td>The handoff: files_changed, verification (what you ran and saw), residual_risk (text, or &quot;none&quot;).</td></tr><tr><td><code>reviewer</code></td><td>string</td><td>optional</td><td>Who should review it.</td></tr><tr><td><code>owner</code></td><td>string</td><td>optional</td><td>A person (name or id) to own a card with no owner.</td></tr><tr><td><code>ownerNote</code></td><td>string</td><td>optional</td><td>Why, for that person.</td></tr><tr><td><code>column</code></td><td>string</td><td>optional</td><td>A Review column, by id or label.</td></tr><tr><td><code>prUrl</code></td><td>string</td><td>optional</td><td>Pull request URL (https), saved on the card you hold.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;request_review&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;,
+      &quot;summary&quot;: &quot;...&quot;,
+      &quot;metadata&quot;: {}
+    }
+  }
+}</code></pre></details><details class="tool" data-text="resolve closes a question. with answer, it answers a teammate&#x27;s question when you know the answer. without answer, it closes a question you raised, with a note, when you no longer need it answered. only a person may close a question that has needsperson. a card parked on it returns to ready."><summary><code>resolve</code><span class="hint write">can modify</span><span>Closes a question. With answer, it answers a teammate&#x27;s question when you know the answer. Without answer, it …</span></summary><p class="desc">Closes a question. With answer, it answers a teammate&#x27;s question when you know the answer. Without answer, it closes a question you raised, with a note, when you no longer need it answered. Only a person may close a question that has needsPerson. A card parked on it returns to Ready.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>signalId</code></td><td>string | number</td><td>required</td><td>The question&#x27;s id.</td></tr><tr><td><code>answer</code></td><td>string</td><td>optional</td><td>The answer. Needs Worker. Leave it out to close your own question.</td></tr><tr><td><code>note</code></td><td>string</td><td>optional</td><td>Without answer: why you no longer need an answer.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;resolve&quot;,
+    &quot;arguments&quot;: {
+      &quot;signalId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="rules keeps your installed rules in step. with ruleid, it records where you installed a rule and its hash. call it once per file after you install a rule from get_setup (part &quot;rules&quot;). without ruleid, it tells you which rules you hold are stale. pass their ids and hashes before you finish work or after a sync."><summary><code>rules</code><span class="hint write">can modify</span><span>Keeps your installed rules in step. With ruleId, it records where you installed a rule and its hash. Call it …</span></summary><p class="desc">Keeps your installed rules in step. With ruleId, it records where you installed a rule and its hash. Call it once per file after you install a rule from get_setup (part &quot;rules&quot;). Without ruleId, it tells you which rules you hold are stale. Pass their ids and hashes before you finish work or after a sync.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>ruleId</code></td><td>string</td><td>optional</td><td>The rule&#x27;s id. Give it to record where you installed it.</td></tr><tr><td><code>client</code></td><td>string</td><td>optional</td><td>Your tool&#x27;s name.</td></tr><tr><td><code>path</code></td><td>string</td><td>optional</td><td>Where you wrote it.</td></tr><tr><td><code>hash</code></td><td>string</td><td>optional</td><td>The rule&#x27;s hash, as delivered.</td></tr><tr><td><code>rules</code></td><td>object[]</td><td>optional</td><td>Without ruleId: the rules you installed, id and hash.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;rules&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="set_brief replaces a brief: this board&#x27;s brief, or with scope workspace the workspace brief that every board&#x27;s agents read. use it only after the person sees the draft and says yes. how to write it: call get_setup with part &quot;briefs&quot;."><summary><code>set_brief</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Replaces a brief: this board&#x27;s brief, or with scope workspace the workspace brief that every board&#x27;s agents …</span></summary><p class="desc">Replaces a brief: this board&#x27;s brief, or with scope workspace the workspace brief that every board&#x27;s agents read. Use it only after the person sees the draft and says yes. How to write it: call get_setup with part &quot;briefs&quot;.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>scope</code></td><td>string</td><td>optional</td><td>board (the default) or workspace. One of: board, workspace</td></tr><tr><td><code>body</code></td><td>string</td><td>required</td><td>The whole brief, in markdown. It replaces the old one.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;set_brief&quot;,
+    &quot;arguments&quot;: {
+      &quot;body&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="show reads one card with its comments, questions and answers, prior runs and capacity. read-only; it needs no claim or persona."><summary><code>show</code><span class="hint read">read-only</span><span>Reads one card with its comments, questions and answers, prior runs and capacity. Read-only; it needs no …</span></summary><p class="desc">Reads one card with its comments, questions and answers, prior runs and capacity. Read-only; it needs no claim or persona.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>commentsBefore</code></td><td>number</td><td>optional</td><td>Older comments: commentsBefore from an earlier answer.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;show&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="stop_run ends the active run on a card now. the claim ends and the card goes back to ready. use it when an agent is stuck, wrong, or must be cut off. in a batch it stops that card only; batch true stops all."><summary><code>stop_run</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Ends the active run on a card now. The claim ends and the card goes back to Ready. Use it when an agent is …</span></summary><p class="desc">Ends the active run on a card now. The claim ends and the card goes back to Ready. Use it when an agent is stuck, wrong, or must be cut off. In a batch it stops that card only; batch true stops all.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>batch</code></td><td>boolean</td><td>optional</td><td>Stop the whole batch. Left out, only this card stops.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;stop_run&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="toggle_task flips a checklist item on a card between done and not done, or sets it to a given state. pick the item by position or by text."><summary><code>toggle_task</code><span class="hint write">can modify</span><span>Flips a checklist item on a card between done and not done, or sets it to a given state. Pick the item by …</span></summary><p class="desc">Flips a checklist item on a card between done and not done, or sets it to a given state. Pick the item by position or by text.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>index</code></td><td>number</td><td>optional</td><td>The item&#x27;s position, from 1.</td></tr><tr><td><code>text</code></td><td>string</td><td>optional</td><td>The item&#x27;s text, instead of a position.</td></tr><tr><td><code>done</code></td><td>boolean</td><td>optional</td><td>Set it to this instead of flipping it.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;toggle_task&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="undo reverts the card&#x27;s latest recorded change. calling it again redoes the change."><summary><code>undo</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Reverts the card&#x27;s latest recorded change. Calling it again redoes the change.</span></summary><p class="desc">Reverts the card&#x27;s latest recorded change. Calling it again redoes the change.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>required</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;undo&quot;,
+    &quot;arguments&quot;: {
+      &quot;cardId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="update_card changes any of a card&#x27;s fields in one call, and archives or restores it (archived). fields you leave out stay as they are. pass updates to change several cards at once. pass checklist as {add, remove} to change items in place. to move a card use move_card. a field that changed since you read the card refuses the call: call show, then write again."><summary><code>update_card</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Changes any of a card&#x27;s fields in one call, and archives or restores it (archived). Fields you leave out stay …</span></summary><p class="desc">Changes any of a card&#x27;s fields in one call, and archives or restores it (archived). Fields you leave out stay as they are. Pass updates to change several cards at once. Pass checklist as {add, remove} to change items in place. To move a card use move_card. A field that changed since you read the card refuses the call: call show, then write again.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cardId</code></td><td>string | number</td><td>optional</td><td>Card id, number (12) or key (WEB-12).</td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>body</code></td><td>string</td><td>optional</td><td>The description (markdown).</td></tr><tr><td><code>acceptance</code></td><td>string | null</td><td>optional</td><td>What done means. Null clears it.</td></tr><tr><td><code>verifyCommand</code></td><td>string | null</td><td>optional</td><td>The command that proves it.</td></tr><tr><td><code>priority</code></td><td>number</td><td>optional</td><td>3 urgent, 2 high, 1 normal, 0 low.</td></tr><tr><td><code>assignee</code></td><td>string | null</td><td>optional</td><td>A persona name. Null clears it.</td></tr><tr><td><code>owner</code></td><td>string</td><td>optional</td><td>A person (name or id) to own a card with no owner.</td></tr><tr><td><code>ownerNote</code></td><td>string</td><td>optional</td><td>Why, for that person.</td></tr><tr><td><code>tenant</code></td><td>string | null</td><td>optional</td><td>A group, such as a client.</td></tr><tr><td><code>effort</code></td><td>string | null</td><td>optional</td><td>low, medium or high.</td></tr><tr><td><code>estimate</code></td><td>string | null</td><td>optional</td><td>XS, S, M, L or XL. Needs the board&#x27;s estimates setting.</td></tr><tr><td><code>labels</code></td><td>string[]</td><td>optional</td><td>The whole set. addLabels and removeLabels change some.</td></tr><tr><td><code>addLabels</code></td><td>string[]</td><td>optional</td><td></td></tr><tr><td><code>removeLabels</code></td><td>string[]</td><td>optional</td><td></td></tr><tr><td><code>dueAt</code></td><td>string | number | null</td><td>optional</td><td>A due date. Needs the board&#x27;s due dates setting.</td></tr><tr><td><code>snoozeUntil</code></td><td>string | number | null</td><td>optional</td><td>Hide the card until this date. Null clears it.</td></tr><tr><td><code>park</code></td><td>boolean</td><td>optional</td><td>With snoozeUntil: park in Snoozed. Default true.</td></tr><tr><td><code>checklist</code></td><td>array | object</td><td>optional</td><td>An array replaces the list with {text, done} items. An object changes it: {add: [texts], remove: [positions from 1, or texts]}.</td></tr><tr><td><code>modelHint</code></td><td>string | null</td><td>optional</td><td>A model the work suits.</td></tr><tr><td><code>workspaceHint</code></td><td>string | null</td><td>optional</td><td>Where the work happens.</td></tr><tr><td><code>touchPaths</code></td><td>string[]</td><td>optional</td><td>Files it will touch.</td></tr><tr><td><code>skillPins</code></td><td>string[]</td><td>optional</td><td>Skills to load first.</td></tr><tr><td><code>branch</code></td><td>string | null</td><td>optional</td><td></td></tr><tr><td><code>prUrl</code></td><td>string | null</td><td>optional</td><td>The pull request (https).</td></tr><tr><td><code>expedite</code></td><td>boolean</td><td>optional</td><td>Let the card pass the WIP cap and be claimed first.</td></tr><tr><td><code>recur</code></td><td>object | null</td><td>optional</td><td>Repeat the card: every (daily, weekly, monthly), at, to. Null stops it.</td></tr><tr><td><code>goalMode</code></td><td>boolean</td><td>optional</td><td>Keep going until the acceptance criteria hold.</td></tr><tr><td><code>maxTurns</code></td><td>number | null</td><td>optional</td><td>Turns in goal mode. Null clears it.</td></tr><tr><td><code>maxRuntimeMs</code></td><td>number | null</td><td>optional</td><td>Longest run in milliseconds. Null clears it.</td></tr><tr><td><code>circuitLimit</code></td><td>number</td><td>optional</td><td>Failures that stop claims of the card.</td></tr><tr><td><code>archived</code></td><td>boolean</td><td>optional</td><td>True archives, false restores.</td></tr><tr><td><code>version</code></td><td>number</td><td>optional</td><td>The card version show gave you. Left out, this connection&#x27;s last read counts.</td></tr><tr><td><code>updates</code></td><td>object[]</td><td>optional</td><td>Several cards: each has cardId and the fields above.</td></tr><tr><td><code>verbose</code></td><td>boolean</td><td>optional</td><td>Return the whole card.</td></tr><tr><td><code>boardId</code></td><td>string</td><td>optional</td><td>Board id or slug.</td></tr><tr><td><code>persona</code></td><td>string</td><td>optional</td><td>The persona to act as.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_card&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="update_persona changes one persona&#x27;s name, title, description or brief. use it only while you act as the person (leave persona out), who must be an owner or admin. a connection that acts as a persona cannot use it. use it after the person sees the text and says yes. it never changes whether a persona may mark work done."><summary><code>update_persona</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Changes one persona&#x27;s name, title, description or brief. Use it only while you act as the person (leave …</span></summary><p class="desc">Changes one persona&#x27;s name, title, description or brief. Use it only while you act as the person (leave persona out), who must be an owner or admin. A connection that acts as a persona cannot use it. Use it after the person sees the text and says yes. It never changes whether a persona may mark work done.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>target</code></td><td>string</td><td>required</td><td>The persona to change: its name or id.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>The new name.</td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td>The new title.</td></tr><tr><td><code>description</code></td><td>string</td><td>optional</td><td>What the persona is for. Other agents read it in the team list.</td></tr><tr><td><code>brief</code></td><td>string</td><td>optional</td><td>The whole new brief, in markdown. It replaces the old one.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_persona&quot;,
+    &quot;arguments&quot;: {
+      &quot;target&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details></div><h3>Prompts <span class="count">6</span></h3><ul class="plain"><li><code>pull-work</code> Claim the next card and work it through to a handoff.</li><li><code>sync-rules</code> Install the board&#x27;s rules the way your environment expects.</li><li><code>catch-up</code> See what changed and what is waiting before you start.</li><li><code>plan</code> Turn a request into cards. Does not start the work.</li><li><code>standup</code> Summarize what changed on the board since the last session.</li><li><code>review</code> Say whether a card is ready for a person to accept.</li></ul>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/kanbanmcp.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/kanbanmcp.svg)](https://mcp.aianytime.net/s/kanbanmcp/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/kanbanmcp.svg)](https://mcp.aianytime.net/s/kanbanmcp/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/kanbanmcp.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Work &amp; productivity</h2>
+<ul class="chips"><li><a href="../milestone-by-ouroboros-apps/">Milestone by Ouroboros Apps</a></li><li><a href="../muslim-prayer-reminder-mcp/">Muslim Prayer Reminder MCP</a></li><li><a href="../neverapply/">NeverApply</a></li><li><a href="../office-suite/">Office Suite</a></li><li><a href="../pdftomarkdown-ai/">PDFtoMarkdown.ai</a></li><li><a href="../placecall/">PlaceCall</a></li><li><a href="../../c/productivity/">All of Work &amp; productivity</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>
