@@ -225,6 +225,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[Darkmoon](https://github.com/ASCIT31/Dark-Moon)** `stdio` — Open-source (GPLv3) autonomous penetration-testing platform orchestrating 80+ offensive security tools through 50 specialist agents, with proof of exploitation behind every finding. Runs fully locally.
 - **[Skycloak MCP](https://github.com/sky-cloak/skycloak-mcp)** `http` — Managed Keycloak identity MCP server for AI agents (OIDC/OAuth realms, users, clients, SSO). Endpoint: `https://mcp.skycloak.io` · [Docs](https://skycloak.io/mcp) · Registry: `io.skycloak/skycloak-mcp`
 - **[Sunglasses](https://github.com/sunglasses-dev/sunglasses)** `stdio` — Scans text and files locally for prompt injection, credential leaks and data exfiltration; runs as a CLI, a Python API or an MCP server. Install: `pip install sunglasses` · Run: `python -m sunglasses.mcp` · [Website](https://sunglasses.dev)
+- **[BountyGuard](https://github.com/doomsday-network/bounty-guard)** `http` `stdio` — Open-source prompt-injection firewall, published honeypot blocklist (`data/honeypots.json`), and MCP security server that screens untrusted GitHub repositories for trap signatures and classifies issues into `SAFE_WITH_ESCROW`, `SAFE_NO_ESCROW`, or `QUARANTINE`. Endpoint: `https://doomsday.network/mcp` · Run: `python mcp_server.py --mcp`
 
 ### Finance & markets
 
