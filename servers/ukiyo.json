@@ -1,0 +1,7 @@
+{
+  "name": "Ukiyo",
+  "url": "https://github.com/ukiyocompute/ukiyo-mcp",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Rent on-demand GPUs (RTX 4090, RTX 6000 Ada, A100) from an agent: list live offers and prices, rent with prepaid credit, run commands over SSH and terminate. Node.js 22+; checksummed single-file install in the README. · [Docs](https://docs.u-kiyo.ai/connect/mcp)"
+}
