@@ -1,8 +1,8 @@
 {
-  "name": "Nakagawa Master Original Theory Router",
+  "name": "AI Answer Guard",
   "url": "https://github.com/Nakagawa-master/nakagawa-theory-archive",
-  "category": "knowledge-memory",
+  "category": "security",
   "transport": "stdio",
-  "description": "Read-only local Python MCP: a Japanese, English or Chinese question returns a relevant Nakagawa Master original source, or no_fit. No account or API key; MCPB or documented checkout.",
+  "description": "Checks evidence-source independence, reported tool outcomes and action permissions before an AI answers or acts; suggests next checks. Local Python, no account or API key. [MCPB v1.2.0](https://github.com/Nakagawa-master/nakagawa-theory-archive/releases/tag/mcp-router-v1.2.0) · [Install guide](https://github.com/Nakagawa-master/nakagawa-theory-archive/blob/main/AI_ANSWER_GUARD_INSTALL.md). Covers 313 published derivative-to-original source links.",
   "registry": "io.github.Nakagawa-master/nakagawa-original-router"
 }
