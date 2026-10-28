@@ -1,0 +1,9 @@
+{
+  "name": "Orizn Visa",
+  "url": "https://github.com/MattJeff/orizn-mcp-server",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Visa and entry requirements for 49,750 passport-destination pairs (199 passports, 250 destinations) in 15 languages. Two tools work without a key; a free API key adds transit rules, comparisons and source URLs. Endpoint: `https://visa.orizn.app/mcp` · [Docs](https://visa.orizn.app/integrations/mcp)",
+  "endpoint": "https://visa.orizn.app/mcp",
+  "registry": "io.github.MattJeff/orizn-visa-mcp"
+}

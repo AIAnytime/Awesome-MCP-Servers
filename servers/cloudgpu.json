@@ -1,0 +1,7 @@
+{
+  "name": "CloudGPU",
+  "url": "https://github.com/mrhy7176/cloudgpu-mcp",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Rent GPUs billed by the minute from an MCP client: live GPU prices and quotes, instances created from an approved quote with a budget and time limit, background commands, log tailing, SFTP upload and download, and destroy to stop billing; the same key also lists models on CloudGPU's OpenAI-compatible model API. Requires an API key and prepaid balance; `CLOUDGPU_READ_ONLY=1` exposes only the look-up tools. Install: `npx -y cloudgpu-mcp` (set `CLOUDGPU_API_KEY`) · [Docs](https://github.com/mrhy7176/cloudgpu-mcp#readme)"
+}

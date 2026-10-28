@@ -1,0 +1,9 @@
+{
+  "name": "Iris",
+  "url": "https://iriscan.app/mcp",
+  "category": "security",
+  "transport": "http",
+  "description": "On-chain investigations: analyzes wallets on Solana, EVM chains, Bitcoin and Tron, traces transfers through mixers, exchanges and instant swaps, and finds a Solana token's insiders. API key with 10 free calls a day, or paid per call in USDC with x402. Endpoint: `https://iriscan.app/mcp`; Registry: `io.github.0xVector0/iris`",
+  "endpoint": "https://iriscan.app/mcp",
+  "registry": "io.github.0xVector0/iris"
+}

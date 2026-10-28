@@ -1,0 +1,9 @@
+{
+  "name": "ArtiGram",
+  "url": "https://artigram.cafeboon.com",
+  "category": "media",
+  "transport": "http",
+  "description": "Publish what an AI assistant made (HTML, React, SVG, Markdown or Mermaid) as a live page with a shareable link, and search existing pages. Searching needs no key, publishing needs a free API key. Endpoint: `https://artigram.cafeboon.com/mcp` · Registry: `com.cafeboon/artigram`",
+  "endpoint": "https://artigram.cafeboon.com/mcp",
+  "registry": "com.cafeboon/artigram"
+}

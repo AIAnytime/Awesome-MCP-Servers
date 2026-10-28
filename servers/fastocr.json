@@ -1,0 +1,8 @@
+{
+  "name": "FastOCR MCP",
+  "url": "https://github.com/fastocr-org/fastocr-mcp",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "OCR local PDF files through the FastOCR API and check API balance from MCP clients. Install: `uvx fastocr-mcp` · [PyPI](https://pypi.org/project/fastocr-mcp/) · [MCP Registry](https://registry.modelcontextprotocol.io/)",
+  "registry": "io.github.fastocr-org/fastocr-mcp"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Carbon Forge",
+  "url": "https://carbonforge.dev/docs/p/guides/mcp-anonymous-access",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Source control and a shared record for people and agents: code, files and prose in one record on the server, with lanes instead of clones and all-or-nothing landings. Reads public workspaces without a token; writing needs a bearer token. Endpoint: `https://carbonforge.dev/api/mcp`",
+  "endpoint": "https://carbonforge.dev/api/mcp",
+  "registry": "io.github.100monkeys-ai/carbon-forge"
+}

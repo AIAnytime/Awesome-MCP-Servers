@@ -1,0 +1,8 @@
+{
+  "name": "Recall Kitchen",
+  "url": "https://github.com/Recall-Kitchen/rk-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword, UPC, product name or vehicle, and fetch a full notice. Free API key or anonymous x402 pay-per-call. Endpoint: `https://app.recallkitchen.com/mcp` · [Docs](https://recallkitchen.com/docs/#mcp)",
+  "endpoint": "https://app.recallkitchen.com/mcp"
+}

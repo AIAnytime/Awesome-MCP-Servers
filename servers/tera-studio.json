@@ -1,0 +1,9 @@
+{
+  "name": "Tera Studio",
+  "url": "https://terastudio.co/ai-assistants/",
+  "category": "media",
+  "transport": "http",
+  "description": "Find a song's key and tempo, or move it up or down by up to 6 semitones with the file processed in the browser and never uploaded, and get the steps to hear a song in your own voice. Read-only, no account or API key. Endpoint: `https://terastudio.co/mcp`",
+  "endpoint": "https://terastudio.co/mcp",
+  "registry": "co.terastudio/tera-studio"
+}

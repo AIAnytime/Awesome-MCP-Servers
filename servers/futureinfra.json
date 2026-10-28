@@ -1,0 +1,8 @@
+{
+  "name": "FutureInfra",
+  "url": "https://futureinfra.ai/docs/mcp/",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Manage Korean cloud virtual machines, snapshots, public IPs and firewall rules via an authenticated hosted endpoint. OAuth or API key required; usage is paid from prepaid credits and console access is limited to South Korea.",
+  "endpoint": "https://futureinfra.ai/v1/mcp"
+}

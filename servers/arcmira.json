@@ -1,0 +1,8 @@
+{
+  "name": "Arcmira",
+  "url": "https://github.com/arcmira/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search indexed YouTube and podcast transcripts for timestamped quotes, speakers, sponsors and recommendations. Requires an Arcmira account via OAuth or an API key; [Arcmira](https://arcmira.com), [API docs](https://arcmira.com/docs), [MCP setup](https://arcmira.com/docs/mcp-server).",
+  "endpoint": "https://mcp.arcmira.com/mcp"
+}

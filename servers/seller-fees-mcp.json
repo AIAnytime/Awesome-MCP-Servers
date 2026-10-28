@@ -1,0 +1,8 @@
+{
+  "name": "seller-fees-mcp",
+  "url": "https://github.com/NarwhalThePong/seller-fees-mcp",
+  "category": "commerce-travel",
+  "transport": "stdio",
+  "description": "Seller fee, payout and break-even price calculator for Gumroad, Stripe, PayPal and Etsy. Runs locally, no API key and no network calls. Install: `npx -y seller-fees-mcp`.",
+  "registry": "io.github.NarwhalThePong/seller-fees-mcp"
+}

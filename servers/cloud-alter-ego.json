@@ -1,0 +1,8 @@
+{
+  "name": "Cloud Alter Ego",
+  "url": "https://cloudalterego.cafeboon.com",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "One memory for every AI chat: rules, a profile and per-project journals stored as plain Markdown files in your own OneDrive, Google Drive, Dropbox, GitHub or Azure DevOps. OAuth sign-in; the server does not keep the content. Endpoint: `https://cloudalterego.cafeboon.com/mcp` · [Docs](https://cloudalterego.cafeboon.com/docs.html)",
+  "endpoint": "https://cloudalterego.cafeboon.com/mcp"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Lava",
+  "url": "https://github.com/dustinliang666-blip/lava-mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Read-only A-share stock and concept-board news-flow heat monitoring via structured remote MCP/REST for quant tools and AI Agent market research. Endpoint: `https://lava.ai-dolphin.com/subscribe/v1/mcp` (API key) · [Docs](https://lava.ai-dolphin.com/subscribe/docs) · Regi
+
+
+
+

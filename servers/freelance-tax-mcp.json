@@ -1,0 +1,8 @@
+{
+  "name": "freelance-tax-mcp",
+  "url": "https://github.com/NarwhalThePong/freelance-tax-mcp",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "US freelancer tax calculators for 2026: quarterly estimated tax, self-employment tax, QBI deduction, hourly rate, IRS due dates, mileage and home office. Runs locally, no API key. Install: `npx -y freelance-tax-mcp`.",
+  "registry": "io.github.NarwhalThePong/freelance-tax-mcp"
+}

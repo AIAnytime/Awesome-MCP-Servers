@@ -1,0 +1,9 @@
+{
+  "name": "GSCmate",
+  "url": "https://github.com/Fushey/gscmate-mcp-listing",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Read-only Search Console data for AI agents: search analytics, sitemap metadata, and URL inspection via per-user OAuth 2.1. Paid plans from $19/month. Endpoint: `https://gscmate.com/mcp`",
+  "endpoint": "https://gscmate.com/mcp",
+  "registry": "com.gscmate/gscmate"
+}

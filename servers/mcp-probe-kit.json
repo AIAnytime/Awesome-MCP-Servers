@@ -1,0 +1,8 @@
+{
+  "name": "mcp-probe-kit",
+  "url": "https://github.com/mybolide/mcp-probe-kit",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Spec-driven dev workflow for coding agents: start_feature/start_bugfix orchestration, resumable plans, a converge gate requiring requirements/spec/implementation/test/review evidence, cross-session history. Install: `npx -y mcp-probe-kit@latest`.",
+  "registry": "io.github.mybolide/mcp-probe-kit"
+}

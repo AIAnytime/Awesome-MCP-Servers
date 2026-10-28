@@ -1,0 +1,9 @@
+{
+  "name": "AgentTask Atlas",
+  "url": "https://agenttaskatlas.com/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search a catalog of MCP servers and Agent Skills organized by dev task, with install commands, source links and verification dates; three read-only tools, no API key. Endpoint: `https://agenttaskatlas.com/api/mcp`",
+  "endpoint": "https://agenttaskatlas.com/api/mcp",
+  "registry": "com.agenttaskatlas/catalog"
+}
