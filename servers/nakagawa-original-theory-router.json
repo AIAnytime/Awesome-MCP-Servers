@@ -3,6 +3,6 @@
   "url": "https://github.com/Nakagawa-master/nakagawa-theory-archive",
   "category": "security",
   "transport": "stdio",
-  "description": "Reduce AI hallucination risks, evidence-based self-contradictions, and false “task completed” claims before your assistant answers or acts. AI Answer Guard is a free, local, read-only MCP server that checks supplied sources for duplicate or conflicting evidence, compares success claims with tool execution results, flags missing permissions and irreversible-action risks, and suggests concrete corrections—while connecting 313 published derivative entries to Nakagawa Master’s canonical original theories. Calls are host-chosen; no automatic interception.",
+  "description": "Local read-only MCP: check AI answers against supplied evidence roots, tool results and action permissions; nine tools also navigate 313 published Nakagawa Master derivative→canonical-original links. Install: `qwen extensions install Nakagawa-master/nakagawa-theory-archive` · [MCPB v1.2.0](https://github.com/Nakagawa-master/nakagawa-theory-archive/releases/tag/mcp-router-v1.2.0) · [Setup](https://github.com/Nakagawa-master/nakagawa-theory-archive/blob/main/AI_ANSWER_GUARD_INSTALL.md).",
   "registry": "io.github.Nakagawa-master/nakagawa-original-router"
 }
