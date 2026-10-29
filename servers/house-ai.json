@@ -1,0 +1,8 @@
+{
+  "name": "House AI",
+  "url": "https://github.com/Apex-Byte-Technologies/house-ai-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Redesign a room, house exterior or yard from a photo in 100+ styles, preview wall paint and flooring, and find real furniture and decor to match; OAuth sign-in with a House AI account. Endpoint: `https://mcp.houseaiapp.com/mcp` · [Docs](https://www.houseaiapp.com/connector)",
+  "endpoint": "https://mcp.houseaiapp.com/mcp"
+}
