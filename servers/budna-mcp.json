@@ -1,0 +1,8 @@
+{
+  "name": "Budna MCP",
+  "url": "https://github.com/budna-marketplace/mcp",
+  "category": "commerce-travel",
+  "transport": "stdio",
+  "description": "Search and inspect public listings on Budna, a Swedish second-hand marketplace: categories, filters, listing details, seller profiles, bid and rating summaries. Read-only; no account or API key. Install: `npx --yes @budna-marketplace/mcp` · [Website](https://budna.se)",
+  "registry": "io.github.budna-marketplace/mcp"
+}
