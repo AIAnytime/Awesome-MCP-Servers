@@ -1,0 +1,8 @@
+{
+  "name": "PDFHaul",
+  "url": "https://www.pdfhaul.com/mcp-server",
+  "category": "(read the allowed values in lint.py)",
+  "transport": "http",
+  "description": "PDF MCP server with 23 tools for Claude: merge, split, compress, OCR, extract tables, remove duplicate pages. OAuth sign-in.",
+  "endpoint": "https://mcp.pdfhaul.com/mcp"
+}
