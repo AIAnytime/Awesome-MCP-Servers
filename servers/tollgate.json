@@ -1,0 +1,7 @@
+{
+  "name": "Tollgate",
+  "url": "https://github.com/kkU1444/tollgate",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Zero-dependency governance gateway for AI agents that move money: 16-ring deterministic enforcement chain, canary-token injection fence, Ed25519-signed human approvals, budget escrow with freeze/clawback, hash-chained audit, TollgateBench in CI. Install: `pip install tollgate-gateway`; launch: `python -m tollgate mcp` (also fronts any third-party stdio MCP server as a governed proxy)."
+}
