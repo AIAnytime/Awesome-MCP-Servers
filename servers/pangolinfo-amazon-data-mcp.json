@@ -1,0 +1,8 @@
+{
+  "name": "Pangolinfo Amazon Data MCP",
+  "url": "https://www.pangolinfo.com/amazon-data-mcp/",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Hosted Amazon product, search, review and seller-data lookups for AI clients; requires a Pangolinfo API key and includes 60 free credits monthly. Endpoint: `https://mcp.pangolinfo.com/mcp`",
+  "endpoint": "https://mcp.pangolinfo.com/mcp"
+}
