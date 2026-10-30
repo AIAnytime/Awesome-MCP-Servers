@@ -1,0 +1,8 @@
+{
+  "name": "b2bsearch",
+  "url": "https://github.com/b2bsearch/mcp",
+  "category": "marketing",
+  "transport": "stdio",
+  "description": "Six B2B prospecting tools over the b2bsearch Actors on Apify: people search (free `count` and `market` modes), decision makers by domain, new hires, lookalike companies, email format and email by profile URL. Your own Apify token, pay per result, misses are free; a free Apify account gets 500 rows a month per Actor. Install: `npx -y @b2bsearch/mcp` · Registry: `io.github.b2bsearch/mcp`",
+  "registry": "io.github.b2bsearch/mcp"
+}
