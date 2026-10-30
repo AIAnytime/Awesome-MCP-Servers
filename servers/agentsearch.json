@@ -1,0 +1,8 @@
+{
+  "name": "AgentSearch",
+  "url": "https://github.com/agentsearchhq-coder/agentsearch-mcp",
+  "category": "search",
+  "transport": "stdio",
+  "description": "Real-time web search, URL-to-clean-Markdown extraction and JavaScript page rendering for AI agents; free search tier with no API key (up to 25 searches a day), paid calls $0.005 each. Install: `npx -y @agentsearchhq/agentsearch-mcp` · [Docs](https://agentsearchhq.com)",
+  "registry": "io.github.agentsearchhq-coder/agentsearch-mcp"
+}
