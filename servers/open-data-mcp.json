@@ -1,0 +1,8 @@
+{
+  "name": "open-data-mcp",
+  "url": "https://github.com/markatdataandbeyond/open-data-mcp",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Free local MCP with ten tools on official open data: EU VAT/LEI, TED tenders, PubMed, ClinicalTrials.gov, French and Nordic company registries, NHTSA VIN recalls and MET Norway weather. No API key for basic tools. Install: `npm ci && node src/index.js`.",
+  "registry": "io.github.markatdataandbeyond/open-data-mcp"
+}
