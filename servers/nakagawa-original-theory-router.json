@@ -3,6 +3,6 @@
   "url": "https://github.com/Nakagawa-master/nakagawa-theory-archive",
   "category": "security",
   "transport": "stdio",
-  "description": "Local read-only MCP: check AI answers against supplied evidence roots, tool results and action permissions; nine tools also navigate 313 published Nakagawa Master derivative→canonical-original links. Install: `qwen extensions install Nakagawa-master/nakagawa-theory-archive` · [MCPB v1.2.0](https://github.com/Nakagawa-master/nakagawa-theory-archive/releases/tag/mcp-router-v1.2.0) · [Setup](https://github.com/Nakagawa-master/nakagawa-theory-archive/blob/main/AI_ANSWER_GUARD_INSTALL.md).",
+  "description": "Check AI answers before you rely on them: spot repeated or conflicting sources, compare claims of completed tasks with actual tool results, and flag missing permissions. Free, local, read-only MCP for Python 3. Install with `qwen extensions install Nakagawa-master/nakagawa-theory-archive` or [MCPB v1.2.0](https://github.com/Nakagawa-master/nakagawa-theory-archive/releases/tag/mcp-router-v1.2.0). [Setup guide](https://github.com/Nakagawa-master/nakagawa-theory-archive/blob/main/AI_ANSWER_GUARD_INSTALL.md).",
   "registry": "io.github.Nakagawa-master/nakagawa-original-router"
 }
