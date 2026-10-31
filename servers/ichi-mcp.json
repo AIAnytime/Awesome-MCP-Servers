@@ -1,0 +1,7 @@
+{
+  "name": "ichi-mcp",
+  "url": "https://github.com/bernik-bot/ichi-mcp",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Reads the live ICHI internet cyber-health index: current band (NORMAL to CRITICAL), score out of 100, six threat dimensions, critical-vulnerability advisories, and feed health — all keyless, no account needed. Install: `uvx --from git+https://github.com/bernik-bot/ichi-mcp ichi-mcp`"
+}
