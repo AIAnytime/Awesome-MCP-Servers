@@ -1,0 +1,9 @@
+{
+  "name": "model.tools",
+  "url": "https://github.com/maceip/model-tools-mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Zero-auth email OTP extractor, KV state checkpoints, webhook receiver bins, delayed HTTP wakeup timers, and URL-to-Markdown reader for autonomous agents. Endpoint: `https://mcp.model.tools/mcp` · [Docs](https://docs.model.tools/llms.txt) · Registry: `tools.model/model-tools-mcp`",
+  "endpoint": "https://mcp.model.tools/mcp",
+  "registry": "tools.model/model-tools-mcp"
+}
