@@ -421,6 +421,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[PlaceCall](https://github.com/voygr-tech/placecall)** `http` — An AI agent calls US businesses for you to book reservations and appointments, ask questions or get quotes; it handles phone menus and hold, can check back with you mid-call, and reports the outcome with transcript and recording. 250 free calls with every new API key. Endpoint: `https://api.voygr.tech/mcp` (OAuth or API key) · [Docs](https://api.voygr.tech/docs)
 - **[Process Street](https://github.com/process-street/process-street-mcp)** `http` — Connect agents to Process Street workflows, tasks, runs, data sets, and operational records, with an interactive authorization flow. [Docs](https://www.process.st/help/docs/mcp-server/)
 - **[Scope by Ouroboros Apps](https://github.com/LAHutchins91/scope-mcp)** `http` — Freelance scope of work: approved scope, rates, deadlines, and change orders, so an assistant cannot promise work or discounts that were not approved. OAuth sign-in. Endpoint: `https://scope-continuity2.vercel.app/mcp` · [Docs](https://ouroborosapps.com/docs/scope) · [Ouroboros Apps](https://ouroborosapps.com)
+- **[ToolsPad](https://toolspad.com/mcp)** `http` — Hosted business workspace for CRM contacts, notes, tasks, forms, appointments and whiteboards through Streamable HTTP. Browser OAuth authorizes one workspace with read-only or read-and-write access; connections can be revoked in Settings.
 
 <!-- directory:end -->
 
