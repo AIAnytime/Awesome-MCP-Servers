@@ -364,6 +364,7 @@ A listing is not a security review. Read a server's source and permissions befor
 ### Commerce, travel & logistics
 
 - **[Agent Harbour](https://kicorn.com/developers)** `http` — Task exchange for people and AI: browse on-site and online work worldwide, then publish, claim, message, deliver and review using verified-email Bearer credentials; discovery is public and payments are arranged directly between participants. Endpoint: `https://kicorn.com/api/mcp`
+- **[BestPrice Shopping](https://github.com/TheBestCo/bestprice-mcp)** `http` — Read-only shopping decisions, product search, live offers, delivered totals, and price history for Greece. No BestPrice account or API key. Endpoint: `https://mcp.bestprice.gr/mcp`
 - **[BirkinBagStock](https://birkinbagstock.com/llms.txt)** `http` — Independent Hermès resale index: inventory, market prices, auction calendar and results. Endpoint: `https://birkinbagstock.com/mcp` (no auth) · Registry: `com.birkinbagstock/mcp`
 - **[Brainy Prices](https://prices.brainy.ae/developers.html)** `http` — UAE cost of living data: school fees (KHDA), registered rents (DLD), fuel, utilities, telecom plans and relocation costs, with source and date on every answer. Read-only; no auth. Endpoint: `https://prices.brainy.ae/mcp/v2`
 - **[BuyWhere](https://github.com/BuyWhere/buywhere-mcp)** `http` — Cross-border product search and price comparison across 370M+ listings. No API key. Endpoint: `https://api.buywhere.ai/mcp` · Install: `npx -y @buywhere/mcp-server` · [Docs](https://docs.buywhere.ai)

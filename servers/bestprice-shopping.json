@@ -1,0 +1,9 @@
+{
+  "name": "BestPrice Shopping",
+  "url": "https://github.com/TheBestCo/bestprice-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Read-only shopping decisions, product search, live offers, delivered totals, and price history for Greece. No BestPrice account or API key. Endpoint: `https://mcp.bestprice.gr/mcp`",
+  "endpoint": "https://mcp.bestprice.gr/mcp",
+  "registry": "gr.bestprice/mcp"
+}
