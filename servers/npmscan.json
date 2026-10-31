@@ -1,0 +1,9 @@
+{
+  "name": "NPMScan",
+  "url": "https://github.com/salemalem/npmscan-mcp-plugin",
+  "category": "security",
+  "transport": "http",
+  "description": "Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and transitive dependency lookups for coding agents. Endpoint: `https://npmscan.com/api/mcp`",
+  "endpoint": "https://npmscan.com/api/mcp",
+  "registry": "io.github.salemalem/npmscan"
+}
