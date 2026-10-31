@@ -1,0 +1,9 @@
+{
+  "name": "SaaS Pro Max",
+  "url": "https://saaspro.dev/docs/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Query product analytics, investigate errors, and manage feature flags with scoped OAuth access; free workspace available.",
+  "endpoint": "https://saaspro.dev/api/mcp",
+  "registry": "io.github.abdurshd/saas-pro-max"
+}
