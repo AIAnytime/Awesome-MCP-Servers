@@ -1,0 +1,7 @@
+{
+  "name": "Polish MCP Servers",
+  "url": "https://github.com/kamilkaczmareksolutions/polish-mcp-servers",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "14 read-only tools for Polish public registers and law: company lookup by NIP, REGON or KRS (GUS REGON BIR1.2), new KRS companies, Sejm ELI legal acts, SAOS court judgments, tenders, building permits, land parcels and zoning, EV charging stations and more. `tools/list` needs no token; each call runs a public pay-per-event Apify Actor billed to your `APIFY_TOKEN`. Install: `npx -y polish-mcp-servers` · [Docs](https://github.com/kamilkaczmareksolutions/polish-mcp-servers#readme)"
+}
