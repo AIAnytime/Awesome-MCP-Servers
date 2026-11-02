@@ -1,0 +1,8 @@
+{
+  "name": "nonsynthetic",
+  "url": "https://nonsynthetic.net",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "443 priced tools for agents on one account-free x402 edge: armory utilities, market tapes, intel dossiers, wallets, board routes. `tools/list` free; calls pay x402 USDC (Base/Solana) or `x-credit` prepaid tokens. Endpoint: `https://api.nonsynthetic.net/mcp`",
+  "endpoint": "https://api.nonsynthetic.net/mcp"
+}
