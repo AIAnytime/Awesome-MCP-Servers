@@ -1,0 +1,7 @@
+{
+  "name": "Dynobase",
+  "url": "https://dynobase.dev/dynamodb-mcp-server/",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Local MCP server inside the Dynobase desktop app for Amazon DynamoDB: list tables, describe schemas and run Scan, Query, GetItem and PartiQL SELECT through your AWS profiles, read-only unless you allow writes. Paid app with a 7-day trial · Runs on `127.0.0.1` with a bearer token; stdio clients connect via `mcp-remote` · [Docs](https://dynobase.dev/dynamodb-mcp-server/)"
+}
