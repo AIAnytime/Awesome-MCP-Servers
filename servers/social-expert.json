@@ -1,0 +1,9 @@
+{
+  "name": "Social Expert",
+  "url": "https://socialexpert.app/tiktok-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "TikTok content ideas, trend and sound details, regional posting times, keywords, hashtags and timestamped feedback on uploaded video drafts by ForUsApps, LLC; OAuth sign-in with one-time free allowances and paid monthly plans.",
+  "endpoint": "https://api.socialexpert.app/functions/v1/mcp",
+  "registry": "app.socialexpert/social-expert"
+}
