@@ -1,0 +1,9 @@
+{
+  "name": "Ahel",
+  "url": "https://github.com/ahel-technologies/ahel",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Data and tools for AI agents from one catalog: company and people enrichment, SEO and SERP data, social media data, official EU business registers and sanctions lists; the price is shown before each call. OAuth sign-in at ahel.ai, free to start, pay per call. Endpoint: `https://mcp.ahel.ai` · [Docs](https://ahel.ai/agents)",
+  "endpoint": "https://mcp.ahel.ai",
+  "registry": "ai.ahel/ahel"
+}
