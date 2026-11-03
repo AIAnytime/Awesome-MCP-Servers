@@ -1,0 +1,9 @@
+{
+  "name": "AIAgentCycle",
+  "url": "https://github.com/aiagentcycle/aiagentcycle-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Read-only access to current AIAgentCycle services, pricing, 190 integrations, case studies, knowledge base and contact details; no account or API key. Endpoint: `https://mcp.aiagentcycle.com/mcp`",
+  "endpoint": "https://mcp.aiagentcycle.com/mcp",
+  "registry": "com.aiagentcycle/aiagentcycle"
+}
