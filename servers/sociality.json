@@ -1,0 +1,9 @@
+{
+  "name": "Sociality MCP",
+  "url": "https://github.com/socialityio/sociality-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Official Sociality.io server for social media analytics, post insights and competitor benchmarking across Facebook, X, Instagram, YouTube, LinkedIn and TikTok. OAuth sign-in with a Sociality.io account. Endpoint: `https://api.sociality.io/mcp` · [Docs](https://sociality.io/mcp) · Registry: `io.sociality/sociality-mcp`",
+  "endpoint": "https://api.sociality.io/mcp",
+  "registry": "io.sociality/sociality-mcp"
+}
