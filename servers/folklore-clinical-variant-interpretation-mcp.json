@@ -1,0 +1,9 @@
+{
+  "name": "Folklore Clinical Variant Interpretation MCP",
+  "url": "https://github.com/helena-bioinformatics/folklore-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "ACMG/AMP germline variant classification, gene profiles, disease associations and literature. Free, read-only Streamable HTTP with no account or API key; [setup](https://folklore.helena.bio/integrations/mcp).",
+  "endpoint": "https://api.helena.bio/folklore/v1/mcp",
+  "registry": "io.github.helena-bioinformatics/folklore"
+}
