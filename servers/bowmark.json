@@ -3,7 +3,7 @@
   "url": "https://github.com/bowmark-ai/mcp",
   "category": "search",
   "transport": "http",
-  "description": "Hosted MCP server with typed functions for live websites: search, read and act on LinkedIn, Amazon, YouTube, Reddit, Airbnb and more, returned as JSON and tested on a schedule. Needs a Bowmark account (OAuth or API key); starts with a free $10. · [Docs](https://bowmark.ai/docs)",
+  "description": "Hosted MCP server with a library of tested functions for live websites (LinkedIn, Amazon, YouTube, Reddit, Airbnb and more): find one with get_library, call it with run, get JSON back. Needs a Bowmark account (OAuth or API key); starts with a free $10. · [Docs](https://bowmark.ai/docs)",
   "endpoint": "https://api.bowmark.ai/mcp",
   "registry": "ai.bowmark/bowmark"
 }
