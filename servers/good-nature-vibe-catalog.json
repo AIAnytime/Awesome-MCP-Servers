@@ -1,0 +1,9 @@
+{
+  "name": "Good Nature Vibe Catalog",
+  "url": "https://github.com/aiagentcycle/gnv-catalog-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Read-only product and public shop knowledge search with no account, cart, orders, payments or checkout. Endpoint: `https://catalog-mcp.goodnaturevibe.com/mcp`",
+  "endpoint": "https://catalog-mcp.goodnaturevibe.com/mcp",
+  "registry": "com.goodnaturevibe/catalog"
+}
