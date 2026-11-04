@@ -1,0 +1,9 @@
+{
+  "name": "Deacon",
+  "url": "https://heydeacon.com/features/mcp-server",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Lets your coding agent read what customers told Deacon's support chat, next to your site's JavaScript errors, then find the cause in your code and show you the fix. Free plan, no card. OAuth sign-in or a Coding agent key. Endpoint: `https://heydeacon.com/mcp` · [Docs](https://heydeacon.com/docs/api#mcp-server) · Registry: `com.heydeacon/deacon`",
+  "endpoint": "https://heydeacon.com/mcp",
+  "registry": "com.heydeacon/deacon"
+}

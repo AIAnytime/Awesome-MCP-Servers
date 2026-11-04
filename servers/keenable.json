@@ -1,0 +1,9 @@
+{
+  "name": "Keenable",
+  "url": "https://github.com/keenableai/keenable-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Web search over Keenable's own index and page fetch as clean Markdown, with site and date filters. Works with no API key on a rate-limited public tier. Endpoint: `https://api.keenable.ai/mcp` · [Docs](https://docs.keenable.ai)",
+  "endpoint": "https://api.keenable.ai/mcp",
+  "registry": "ai.keenable/web-search"
+}
