@@ -1,0 +1,9 @@
+{
+  "name": "Rugsight",
+  "url": "https://github.com/rugsightapp/rugsight",
+  "category": "finance",
+  "transport": "http",
+  "description": "Rug-pull risk scores for Solana SPL tokens from on-chain data (authorities, holder concentration, liquidity, age): free `get_token_risk_score`, plus a full report via `get_token_risk_report` paid per call with x402 (0.03 USDC), no API key. Endpoint: `https://rugsight.rugsight.workers.dev/mcp`",
+  "endpoint": "https://rugsight.rugsight.workers.dev/mcp",
+  "registry": "dev.workers.rugsight.rugsight/rugsight"
+}
