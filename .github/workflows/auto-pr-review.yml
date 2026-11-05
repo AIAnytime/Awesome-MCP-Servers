@@ -1,0 +1,58 @@
+name: Automated PR review and merge
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Existing PR number to process
+        required: true
+        type: number
+
+# Only grant the token what each job needs. Fork PR code is never executed here.
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-manager-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: PR-Agent review
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout trusted base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Run PR-Agent review
+        uses: qodo-ai/pr-agent@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          CONFIG.MODEL: gpt-4.1-mini
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.auto_approve: "false"
+        with:
+          command: `/review`
+          pr_url: ${{ github.event.pull_request.html_url || format('https://github.com/{0}/pull/{1}', github.repository, inputs.pr_number) }}
+
+  # This job deliberately does not approve based only on CI. A maintainer must
+  # review the PR-Agent report until a separate deterministic acceptance gate
+  # is implemented for every CONTRIBUTING.md rule.
+  gate:
+    name: Await maintainer acceptance
+    needs: review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain current safety gate
+        run: |
+          echo "AI review completed. Automatic approval is intentionally disabled."
+          echo "Add a deterministic contribution validator and explicit pass/fail output before enabling unattended merges."
