@@ -1,58 +1,43 @@
-name: Automated PR review and merge
+name: PR-Agent review
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review]
-  workflow_dispatch:
-    inputs:
-      pr_number:
-        description: Existing PR number to process
-        required: true
-        type: number
+    types: [opened, reopened, synchronize, ready_for_review, review_requested]
 
-# Only grant the token what each job needs. Fork PR code is never executed here.
+# PR-Agent reads the PR diff through GitHub's API. Never check out or execute
+# code from a fork in a pull_request_target workflow.
 permissions:
   contents: read
-  pull-requests: write
   issues: write
+  pull-requests: write
 
 concurrency:
-  group: pr-manager-${{ github.event.pull_request.number || inputs.pr_number }}
+  group: pr-agent-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   review:
-    name: PR-Agent review
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    if: github.event.sender.type != 'Bot' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Checkout trusted base branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-      - name: Run PR-Agent review
-        uses: qodo-ai/pr-agent@main
+      - name: Run PR-Agent with Gemini
+        uses: the-pr-agent/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-          CONFIG.MODEL: gpt-4.1-mini
+          config.model: "gemini/gemini-3.8-flash"
+          config.fallback_models: '[]'
+          GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
-          github_action_config.auto_approve: "false"
-        with:
-          command: `/review`
-          pr_url: ${{ github.event.pull_request.html_url || format('https://github.com/{0}/pull/{1}', github.repository, inputs.pr_number) }}
-
-  # This job deliberately does not approve based only on CI. A maintainer must
-  # review the PR-Agent report until a separate deterministic acceptance gate
-  # is implemented for every CONTRIBUTING.md rule.
-  gate:
-    name: Await maintainer acceptance
-    needs: review
-    runs-on: ubuntu-latest
-    steps:
-      - name: Explain current safety gate
-        run: |
-          echo "AI review completed. Automatic approval is intentionally disabled."
-          echo "Add a deterministic contribution validator and explicit pass/fail output before enabling unattended merges."
+          pr_reviewer.extra_instructions: >-
+            Review this repository as a strict community directory for Model Context Protocol servers.
+            Check CONTRIBUTING.md requirements: exactly one server per PR; a real MCP server using
+            stdio, Streamable HTTP, or SSE; publicly reachable repository, package, or hosted endpoint;
+            valid category and transport; accurate one-sentence factual description; no promotional
+            claims or tracking parameters; no duplicate server name, product, or domain; valid endpoint
+            for hosted entries; and generated README consistency. Pay special attention to false claims,
+            undisclosed affiliation, dead links, authentication requirements, security-sensitive claims,
+            and entries that merely wrap a generic API without implementing MCP. Clearly separate
+            verified facts from claims made by the submitter. Flag uncertainty rather than guessing.
