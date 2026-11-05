@@ -1,0 +1,9 @@
+{
+  "name": "TextKit",
+  "url": "https://jointextkit.com/docs/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Send and receive SMS, verify phone numbers, buy US and Canada numbers, and manage contacts, segments, broadcasts and automations. OAuth sign-in or an API key as a Bearer token; free sandbox keys at sign-up. Endpoint: `https://mcp.jointextkit.com` · [Website](https://jointextkit.com) · Registry: `com.jointextkit/textkit`",
+  "endpoint": "https://mcp.jointextkit.com",
+  "registry": "com.jointextkit/textkit"
+}
