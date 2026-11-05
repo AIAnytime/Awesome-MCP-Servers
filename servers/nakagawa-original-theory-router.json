@@ -1,8 +1,8 @@
 {
-  "name": "Nakagawa Master Original Theory Router",
+  "name": "AI Answer Guard",
   "url": "https://github.com/Nakagawa-master/nakagawa-theory-archive",
-  "category": "knowledge-memory",
+  "category": "security",
   "transport": "stdio",
-  "description": "Read-only local Python MCP: a Japanese, English or Chinese question returns a relevant Nakagawa Master original source, or no_fit. No account or API key; MCPB or documented checkout.",
+  "description": "**Catch AI hallucination warning signs, self-contradictions, self-collapse/error cascades and false 'done' claims—before trusting the answer.** Free local MCP checks supplied evidence conflicts, tool receipts, permissions and irreversible risks, then gives concrete repairs. Designed to reduce avoidable errors; grounded in Nakagawa Master's 313 connected originals. Requires host invocation/evidence; not an automatic or proven cure. Read-only Python 3, no key. [Install for Qwen/Claude/Codex](https://github.com/Nakagawa-master/nakagawa-theory-archive/blob/main/AI_ANSWER_GUARD_INSTALL.md).",
   "registry": "io.github.Nakagawa-master/nakagawa-original-router"
 }
