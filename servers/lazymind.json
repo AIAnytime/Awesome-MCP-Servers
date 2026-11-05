@@ -1,0 +1,7 @@
+{
+  "name": "LazyMind",
+  "url": "https://github.com/LazyAGI/LazyMind",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "Local AI Skill Runtime that exposes knowledge, Skills, Workflows, review checkpoints, and artifacts to external agents over MCP. Install: [desktop app](https://github.com/LazyAGI/LazyMind/releases/latest)"
+}
