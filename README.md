@@ -227,6 +227,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Media & generation
 
+- **[AppScreen](https://appscreen.pro/mcp)** `http` — Design App Store and Google Play screenshots in the AppScreen browser editor: slides, phone and tablet frames, captions, backgrounds, the app's own screenshots, PNG export at store sizes and share links. Endpoint: `https://appscreen.pro/mcp` (OAuth, no API key; needs AppScreen Pro, $9 one-time) · [Docs](https://appscreen.pro/mcp)
 - **[ArtiGram](https://artigram.cafeboon.com)** `http` — Publish what an AI assistant made (HTML, React, SVG, Markdown or Mermaid) as a live page with a shareable link, and search existing pages. Searching needs no key, publishing needs a free API key. Endpoint: `https://artigram.cafeboon.com/mcp` · Registry: `com.cafeboon/artigram`
 - **[audio](https://github.com/audiojs/audio)** `stdio` — Edit, analyze and convert audio files and the sound of videos, no ffmpeg: loudness and true peak, checks against ACX, podcast, streaming and EBU R 128 specs, denoise, EQ, trim, fades, BPM, key. Install: `npx -y audio --mcp` · [Docs](https://github.com/audiojs/audio#mcp)
 - **[Claude Imagine](https://github.com/lumian2015/claudeimagine-mcp)** `http` — Generate and edit images and videos with Nano Banana 2, GPT Image 2.5, Seedream 4.5, Flux 2 Pro, and Veo 3.1 Fast. Endpoint: `https://claudeimagine.com/api/mcp` (OAuth, no API key; free signup credits, then paid plans) · [Docs](https://claudeimagine.com/docs/mcp)
