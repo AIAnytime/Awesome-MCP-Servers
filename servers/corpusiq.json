@@ -1,0 +1,9 @@
+{
+  "name": "CorpusIQ",
+  "url": "https://github.com/CorpusIQ/corpusiq-docs",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Read-only MCP access to live business data across 40+ systems, including Stripe, QuickBooks, GA4, Shopify and HubSpot, with a source citation on each figure. Endpoint: `https://mcp2.corpusiq.io/mcp`",
+  "endpoint": "https://mcp2.corpusiq.io/mcp",
+  "registry": "io.corpusiq/multi-source-mcp"
+}
