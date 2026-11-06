@@ -1,0 +1,8 @@
+{
+  "name": "Repostit",
+  "url": "https://app.repostit.io/claude-connector.html",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Create editable social post and carousel drafts, schedule saved posts and inspect delivery; drafting does not publish. Requires a Repostit account and OAuth authorization, with account and plan limits; endpoint: `https://repostit-mcp-cfjcykgqda-uc.a.run.app/mcp/v1.1`.",
+  "endpoint": "https://repostit-mcp-cfjcykgqda-uc.a.run.app/mcp/v1.1"
+}
