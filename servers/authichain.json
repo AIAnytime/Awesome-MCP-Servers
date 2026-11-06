@@ -1,0 +1,9 @@
+{
+  "name": "AuthiChain",
+  "url": "https://github.com/undone0603/authichain-unified",
+  "category": "security",
+  "transport": "http",
+  "description": "Verify signed provenance records and attestations, inspect Living QR records, and score EU Digital Product Passport readiness gaps (advisory self-check, not legal advice; no tool proves physical authenticity). Free discovery; paid verify is $0.05 Circle USDC on Base via x402 (3 free UUID previews/day per IP). Endpoint: `https://authichain.com/mcp` · [Docs](https://authichain.com/x402) · Registry: `com.authichain/authichain`",
+  "endpoint": "https://authichain.com/mcp",
+  "registry": "com.authichain/authichain"
+}
