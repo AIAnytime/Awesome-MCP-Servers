@@ -1,0 +1,9 @@
+{
+  "name": "JobsPipe",
+  "url": "https://docs.jobspipe.dev/ai-agents/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search live, normalized job postings across 30+ ATS feeds and job boards. OAuth or API key. Endpoint: `https://mcp.jobspipe.dev/mcp` · [Docs](https://docs.jobspipe.dev/ai-agents/mcp)",
+  "endpoint": "https://mcp.jobspipe.dev/mcp",
+  "registry": "dev.jobspipe/mcp"
+}
