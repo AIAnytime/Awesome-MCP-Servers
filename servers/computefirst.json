@@ -1,0 +1,9 @@
+{
+  "name": "ComputeFirst",
+  "url": "https://computefirst.net/docs",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Catalog of versioned, deterministic tools for exact math, CSV and JSON transforms, date math, text, hashing and identifier checks; search, read the schema, then execute by id and version. Free, no account or API key. Endpoint: `https://computefirst.net/mcp`",
+  "endpoint": "https://computefirst.net/mcp",
+  "registry": "io.github.321zz321/computefirst"
+}
