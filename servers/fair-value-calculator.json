@@ -1,0 +1,9 @@
+{
+  "name": "Fair Value Calculator",
+  "url": "https://github.com/petz00711/fair-value-calculator-mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Fair value per share, valuation verdict and quality score for 40,000+ listed stocks worldwide, blended from 26 valuation models and recalculated daily; also stock search by name, ticker or ISIN, side-by-side comparison, a screener and the signed-in watchlist. Free account, OAuth sign-in; exact fair values for all stocks with Pro. Endpoint: `https://www.fairvalue-calculator.com/mcp` · [Setup](https://www.fairvalue-calculator.com/integrations) · Registry: `com.fairvalue-calculator/fair-value`",
+  "endpoint": "https://www.fairvalue-calculator.com/mcp",
+  "registry": "com.fairvalue-calculator/fair-value"
+}

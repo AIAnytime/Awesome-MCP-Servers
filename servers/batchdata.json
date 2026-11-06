@@ -1,0 +1,9 @@
+{
+  "name": "BatchData",
+  "url": "https://github.com/batchdataco/batchdata-mcp-server",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Hosted MCP server for U.S. real estate data: property lookup, comparables, property search, owner skip tracing, phone verification and address geocoding. OAuth sign-in or API token. · [Docs](https://batchdata.io/mcp-server)",
+  "endpoint": "https://mcp.batchdata.com",
+  "registry": "io.github.batchdataco/batchdata-mcp-server"
+}
