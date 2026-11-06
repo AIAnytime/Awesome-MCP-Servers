@@ -1,0 +1,8 @@
+{
+  "name": "OMX for Hyperliquid",
+  "url": "https://github.com/Lumen-Founder/omx",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "Non-custodial Hyperliquid perps execution for AI agents: pre-trade limits, human approval, kill switch, audit log; keyless demo via `uvx omx-hyperliquid`; optional disclosed 1 bp builder fee.",
+  "registry": "io.github.Lumen-Founder/omx-hyperliquid-trading"
+}
