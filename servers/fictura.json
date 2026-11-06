@@ -1,0 +1,9 @@
+{
+  "name": "Fictura",
+  "url": "https://github.com/Apex-Byte-Technologies/fictura-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Paywalls, onboarding, subscription analytics, A/B experiments, attribution and error reports for Expo and React Native apps; mostly read-only, OAuth sign-in or API key. Endpoint: `https://mcp.fictura.co/mcp` · [Docs](https://docs.fictura.co/connections/outgoing/mcp-server)",
+  "endpoint": "https://mcp.fictura.co/mcp",
+  "registry": "co.fictura/mcp"
+}
