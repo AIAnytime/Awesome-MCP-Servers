@@ -1,0 +1,14 @@
+{
+  "name": "MailVeri MCP",
+  "url": "https://github.com/mailveri/mailveri-mcp",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Verify single emails or bulk lists (valid, invalid, disposable, catch-all, role) from an AI agent through the MailVeri API; API key required, 1,000 free credits."
+}
+
+
+
+
+
+
+
