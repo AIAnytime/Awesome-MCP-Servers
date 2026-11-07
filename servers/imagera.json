@@ -1,0 +1,9 @@
+{
+  "name": "Imagera",
+  "url": "https://github.com/alexadams6ix/imagera-skills",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate and edit images, video, voice and music with Imagera from any MCP client; OAuth sign-in, no API key; paid credits. Endpoint: `https://mcp.imagera.ai/mcp` · [Docs](https://imagera.ai/mcp)",
+  "endpoint": "https://mcp.imagera.ai/mcp",
+  "registry": "ai.imagera/imagera"
+}
