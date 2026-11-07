@@ -253,6 +253,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Security
 
+- **[anon.li](https://github.com/anondotli/anon.li)** `http` — Remote server for anon.li, an open-source (AGPL-3.0) privacy suite: manage email aliases, recipients, end-to-end encrypted file drops and encrypted forms. Hosted, OAuth sign-in; free plan available. Endpoint: `https://anon.li/api/mcp` · Registry: `io.github.anondotli/anon-li` · [Docs](https://anon.li/mcp)
 - **[Council of AI (GSPC)](https://github.com/CSOAI-ORG/councilof-ai/tree/master/mcp/gspc-server)** `http` — Reads a public board of signed AI behaviour measurement cards and verifies Ed25519 signatures and Merkle inclusion; read tools need no key, evidence tools are x402-metered. Endpoint: `https://councilof.ai/mcp` · Install: `npx -y csoai-gspc-mcp` · Registry: `io.github.CSOAI-ORG/gspc`
 - **[Darkmoon](https://github.com/ASCIT31/Dark-Moon)** `stdio` — Open-source (GPLv3) autonomous penetration-testing platform orchestrating 80+ offensive security tools through 50 specialist agents, with proof of exploitation behind every finding. Runs fully locally.
 - **[Iris](https://iriscan.app/mcp)** `http` — On-chain investigations: analyzes wallets on Solana, EVM chains, Bitcoin and Tron, traces transfers through mixers, exchanges and instant swaps, and finds a Solana token's insiders. API key with 10 free calls a day, or paid per call in USDC with x402. Endpoint: `https://iriscan.app/mcp`; Registry: `io.github.0xVector0/iris`
