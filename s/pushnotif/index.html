@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PushNotif MCP server: status, tools and setup</title>
+<meta name="description" content="PushNotif MCP server. Answered an MCP handshake without credentials and listed 19 tools. Web Push (VAPID), Android (FCM), iOS (APNs), In-App Popup Banners, Social Proof Toasts, and Transactional...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/pushnotif/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="PushNotif MCP server: status, tools and setup">
+<meta property="og:description" content="PushNotif MCP server. Answered an MCP handshake without credentials and listed 19 tools. Web Push (VAPID), Android (FCM), iOS (APNs), In-App Popup Banners, Social Proof Toasts, and Transactional...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/pushnotif/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PushNotif MCP server: status, tools and setup">
+<meta name="twitter:description" content="PushNotif MCP server. Answered an MCP handshake without credentials and listed 19 tools. Web Push (VAPID), Android (FCM), iOS (APNs), In-App Popup Banners, Social Proof Toasts, and Transactional...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "PushNotif", "description": "Web Push (VAPID), Android (FCM), iOS (APNs), In-App Popup Banners, Social Proof Toasts, and Transactional Email OTP with 24 native MCP tools. Install: npx -y pushnotif-mcp · Website", "url": "https://mcp.aianytime.net/s/pushnotif/", "sameAs": "https://github.com/AarsyDesign/pushnotif-mcp", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Marketing, content & social)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "2.5.3", "featureList": ["check_billing_and_qris_status", "configure_email_automation", "configure_inapp_banner", "configure_payment_webhook", "configure_rss_autopush", "configure_social_toast", "create_app", "create_qris_invoice", "delete_app", "get_campaign_analytics", "list_apps", "list_subscribers", "login_existing_account", "register_new_account", "schedule_push_notification", "send_push_notification", "send_transactional_email", "update_app_branding", "update_subscriber_tags"], "dateModified": "2026-11-07T10:13:41Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Marketing, content & social", "item": "https://mcp.aianytime.net/c/marketing/"}, {"@type": "ListItem", "position": 3, "name": "PushNotif", "item": "https://mcp.aianytime.net/s/pushnotif/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/marketing/">Marketing, content &amp; social</a></p>
+<h1>PushNotif</h1>
+<p class="lede">Web Push (VAPID), Android (FCM), iOS (APNs), In-App Popup Banners, Social Proof Toasts, and Transactional Email OTP with 24 native MCP tools. Install: <code>npx -y pushnotif-mcp</code> · <a href="https://pushnotif.biz.id" rel="nofollow noopener">Website</a></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 19 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/marketing/">Marketing, content &amp; social</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://github.com/AarsyDesign/pushnotif-mcp" rel="nofollow noopener">https://github.com/AarsyDesign/pushnotif-mcp</a></dd><dt>Endpoint</dt><dd><code>https://pushnotif.biz.id/mcp</code></dd><dt>MCP Registry</dt><dd><code>io.github.AarsyDesign/pushnotif-mcp</code></dd><dt>Reports itself as</dt><dd>pushnotif-mcp 2.5.3</dd><dt>Protocol</dt><dd>2024-11-05</dd><dt>Tools</dt><dd>19</dd><dt>Context cost</dt><dd>about 8,308 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>no change seen since first check</dd><dt>Handshake time</dt><dd>866 ms</dd><dt>Repository</dt><dd>0 stars · last push 2026-10-28 · MIT</dd><dt>Last checked</dt><dd>2026-11-07 10:13:41 UTC</dd><dt>Listed since</dt><dd>2026-10-25</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 866 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>19 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2024-11-05</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-07T10:13:41Z">2026-11-07 10:13:41 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">100% of the last 9 daily checks reachable; median response 842 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http pushnotif https://pushnotif.biz.id/mcp</code><button class="copy" data-copy="claude mcp add --transport http pushnotif https://pushnotif.biz.id/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://pushnotif.biz.id/mcp</code><button class="copy" data-copy="https://pushnotif.biz.id/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://pushnotif.biz.id/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://pushnotif.biz.id/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=pushnotif&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9wdXNobm90aWYuYml6LmlkL21jcCJ9">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22pushnotif%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//pushnotif.biz.id/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;pushnotif&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;pushnotif&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;serverUrl&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;serverUrl&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://pushnotif.biz.id/mcp</code><button class="copy" data-copy="https://pushnotif.biz.id/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;pushnotif&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://pushnotif.biz.id/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">19</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-07. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/pushnotif.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="check_billing_and_qris_status check qris top-up order payment status (pending or paid), current workspace credit balance, credit mutation ledger history, and official downloadable pdf invoice urls. use this tool to verify whether an order from create_qris_invoice has settled or to audit credit consumption; do not use it to generate a new payment invoice (use create_qris_invoice instead) or view campaign click rates (use get_ca"><summary><code>check_billing_and_qris_status</code><span class="hint read">read-only</span><span>Check QRIS top-up order payment status (PENDING or PAID), current workspace credit balance, credit mutation …</span></summary><p class="desc">Check QRIS top-up order payment status (PENDING or PAID), current workspace credit balance, credit mutation ledger history, and official downloadable PDF invoice URLs. Use this tool to verify whether an order from create_qris_invoice has settled or to audit credit consumption; do not use it to generate a new payment invoice (use create_qris_invoice instead) or view campaign click rates (use get_campaign_analytics instead). Read-only operation requiring PUSHNOTIF_API_KEY with 0 credit cost; pass order_id to inspect a single invoice or omit it to list recent orders and ledger entries. Returns JSON { credits_balance, orders: [{ id, amount_rp, credits_added, status, invoice_pdf_url, created_at }], recent_ledger: [{ id, delta, reason, created_at }] }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>string</td><td>optional</td><td>Optional specific QRIS order ID in format ord_xxxx (from create_qris_invoice) to check; omit to return the latest orders and ledger history</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_billing_and_qris_status&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="configure_email_automation configure per-app module switches (on/off) for transactional email otp, automated payment webhook email receipts, order status emails, and the web push notification collector, plus sender brand name and reply-to email address. use this tool to enable or disable individual channels per website; do not use it to send an immediate email or otp (use send_transactional_email instead). requires pushnoti"><summary><code>configure_email_automation</code><span class="hint write">can modify</span><span>Configure per-app module switches (ON/OFF) for Transactional Email OTP, Automated Payment Webhook Email …</span></summary><p class="desc">Configure per-app module switches (ON/OFF) for Transactional Email OTP, Automated Payment Webhook Email Receipts, Order Status Emails, and the Web Push Notification collector, plus sender brand name and Reply-To email address. Use this tool to enable or disable individual channels per website; do not use it to send an immediate email or OTP (use send_transactional_email instead). Requires PUSHNOTIF_API_KEY and costs 0 credits. Returns JSON { ok, app_id, push_enabled, email_otp_enabled, email_invoice_enabled, email_status_enabled, email_brand_name, email_reply_to }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>push_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to enable Web Push Notification collection on the website, or false to disable</td></tr><tr><td><code>email_otp_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to enable 6-digit Email OTP generation and verification for this app</td></tr><tr><td><code>email_invoice_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to automatically send paid invoice receipts via email when a payment webhook arrives</td></tr><tr><td><code>email_status_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to enable order status and shipping tracking emails</td></tr><tr><td><code>email_brand_name</code></td><td>string</td><td>optional</td><td>Sender brand name shown in the recipient inbox (e.g., &#x27;Kopi Nusantara&#x27;)</td></tr><tr><td><code>email_reply_to</code></td><td>string</td><td>optional</td><td>Business Reply-To email address where customer replies are routed</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;configure_email_automation&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="configure_inapp_banner configure and publish an on-site in-app popup or banner (center modal, top sticky bar, or bottom slide-in toast) rendered inside the website by the pushnotif sdk without requiring browser push permission. use this tool for visual in-page promos and announcements; do not use it for os lock-screen notifications (use send_push_notification instead). prerequisite: call list_apps first to obtain app_id"><summary><code>configure_inapp_banner</code><span class="hint write">can modify</span><span>Configure and publish an on-site In-App Popup or Banner (center modal, top sticky bar, or bottom slide-in …</span></summary><p class="desc">Configure and publish an on-site In-App Popup or Banner (center modal, top sticky bar, or bottom slide-in toast) rendered inside the website by the PushNotif SDK without requiring browser push permission. Use this tool for visual in-page promos and announcements; do not use it for OS lock-screen notifications (use send_push_notification instead). Prerequisite: call list_apps first to obtain app_id. Requires PUSHNOTIF_API_KEY; saving configuration is idempotent and costs 0 credits, while each live visitor display deducts 1 credit (inapp_trigger controls when the banner fires—such as &#x27;scroll_50&#x27; for 50% page scroll or &#x27;event:add_to_cart&#x27; for custom DOM events—combined with inapp_freq to cap repeat impressions per visitor). Returns JSON { ok, app_id, inapp_enabled, inapp_style, inapp_trigger, inapp_freq }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>inapp_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to publish the banner live on the website, or false to pause it (default: true)</td></tr><tr><td><code>inapp_style</code></td><td>string</td><td>optional</td><td>Visual layout: &#x27;modal&#x27; (center dialog), &#x27;top_bar&#x27; (sticky top ribbon), or &#x27;bottom_slide&#x27; (corner slide-in toast)</td></tr><tr><td><code>inapp_trigger</code></td><td>string</td><td>optional</td><td>Trigger condition: &#x27;immediate&#x27; (default), &#x27;delay_5s&#x27;, &#x27;delay_10s&#x27;, &#x27;scroll_50&#x27;, &#x27;scroll_80&#x27;, or custom DOM event &#x27;event:&lt;name&gt;&#x27;</td></tr><tr><td><code>inapp_title</code></td><td>string</td><td>required</td><td>Banner headline text (1 to 100 characters)</td></tr><tr><td><code>inapp_body</code></td><td>string</td><td>required</td><td>Banner supporting message text (1 to 240 characters)</td></tr><tr><td><code>inapp_cta_text</code></td><td>string</td><td>optional</td><td>Optional CTA button label (must be paired with inapp_cta_url to render a clickable action button)</td></tr><tr><td><code>inapp_cta_url</code></td><td>string</td><td>optional</td><td>Optional HTTPS destination URL opened when the CTA button is clicked</td></tr><tr><td><code>inapp_accent</code></td><td>string</td><td>optional</td><td>Optional 6-digit hex color code for the CTA button and accent border (default: &#x27;#0058BE&#x27;)</td></tr><tr><td><code>inapp_freq</code></td><td>string</td><td>optional</td><td>Per-visitor frequency cap: &#x27;once_forever&#x27; (one-time announcement per visitor, never shown again), &#x27;once_per_session&#x27; (default), &#x27;once_per_day&#x27;, &#x27;cooldown_3h&#x27;, &#x27;cooldown_12h&#x27;, &#x27;once_per_week&#x27;, or &#x27;always&#x27;</td></tr><tr><td><code>segment_tag</code></td><td>string</td><td>optional</td><td>Optional target segment/merchant tag (e.g., &#x27;seblak-nearby&#x27;) to display a dedicated In-App Banner on pages matching that tag under a single shared App ID (default: &#x27;all&#x27; for global fallback)</td></tr><tr><td><code>inapp_template_id</code></td><td>string</td><td>optional</td><td>Optional template preset: &#x27;default&#x27;, &#x27;ai_custom&#x27; (custom HTML card), &#x27;voucher_copy&#x27;, &#x27;flash_timer&#x27;, &#x27;feature_grid&#x27;, or &#x27;event_invite&#x27;</td></tr><tr><td><code>inapp_custom_html</code></td><td>string</td><td>optional</td><td>Optional raw HTML card markup when inapp_template_id is ai_custom (renders up to 96vw x 94vh)</td></tr><tr><td><code>inapp_image_url</code></td><td>string</td><td>optional</td><td>Optional HTTPS image/poster URL (supports transparent PNG/WEBP)</td></tr><tr><td><code>inapp_image_size</code></td><td>string</td><td>optional</td><td>Optional poster width preset when using image_only: &#x27;compact&#x27;, &#x27;standard&#x27; (default), &#x27;large&#x27;, &#x27;xl&#x27;, or &#x27;full&#x27;</td></tr><tr><td><code>inapp_image_transparent</code></td><td>boolean</td><td>optional</td><td>Set true when using a transparent PNG/WEBP poster in image_only style so no card box is rendered</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;configure_inapp_banner&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;,
+      &quot;inapp_title&quot;: &quot;...&quot;,
+      &quot;inapp_body&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="configure_payment_webhook generate the ready-to-paste universal incoming webhook url (post /api/v1/apps/{app_id}/incoming-event) for 9 auto-detected formats (midtrans, xendit, mayar, lynk.id, duitku, tripay, supabase database/auth, saweria/trakteer, shopify, woocommerce, github, and custom json), or trigger a live test event when simulate_test=true. use this tool when connecting a payment gateway, supabase backend, creator"><summary><code>configure_payment_webhook</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Generate the ready-to-paste Universal Incoming Webhook URL (POST /api/v1/apps/{app_id}/incoming-event) for 9 …</span></summary><p class="desc">Generate the ready-to-paste Universal Incoming Webhook URL (POST /api/v1/apps/{app_id}/incoming-event) for 9 auto-detected formats (Midtrans, Xendit, Mayar, Lynk.id, Duitku, Tripay, Supabase Database/Auth, Saweria/Trakteer, Shopify, WooCommerce, GitHub, and Custom JSON), or trigger a live test event when simulate_test=true. Use this tool when connecting a payment gateway, Supabase backend, creator tipping page, or e-commerce store to automatically show a Live Activity Toast, broadcast a Web Push, and/or send a transactional receipt email upon settlement; do not use it for RSS blog feeds (use configure_rss_autopush instead) or manual push campaigns (use send_push_notification instead). Prerequisite: call list_apps first to obtain app_id. Requires PUSHNOTIF_API_KEY; generating the webhook URL costs 0 credits, while live or simulated push broadcasts deduct 1 credit per delivered device (toast_only mode costs 0 credits on display). Returns JSON { ok, app_id, mode, webhook_url, supported_platforms, setup_guides, simulation_result }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>mode</code></td><td>string</td><td>optional</td><td>Action when incoming webhook event arrives: &#x27;both&#x27; (default: show Live Activity Toast on website + send Web Push), &#x27;toast_only&#x27; (show Live Activity Toast only, 0 credits), or &#x27;push_only&#x27; (send Web Push notification only)</td></tr><tr><td><code>simulate_test</code></td><td>boolean</td><td>optional</td><td>Set true to immediately fire a test incoming webhook event to verify Live Activity Toast and Web Push delivery</td></tr><tr><td><code>platform</code></td><td>string</td><td>optional</td><td>Platform format to simulate when simulate_test=true: &#x27;midtrans&#x27; (default), &#x27;supabase&#x27;, &#x27;saweria&#x27;, &#x27;shopify&#x27;, &#x27;xendit&#x27;, &#x27;woocommerce&#x27;, or &#x27;github&#x27;</td></tr><tr><td><code>buyer_name</code></td><td>string</td><td>optional</td><td>Optional custom actor/buyer name for test simulation (default: &#x27;Budi (Jakarta)&#x27;)</td></tr><tr><td><code>item_name</code></td><td>string</td><td>optional</td><td>Optional custom product/order/table name for test simulation (default: &#x27;Paket Premium Rp 149.000&#x27;)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;configure_payment_webhook&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="configure_rss_autopush configure automated 24/7 rss, atom, or xml sitemap polling for an app_id, or trigger an immediate feed check and push broadcast via dispatch_now=true. use this tool when a blog, news portal, or store wants newly published urls automatically broadcast as push notifications; do not use it for manual one-off messages (use send_push_notification instead) or fixed-time calendar campaigns (use schedule_"><summary><code>configure_rss_autopush</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Configure automated 24/7 RSS, Atom, or XML Sitemap polling for an app_id, or trigger an immediate feed check …</span></summary><p class="desc">Configure automated 24/7 RSS, Atom, or XML Sitemap polling for an app_id, or trigger an immediate feed check and push broadcast via dispatch_now=true. Use this tool when a blog, news portal, or store wants newly published URLs automatically broadcast as push notifications; do not use it for manual one-off messages (use send_push_notification instead) or fixed-time calendar campaigns (use schedule_push_notification instead). Prerequisite: call list_apps first to obtain app_id. Requires PUSHNOTIF_API_KEY; feed URLs are validated against SSRF rules, deduplicated by item GUID/URL so each post is sent only once, and deduct 1 credit per delivered subscriber when a new item is broadcast (setting dispatch_now=true immediately fetches and broadcasts the newest feed entry even if rss_enabled=false). Returns JSON { ok, app_id, rss_enabled, rss_feed_url, rss_interval, dispatched_now, latest_item_title }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>rss_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to enable background RSS/Sitemap polling at rss_interval, or false to pause background polling</td></tr><tr><td><code>rss_feed_url</code></td><td>string</td><td>optional</td><td>Public HTTPS URL of the RSS 2.0, Atom, or XML Sitemap feed (required when enabling polling or calling dispatch_now=true)</td></tr><tr><td><code>rss_interval</code></td><td>string</td><td>optional</td><td>Background polling interval: &#x27;5m&#x27;, &#x27;15m&#x27;, &#x27;30m&#x27; (default), &#x27;1h&#x27;, &#x27;3h&#x27;, or &#x27;daily_digest&#x27;</td></tr><tr><td><code>rss_prefix</code></td><td>string</td><td>optional</td><td>Optional text prepended to each auto-generated notification title (e.g., &#x27;Artikel Baru: &#x27;)</td></tr><tr><td><code>dispatch_now</code></td><td>boolean</td><td>optional</td><td>Set true to immediately fetch the latest feed entry and broadcast it to active subscribers right now</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;configure_rss_autopush&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="configure_social_toast configure the standalone on-site live activity social proof toast (corner notification card showing recent subscriber joins, logins, and purchases) and its 3 automated dom/webhook sensors for an app_id without overwriting the in-app promo banner. use this tool to enable/disable social proof toasts, change visual theme or screen corner, or toggle auto-capture sensors; do not use it for promo popups"><summary><code>configure_social_toast</code><span class="hint write">can modify</span><span>Configure the standalone on-site Live Activity Social Proof Toast (corner notification card showing recent …</span></summary><p class="desc">Configure the standalone on-site Live Activity Social Proof Toast (corner notification card showing recent subscriber joins, logins, and purchases) and its 3 automated DOM/webhook sensors for an app_id without overwriting the In-App Promo Banner. Use this tool to enable/disable social proof toasts, change visual theme or screen corner, or toggle auto-capture sensors; do not use it for promo popups (use configure_inapp_banner instead). Requires PUSHNOTIF_API_KEY and costs 0 credits. Returns JSON { ok, app_id, toast_enabled, toast_theme, toast_position, toast_action, sensors }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>toast_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to enable Live Activity Toast on the website, or false to turn it off</td></tr><tr><td><code>toast_theme</code></td><td>string</td><td>optional</td><td>Visual theme: &#x27;light_emerald&#x27; (default), &#x27;dark_slate&#x27;, &#x27;royal_blue&#x27;, or &#x27;ai_custom&#x27; (bespoke HTML/CSS)</td></tr><tr><td><code>toast_custom_title</code></td><td>string</td><td>optional</td><td>Optional custom headline override for the Live Toast (leave empty to use automated sensor feed)</td></tr><tr><td><code>toast_custom_body</code></td><td>string</td><td>optional</td><td>Optional custom message body override for the Live Toast</td></tr><tr><td><code>toast_custom_html</code></td><td>string</td><td>optional</td><td>Optional bespoke HTML/CSS markup when toast_theme=&#x27;ai_custom&#x27;</td></tr><tr><td><code>toast_position</code></td><td>string</td><td>optional</td><td>Screen corner: &#x27;bottom_left&#x27; (default) or &#x27;bottom_right&#x27;</td></tr><tr><td><code>toast_action</code></td><td>string</td><td>optional</td><td>Click behavior: &#x27;subscribe_push&#x27; (default), &#x27;custom_url&#x27;, or &#x27;none&#x27;</td></tr><tr><td><code>toast_custom_url</code></td><td>string</td><td>optional</td><td>Optional HTTPS URL opened when toast_action=&#x27;custom_url&#x27;</td></tr><tr><td><code>toast_sensor_sub</code></td><td>boolean</td><td>optional</td><td>Auto-show toast when a new visitor subscribes to push notifications</td></tr><tr><td><code>toast_sensor_auth</code></td><td>boolean</td><td>optional</td><td>Auto-detect signup/login forms on the website</td></tr><tr><td><code>toast_sensor_buy</code></td><td>boolean</td><td>optional</td><td>Auto-detect checkout/payment forms and incoming payment webhooks</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;configure_social_toast&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_app register a new website domain or mobile application under the authenticated workspace and generate its unique ecdsa p-256 vapid keypair and 1-line html sdk snippet. use this tool when adding an additional website or app to an existing account; do not use it to modify an existing app&#x27;s icon, welcome push, or mobile keys (use update_app_branding instead) or to remove an app (use delete_app instead)."><summary><code>create_app</code><span class="hint write">can modify</span><span>Register a new website domain or mobile application under the authenticated workspace and generate its unique …</span></summary><p class="desc">Register a new website domain or mobile application under the authenticated workspace and generate its unique ECDSA P-256 VAPID keypair and 1-line HTML SDK snippet. Use this tool when adding an additional website or app to an existing account; do not use it to modify an existing app&#x27;s icon, welcome push, or mobile keys (use update_app_branding instead) or to remove an app (use delete_app instead). Requires PUSHNOTIF_API_KEY, costs 0 credits, and creates a persistent app record where site_url must be a valid HTTPS origin (or http://localhost for local testing). Returns JSON { ok, app: { id, site_name, site_url, vapid_public_key, created_at }, sdk_snippet }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>site_name</code></td><td>string</td><td>required</td><td>Display name of the website or mobile application (2 to 80 characters)</td></tr><tr><td><code>site_url</code></td><td>string</td><td>required</td><td>Canonical HTTPS origin URL of the website (must start with https:// or http://localhost)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_app&quot;,
+    &quot;arguments&quot;: {
+      &quot;site_name&quot;: &quot;...&quot;,
+      &quot;site_url&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_qris_invoice create a prepaid credit top-up invoice payable via indonesian qris (all banks and e-wallets) at a flat rate of rp 0.20 per credit (rp 1,000 = 5,000 non-expiring credits). use this tool when the user wants to purchase additional credits; do not use it to check whether an existing invoice has been paid (use check_billing_and_qris_status instead). requires pushnotif_api_key, generates a pending order"><summary><code>create_qris_invoice</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Create a prepaid credit top-up invoice payable via Indonesian QRIS (all banks and e-wallets) at a flat rate …</span></summary><p class="desc">Create a prepaid credit top-up invoice payable via Indonesian QRIS (all banks and e-wallets) at a flat rate of Rp 0.20 per credit (Rp 1,000 = 5,000 non-expiring credits). Use this tool when the user wants to purchase additional credits; do not use it to check whether an existing invoice has been paid (use check_billing_and_qris_status instead). Requires PUSHNOTIF_API_KEY, generates a PENDING order valid for 30 minutes at 0 fee, and automatically credits the workspace upon payment webhook confirmation; if both package_id and custom amount_rp are supplied, amount_rp takes precedence (minimum Rp 1,000). Returns JSON { ok, order: { id, amount_rp, credits_added, status, qris_checkout_url, expires_at } }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>package_id</code></td><td>string</td><td>optional</td><td>Preset package tier: &#x27;starter&#x27; (Rp 20,000 = 100,000 credits), &#x27;growth&#x27; (Rp 50,000 = 250,000 credits), or &#x27;pro&#x27; (Rp 100,000 = 500,000 credits); ignored if amount_rp is explicitly provided</td></tr><tr><td><code>amount_rp</code></td><td>integer</td><td>optional</td><td>Custom top-up amount in Indonesian Rupiah (minimum 1000, maximum 10000000; 1 IDR = 5 lifetime credits, overrides package_id)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_qris_invoice&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="delete_app permanently delete a registered application (app_id) along with all of its subscriber device tokens, scheduled campaigns, and delivery history. use this tool only when a user explicitly asks to remove a duplicate or decommissioned app; do not use it to pause notifications or change app settings (use update_app_branding or configure_inapp_banner instead). prerequisite: call list_apps first to verif"><summary><code>delete_app</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Permanently delete a registered application (app_id) along with all of its subscriber device tokens, …</span></summary><p class="desc">Permanently delete a registered application (app_id) along with all of its subscriber device tokens, scheduled campaigns, and delivery history. Use this tool only when a user explicitly asks to remove a duplicate or decommissioned app; do not use it to pause notifications or change app settings (use update_app_branding or configure_inapp_banner instead). Prerequisite: call list_apps first to verify the exact app_id and active subscriber count. Requires PUSHNOTIF_API_KEY, costs 0 credits, and is irreversibly destructive (confirm_delete must be set to true or the call is rejected). Returns JSON { ok, deleted_app_id, deleted_site_name, subscribers_removed }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx to permanently delete (obtain from list_apps)</td></tr><tr><td><code>confirm_delete</code></td><td>boolean</td><td>required</td><td>Safety confirmation flag: must be explicitly set to true to execute permanent deletion</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;delete_app&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;,
+      &quot;confirm_delete&quot;: false
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_campaign_analytics retrieve historical push campaign delivery metrics (delivered count, click count, ctr percentage, credits spent) and active scheduled queue items (cmp_sch_xxxx). use this tool to audit campaign performance or look up scheduled campaign ids before editing or canceling them with schedule_push_notification; do not use it to inspect qris payment invoices (use check_billing_and_qris_status instead) or "><summary><code>get_campaign_analytics</code><span class="hint read">read-only</span><span>Retrieve historical push campaign delivery metrics (delivered count, click count, CTR percentage, credits …</span></summary><p class="desc">Retrieve historical push campaign delivery metrics (delivered count, click count, CTR percentage, credits spent) and active scheduled queue items (cmp_sch_xxxx). Use this tool to audit campaign performance or look up scheduled campaign IDs before editing or canceling them with schedule_push_notification; do not use it to inspect QRIS payment invoices (use check_billing_and_qris_status instead) or subscriber device lists (use list_subscribers instead). Read-only operation requiring PUSHNOTIF_API_KEY with 0 credit cost; omitting app_id aggregates metrics across all workspace apps up to limit rows. Returns JSON { summary: { total_sent, total_clicks, avg_ctr_percent }, campaigns: [{ id, app_id, title, delivered_count, click_count, ctr_percent, created_at }], scheduled_queue: [{ id, app_id, title, scheduled_for, recurrence_rule, status }] }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>optional</td><td>Optional application ID filter in format app_xxxx (omit to aggregate across all workspace apps)</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of recent campaigns to return (1 to 50, default: 10)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_campaign_analytics&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_apps list all registered websites and mobile apps in the workspace with active subscriber counts, current credit balance, and optional framework sdk installation snippets (when include_sdk_framework is set). use this tool first as a prerequisite to obtain a valid app_id before calling send_push_notification, schedule_push_notification, update_app_branding, delete_app, configure_inapp_banner, or configu"><summary><code>list_apps</code><span class="hint read">read-only</span><span>List all registered websites and mobile apps in the workspace with active subscriber counts, current credit …</span></summary><p class="desc">List all registered websites and mobile apps in the workspace with active subscriber counts, current credit balance, and optional framework SDK installation snippets (when include_sdk_framework is set). Use this tool first as a prerequisite to obtain a valid app_id before calling send_push_notification, schedule_push_notification, update_app_branding, delete_app, configure_inapp_banner, or configure_rss_autopush; do not use it to inspect individual subscriber devices (use list_subscribers instead). Read-only operation requiring PUSHNOTIF_API_KEY with 0 credit cost; when include_sdk_framework is passed (&#x27;html&#x27;, &#x27;nextjs&#x27;, &#x27;laravel&#x27;, &#x27;wordpress&#x27;, &#x27;flutter&#x27;), each app entry also includes ready-to-paste SDK setup code. Returns JSON { tenant_name, credits_balance, total_apps, apps: [{ id, site_name, site_url, active_subscribers, sdk_guide }] }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>optional</td><td>Optional specific app_id (format app_xxxx) to filter and inspect in detail</td></tr><tr><td><code>include_sdk_framework</code></td><td>string</td><td>optional</td><td>Optional target stack (&#x27;html&#x27;, &#x27;nextjs&#x27;, &#x27;laravel&#x27;, &#x27;wordpress&#x27;, or &#x27;flutter&#x27;) to include copy-paste SDK &amp; service worker installation code</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_apps&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_subscribers retrieve active subscriber device records, assigned segment tags, platform breakdown counts (web vapid, android fcm, ios apns), or full csv/json backup export for zero-downtime migration. use this tool to inspect audience size, platform distribution, export subscriber tokens (export_format=&quot;csv&quot; or &quot;json&quot;), or obtain a subscriber_id before calling update_subscriber_tags; do not use it to view camp"><summary><code>list_subscribers</code><span class="hint read">read-only</span><span>Retrieve active subscriber device records, assigned segment tags, platform breakdown counts (Web VAPID, …</span></summary><p class="desc">Retrieve active subscriber device records, assigned segment tags, platform breakdown counts (Web VAPID, Android FCM, iOS APNs), or full CSV/JSON backup export for zero-downtime migration. Use this tool to inspect audience size, platform distribution, export subscriber tokens (export_format=&quot;csv&quot; or &quot;json&quot;), or obtain a subscriber_id before calling update_subscriber_tags; do not use it to view campaign click metrics (use get_campaign_analytics instead) or modify/import subscribers (use update_subscriber_tags instead). Read-only operation requiring PUSHNOTIF_API_KEY with 0 credit cost; filter by app_id and optional tag to narrow results. Returns JSON { total_active, platform_breakdown: { web, android_fcm, ios_apns }, subscribers: [{ id, app_id, platform, tags, created_at }], export_data }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>optional</td><td>Optional application ID filter in format app_xxxx (omit to aggregate across all apps in the workspace)</td></tr><tr><td><code>tag</code></td><td>string</td><td>optional</td><td>Optional segment tag filter (returns only subscribers carrying this tag)</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of subscriber records to return (1 to 100, default: 15)</td></tr><tr><td><code>export_format</code></td><td>string</td><td>optional</td><td>Optional backup export format: &#x27;csv&#x27; or &#x27;json&#x27; to include full VAPID endpoint/p256dh/auth migration dump for the specified app_id</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_subscribers&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="login_existing_account authenticate an existing pushnotif account using email and password to retrieve its live api key and registered apps, with optional inline profile name or password update (when new_name or new_password is provided). use this tool for existing users connecting from chat or updating account credentials; do not use it for new signups (use register_new_account instead) or app-level branding (use updat"><summary><code>login_existing_account</code><span class="hint write">can modify</span><span>Authenticate an existing PushNotif account using email and password to retrieve its live API key and …</span></summary><p class="desc">Authenticate an existing PushNotif account using email and password to retrieve its live API key and registered apps, with optional inline profile name or password update (when new_name or new_password is provided). Use this tool for existing users connecting from chat or updating account credentials; do not use it for new signups (use register_new_account instead) or app-level branding (use update_app_branding instead). Requires valid email and password (no prior API key needed), costs 0 credits, and is rate-limited against brute-force attempts; read-only unless new_name or new_password is supplied. Returns JSON { ok, tenant: { id, name, email, api_key, credits }, apps: [{ id, site_name, site_url }], profile_updated }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>email</code></td><td>string</td><td>required</td><td>Registered PushNotif account email address</td></tr><tr><td><code>password</code></td><td>string</td><td>required</td><td>Current account login password</td></tr><tr><td><code>new_name</code></td><td>string</td><td>optional</td><td>Optional new workspace display name (2 to 80 characters) to update upon login</td></tr><tr><td><code>new_password</code></td><td>string</td><td>optional</td><td>Optional new account password (minimum 6 characters) to replace the current password</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;login_existing_account&quot;,
+    &quot;arguments&quot;: {
+      &quot;email&quot;: &quot;...&quot;,
+      &quot;password&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="register_new_account two-step onboarding tool to request a 6-digit email otp (step 1: omit otp_code) or verify the otp to create a new pushnotif account with 1,000 free lifetime credits, register the initial website, and return a live api key (step 2: pass otp_code, password, and name). use this tool only for brand-new user signups; do not use it for existing accounts (use login_existing_account instead) or to add web"><summary><code>register_new_account</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Two-step onboarding tool to request a 6-digit email OTP (step 1: omit otp_code) or verify the OTP to create a …</span></summary><p class="desc">Two-step onboarding tool to request a 6-digit email OTP (step 1: omit otp_code) or verify the OTP to create a new PushNotif account with 1,000 free lifetime credits, register the initial website, and return a live API key (step 2: pass otp_code, password, and name). Use this tool only for brand-new user signups; do not use it for existing accounts (use login_existing_account instead) or to add websites to an existing account (use create_app instead). Public endpoint requiring no API key; step 1 is rate-limited to 5 OTPs per 10 minutes per IP (valid 10 minutes), while step 2 irreversibly creates a tenant and ECDSA P-256 VAPID keypair. Returns JSON { ok, step, tenant: { id, name, email, api_key, credits }, app: { id, site_name, site_url, vapid_public_key } }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>email</code></td><td>string</td><td>required</td><td>Email address to register (must not already belong to an existing PushNotif account)</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Workspace or company display name (2 to 80 characters; required when verifying otp_code)</td></tr><tr><td><code>password</code></td><td>string</td><td>optional</td><td>Account login password (minimum 6 characters; required when verifying otp_code)</td></tr><tr><td><code>otp_code</code></td><td>string</td><td>optional</td><td>Optional 6-digit numeric OTP from email: omit on first call to send the OTP email, then provide on second call to complete registration</td></tr><tr><td><code>site_name</code></td><td>string</td><td>optional</td><td>Optional display name for the initial website or app (defaults to workspace name)</td></tr><tr><td><code>site_url</code></td><td>string</td><td>optional</td><td>Optional full HTTPS origin URL of the initial website (e.g., https://example.com)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;register_new_account&quot;,
+    &quot;arguments&quot;: {
+      &quot;email&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="schedule_push_notification create a new scheduled or recurring push notification campaign, edit an existing queued campaign (via update_campaign_id), or cancel a queued campaign before execution (via cancel_campaign_id). use this tool for delayed, recurring, or editable future broadcasts; do not use it for immediate sending (use send_push_notification instead) or automated rss feed polling (use configure_rss_autopush instea"><summary><code>schedule_push_notification</code><span class="hint write">can modify</span><span>Create a new scheduled or recurring push notification campaign, edit an existing queued campaign (via …</span></summary><p class="desc">Create a new scheduled or recurring push notification campaign, edit an existing queued campaign (via update_campaign_id), or cancel a queued campaign before execution (via cancel_campaign_id). Use this tool for delayed, recurring, or editable future broadcasts; do not use it for immediate sending (use send_push_notification instead) or automated RSS feed polling (use configure_rss_autopush instead). Prerequisite: call list_apps to obtain app_id, or call get_campaign_analytics to obtain an existing cmp_sch_xxxx ID for editing or cancellation. Requires PUSHNOTIF_API_KEY; scheduling, editing, or canceling costs 0 credits up front, and 1 credit per delivered device is deducted only when the schedule fires (mutually exclusive modes: pass cancel_campaign_id to delete, update_campaign_id to modify fields in-place, or neither to create a new schedule). Returns JSON { ok, action, scheduled_campaign: { id, app_id, title, body, scheduled_for, recurrence_rule, status } }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>optional</td><td>Target application ID in format app_xxxx (required when creating a new schedule)</td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td>Notification headline (1 to 100 characters; required when creating, optional when editing via update_campaign_id)</td></tr><tr><td><code>body</code></td><td>string</td><td>optional</td><td>Notification body text (1 to 240 characters; required when creating, optional when editing via update_campaign_id)</td></tr><tr><td><code>url</code></td><td>string</td><td>optional</td><td>Optional HTTPS destination URL opened when the notification is tapped</td></tr><tr><td><code>scheduled_for</code></td><td>string</td><td>optional</td><td>ISO-8601 execution timestamp with timezone offset (e.g., &#x27;2026-10-21T08:00:00+07:00&#x27;)</td></tr><tr><td><code>recurrence_rule</code></td><td>string</td><td>optional</td><td>Recurrence pattern: &#x27;once&#x27; (default), &#x27;daily&#x27;, &#x27;twice_daily&#x27;, &#x27;weekly&#x27;, &#x27;monthly&#x27;, &#x27;every_30m&#x27;, &#x27;every_3h&#x27;, &#x27;every_6h&#x27;, or a 5-field cron expression</td></tr><tr><td><code>update_campaign_id</code></td><td>string</td><td>optional</td><td>Optional existing scheduled campaign ID (format cmp_sch_xxxx from get_campaign_analytics) to edit in-place with new title, body, url, scheduled_for, or recurrence_rule</td></tr><tr><td><code>cancel_campaign_id</code></td><td>string</td><td>optional</td><td>Optional existing scheduled campaign ID (format cmp_sch_xxxx from get_campaign_analytics) to cancel and remove from the queue</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;schedule_push_notification&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="send_push_notification broadcast an immediate push notification across web push (vapid), android (fcm), and ios (apns) to active subscribers of a specific app_id. use this tool for instant real-time delivery; do not use it for future or recurring broadcasts (use schedule_push_notification instead) or on-site html popups (use configure_inapp_banner instead). prerequisite: call list_apps first to obtain app_id. requires p"><summary><code>send_push_notification</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Broadcast an immediate push notification across Web Push (VAPID), Android (FCM), and iOS (APNs) to active …</span></summary><p class="desc">Broadcast an immediate push notification across Web Push (VAPID), Android (FCM), and iOS (APNs) to active subscribers of a specific app_id. Use this tool for instant real-time delivery; do not use it for future or recurring broadcasts (use schedule_push_notification instead) or on-site HTML popups (use configure_inapp_banner instead). Prerequisite: call list_apps first to obtain app_id. Requires PUSHNOTIF_API_KEY, deducts 1 credit (Rp 0.20) per successfully delivered device (0 credits charged for 404/410 dead tokens, which are auto-pruned), and is irreversible once dispatched; when segment is set to a custom tag (from update_subscriber_tags) instead of &#x27;all&#x27;, only subscribers carrying that tag receive the broadcast, and omitting url defaults the tap action to the app&#x27;s registered site_url. Returns JSON { ok, campaign_id, total_targeted, total_delivered, total_gone_pruned, credits_deducted, credits_remaining }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>title</code></td><td>string</td><td>required</td><td>Notification headline shown on the lock screen (1 to 100 characters)</td></tr><tr><td><code>body</code></td><td>string</td><td>required</td><td>Notification message body text (1 to 240 characters)</td></tr><tr><td><code>url</code></td><td>string</td><td>optional</td><td>Optional HTTPS destination URL opened when the notification is tapped (defaults to app&#x27;s site_url)</td></tr><tr><td><code>segment</code></td><td>string</td><td>optional</td><td>Target audience filter: &#x27;all&#x27; (default) or a specific subscriber/merchant tag assigned via data-tags, PushNotif.addTag(), or update_subscriber_tags</td></tr><tr><td><code>icon_url</code></td><td>string</td><td>optional</td><td>Optional HTTPS URL of a custom notification icon/logo (e.g., per-merchant logo override on a shared App ID)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;send_push_notification&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;,
+      &quot;title&quot;: &quot;...&quot;,
+      &quot;body&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="send_transactional_email send a 1-to-1 locked transactional email (6-digit otp challenge, paid invoice receipt, or order shipping status update) or verify a 6-digit otp code entered by a user. use this tool for transactional 1-to-1 emails and managed otp verification; bulk marketing or promotional blasts are strictly prohibited. requires pushnotif_api_key; sending an email or otp deducts 25 credits (rp 5), while verifying"><summary><code>send_transactional_email</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Send a 1-to-1 locked transactional email (6-digit OTP challenge, paid invoice receipt, or order shipping …</span></summary><p class="desc">Send a 1-to-1 locked transactional email (6-digit OTP challenge, paid invoice receipt, or order shipping status update) or verify a 6-digit OTP code entered by a user. Use this tool for transactional 1-to-1 emails and managed OTP verification; bulk marketing or promotional blasts are strictly prohibited. Requires PUSHNOTIF_API_KEY; sending an email or OTP deducts 25 credits (Rp 5), while verifying an OTP code (action=verify_otp) costs 0 credits. Returns JSON delivery receipt or OTP verification token.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>action</code></td><td>string</td><td>required</td><td>Operation mode: &#x27;send_otp&#x27; (generate &amp; email 6-digit OTP), &#x27;verify_otp&#x27; (verify 6-digit code), &#x27;send_invoice&#x27; (send paid receipt email), or &#x27;send_order_status&#x27; (send order/shipping update)</td></tr><tr><td><code>to_email</code></td><td>string</td><td>required</td><td>Single recipient email address (1-to-1 transactional only)</td></tr><tr><td><code>otp_code</code></td><td>string</td><td>optional</td><td>6-digit numeric OTP code (required when action=&#x27;verify_otp&#x27;)</td></tr><tr><td><code>reference_id</code></td><td>string</td><td>optional</td><td>Invoice number or Order ID (e.g., &#x27;INV-2026-001&#x27; or &#x27;ORD-99281&#x27; for send_invoice / send_order_status)</td></tr><tr><td><code>detail_text</code></td><td>string</td><td>optional</td><td>Transaction amount/items or shipping courier tracking info (e.g., &#x27;Rp 85.000 — Kopi Susu&#x27; or &#x27;DIKIRIM — Resi JNE: JP882910&#x27;)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;send_transactional_email&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;,
+      &quot;action&quot;: &quot;...&quot;,
+      &quot;to_email&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="update_app_branding update an existing application&#x27;s notification icon url, automated welcome push message (including drip delay welcome_delay_sec and promo target url welcome_url), zero-downtime custom vapid keys (vapid_public_key &amp; vapid_private_key for migrating from onesignal/larapush), and optional native mobile push credentials (android fcm http v1 service account json and ios apns .p8 key). use this tool to co"><summary><code>update_app_branding</code><span class="hint write">can modify</span><span>Update an existing application&#x27;s notification icon URL, automated welcome push message (including drip delay …</span></summary><p class="desc">Update an existing application&#x27;s notification icon URL, automated welcome push message (including drip delay welcome_delay_sec and promo target URL welcome_url), zero-downtime custom VAPID keys (vapid_public_key &amp; vapid_private_key for migrating from OneSignal/LaraPush), and optional native mobile push credentials (Android FCM HTTP v1 service account JSON and iOS APNs .p8 key). Use this tool to configure app-level branding, onboarding welcome alerts, custom VAPID key migration, or native mobile credentials; do not use it to create a new app (use create_app instead) or configure on-site HTML popups (use configure_inapp_banner instead). Prerequisite: call list_apps first to obtain app_id. Requires PUSHNOTIF_API_KEY and idempotently updates only the fields provided at 0 configuration cost (when welcome_enabled=true, each new subscriber welcome push deducts 1 credit; APNs requires apns_key_id, apns_team_id, apns_bundle_id, and apns_p8_key together). Returns JSON { ok, app_id, icon_url, welcome_enabled, welcome_url, welcome_delay_sec, custom_vapid_updated, android_fcm_configured, ios_apns_configured }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>app_id</code></td><td>string</td><td>required</td><td>Target application ID in format app_xxxx (obtain from list_apps)</td></tr><tr><td><code>icon_url</code></td><td>string</td><td>optional</td><td>Optional direct HTTPS URL to a square PNG/JPG/WebP brand icon (recommended 192x192px)</td></tr><tr><td><code>welcome_enabled</code></td><td>boolean</td><td>optional</td><td>Set true to automatically send a welcome push notification immediately after a visitor subscribes</td></tr><tr><td><code>welcome_title</code></td><td>string</td><td>optional</td><td>Headline of the automated welcome push notification (max 80 characters; used when welcome_enabled=true)</td></tr><tr><td><code>welcome_body</code></td><td>string</td><td>optional</td><td>Body text of the automated welcome push notification (max 180 characters; used when welcome_enabled=true)</td></tr><tr><td><code>welcome_url</code></td><td>string</td><td>optional</td><td>Optional target promo/onboarding HTTPS URL opened when the subscriber clicks the welcome push notification (defaults to site_url)</td></tr><tr><td><code>welcome_delay_sec</code></td><td>integer</td><td>optional</td><td>Optional drip delay in seconds (0 to 300, default: 0) before firing the welcome push notification after opt-in</td></tr><tr><td><code>vapid_public_key</code></td><td>string</td><td>optional</td><td>Optional URL-safe Base64 VAPID Public Key imported from OneSignal, LaraPush, or Webpushr for zero-downtime migration</td></tr><tr><td><code>vapid_private_key</code></td><td>string</td><td>optional</td><td>Optional URL-safe Base64 or PEM VAPID Private Key paired with vapid_public_key</td></tr><tr><td><code>fcm_service_account_json</code></td><td>string</td><td>optional</td><td>Optional raw JSON string of Google Firebase Service Account key for native Android FCM HTTP v1 delivery</td></tr><tr><td><code>apns_key_id</code></td><td>string</td><td>optional</td><td>Optional 10-character Apple Developer APNs Key ID (provide together with apns_team_id, apns_bundle_id, and apns_p8_key)</td></tr><tr><td><code>apns_team_id</code></td><td>string</td><td>optional</td><td>Optional 10-character Apple Developer Team ID</td></tr><tr><td><code>apns_bundle_id</code></td><td>string</td><td>optional</td><td>Optional iOS application Bundle Identifier (e.g., &#x27;id.company.app&#x27;)</td></tr><tr><td><code>apns_p8_key</code></td><td>string</td><td>optional</td><td>Optional full PEM content of Apple&#x27;s AuthKey_XXXX.p8 private key file</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_app_branding&quot;,
+    &quot;arguments&quot;: {
+      &quot;app_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="update_subscriber_tags assign or remove audience segment tags on a subscriber device (subscriber_id), permanently unsubscribe a device (unsubscribe=true), or bulk-import existing web push subscribers via csv or json array (import_app_id + import_csv or import_subscribers) at 0 credit cost. use this tool to manage subscriber segmentation, remove a device, or migrate subscribers from onesignal/larapush/webpushr; do not us"><summary><code>update_subscriber_tags</code><span class="hint write">can modify</span><span>Assign or remove audience segment tags on a subscriber device (subscriber_id), permanently unsubscribe a …</span></summary><p class="desc">Assign or remove audience segment tags on a subscriber device (subscriber_id), permanently unsubscribe a device (unsubscribe=true), or bulk-import existing Web Push subscribers via CSV or JSON array (import_app_id + import_csv or import_subscribers) at 0 credit cost. Use this tool to manage subscriber segmentation, remove a device, or migrate subscribers from OneSignal/LaraPush/Webpushr; do not use it to list or export subscribers (use list_subscribers instead). Requires PUSHNOTIF_API_KEY and costs 0 credits. Returns JSON { ok, subscriber_id, action, tags, removed, imported, updated }.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>subscriber_id</code></td><td>string</td><td>optional</td><td>Target subscriber device ID in format sub_xxxx (required when updating tags or unsubscribing a single device)</td></tr><tr><td><code>add_tags</code></td><td>string[]</td><td>optional</td><td>Optional list of lowercase segment tag strings (e.g., [&#x27;vip&#x27;, &#x27;jakarta&#x27;]) to attach to the subscriber for targeted broadcasts</td></tr><tr><td><code>remove_tags</code></td><td>string[]</td><td>optional</td><td>Optional list of segment tag strings to remove from the subscriber</td></tr><tr><td><code>unsubscribe</code></td><td>boolean</td><td>optional</td><td>Set true to permanently unsubscribe and delete this subscriber device record</td></tr><tr><td><code>import_app_id</code></td><td>string</td><td>optional</td><td>Optional target app_id (app_xxxx) when performing a zero-downtime bulk subscriber import via import_csv or import_subscribers</td></tr><tr><td><code>import_csv</code></td><td>string</td><td>optional</td><td>Optional CSV text containing endpoint,p256dh,auth,tags rows to bulk-import into import_app_id</td></tr><tr><td><code>import_subscribers</code></td><td>object[]</td><td>optional</td><td>Optional JSON array of subscriber objects ({endpoint, p256dh, auth, tags}) to bulk-import into import_app_id</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_subscriber_tags&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details></div>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/pushnotif.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/pushnotif.svg)](https://mcp.aianytime.net/s/pushnotif/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/pushnotif.svg)](https://mcp.aianytime.net/s/pushnotif/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/pushnotif.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Marketing, content &amp; social</h2>
+<ul class="chips"><li><a href="../quibbly/">Quibbly</a></li><li><a href="../rank-by-ouroboros-apps/">Rank by Ouroboros Apps</a></li><li><a href="../repostit/">Repostit</a></li><li><a href="../restosignals/">RestoSignals</a></li><li><a href="../robot-speed/">Robot Speed</a></li><li><a href="../saascity/">SaaSCity</a></li><li><a href="../../c/marketing/">All of Marketing, content &amp; social</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>
