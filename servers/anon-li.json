@@ -1,0 +1,9 @@
+{
+  "name": "anon.li",
+  "url": "https://github.com/anondotli/anon.li",
+  "category": "security",
+  "transport": "http",
+  "description": "Remote server for anon.li, an open-source (AGPL-3.0) privacy suite: manage email aliases, recipients, end-to-end encrypted file drops and encrypted forms. Hosted, OAuth sign-in; free plan available. Endpoint: `https://anon.li/api/mcp` · Registry: `io.github.anondotli/anon-li` · [Docs](https://anon.li/mcp)",
+  "endpoint": "https://anon.li/api/mcp",
+  "registry": "io.github.anondotli/anon-li"
+}
