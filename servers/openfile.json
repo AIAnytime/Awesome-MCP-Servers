@@ -1,0 +1,9 @@
+{
+  "name": "OpenFile",
+  "url": "https://joinopenfile.com/docs/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Form a U.S. company or file a U.S. trademark: state fees, quotes, live USPTO search, and drafts the owner signs. 27 tools, no account or API key needed; not legal advice. Endpoint: `https://mcp.joinopenfile.com` · [Website](https://joinopenfile.com) · Registry: `com.joinopenfile/openfile`",
+  "endpoint": "https://mcp.joinopenfile.com",
+  "registry": "com.joinopenfile/openfile"
+}
