@@ -1,0 +1,9 @@
+{
+  "name": "Fezola",
+  "url": "https://github.com/mehdis34/fezola-mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "One connector for several mailboxes and chats: Gmail, iCloud and any IMAP mailbox, plus read-only Google Chat and Telegram, with unified search, a daily briefing of what needs a reply and reply drafts saved in the right mailbox; never sends mail on its own. Hosted closed-source service with OAuth 2.1 sign-in, free for 2 sources (the linked repo holds docs and client configs) · [Docs](https://app.fezola.com/en/docs)",
+  "endpoint": "https://api.fezola.com/mcp",
+  "registry": "com.fezola.app/fezola"
+}
