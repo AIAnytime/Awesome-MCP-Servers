@@ -5,10 +5,3 @@
   "transport": "stdio",
   "description": "Verify single emails or bulk lists (valid, invalid, disposable, catch-all, role) from an AI agent through the MailVeri API; API key required, 1,000 free credits."
 }
-
-
-
-
-
-
-
