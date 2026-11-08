@@ -1,0 +1,8 @@
+{
+  "name": "SalesTouch",
+  "url": "https://www.salestouch.io/docs",
+  "category": "marketing",
+  "transport": "http",
+  "description": "The LinkedIn MCP for AI agents. Enables automated LinkedIn prospecting; LinkedIn access requires user authorization.",
+  "endpoint": "https://www.salestouch.io/api/mcp"
+}

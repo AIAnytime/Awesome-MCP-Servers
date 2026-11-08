@@ -1,0 +1,9 @@
+{
+  "name": "Fax for Agents",
+  "url": "https://github.com/faxforagents/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Send and receive faxes from an AI agent: prepare a document, get a quote, send, poll for the carrier's evidence, read inbound faxes. Bearer API key, a test key is free and uses a sandbox with no carrier. Endpoint: `https://mcp.faxforagents.com/mcp/` · [Docs](https://faxforagents.com/docs/) · Registry: `io.github.faxforagents/faxforagents-mcp`",
+  "endpoint": "https://mcp.faxforagents.com/mcp/",
+  "registry": "io.github.faxforagents/faxforagents-mcp"
+}

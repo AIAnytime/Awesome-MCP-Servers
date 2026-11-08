@@ -1,0 +1,8 @@
+{
+  "name": "Sequenzy",
+  "url": "https://github.com/Sequenzy/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Manage email subscribers, campaigns, automations and transactional email; requires a Sequenzy account with OAuth or an API key, with a free tier of 2,500 emails per month.",
+  "endpoint": "https://api.sequenzy.com/v1/mcp"
+}
