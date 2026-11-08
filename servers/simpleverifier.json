@@ -1,0 +1,9 @@
+{
+  "name": "SimpleVerifier",
+  "url": "https://simpleverifier.com/docs/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Verify email addresses with a live SMTP mailbox check (valid, risky or invalid with the mail server's reason, catch-all grading) and check phone number formats. Requires a SimpleVerifier Pro plan or above, via OAuth or an API key; endpoint: `https://simpleverifier.com/api/mcp`.",
+  "endpoint": "https://simpleverifier.com/api/mcp",
+  "registry": "io.github.Ahmedmkarrar/simpleverifier"
+}
