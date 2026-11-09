@@ -1,0 +1,9 @@
+{
+  "name": "AdMakeAI",
+  "url": "https://github.com/mesmerlord/admakeai-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Generate Meta and TikTok ad images and UGC-style video ads, pull competitors' live ads from the Meta Ad Library, and draft and report on Meta campaigns. OAuth 2.1 sign-in or an `x-api-key` header; 30 free credits, no card. Endpoint: `https://admakeai.com/api/mcp` · [Docs](https://admakeai.com/agents) · Registry: `com.admakeai/admakeai`",
+  "endpoint": "https://admakeai.com/api/mcp",
+  "registry": "com.admakeai/admakeai"
+}
