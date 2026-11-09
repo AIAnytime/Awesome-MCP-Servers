@@ -1,0 +1,9 @@
+{
+  "name": "Nexscope",
+  "url": "https://github.com/nexscope-ai/nexscope-ecommerce-api",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Ecommerce product research for Amazon and other marketplaces via remote MCP; API key with 1,000 trial credits then paid. Endpoint: `https://api.nexscope.ai/mcp`",
+  "endpoint": "https://api.nexscope.ai/mcp",
+  "registry": "io.github.nexscope/ecommerce"
+}
