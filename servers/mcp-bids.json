@@ -1,0 +1,8 @@
+{
+  "name": "MCP Bids",
+  "url": "https://github.com/pixelligue/mcpbids-plugins",
+  "category": "search",
+  "transport": "http",
+  "description": "Search collected US, Canadian and TED procurement notices and inspect available source documents; account required, free tier available. Endpoint: `https://mcpbids.com/mcp` · [Website](https://mcpbids.com)",
+  "endpoint": "https://mcpbids.com/mcp"
+}
