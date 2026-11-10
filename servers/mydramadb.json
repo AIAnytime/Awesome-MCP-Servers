@@ -1,0 +1,8 @@
+{
+  "name": "MyDramaDB",
+  "url": "https://mydramadb.com/connect",
+  "category": "media",
+  "transport": "http",
+  "description": "Search dramas, cast credits and, where available, episode-level information through a public, read-only connector that links to source pages and needs no sign-in or API key.",
+  "endpoint": "https://mydramadb.com/mcp"
+}
