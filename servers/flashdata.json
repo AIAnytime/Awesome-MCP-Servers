@@ -1,0 +1,7 @@
+{
+  "name": "FlashData Google Search and YouTube Data",
+  "url": "https://github.com/rocosen/flashdata-mcp",
+  "category": "search",
+  "transport": "stdio",
+  "description": "Google Search, News, Images, Shopping, Videos and Places; YouTube search, extended search, metadata, existing transcripts/captions, channels, suggestions, license labels and asynchronous media downloads to customer storage; API key and paid Credits required. Install: `npx -y @flashdata-dev/mcp` · [Docs](https://flashdata.dev/docs)"
+}
