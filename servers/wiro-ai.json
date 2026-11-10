@@ -1,0 +1,9 @@
+{
+  "name": "Wiro AI",
+  "url": "https://github.com/wiroai/Wiro-MCP",
+  "category": "media",
+  "transport": "http",
+  "description": "Search, price and run 1,000+ image, video, audio and LLM models on Wiro AI, build workflows that chain them, and deploy and message AI agents. Endpoint: `https://mcp.wiro.ai/v1` (OAuth sign-in or a Wiro API key; runs are billed from your Wiro wallet) · Install: `npx -y @wiro-ai/wiro-mcp` · [Docs](https://wiro.ai/docs/wiro-mcp-server)",
+  "endpoint": "https://mcp.wiro.ai/v1",
+  "registry": "ai.wiro/mcp"
+}
