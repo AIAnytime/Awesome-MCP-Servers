@@ -1,0 +1,8 @@
+{
+  "name": "iotaudit",
+  "url": "https://github.com/emirmrkaljevic/iotaudit",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Local CLI and MCP server that audits IoT and smart-home devices on your own LAN: destinations, encryption, public DNS, DNS-over-TLS and DNS-over-HTTPS. Install: `pip install iotaudit`.",
+  "registry": "io.github.emirmrkaljevic/iotaudit"
+}
