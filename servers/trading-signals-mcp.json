@@ -1,0 +1,8 @@
+{
+  "name": "Trading Signals MCP",
+  "url": "https://github.com/gdietsch/trading-signals-mcp",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "Pay-per-call market data for AI agents: ES futures event-risk gate, SEC insider buys, and AI trade briefs. Free tier or $0.01 USDC via x402. Install: `npx x402-trading-signals-mcp` · [Docs](https://signals.incomefather.com)",
+  "registry": "io.github.gdietsch/trading-signals-mcp"
+}
