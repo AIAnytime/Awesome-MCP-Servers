@@ -1,0 +1,9 @@
+{
+  "name": "GoVisit Tools",
+  "url": "https://govisit.ai/en/docs/developers/mcp/overview",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Read-only travel discovery across destinations, places, categories and collections with 22 tools; no account or API key. Endpoint: `https://govisit.ai/mcp` · Registry: `ai.govisit/tools`",
+  "endpoint": "https://govisit.ai/mcp",
+  "registry": "ai.govisit/tools"
+}
