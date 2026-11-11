@@ -1,0 +1,7 @@
+{
+  "name": "base64-lite",
+  "url": "https://github.com/tidybytetools/base64-lite",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Encodes or decodes Base64 for text and local files, with an optional URL-safe alphabet and data-URI output. Free, runs on your computer, no API key. Install: `pip install git+https://github.com/tidybytetools/base64-lite` · MCP: `uvx --from git+https://github.com/tidybytetools/base64-lite base64-lite mcp`"
+}
