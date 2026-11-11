@@ -1,0 +1,9 @@
+{
+  "name": "Toolbox POD",
+  "url": "https://github.com/Toolbox-POD/toolbox-pod-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Design custom tees and hoodies, see mockups in chosen colors, price an order and get a checkout link to pay on toolboxpod.com (the AI never pays), then track it; printed and shipped from Utah, US only. OAuth sign-in, sign up while connecting. Endpoint: `https://mcp.toolboxpod.com/mcp` · [Docs](https://toolboxpod.com/docs/mcp)",
+  "endpoint": "https://mcp.toolboxpod.com/mcp",
+  "registry": "com.toolboxpod/mcp"
+}
