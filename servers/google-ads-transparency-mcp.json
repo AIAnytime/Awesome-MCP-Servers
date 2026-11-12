@@ -1,0 +1,9 @@
+{
+  "name": "Google Ads Transparency MCP",
+  "url": "https://github.com/GeminiGeorge22/google-ads-transparency-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Competitor Google ads from the Google Ads Transparency Center by domain, advertiser ID, Transparency Center link or advertiser name: which ads are new, running or stopped, with first and last shown dates, format and ad links; Apify OAuth or API token. Endpoint: `https://mcp.apify.com?tools=publicrecords/google-ads-transparency-scraper` · [Docs](https://apify.com/publicrecords/google-ads-transparency-scraper)",
+  "endpoint": "https://mcp.apify.com?tools=publicrecords/google-ads-transparency-scraper",
+  "registry": "io.github.GeminiGeorge22/google-ads-transparency-mcp"
+}
