@@ -1,0 +1,9 @@
+{
+  "name": "FactLot",
+  "url": "https://github.com/9mp96ygnbk-alt/factlot",
+  "category": "finance",
+  "transport": "http",
+  "description": "Commercial real estate calculators (rent schedule, net effective rent, CAM, debt sizing, ASC 842, WALT, NPV, IRR) that return every step and a versioned formula ID, plus parcel and entity IDs and fact validation. Free, no API key, 60 requests/minute per address. Endpoint: `https://api.factlot.com/mcp` · Registry: `io.github.9mp96ygnbk-alt/factlot`",
+  "endpoint": "https://api.factlot.com/mcp",
+  "registry": "io.github.9mp96ygnbk-alt/factlot"
+}
