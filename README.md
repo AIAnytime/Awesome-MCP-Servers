@@ -256,6 +256,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Security
 
+- **[Agency Check](https://github.com/CyberStrategy1/agency-check)** `http` — Hosted remote MCP that checks what an AI agent is about to buy, send, sign up for or connect before it acts; Google OAuth; free 20 checks/month. Endpoint: `https://agency-check.app/mcp` · Registry: `io.github.CyberStrategy1/agency-check`
 - **[Council of AI (GSPC)](https://github.com/CSOAI-ORG/councilof-ai/tree/master/mcp/gspc-server)** `http` — Reads a public board of signed AI behaviour measurement cards and verifies Ed25519 signatures and Merkle inclusion; read tools need no key, evidence tools are x402-metered. Endpoint: `https://councilof.ai/mcp` · Install: `npx -y csoai-gspc-mcp` · Registry: `io.github.CSOAI-ORG/gspc`
 - **[Darkmoon](https://github.com/ASCIT31/Dark-Moon)** `stdio` — Open-source (GPLv3) autonomous penetration-testing platform orchestrating 80+ offensive security tools through 50 specialist agents, with proof of exploitation behind every finding. Runs fully locally.
 - **[Iris](https://iriscan.app/mcp)** `http` — On-chain investigations: analyzes wallets on Solana, EVM chains, Bitcoin and Tron, traces transfers through mixers, exchanges and instant swaps, and finds a Solana token's insiders. API key with 10 free calls a day, or paid per call in USDC with x402. Endpoint: `https://iriscan.app/mcp`; Registry: `io.github.0xVector0/iris`

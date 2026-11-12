@@ -1,0 +1,9 @@
+{
+  "name": "Agency Check",
+  "url": "https://github.com/CyberStrategy1/agency-check",
+  "category": "security",
+  "transport": "http",
+  "description": "Hosted remote MCP that checks what an AI agent is about to buy, send, sign up for or connect before it acts; Google OAuth; free 20 checks/month. Endpoint: `https://agency-check.app/mcp`",
+  "endpoint": "https://agency-check.app/mcp",
+  "registry": "io.github.CyberStrategy1/agency-check"
+}
