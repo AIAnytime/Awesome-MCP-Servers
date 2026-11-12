@@ -3,7 +3,7 @@
   "url": "https://github.com/mehdis34/fezola-mcp",
   "category": "productivity",
   "transport": "http",
-  "description": "Multi-account connector for Claude and ChatGPT: Gmail, Outlook, iCloud and any IMAP mailbox, Google Chat, Telegram (read-only), Google Calendar, Notion and Google Ads (read, write, delete; changes are validated and confirmed first). Unified search across accounts, a daily briefing, reply drafts saved in the right mailbox (direct sending only if enabled).",
+  "description": "Multi-account connector for Claude and ChatGPT: Gmail, Outlook, iCloud and any IMAP mailbox, Google Chat, Telegram (read-only), Google Calendar, Notion and ad platforms (Google Ads, Microsoft Advertising, OpenAI Ads; changes are validated or simulated first where supported, new campaigns start paused). Unified search across accounts, a daily briefing, reply drafts saved in the right mailbox (direct sending only if enabled).",
   "endpoint": "https://api.fezola.com/mcp",
   "registry": "com.fezola.app/fezola"
 }
