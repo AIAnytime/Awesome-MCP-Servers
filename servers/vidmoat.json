@@ -1,0 +1,9 @@
+{
+  "name": "Vidmoat",
+  "url": "https://developer.vidmoat.com/developer/docs/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Hosted video editor your agent can drive: import footage, edit a real timeline, preview frames and render MP4s. OAuth or API key; test keys are free, live MCP needs the Studio plan. Endpoint: `https://api.vidmoat.com/api/mcp`",
+  "endpoint": "https://api.vidmoat.com/api/mcp",
+  "registry": "com.vidmoat/vidmoat"
+}
