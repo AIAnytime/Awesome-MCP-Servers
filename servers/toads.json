@@ -1,0 +1,7 @@
+{
+  "name": "Toads",
+  "url": "https://github.com/854Labs/toads",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Edit screen recordings in Toads on your Mac: tidy up filler words, cut by transcript, add captions, titles and zooms, and export. Runs locally on macOS, no API key; needs the Toads website edition (7-day trial, then paid license). · [Website](https://toads.io/mcp)"
+}
