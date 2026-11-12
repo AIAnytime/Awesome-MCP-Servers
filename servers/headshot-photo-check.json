@@ -1,0 +1,9 @@
+{
+  "name": "Headshot Photo Check",
+  "url": "https://github.com/TRW123123/bewerbungsfoto-check-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Read-only technical check of a profile or job-application photo (resolution, crop, format; brightness, contrast and sharpness when pixels are analysed) with a score, crop recommendations and tips for LinkedIn, XING and applications; no account or API key. · [Docs](https://www.profilfoto-ki.de/mcp/)",
+  "endpoint": "https://mcp.profilfoto-ki.de/mcp",
+  "registry": "de.profilfoto-ki/headshot-check"
+}
