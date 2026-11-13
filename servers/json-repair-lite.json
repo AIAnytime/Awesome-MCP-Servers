@@ -1,0 +1,7 @@
+{
+  "name": "json-repair-lite",
+  "url": "https://github.com/tidybytetools/json-repair-lite",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Repairs broken or incomplete JSON, including model output, and runs offline with no API key. Free, runs on your computer. Install: `pip install git+https://github.com/tidybytetools/json-repair-lite` · MCP: `uvx --from git+https://github.com/tidybytetools/json-repair-lite json-repair-lite mcp`"
+}
