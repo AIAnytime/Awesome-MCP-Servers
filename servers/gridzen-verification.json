@@ -1,0 +1,9 @@
+{
+  "name": "GridZen Verification",
+  "url": "https://github.com/immurray/gridzen-developer-kit/blob/main/llms-install.md",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Research and synthetic MCP tools for identity-verification coverage planning and sandbox decision results. Not live identity verification. Endpoint: `https://gridzen.ai/developers/mcp`",
+  "endpoint": "https://gridzen.ai/developers/mcp",
+  "registry": "ai.gridzen/verification"
+}
