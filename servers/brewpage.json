@@ -1,0 +1,9 @@
+{
+  "name": "BrewPage",
+  "url": "https://github.com/kochetkov-ma/brewpage-openapi",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Free hosting for HTML pages, Markdown, JSON, key-value data and files: publish and get a shareable HTTPS link back, no account or API key; an owner token updates or deletes, content expires (up to 30 days). Endpoint: `https://brewpage.app/mcp` · Install: `npx -y brewpage-mcp` · [Docs](https://kochetkov-ma.github.io/brewpage-openapi/) · Registry: `io.github.kochetkov-ma/brewpage-mcp`",
+  "endpoint": "https://brewpage.app/mcp",
+  "registry": "io.github.kochetkov-ma/brewpage-mcp"
+}
