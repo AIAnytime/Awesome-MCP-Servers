@@ -1,0 +1,8 @@
+{
+  "name": "usb-rea",
+  "url": "https://github.com/emirmrkaljevic/usb-rea",
+  "category": "security",
+  "transport": "stdio",
+  "description": "CLI and MCP server that infers a USB device protocol from a labelled vendor-app capture and writes a pyusb driver. Install: `pip install usb-rea`.",
+  "registry": "io.github.emirmrkaljevic/usb-rea"
+}
