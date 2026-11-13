@@ -1,0 +1,7 @@
+{
+  "name": "ThreadShelf",
+  "url": "https://github.com/ChrystianSchutz/ThreadShelf",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Local archive with semantic and exact search over exported ChatGPT, Claude, Google AI Studio, OpenRouter, LM Studio and Grok chats; tools list collections, search and read full threads. Install: `npx -y threadshelf mcp`"
+}
