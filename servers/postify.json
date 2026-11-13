@@ -1,0 +1,8 @@
+{
+  "name": "Postify",
+  "url": "https://usepostify.com/docs/connecting-ai-assistants",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Draft, schedule and publish social posts, read post analytics and answer inbox messages in a Postify workspace. Needs a Postify account and OAuth sign-in; the free plan includes 30 posts a month.",
+  "endpoint": "https://app.usepostify.com/api/mcp"
+}
