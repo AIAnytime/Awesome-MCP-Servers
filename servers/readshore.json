@@ -1,0 +1,9 @@
+{
+  "name": "ReadShore",
+  "url": "https://readshore.app/connect-ai-assistants/",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Search, read and save to your own ReadShore read-later library: summaries, analysis and original text with numbered passages for citation; adds links but cannot delete. OAuth with sign-in with Apple. Endpoint: `https://readshore.app/mcp` · Registry: `app.readshore/readshore`",
+  "endpoint": "https://readshore.app/mcp",
+  "registry": "app.readshore/readshore"
+}
