@@ -1,0 +1,8 @@
+{
+  "name": "Marketing Playbooks",
+  "url": "https://github.com/sourabhjagga/marketing-playbooks-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Semantic RAG retrieval across 19,895 growth playbooks for SEO, Funnels, Heuristic CRO, and Distribution; 20 free daily queries with no API key, sub-15ms vector search. Endpoint: `https://playbooks.managedcloudvps.com/mcp`",
+  "endpoint": "https://playbooks.managedcloudvps.com/mcp"
+}
