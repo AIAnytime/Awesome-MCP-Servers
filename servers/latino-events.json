@@ -1,0 +1,8 @@
+{
+  "name": "Latino Events (events.lat)",
+  "url": "https://events.lat/llms.txt",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Search concerts, festivals and cultural events across Mexico, Brazil, Argentina, Colombia, Chile and Peru, with venue, dates and the official ticket link; OAuth sign-in with a free events.lat account. Endpoint: `https://ojlsoqhibryhvuyltwpi.supabase.co/functions/v1/mcp`",
+  "endpoint": "https://ojlsoqhibryhvuyltwpi.supabase.co/functions/v1/mcp"
+}
