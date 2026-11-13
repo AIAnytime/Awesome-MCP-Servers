@@ -3,7 +3,7 @@
   "url": "https://github.com/wassengerhq/whatsapp-mcp",
   "category": "marketing",
   "transport": "http",
-  "description": "Send WhatsApp messages and approved templates, and manage chats, contacts, campaigns and a shared team inbox through the official WhatsApp Business API; needs a Wassenger API key. Endpoint: `https://api.wassenger.com/mcp` · [Docs](https://github.com/wassengerhq/whatsapp-mcp)",
+  "description": "Send WhatsApp messages and approved templates, and manage chats, contacts, campaigns and a shared team inbox through the official WhatsApp Business API; needs a Wassenger API key. Endpoint: `https://api.wassenger.com/mcp` · [Docs](https://wassenger.com/whatsapp-mcp)",
   "endpoint": "https://api.wassenger.com/mcp",
   "registry": "com.wassenger/whatsapp"
 }
