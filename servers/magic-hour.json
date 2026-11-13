@@ -3,6 +3,7 @@
   "url": "https://github.com/magichourhq/magic-hour-mcp",
   "category": "media",
   "transport": "http",
-  "description": "Generate and edit video, images, and audio with 44 Magic Hour API tools. Endpoint: `https://mcp.magichour.ai/` (bearer API key required) · [Setup](https://magichour.ai/mcp)",
-  "endpoint": "https://mcp.magichour.ai/"
+  "description": "Create and edit images and videos, and generate audio. Connect with OAuth or a bearer API key · [Setup](https://magichour.ai/mcp)",
+  "endpoint": "https://mcp.magichour.ai/",
+  "registry": "io.github.magichourhq/magic-hour"
 }
