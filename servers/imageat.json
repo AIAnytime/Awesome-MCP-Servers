@@ -1,0 +1,9 @@
+{
+  "name": "imageat",
+  "url": "https://github.com/incendies/imageat-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate and edit images and videos, plus narrated explainers and voiceovers. Needs an imageat API key. Endpoint: `https://mcp.imageat.com/mcp` · Install: `npx -y @imageat/mcp` · [Docs](https://imageat.com/mcp)",
+  "endpoint": "https://mcp.imageat.com/mcp",
+  "registry": "io.github.incendies/imageat"
+}
