@@ -1,0 +1,8 @@
+{
+  "name": "Lantern Works",
+  "url": "https://github.com/connormatthewdouglas/agent-work-stack-deals",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Free, keyless, read-only GPU rental price comparison checked daily, with cited rates and job-cost estimates. Install: `uvx lantern-works-deals-mcp` · [Docs](https://thelanternworks.com/for-agents/)",
+  "endpoint": "https://lantern-works-mcp.lantern-works.workers.dev/mcp"
+}
