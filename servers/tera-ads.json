@@ -1,0 +1,9 @@
+{
+  "name": "Tera Ads",
+  "url": "https://github.com/Teralabsx/meta-ads-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Read and change Meta (Facebook and Instagram) ads with approval before changes and a 7-day undo for pauses and budgets, next to the Shopify store's profit after returns; new campaigns, ad sets and ads start paused. OAuth, free plan. Endpoint: `https://teraads.co/mcp` · [Docs](https://teraads.co/connect)",
+  "endpoint": "https://teraads.co/mcp",
+  "registry": "co.teraads/connect"
+}
