@@ -1,0 +1,9 @@
+{
+  "name": "OsmO Phone Calls",
+  "url": "https://github.com/Mountainheads-Private-limited/osmo-ai-plugins",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Your agent places real phone calls to businesses and helplines after you confirm, then reads back the summary and transcript; OAuth sign-in with a phone number, 50 free credits for new users in the US, Canada, UK and Australia; with free credits, OsmO calls businesses and toll-free numbers; calling your contacts and scheduling calls need an OsmO app plan. Endpoint: `https://api.getosmo.app/mcp`",
+  "endpoint": "https://api.getosmo.app/mcp",
+  "registry": "app.getosmo/phone-calls"
+}
