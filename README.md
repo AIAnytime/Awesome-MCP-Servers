@@ -488,6 +488,7 @@ Once merged, your server gets its own page and a status badge you can embed:
 - [Model Context Protocol — documentation](https://modelcontextprotocol.io)
 - [MCP specification](https://modelcontextprotocol.io/specification)
 - [Official MCP registry](https://registry.modelcontextprotocol.io)
+- [HOL Plugins](https://hol.org/plugins) - Public directory of MCP servers and coding-agent plugins, ranked by trust score
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) · [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
 - [AI Anytime on YouTube](https://www.youtube.com/@AIAnytime) — MCP tutorials and walkthroughs
 
