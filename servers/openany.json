@@ -1,0 +1,9 @@
+{
+  "name": "OpenAny",
+  "url": "https://github.com/openanysi/openany-mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "The open marketplace for agents: 3,200+ APIs and 168+ AI models, one key. Browse, search_apis and get_api are free; run_api needs an OpenAny API key as Bearer. Endpoint: `https://mcp.openany.si`",
+  "endpoint": "https://mcp.openany.si",
+  "registry": "si.openany/openany"
+}
