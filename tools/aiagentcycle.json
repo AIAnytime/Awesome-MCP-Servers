@@ -1,0 +1,324 @@
+{
+ "server": "AIAgentCycle",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "get_company_profile",
+   "title": "AIAgentCycle company profile",
+   "description": "Who AIAgentCycle is: summary, legal name, location, founder, focus and approach. lang is nl or en.\nfacts_verified tells whether the key facts still appear on the About page.",
+   "inputSchema": {
+    "properties": {
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_contact_info",
+   "title": "Contact AIAgentCycle",
+   "description": "Public contact route: email, phone/WhatsApp, contact page and the free assessment (scan) page.\nThis server cannot send messages or book appointments.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_document",
+   "title": "Read one AIAgentCycle page in full",
+   "description": "Full text (Markdown) of one page, article, case, solution, sector or integration page, with its\nsource url, language and last-modified date. Ids come from search_knowledge_base or list_documents.",
+   "inputSchema": {
+    "properties": {
+     "id": {
+      "description": "Numeric document id from search_knowledge_base or list_documents, for example 20 for the Dutch pricing page.",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_faq",
+   "title": "AIAgentCycle FAQ",
+   "description": "Frequently asked questions about prices, maintenance and approach, verbatim from the pricing page.\nlang is nl or en.",
+   "inputSchema": {
+    "properties": {
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_service",
+   "title": "One AIAgentCycle service",
+   "description": "One public service by id (ids come from list_services). An unknown id is an error.",
+   "inputSchema": {
+    "properties": {
+     "service_id": {
+      "description": "Service id exactly as returned by list_services, for example quick-win, techbeheer or serverbeheer.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "service_id"
+    ],
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_cases",
+   "title": "AIAgentCycle case studies",
+   "description": "Published case studies (client and own projects) with title, summary and url. Read one in full with\nget_document. lang is nl or en.",
+   "inputSchema": {
+    "properties": {
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_documents",
+   "title": "List AIAgentCycle pages",
+   "description": "Catalogue of the website: id, type, title, url, last-modified date and a one-line summary per\ndocument. lang is nl or en. type optionally narrows to: article, page, integration, case, solution, sector.",
+   "inputSchema": {
+    "properties": {
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     },
+     "type": {
+      "default": "",
+      "description": "Optional filter on document type: article, page, integration, case, solution or sector. Leave empty for all types.",
+      "enum": [
+       "",
+       "article",
+       "page",
+       "integration",
+       "case",
+       "solution",
+       "sector"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_integrations",
+   "title": "Systems AIAgentCycle integrates",
+   "description": "The integrations catalogue of aiagentcycle.com (190 systems): name, status, domain, category,\ndescription, open-source license and a detail-page url where one exists. Status: productie = already\nrunning in production at AIAgentCycle or a client; standaard = n8n has a built-in node; maatwerk = custom\nvia API, export, database or screen automation. Filters: query (name or text, max 100 chars), domain\n(administratie, verkoop, samenwerken, data), status, open_source. lang is nl or en. A system that is not\nlisted can usually still be connected through one of those four routes.",
+   "inputSchema": {
+    "properties": {
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     },
+     "query": {
+      "default": "",
+      "description": "Optional words that must all occur in the name, description, category or license, for example 'twinfield' or 'crm'. Max 100 characters.",
+      "type": "string"
+     },
+     "domain": {
+      "default": "",
+      "description": "Optional domain filter: administratie (finance and admin), verkoop (customers and sales), samenwerken (work and communication) or data (data, servers and AI).",
+      "enum": [
+       "",
+       "administratie",
+       "verkoop",
+       "samenwerken",
+       "data"
+      ],
+      "type": "string"
+     },
+     "status": {
+      "default": "",
+      "description": "Optional status filter: productie (running in production), standaard (n8n built-in node) or maatwerk (custom).",
+      "enum": [
+       "",
+       "productie",
+       "standaard",
+       "maatwerk"
+      ],
+      "type": "string"
+     },
+     "open_source": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "true for only open-source systems, false for only proprietary ones; leave out for both."
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_services",
+   "title": "AIAgentCycle services and prices",
+   "description": "All public services and maintenance packages with indicative prices (excl. VAT, business clients).\nEach price carries price_verified: true if it still appears verbatim on the live pricing page.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_knowledge_base",
+   "title": "Search the AIAgentCycle website",
+   "description": "Ranked full-text search over every page, solution, sector page, case, integration and article of\naiagentcycle.com. Any word may match; documents matching more words rank higher. lang is nl or en.\ntype optionally narrows to: article, page, integration, case, solution, sector. query max 100 chars,\nlimit 1-10. Each hit has an id for get_document and the source url.",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "description": "Search words, 1 to 100 characters, in the language of lang, for example 'Exact Online koppeling' or 'AI agent cost'.",
+      "type": "string"
+     },
+     "lang": {
+      "default": "nl",
+      "description": "Language of the content: nl (Dutch, the primary site language) or en (English).",
+      "enum": [
+       "nl",
+       "en"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "default": 5,
+      "description": "Maximum number of hits to return, 1 to 10.",
+      "type": "integer"
+     },
+     "type": {
+      "default": "",
+      "description": "Optional filter on document type: article, page, integration, case, solution or sector. Leave empty for all types.",
+      "enum": [
+       "",
+       "article",
+       "page",
+       "integration",
+       "case",
+       "solution",
+       "sector"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [],
+ "prompts": []
+}

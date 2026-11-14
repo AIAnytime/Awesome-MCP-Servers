@@ -1,0 +1,4026 @@
+{
+ "server": "AgentSEO",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "agentseo_ai_overview_extract",
+   "title": "AgentSEO AI Overview Extract",
+   "description": "Extract AI Overview insights for a target keyword.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "target_domain": {
+      "type": "string"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_ai_visibility_prompt_set",
+   "title": "AgentSEO AI Visibility Prompt Set",
+   "description": "Build stable AI visibility prompt sets mapped to owned assets, platforms, competitors, citations, and weekly action routing.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "category": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+     },
+     "audience": {
+      "type": "string",
+      "maxLength": 180
+     },
+     "locale": {
+      "default": "United States",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 80
+     },
+     "platforms": {
+      "default": [
+       "chatgpt",
+       "perplexity",
+       "google_ai"
+      ],
+      "minItems": 1,
+      "maxItems": 6,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "chatgpt",
+        "perplexity",
+        "google_ai",
+        "gemini",
+        "copilot",
+        "claude"
+       ]
+      }
+     },
+     "competitors": {
+      "default": [],
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 160
+      }
+     },
+     "topics": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "product_terms": {
+      "default": [],
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "personas": {
+      "default": [],
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "owned_assets": {
+      "default": [],
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "page_type": {
+         "default": "other",
+         "type": "string",
+         "enum": [
+          "homepage",
+          "docs",
+          "blog_post",
+          "comparison",
+          "pricing",
+          "product",
+          "case_study",
+          "tool",
+          "other"
+         ]
+        },
+        "topics": {
+         "default": [],
+         "maxItems": 20,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+         }
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "prompt_count": {
+      "default": 20,
+      "type": "integer",
+      "minimum": 6,
+      "maximum": 50
+     },
+     "cadence": {
+      "default": "weekly",
+      "type": "string",
+      "enum": [
+       "weekly",
+       "biweekly",
+       "monthly"
+      ]
+     },
+     "include_citation_checks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_competitor_checks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target",
+     "category",
+     "topics"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_analyze_serp",
+   "title": "AgentSEO Analyze SERP",
+   "description": "Deep analysis of Search Engine Results Page (SERP) features and competitors.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "device": {
+      "default": "desktop",
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ]
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_anchors",
+   "title": "AgentSEO Backlinks Anchors",
+   "description": "Analyze backlink anchor text groups and classify branded, commercial, generic, URL, risky, broken, or lost anchor patterns.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "internal_list_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_indirect_links": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "anchor_filter": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+     },
+     "min_backlinks": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "min_referring_domains": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "sort_by": {
+      "default": "backlinks",
+      "type": "string",
+      "enum": [
+       "backlinks",
+       "rank",
+       "referring_domains",
+       "spam_score",
+       "broken_backlinks"
+      ]
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_competitors",
+   "title": "AgentSEO Backlinks Competitors",
+   "description": "Discover backlink-profile competitors and prioritize overlap, authority, and link-gap research actions.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "min_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+     },
+     "min_intersections": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "main_domain": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_large_domains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sort_by": {
+      "default": "opportunity",
+      "type": "string",
+      "enum": [
+       "rank",
+       "intersections",
+       "opportunity"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_domain_pages",
+   "title": "AgentSEO Backlinks Domain Pages",
+   "description": "Analyze backlink-bearing pages and classify linkable assets, broken backlink pages, lost links, refresh candidates, and quality risks.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "internal_list_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "page_filter": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+     },
+     "title_filter": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+     },
+     "status_code": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 599
+     },
+     "min_backlinks": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "min_referring_domains": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "min_words": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+     },
+     "sort_by": {
+      "default": "backlinks",
+      "type": "string",
+      "enum": [
+       "backlinks",
+       "referring_domains",
+       "rank",
+       "spam_score",
+       "broken_backlinks",
+       "first_visited",
+       "words_count",
+       "external_links"
+      ]
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_list",
+   "title": "AgentSEO Backlinks List",
+   "description": "Return a bounded list of actionable backlinks and classify each one for protection, repair, reclaim, quality review, or outreach reference.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "mode": {
+      "default": "one_per_domain",
+      "type": "string",
+      "enum": [
+       "as_is",
+       "one_per_domain",
+       "one_per_anchor"
+      ]
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_indirect_links": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "intersection_mode": {
+      "default": "partial",
+      "type": "string",
+      "enum": [
+       "all",
+       "partial"
+      ]
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "broken_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "min_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+     },
+     "sort_by": {
+      "default": "rank",
+      "type": "string",
+      "enum": [
+       "rank",
+       "page_rank",
+       "first_seen",
+       "lost_date"
+      ]
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_new_lost_timeseries",
+   "title": "AgentSEO Backlinks New/Lost Timeseries",
+   "description": "Track new and lost backlinks/referring domains over time and classify link momentum, leakage, and volatility.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "date_from": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "date_to": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "group_range": {
+      "default": "month",
+      "type": "string",
+      "enum": [
+       "day",
+       "week",
+       "month",
+       "year"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_opportunity_finder",
+   "title": "AgentSEO Backlinks Opportunity Finder",
+   "description": "Turn supplied backlink prospects, competitor link gaps, and owned assets into prioritized safe outreach, reclaim, repair, and digital PR actions.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "campaign_goal": {
+      "default": "mixed",
+      "type": "string",
+      "enum": [
+       "mixed",
+       "link_gap",
+       "broken_link_building",
+       "digital_pr",
+       "resource_page",
+       "reclaim_lost_links",
+       "protect_authority"
+      ]
+     },
+     "prospects": {
+      "minItems": 1,
+      "maxItems": 250,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "source_domain": {
+         "type": "string",
+         "minLength": 1
+        },
+        "source_url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string"
+        },
+        "source_type": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "resource_page",
+          "article",
+          "directory",
+          "tool_list",
+          "news",
+          "partner",
+          "unknown"
+         ]
+        },
+        "linked_competitors": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "topics": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "domain_rank": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 1000
+        },
+        "page_rank": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 1000
+        },
+        "spam_score": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 100
+        },
+        "traffic_estimate": {
+         "type": "number",
+         "minimum": 0
+        },
+        "dofollow": {
+         "type": "boolean"
+        },
+        "broken_link": {
+         "default": false,
+         "type": "boolean"
+        },
+        "lost_link": {
+         "default": false,
+         "type": "boolean"
+        },
+        "context": {
+         "type": "string"
+        },
+        "notes": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "source_domain"
+       ]
+      }
+     },
+     "owned_assets": {
+      "default": [],
+      "maxItems": 250,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1
+        },
+        "page_type": {
+         "default": "other",
+         "type": "string",
+         "enum": [
+          "research",
+          "tool",
+          "guide",
+          "template",
+          "comparison",
+          "case_study",
+          "landing_page",
+          "other"
+         ]
+        },
+        "topics": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "linkable_reason": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "competitor_domains": {
+      "default": [],
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "existing_backlink_domains": {
+      "default": [],
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "max_opportunities": {
+      "default": 20,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50
+     },
+     "min_priority": {
+      "default": "medium",
+      "type": "string",
+      "enum": [
+       "low",
+       "medium",
+       "high"
+      ]
+     },
+     "max_spam_score": {
+      "default": 35,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+     },
+     "include_outreach_angles": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target",
+     "prospects"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_page_intersection",
+   "title": "AgentSEO Backlinks Page Intersection",
+   "description": "Find source pages that link to competitor targets but not excluded/user targets, then prioritize link-gap outreach and quality review.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "targets": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "exclude_targets": {
+      "default": [],
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "internal_list_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_indirect_links": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "broken_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "min_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+     },
+     "min_domain_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+     },
+     "min_page_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+     },
+     "max_spam_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+     },
+     "sort_by": {
+      "default": "rank",
+      "type": "string",
+      "enum": [
+       "rank",
+       "domain_rank",
+       "page_rank",
+       "first_seen",
+       "last_seen"
+      ]
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "targets"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_referring_domains",
+   "title": "AgentSEO Backlinks Referring Domains",
+   "description": "Analyze referring domains and classify authority, lost-domain recovery, broken-link repair, quality review, and outreach patterns.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "internal_list_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_indirect_links": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "domain_filter": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "min_backlinks": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "min_referring_pages": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+     },
+     "min_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+     },
+     "sort_by": {
+      "default": "rank",
+      "type": "string",
+      "enum": [
+       "rank",
+       "backlinks",
+       "referring_pages",
+       "spam_score",
+       "broken_backlinks",
+       "first_seen",
+       "lost_date"
+      ]
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_backlinks_summary",
+   "title": "AgentSEO Backlinks Summary",
+   "description": "Summarize backlink authority, referring domains, spam risk, broken backlinks, and next SEO actions for a domain, subdomain, or URL.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_indirect_links": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exclude_internal_backlinks": {
+      "default": true,
+      "type": "boolean"
+     },
+     "backlinks_status_type": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "all",
+       "lost"
+      ]
+     },
+     "dofollow_only": {
+      "default": false,
+      "type": "boolean"
+     },
+     "internal_list_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "rank_scale": {
+      "default": "one_hundred",
+      "type": "string",
+      "enum": [
+       "one_hundred",
+       "one_thousand"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_action_plan",
+   "title": "AgentSEO Content Action Plan",
+   "description": "Turn supplied SEO opportunities into a capacity-aware content calendar and execution plan.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "goal": {
+      "default": "traffic_growth",
+      "type": "string",
+      "enum": [
+       "traffic_growth",
+       "lead_generation",
+       "refresh_decay",
+       "launch_support",
+       "authority_building"
+      ]
+     },
+     "horizon_days": {
+      "default": 30,
+      "type": "integer",
+      "minimum": 7,
+      "maximum": 90
+     },
+     "weekly_capacity": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     },
+     "start_date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "team": {
+      "default": [],
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 80
+      }
+     },
+     "items": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "keyword": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 120
+        },
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "source_endpoint": {
+         "type": "string",
+         "maxLength": 120
+        },
+        "opportunity_type": {
+         "default": "new_content",
+         "type": "string",
+         "enum": [
+          "new_content",
+          "refresh",
+          "technical_fix",
+          "internal_links",
+          "schema",
+          "backlink_outreach",
+          "monitoring"
+         ]
+        },
+        "buyer_stage": {
+         "default": "awareness",
+         "type": "string",
+         "enum": [
+          "awareness",
+          "consideration",
+          "decision",
+          "implementation",
+          "retention"
+         ]
+        },
+        "priority": {
+         "default": "medium",
+         "type": "string",
+         "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+         ]
+        },
+        "impact_score": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 100
+        },
+        "effort": {
+         "default": "medium",
+         "type": "string",
+         "enum": [
+          "small",
+          "medium",
+          "large"
+         ]
+        },
+        "status": {
+         "default": "idea",
+         "type": "string",
+         "enum": [
+          "idea",
+          "ready",
+          "blocked",
+          "in_progress"
+         ]
+        },
+        "dependencies": {
+         "default": [],
+         "maxItems": 10,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+         }
+        },
+        "notes": {
+         "type": "string",
+         "maxLength": 1000
+        }
+       },
+       "required": [
+        "title"
+       ]
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "items"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_brief",
+   "title": "AgentSEO Content Brief",
+   "description": "Turn live SERP intent into a production-ready content brief for writers and coding agents.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "audience": {
+      "description": "Optional audience description",
+      "type": "string"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "device": {
+      "default": "desktop",
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ]
+     },
+     "brand_voice": {
+      "default": "expert",
+      "type": "string",
+      "enum": [
+       "neutral",
+       "expert",
+       "friendly",
+       "bold",
+       "technical"
+      ]
+     },
+     "page_type": {
+      "default": "auto",
+      "type": "string",
+      "enum": [
+       "auto",
+       "blog_post",
+       "landing_page",
+       "comparison_page",
+       "guide",
+       "tool_page"
+      ]
+     },
+     "brief_depth": {
+      "default": "standard",
+      "type": "string",
+      "enum": [
+       "standard",
+       "detailed"
+      ]
+     },
+     "include_serp_outline": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_cannibalization",
+   "title": "AgentSEO Content Cannibalization",
+   "description": "Detect overlapping SEO pages and recommend safe consolidation, differentiation, canonical, and internal-link fixes.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "focus_keywords": {
+      "default": [],
+      "maxItems": 250,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "sensitivity": {
+      "default": "balanced",
+      "type": "string",
+      "enum": [
+       "conservative",
+       "balanced",
+       "aggressive"
+      ]
+     },
+     "pages": {
+      "minItems": 2,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "description": {
+         "type": "string",
+         "maxLength": 500
+        },
+        "headings": {
+         "default": [],
+         "maxItems": 30,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1
+         }
+        },
+        "primary_keyword": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 120
+        },
+        "target_keywords": {
+         "default": [],
+         "maxItems": 50,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+         }
+        },
+        "ranking_queries": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+         }
+        },
+        "page_type": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "unknown",
+          "homepage",
+          "blog_post",
+          "landing_page",
+          "product",
+          "software",
+          "local_business",
+          "comparison_page",
+          "guide",
+          "docs"
+         ]
+        },
+        "canonical_url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "indexable": {
+         "default": true,
+         "type": "boolean"
+        },
+        "clicks": {
+         "type": "number",
+         "minimum": 0
+        },
+        "impressions": {
+         "type": "number",
+         "minimum": 0
+        },
+        "avg_position": {
+         "type": "number",
+         "minimum": 1,
+         "maximum": 100
+        },
+        "backlinks": {
+         "type": "number",
+         "minimum": 0
+        },
+        "last_updated": {
+         "type": "string",
+         "maxLength": 40
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "pages"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_competitor_gap_matrix",
+   "title": "AgentSEO Competitor Content Gap Matrix",
+   "description": "Compare supplied own and competitor pages to find missing topics, weak coverage, format gaps, and buyer-stage gaps.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "focus_topics": {
+      "default": [],
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "own_pages": {
+      "default": [],
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "description": {
+         "type": "string",
+         "maxLength": 500
+        },
+        "keywords": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+         }
+        },
+        "ranking_queries": {
+         "default": [],
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+         }
+        },
+        "page_type": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "unknown",
+          "homepage",
+          "blog_post",
+          "landing_page",
+          "product",
+          "software",
+          "local_business",
+          "comparison_page",
+          "guide",
+          "docs",
+          "template",
+          "tool",
+          "case_study"
+         ]
+        },
+        "buyer_stage": {
+         "default": "awareness",
+         "type": "string",
+         "enum": [
+          "awareness",
+          "consideration",
+          "decision",
+          "implementation",
+          "retention"
+         ]
+        },
+        "estimated_traffic": {
+         "type": "number",
+         "minimum": 0
+        },
+        "search_volume": {
+         "type": "number",
+         "minimum": 0
+        },
+        "avg_position": {
+         "type": "number",
+         "minimum": 1,
+         "maximum": 100
+        },
+        "backlinks": {
+         "type": "number",
+         "minimum": 0
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "competitors": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "domain": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 160
+        },
+        "pages": {
+         "minItems": 1,
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "url": {
+            "type": "string",
+            "format": "uri"
+           },
+           "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+           },
+           "description": {
+            "type": "string",
+            "maxLength": 500
+           },
+           "keywords": {
+            "default": [],
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+             "type": "string",
+             "minLength": 1,
+             "maxLength": 120
+            }
+           },
+           "ranking_queries": {
+            "default": [],
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+             "type": "string",
+             "minLength": 1,
+             "maxLength": 120
+            }
+           },
+           "page_type": {
+            "default": "unknown",
+            "type": "string",
+            "enum": [
+             "unknown",
+             "homepage",
+             "blog_post",
+             "landing_page",
+             "product",
+             "software",
+             "local_business",
+             "comparison_page",
+             "guide",
+             "docs",
+             "template",
+             "tool",
+             "case_study"
+            ]
+           },
+           "buyer_stage": {
+            "default": "awareness",
+            "type": "string",
+            "enum": [
+             "awareness",
+             "consideration",
+             "decision",
+             "implementation",
+             "retention"
+            ]
+           },
+           "estimated_traffic": {
+            "type": "number",
+            "minimum": 0
+           },
+           "search_volume": {
+            "type": "number",
+            "minimum": 0
+           },
+           "avg_position": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100
+           },
+           "backlinks": {
+            "type": "number",
+            "minimum": 0
+           }
+          },
+          "required": [
+           "url",
+           "title"
+          ]
+         }
+        }
+       },
+       "required": [
+        "domain",
+        "pages"
+       ]
+      }
+     },
+     "max_opportunities": {
+      "default": 30,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "competitors"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_draft_qa",
+   "title": "AgentSEO Content Draft QA",
+   "description": "Validate a draft URL or markdown against live SERP expectations before publishing.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "draft_url": {
+      "description": "Draft or staged page URL",
+      "type": "string",
+      "format": "uri"
+     },
+     "draft_markdown": {
+      "description": "Draft markdown when no URL exists",
+      "type": "string",
+      "minLength": 100,
+      "maxLength": 50000
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "device": {
+      "default": "desktop",
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ]
+     },
+     "qa_depth": {
+      "default": "standard",
+      "type": "string",
+      "enum": [
+       "standard",
+       "strict"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_gap",
+   "title": "AgentSEO Content Gap",
+   "description": "Run content gap analysis for a URL and keyword.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your URL"
+     },
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "scrape_depth": {
+      "default": "h3",
+      "type": "string",
+      "enum": [
+       "h1",
+       "h2",
+       "h3"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "url",
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_internal_links",
+   "title": "AgentSEO Content Internal Links",
+   "description": "Find internal link opportunities from a source page to required supplied target pages.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "source_url": {
+      "description": "Source page URL to scrape",
+      "type": "string",
+      "format": "uri"
+     },
+     "source_markdown": {
+      "description": "Source page markdown when no URL exists",
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 50000
+     },
+     "keyword": {
+      "type": "string"
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "max_suggestions": {
+      "default": 8,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+     },
+     "target_pages": {
+      "description": "Required candidate internal pages from your sitemap, CMS, crawler, Search Console, or /site/sitemap-audit.",
+      "minItems": 1,
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "description": {
+         "type": "string",
+         "maxLength": 500
+        },
+        "keywords": {
+         "default": [],
+         "maxItems": 12,
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_keyword_map",
+   "title": "AgentSEO Content Keyword Map",
+   "description": "Map supplied keywords to supplied pages and flag missing pages or cannibalization risks.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keywords": {
+      "minItems": 1,
+      "maxItems": 250,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "pages": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "title": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 180
+        },
+        "description": {
+         "type": "string",
+         "maxLength": 500
+        },
+        "headings": {
+         "default": [],
+         "maxItems": 30,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1
+         }
+        },
+        "current_keywords": {
+         "default": [],
+         "maxItems": 30,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1
+         }
+        },
+        "page_type": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "unknown",
+          "homepage",
+          "blog_post",
+          "landing_page",
+          "product",
+          "software",
+          "local_business",
+          "comparison_page",
+          "guide",
+          "docs"
+         ]
+        }
+       },
+       "required": [
+        "url",
+        "title"
+       ]
+      }
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "max_mappings": {
+      "default": 250,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 250
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keywords",
+     "pages"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_programmatic_template",
+   "title": "AgentSEO Programmatic SEO Template",
+   "description": "Plan safe programmatic SEO templates with uniqueness rules, indexation gates, internal links, schema guidance, and launch QA.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "playbook": {
+      "default": "custom",
+      "type": "string",
+      "enum": [
+       "templates",
+       "curation",
+       "conversions",
+       "comparisons",
+       "examples",
+       "locations",
+       "personas",
+       "integrations",
+       "glossary",
+       "translations",
+       "directory",
+       "profiles",
+       "custom"
+      ]
+     },
+     "page_goal": {
+      "default": "lead_generation",
+      "type": "string",
+      "enum": [
+       "traffic",
+       "lead_generation",
+       "trial_signup",
+       "demo_request",
+       "purchase",
+       "authority",
+       "support"
+      ]
+     },
+     "keyword_pattern": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+     },
+     "url_pattern": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+     },
+     "audience": {
+      "type": "string",
+      "maxLength": 180
+     },
+     "page_count_estimate": {
+      "default": 100,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+     },
+     "data_sources": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 120
+        },
+        "type": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "first_party",
+          "product",
+          "user_generated",
+          "licensed",
+          "public",
+          "manual",
+          "unknown"
+         ]
+        },
+        "freshness": {
+         "default": "unknown",
+         "type": "string",
+         "enum": [
+          "real_time",
+          "daily",
+          "weekly",
+          "monthly",
+          "quarterly",
+          "static",
+          "unknown"
+         ]
+        },
+        "fields": {
+         "default": [],
+         "maxItems": 80,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+         }
+        }
+       },
+       "required": [
+        "name"
+       ]
+      }
+     },
+     "variables": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 80
+      }
+     },
+     "unique_fields": {
+      "default": [],
+      "maxItems": 80,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 80
+      }
+     },
+     "sample_records": {
+      "default": [],
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "propertyNames": {
+        "type": "string"
+       },
+       "additionalProperties": {
+        "type": [
+         "string",
+         "number",
+         "boolean",
+         "null"
+        ]
+       }
+      }
+     },
+     "competitors": {
+      "default": [],
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 160
+      }
+     },
+     "conversion_cta": {
+      "type": "string",
+      "maxLength": 120
+     },
+     "publishing_cadence": {
+      "default": "pilot",
+      "type": "string",
+      "enum": [
+       "pilot",
+       "weekly_batch",
+       "monthly_batch",
+       "bulk_import"
+      ]
+     },
+     "include_schema": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_internal_linking": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword_pattern",
+     "url_pattern",
+     "data_sources",
+     "variables"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_refresh_brief",
+   "title": "AgentSEO Content Refresh Brief",
+   "description": "Create a refresh brief for an existing URL and keyword.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Existing page URL"
+     },
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "scrape_depth": {
+      "default": "h3",
+      "type": "string",
+      "enum": [
+       "h1",
+       "h2",
+       "h3"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "url",
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_schema_plan",
+   "title": "AgentSEO Content Schema Plan",
+   "description": "Plan JSON-LD schema for a URL or markdown page without a provider call.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "description": "Page URL to scrape",
+      "type": "string",
+      "format": "uri"
+     },
+     "page_markdown": {
+      "description": "Page markdown when no URL exists",
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 50000
+     },
+     "page_type": {
+      "default": "auto",
+      "type": "string",
+      "enum": [
+       "auto",
+       "article",
+       "blog_post",
+       "landing_page",
+       "product",
+       "software",
+       "local_business",
+       "faq",
+       "how_to"
+      ]
+     },
+     "keyword": {
+      "type": "string"
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "include_jsonld": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_serp_outline",
+   "title": "AgentSEO SERP Outline",
+   "description": "Turn live SERP intent into a writer- and agent-ready page outline.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Target keyword"
+     },
+     "target": {
+      "description": "Optional target brand or domain",
+      "type": "string"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "device": {
+      "default": "desktop",
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ]
+     },
+     "outline_depth": {
+      "default": "standard",
+      "type": "string",
+      "enum": [
+       "brief",
+       "standard",
+       "detailed"
+      ]
+     },
+     "include_title_options": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_technical_qa",
+   "title": "AgentSEO Content Technical QA",
+   "description": "Run pre-publish SEO QA for metadata, indexability, canonical, headings, schema, links, and media.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "format": "uri"
+     },
+     "html": {
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 250000
+     },
+     "markdown": {
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 50000
+     },
+     "keyword": {
+      "type": "string",
+      "minLength": 1
+     },
+     "target": {
+      "type": "string"
+     },
+     "expected_canonical": {
+      "type": "string",
+      "format": "uri"
+     },
+     "page_type": {
+      "default": "auto",
+      "type": "string",
+      "enum": [
+       "auto",
+       "article",
+       "blog_post",
+       "landing_page",
+       "product",
+       "software",
+       "local_business",
+       "comparison_page",
+       "guide",
+       "docs"
+      ]
+     },
+     "check_external_links": {
+      "default": false,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_content_title_meta",
+   "title": "AgentSEO Content Title Meta",
+   "description": "Generate SEO title and meta description options for a URL or markdown page.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "description": "Page URL to scrape",
+      "type": "string",
+      "format": "uri"
+     },
+     "page_markdown": {
+      "description": "Page markdown when no URL exists",
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 50000
+     },
+     "keyword": {
+      "type": "string",
+      "minLength": 1
+     },
+     "target": {
+      "description": "Optional target brand, domain, or product",
+      "type": "string"
+     },
+     "page_type": {
+      "default": "auto",
+      "type": "string",
+      "enum": [
+       "auto",
+       "blog_post",
+       "landing_page",
+       "product",
+       "software",
+       "local_business",
+       "comparison_page",
+       "guide"
+      ]
+     },
+     "current_title": {
+      "type": "string",
+      "maxLength": 120
+     },
+     "current_meta_description": {
+      "type": "string",
+      "maxLength": 320
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_domain_competitors",
+   "title": "AgentSEO Domain Competitors",
+   "description": "Discover search competitors for a domain and prioritize overlap, traffic gaps, and next analysis actions.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 250
+     },
+     "min_intersections": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000000
+     },
+     "max_rank_group": {
+      "default": 20,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "sort_by": {
+      "default": "threat",
+      "type": "string",
+      "enum": [
+       "overlap",
+       "competitor_traffic",
+       "traffic_gap",
+       "threat"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_domain_intersection",
+   "title": "AgentSEO Domain Intersection",
+   "description": "Compare two domains to find shared keyword deficits, advantages, and target1-exclusive keyword opportunities.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target1": {
+      "type": "string",
+      "minLength": 1
+     },
+     "target2": {
+      "type": "string",
+      "minLength": 1
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 250
+     },
+     "intersections": {
+      "default": true,
+      "type": "boolean"
+     },
+     "min_search_volume": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000000
+     },
+     "sort_by": {
+      "default": "opportunity",
+      "type": "string",
+      "enum": [
+       "opportunity",
+       "search_volume",
+       "traffic_gap",
+       "rank_gap",
+       "cpc"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target1",
+     "target2"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_domain_ranked_keywords",
+   "title": "AgentSEO Domain Ranked Keywords",
+   "description": "Find ranked keywords for a domain, subdomain, or URL and prioritize refresh opportunities.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 250
+     },
+     "min_search_volume": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+     },
+     "max_rank": {
+      "default": 100,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "sort_by": {
+      "default": "opportunity",
+      "type": "string",
+      "enum": [
+       "opportunity",
+       "estimated_traffic",
+       "rank",
+       "search_volume",
+       "cpc"
+      ]
+     },
+     "include_lost": {
+      "default": false,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_domain_relevant_pages",
+   "title": "AgentSEO Domain Relevant Pages",
+   "description": "Find traffic-carrying pages for a domain and route them into protect, refresh, expand, or recover actions.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "minLength": 1
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 250
+     },
+     "min_traffic": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000000
+     },
+     "historical_serp_mode": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+       "live",
+       "lost",
+       "all"
+      ]
+     },
+     "sort_by": {
+      "default": "estimated_traffic",
+      "type": "string",
+      "enum": [
+       "estimated_traffic",
+       "keyword_count",
+       "top3",
+       "opportunity"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_domain_traffic_estimate",
+   "title": "AgentSEO Domain Traffic Estimate",
+   "description": "Compare estimated search traffic across multiple domains, subdomains, or URLs before spending deeper analysis credits.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "targets": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "include_paid": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_featured_snippet": {
+      "default": true,
+      "type": "boolean"
+     },
+     "include_local_pack": {
+      "default": false,
+      "type": "boolean"
+     },
+     "sort_by": {
+      "default": "organic_traffic",
+      "type": "string",
+      "enum": [
+       "organic_traffic",
+       "total_traffic",
+       "paid_traffic",
+       "opportunity",
+       "target"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "targets"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_extract",
+   "title": "AgentSEO Extract",
+   "description": "Extract content from a URL and convert to Markdown.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL to scrape"
+     },
+     "include_images": {
+      "default": false,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_job_status",
+   "title": "AgentSEO Job Status",
+   "description": "Get status/result for a previously queued job.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "job_id": {
+      "type": "string",
+      "description": "Job ID"
+     }
+    },
+    "required": [
+     "job_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_keyword_ideas_suggest",
+   "title": "AgentSEO Keyword Ideas Suggest",
+   "description": "Expand one seed keyword into prioritized long-tail keyword ideas with search metrics.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Seed keyword or topic"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 100
+     },
+     "min_search_volume": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+     },
+     "include_seed_keyword": {
+      "default": true,
+      "type": "boolean"
+     },
+     "exact_match": {
+      "default": false,
+      "type": "boolean"
+     },
+     "ignore_synonyms": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_keyword_metrics_overview",
+   "title": "AgentSEO Keyword Metrics Overview",
+   "description": "Score a supplied keyword list with search metrics and page-priority guidance.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keywords": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 80
+      }
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "min_search_volume": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+     },
+     "sort_by": {
+      "default": "priority",
+      "type": "string",
+      "enum": [
+       "priority",
+       "search_volume",
+       "cpc",
+       "difficulty"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keywords"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_local_audit",
+   "title": "AgentSEO Local Audit",
+   "description": "Audit one Google Maps business listing. Provide its business name and city/state/country; do not pass a website URL or domain.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "business_name": {
+      "type": "string",
+      "description": "Business name as shown on Google Maps, not a domain or URL"
+     },
+     "location": {
+      "type": "string",
+      "description": "City, state, and country of the business"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "business_name",
+     "location"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_local_visibility_track",
+   "title": "AgentSEO Local Visibility Track",
+   "description": "Track local visibility for a domain across keywords and locations.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Domain to track"
+     },
+     "keywords": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "locations": {
+      "minItems": 1,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "domain",
+     "keywords",
+     "locations"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_opportunities_brief",
+   "title": "AgentSEO Opportunity Brief",
+   "description": "Turn one keyword or page opportunity into an implementation-ready brief.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Selected opportunity keyword"
+     },
+     "target": {
+      "type": "string",
+      "description": "Target domain or URL"
+     },
+     "page_url": {
+      "type": "string",
+      "format": "uri"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "opportunity_type": {
+      "type": "string",
+      "enum": [
+       "quick_win",
+       "content_refresh",
+       "ai_overview_opportunity",
+       "featured_snippet_opportunity",
+       "commercial_intent_opportunity",
+       "lost_keyword_recovery",
+       "competitor_gap"
+      ]
+     },
+     "current_rank": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "include_competitor_outlines": {
+      "default": true,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword",
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_opportunities_find",
+   "title": "AgentSEO Opportunity Finder",
+   "description": "Find prioritized SEO opportunities for a domain or URL.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "description": "Domain or URL to analyze"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "keyword_limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "opportunity_limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     },
+     "include_serp_competitors": {
+      "default": false,
+      "type": "boolean"
+     },
+     "include_competitor_discovery": {
+      "default": false,
+      "type": "boolean"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_page_cro_qa",
+   "title": "AgentSEO Page CRO QA",
+   "description": "Audit SEO landing pages for value proposition clarity, CTA strength, trust proof, objection handling, and conversion friction.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "format": "uri"
+     },
+     "html": {
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 250000
+     },
+     "markdown": {
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 50000
+     },
+     "target": {
+      "type": "string"
+     },
+     "keyword": {
+      "type": "string"
+     },
+     "page_type": {
+      "default": "auto",
+      "type": "string",
+      "enum": [
+       "auto",
+       "homepage",
+       "landing_page",
+       "pricing",
+       "feature",
+       "blog_post",
+       "product",
+       "comparison_page",
+       "docs"
+      ]
+     },
+     "conversion_goal": {
+      "default": "signup",
+      "type": "string",
+      "enum": [
+       "signup",
+       "trial",
+       "demo",
+       "purchase",
+       "contact_sales",
+       "subscribe",
+       "download",
+       "learn_more"
+      ]
+     },
+     "traffic_source": {
+      "default": "organic",
+      "type": "string",
+      "enum": [
+       "organic",
+       "paid",
+       "email",
+       "social",
+       "direct",
+       "referral",
+       "unknown"
+      ]
+     },
+     "audience": {
+      "type": "string",
+      "maxLength": 180
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_page_intersection",
+   "title": "AgentSEO Page Intersection",
+   "description": "Compare ranking pages to find shared page keywords or competitor-page keywords excluded from your pages.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "pages": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "format": "uri"
+      }
+     },
+     "exclude_pages": {
+      "default": [],
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "format": "uri"
+      }
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "location_code": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+     },
+     "language": {
+      "default": "en",
+      "type": "string"
+     },
+     "item_types": {
+      "default": [
+       "organic",
+       "featured_snippet"
+      ],
+      "minItems": 1,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "organic",
+        "paid",
+        "featured_snippet",
+        "local_pack"
+       ]
+      }
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 100
+     },
+     "offset": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20000
+     },
+     "include_subdomains": {
+      "default": true,
+      "type": "boolean"
+     },
+     "intersection_mode": {
+      "default": "union",
+      "type": "string",
+      "enum": [
+       "union",
+       "intersect"
+      ]
+     },
+     "include_serp_info": {
+      "default": false,
+      "type": "boolean"
+     },
+     "include_clickstream_data": {
+      "default": false,
+      "type": "boolean"
+     },
+     "ignore_synonyms": {
+      "default": true,
+      "type": "boolean"
+     },
+     "min_search_volume": {
+      "default": 0,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000000
+     },
+     "max_rank": {
+      "default": 30,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "sort_by": {
+      "default": "opportunity",
+      "type": "string",
+      "enum": [
+       "opportunity",
+       "search_volume",
+       "traffic_gap",
+       "rank",
+       "cpc"
+      ]
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "pages"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_rank_track",
+   "title": "AgentSEO Rank Track",
+   "description": "Queue a rank tracking check for a URL and keyword.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "keyword": {
+      "type": "string",
+      "description": "Keyword to track"
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to track"
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword",
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_search",
+   "title": "AgentSEO Search",
+   "description": "Perform a Google search with optional domain filters.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "The search query"
+     },
+     "limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50
+     },
+     "include_domains": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "exclude_domains": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_serp_volatility",
+   "title": "AgentSEO SERP Volatility Monitor",
+   "description": "Compare supplied SERP snapshots to detect rank churn, top-domain churn, feature changes, and target visibility movement.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "keyword": {
+      "type": "string",
+      "minLength": 1
+     },
+     "location": {
+      "default": "United States",
+      "type": "string"
+     },
+     "device": {
+      "default": "desktop",
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ]
+     },
+     "sensitivity": {
+      "default": "medium",
+      "type": "string",
+      "enum": [
+       "low",
+       "medium",
+       "high"
+      ]
+     },
+     "target_domains": {
+      "default": [],
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 180
+      }
+     },
+     "snapshots": {
+      "minItems": 2,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "checked_at": {
+         "type": "string",
+         "minLength": 1
+        },
+        "serp_features": {
+         "default": [],
+         "maxItems": 30,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+         }
+        },
+        "results": {
+         "minItems": 1,
+         "maxItems": 100,
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "position": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+           },
+           "url": {
+            "type": "string",
+            "format": "uri"
+           },
+           "title": {
+            "type": "string",
+            "maxLength": 240
+           },
+           "domain": {
+            "type": "string",
+            "maxLength": 180
+           },
+           "result_type": {
+            "default": "organic",
+            "type": "string",
+            "enum": [
+             "organic",
+             "paid",
+             "local_pack",
+             "featured_snippet",
+             "ai_overview",
+             "people_also_ask",
+             "video",
+             "image",
+             "news",
+             "other"
+            ]
+           }
+          },
+          "required": [
+           "position",
+           "url"
+          ]
+         }
+        }
+       },
+       "required": [
+        "checked_at",
+        "results"
+       ]
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "keyword",
+     "snapshots"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "agentseo_site_sitemap_audit",
+   "title": "AgentSEO Sitemap Audit",
+   "description": "Audit sitemap coverage, orphan-page candidates, important URLs, canonical/indexability noise, and internal-link gaps.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string"
+     },
+     "sitemap_url": {
+      "type": "string",
+      "format": "uri"
+     },
+     "sitemap_xml": {
+      "type": "string",
+      "minLength": 80,
+      "maxLength": 2000000
+     },
+     "max_sitemap_children": {
+      "default": 3,
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+     },
+     "important_urls": {
+      "default": [],
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "format": "uri"
+      }
+     },
+     "crawl_urls": {
+      "default": [],
+      "maxItems": 5000,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "source": {
+         "type": "string",
+         "maxLength": 80
+        },
+        "title": {
+         "type": "string",
+         "maxLength": 180
+        },
+        "status_code": {
+         "type": "integer",
+         "minimum": 100,
+         "maximum": 599
+        },
+        "indexable": {
+         "default": true,
+         "type": "boolean"
+        },
+        "canonical_url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "inbound_internal_links": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 9007199254740991
+        },
+        "clicks": {
+         "type": "number",
+         "minimum": 0
+        },
+        "impressions": {
+         "type": "number",
+         "minimum": 0
+        }
+       },
+       "required": [
+        "url"
+       ]
+      }
+     },
+     "internal_links": {
+      "default": [],
+      "maxItems": 20000,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "source_url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "target_url": {
+         "type": "string",
+         "format": "uri"
+        },
+        "anchor": {
+         "type": "string",
+         "maxLength": 160
+        }
+       },
+       "required": [
+        "source_url",
+        "target_url"
+       ]
+      }
+     },
+     "sync": {
+      "default": true,
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

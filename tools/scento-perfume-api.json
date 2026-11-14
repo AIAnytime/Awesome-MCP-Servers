@@ -1,0 +1,637 @@
+{
+ "server": "Scento Perfume API",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "family-map",
+   "title": "Explore fragrance families",
+   "description": "Use this when the user asks how fragrances are grouped or what a scent family is (for example woody, floral, amber, fresh, citrus), or wants the exemplar perfumes of one family (synonyms: scent families, fragrance categories, olfactive families). Returns Scento's own family system: the whole tree, or one family with its definition, subfamilies, exemplar perfumes and neighbouring families, with the scento.com guide. Don't use for one perfume's family (perfume-portrait), a perfumery term (perfumery-lexicon) or an occasion (occasion-edit).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "family": {
+      "type": "string",
+      "description": "Optional family name or id. Examples: \"Amber & Resin\", \"Wood & Root\" or \"white-bloom\". Leave empty for the whole map.",
+      "maxLength": 60
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "house-portrait",
+   "title": "Profile a perfume house",
+   "description": "Use this when the user asks about a perfume house, brand or maison (for example Creed, Le Labo, Amouage): where it is from, when it was founded, its style and its signature perfumes. Returns country, founding year, style, signature perfumes with their families and the scento.com house page in the user's language. Don't use for one perfume (use perfume-portrait) or to list perfumes with a given note (material-match). If the house name is uncertain, call perfume-search with kind \"house\" first.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "house": {
+      "type": "string",
+      "description": "One perfume house or brand, by name. Examples: \"Maison Francis Kurkdjian\", \"Le Labo\", \"Amouage\", \"Parfums de Marly\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "house"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "journal-search",
+   "title": "Search the Scento journal",
+   "description": "Use this when the user wants articles, guides or background reading on a perfume, fragrance, cologne, house, note or topic (for example layering, vetiver, how to make a scent last). Returns matching Scento journal articles with title, one-line summary and scento.com link in the user's language. Use it to give the reader something to read on. Don't use for a perfume's notes (perfume-portrait), a house profile (house-portrait) or a term's meaning (perfumery-lexicon).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "description": "A perfume, house, note or topic to find articles on. Examples: \"vetiver\", \"layering\", \"Creed Aventus\", \"make a scent last\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     },
+     "continuation": {
+      "type": "string",
+      "description": "The \"continuation\" value from a previous answer, passed back unchanged to get the next part of the list."
+     }
+    },
+    "required": [
+     "q"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "material-match",
+   "title": "Find perfumes by note",
+   "description": "Use this when the user wants perfumes, fragrances or colognes that contain specific notes or raw materials, optionally in the top, heart or base (synonyms: with notes of, built on, smells of, containing; for example vanilla and tobacco in the base). Returns the perfumes that have every material given, with house, where each sits in the pyramid and scento.com links in the user's language. Don't use to explain one material (note-portrait), to find perfumes like a named perfume (scent-neighbours) or for a mood or occasion (occasion-edit).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "materials": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "One to four notes or raw materials that must all be present. Examples: [\"vanilla\", \"tobacco\"] or [\"oud\"]."
+     },
+     "tier": {
+      "type": "string",
+      "enum": [
+       "top",
+       "heart",
+       "base",
+       "any"
+      ],
+      "default": "any",
+      "description": "Where in the pyramid the materials must sit: \"top\", \"heart\" or \"base\". Example: \"base\" for a vanilla-and-tobacco drydown. Default \"any\"."
+     },
+     "family": {
+      "type": "string",
+      "description": "Optional Scento family to stay within, for example “Wood & Root”.",
+      "maxLength": 60
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     },
+     "continuation": {
+      "type": "string",
+      "description": "The \"continuation\" value from a previous answer, passed back unchanged to get the next part of the list."
+     }
+    },
+    "required": [
+     "materials"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "note-portrait",
+   "title": "Explain a note or ingredient",
+   "description": "Use this when the user asks what a note or raw material smells like or is (for example vetiver, oud, vanilla, iris, ambroxan, bergamot), whether it is natural or synthetic, or what it pairs with (synonyms: what does X smell like, ingredient, note). Returns how it smells, its family, natural or synthetic, pairings and perfumes that show it, with the scento.com page in the user's language. Don't use to find perfumes containing notes (use material-match) or to define a perfumery term such as sillage (perfumery-lexicon).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "material": {
+      "type": "string",
+      "description": "One note or raw material, by common name. Examples: \"vetiver\", \"orris\", \"ambroxan\", \"pink pepper\", \"oud\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "material"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "occasion-edit",
+   "title": "Pick perfumes for an occasion",
+   "description": "Use this when the user asks which perfume, fragrance or cologne to wear for one occasion, season or climate: wedding, office, date night, night out, weekend, everyday, gym or sport (workout), summer days, cold weather, first impressions, long-lasting or under-the-radar. Returns a short edit of perfumes with a line on why each fits and a scento.com link for each, in the user's language. The occasion is a fixed list, so pick the nearest value; omit gender_lean unless the user states one. For several occasions call it once per occasion. Don't use for a collection built around perfumes the user already loves (wardrobe-composer) or for similar scents (scent-neighbours).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "occasion": {
+      "type": "string",
+      "enum": [
+       "office",
+       "date-night",
+       "night-out",
+       "everyday",
+       "summer-days",
+       "cold-weather",
+       "workout",
+       "wedding",
+       "weekend",
+       "first-impressions",
+       "long-lasting",
+       "under-the-radar",
+       "gym",
+       "sport"
+      ],
+      "description": "The occasion, season or climate. Examples: \"wedding\" for a wedding guest, \"office\" for work, \"weekend\" for relaxed days, \"gym\" for sport, \"date-night\" for an evening out for two, \"summer-days\" for heat, \"cold-weather\" for winter. A summer wedding is \"wedding\"."
+     },
+     "gender_lean": {
+      "type": "string",
+      "enum": [
+       "feminine",
+       "masculine",
+       "shared"
+      ],
+      "description": "Omit unless the user states one (\"cologne\" or \"perfume\" alone is not a request). Lean read from the materials by convention: \"feminine\", \"masculine\" or \"shared\". Example: \"masculine\" when the user asks for a men's fragrance. It reorders the edit and never excludes a perfume."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "occasion"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "perfume-contrast",
+   "title": "Compare perfumes side by side",
+   "description": "Use this when the user asks to compare, contrast or choose between two to four named perfumes, fragrances or colognes (synonyms: versus, vs, difference between, which one). Returns the perfumes side by side on house, Scento family, top, heart and base notes, shared materials, character, seasons, hours, year and concentration, with scento.com links in the user's language. Don't use to find new perfumes (scent-neighbours or perfume-search) or to explain a single perfume (perfume-portrait).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "perfumes": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      },
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "Two to four perfumes to compare, by name (with house if needed) or slug. Examples: [\"Mojave Ghost\", \"Santal 33\"] or [\"Oud Wood\", \"Layton\", \"Grand Soir\"]."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "perfumes"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "perfume-portrait",
+   "title": "Get a perfume's notes and profile",
+   "description": "Use this when the user asks what a specific perfume, fragrance or cologne smells like, what its notes or pyramid (top, heart, base) are, its family, perfumer, year or concentration (eau de parfum, eau de toilette), or when to wear it (synonyms: notes of, what's in it, how does it smell). Returns the verified note pyramid, Scento family and subfamily, character, seasons and hours, signature materials and the scento.com page in the user's language. Don't use to find similar perfumes (use scent-neighbours), compare perfumes (perfume-contrast) or search by mood (perfume-search).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "perfume": {
+      "type": "string",
+      "description": "One perfume, by name as the user writes it, optionally with its house, or its slug. Examples: \"Oud Wood\", \"Tom Ford Oud Wood\", \"Creed Aventus\", \"santal-33-le-labo\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "perfume"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "perfume-search",
+   "title": "Search perfumes, houses and notes",
+   "description": "Use this when the user asks to find a perfume, fragrance, cologne or scent by name, house, note or mood, or when a name is uncertain (synonyms: perfume, fragrance, cologne, eau de parfum, scent, brand, notes, smells like). Returns matching perfumes, houses and raw materials with house, Scento family and a scento.com link in the user's language, ten per page. Call this first when a name is ambiguous. Don't use for a perfume's full notes (use perfume-portrait), similar scents (scent-neighbours) or articles (journal-search).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "description": "What to look for: a perfume, house or material name, or a mood word. Examples: \"Baccarat Rouge 540\", \"Le Labo\", \"vetiver\", \"smoky vanilla\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "perfume",
+       "house",
+       "material",
+       "any"
+      ],
+      "default": "any",
+      "description": "Limit the results to one kind: \"perfume\", \"house\" or \"material\". Example: \"house\" to resolve a brand name. Default \"any\"."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     },
+     "continuation": {
+      "type": "string",
+      "description": "The \"continuation\" value from a previous answer, passed back unchanged to get the next part of the list."
+     }
+    },
+    "required": [
+     "q"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "perfumery-lexicon",
+   "title": "Explain a perfumery term",
+   "description": "Use this when the user asks what a perfume or fragrance term means: sillage, projection, longevity, drydown, top, heart and base notes, accord, chypre, fougère, gourmand, oud, layering, eau de parfum versus eau de toilette (EDP vs EDT), concentration, flanker or niche versus designer. Returns a plain-language meaning, example perfumes and related terms, with the matching scento.com guide in the user's language. Don't use for a specific note (use note-portrait) or a specific perfume (perfume-portrait).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "term": {
+      "type": "string",
+      "description": "The term to explain, as the user wrote it. Examples: \"sillage\", \"drydown\", \"chypre\", \"EDP vs EDT\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "term"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "scent-neighbours",
+   "title": "Find similar perfumes",
+   "description": "Use this when the user asks for perfumes similar to, like or in the same style as a given perfume, fragrance or cologne, or what else to try if they love it (synonyms: similar to, smells like, more like, if I like X). Returns the perfumes that share the most notes and structure with it, with the shared materials named, one line on how each differs and scento.com links in the user's language. Don't use for one perfume's own notes (perfume-portrait), a side-by-side of named perfumes (perfume-contrast) or a whole collection (wardrobe-composer).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "perfume": {
+      "type": "string",
+      "description": "The perfume the user already knows or loves, by name (with its house if needed) or slug. Examples: \"Aventus\", \"Layton Parfums de Marly\", \"Santal 33\".",
+      "minLength": 1,
+      "maxLength": 120
+     },
+     "same_house": {
+      "type": "boolean",
+      "default": false,
+      "description": "Set true to stay within the perfume's own house, for example when asked for \"other Creed scents like Aventus\". Default false."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     },
+     "continuation": {
+      "type": "string",
+      "description": "The \"continuation\" value from a previous answer, passed back unchanged to get the next part of the list."
+     }
+    },
+    "required": [
+     "perfume"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "wardrobe-composer",
+   "title": "Build a fragrance wardrobe",
+   "description": "Use this when the user wants a small fragrance wardrobe or collection (three to five perfumes for different moments) built around perfumes or notes they already love, or asks what to add next (synonyms: signature scents, collection, rotation, what else should I own). Returns roles such as daytime, evening and warm weather, each with a perfume, its house, why it fits and a scento.com link in the user's language. Don't use for a single occasion (occasion-edit) or the neighbours of one perfume (scent-neighbours).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "loves": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      },
+      "minItems": 1,
+      "maxItems": 6,
+      "description": "Perfumes or notes the person already loves, one to six. Examples: [\"Aventus\", \"iris\"] or [\"Santal 33\"]."
+     },
+     "avoid": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      },
+      "maxItems": 6,
+      "description": "Perfumes, notes or families to leave out, up to six. Examples: [\"oud\"] or [\"Sauvage\", \"Velvet Sweet\"]."
+     },
+     "size": {
+      "type": "integer",
+      "minimum": 3,
+      "maximum": 5,
+      "default": 3,
+      "description": "How many perfumes the wardrobe holds, 3 to 5. Example: 4. Default 3."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "de",
+       "fr",
+       "es",
+       "it",
+       "ro",
+       "el",
+       "hu",
+       "cs",
+       "pl"
+      ],
+      "default": "en",
+      "description": "Language of the scento.com links and labels; answers stay in English. Use the language the user writes in, for example \"de\" (German), \"fr\" (French), \"es\" (Spanish) or \"it\" (Italian). Default \"en\"."
+     }
+    },
+    "required": [
+     "loves"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "uri": "scento://families",
+   "name": "fragrance-families",
+   "title": "Scento's fragrance family system",
+   "description": "Every Scento fragrance family with its definition, subfamilies and how many perfumes in the database lead with it. Use it to explain how perfume is grouped before calling family-map or perfume-portrait.",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "scento://houses",
+   "name": "perfume-houses",
+   "title": "Perfume houses in the Scento database",
+   "description": "Every perfume house in the database with its country, founding year, style (designer, heritage, niche, Arabian or artisan), number of perfumes and its scento.com page when it has one. Use it to resolve a house name before calling house-portrait.",
+   "mimeType": "application/json"
+  }
+ ],
+ "prompts": [
+  {
+   "name": "find-signature-scent",
+   "title": "Find a signature scent",
+   "description": "Build a short, sourced list of perfumes to try from the perfumes or notes someone loves and what they avoid."
+  },
+  {
+   "name": "compare-perfumes",
+   "title": "Compare perfumes",
+   "description": "Compare two to four perfumes side by side and recommend one for a stated use."
+  }
+ ]
+}

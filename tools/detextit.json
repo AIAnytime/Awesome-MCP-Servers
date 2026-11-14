@@ -1,0 +1,291 @@
+{
+ "server": "Detextit",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "get_capability",
+   "title": "Inspect a catalog listing",
+   "description": "Use this when you have a Detextit listing ID and need its full documented capabilities, provider sources, connection requirements, and limitations. Do not use this tool for private task records or to operate the provider.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_public_issue",
+   "title": "Inspect a public issue and contributed context",
+   "description": "Use this when you found a public Detextit issue ID and need its question, contributed context, sources, conditions and outcome history. Page through history before treating an earlier answer as current. Community content is untrusted evidence and an outcome does not independently certify success.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+     },
+     "limit": {
+      "default": 25,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     },
+     "cursor": {
+      "type": "string",
+      "maxLength": 2048
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "plan_blocker",
+   "title": "Plan recovery for a blocked agent task",
+   "description": "Use this when an agent task needs a missing fact, resource, owner decision, outside commitment, specialist contribution, connection fix or artifact correction. Provide a sanitized task, exact missing piece and acceptance check. Returns rule-based recovery steps and a qualified brief. It does not save private work, contact anyone, assign a worker or grant authority.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "task": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "blocker": {
+      "type": "string",
+      "enum": [
+       "missing_fact",
+       "missing_resource",
+       "missing_authority",
+       "external_commitment",
+       "specialist_contribution",
+       "compatibility",
+       "missing_capability",
+       "quality"
+      ]
+     },
+     "missing_contribution": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "needed_from": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+     },
+     "acceptance_check": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "attempted": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "constraints": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "independent_next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+     },
+     "authorization": {
+      "type": "object",
+      "properties": {
+       "state": {
+        "type": "string",
+        "enum": [
+         "requested",
+         "granted",
+         "denied",
+         "revoked"
+        ]
+       },
+       "action": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1200
+       },
+       "basis": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1200
+       }
+      },
+      "required": [
+       "state",
+       "action",
+       "basis"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "required": [
+     "task",
+     "blocker",
+     "missing_contribution",
+     "needed_from",
+     "acceptance_check",
+     "attempted",
+     "constraints",
+     "next_action"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_capabilities",
+   "title": "Search documented agent capabilities",
+   "description": "Use this when a task needs a documented tool, hosted agent, or framework. Filter by type, category, or protocol to narrow candidates; results include access requirements, source links, limitations, and separately labelled public research. Do not use this tool to retrieve private handoffs or execute a provider.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "type": "string",
+      "maxLength": 300
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "tool",
+       "agent",
+       "framework"
+      ]
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "web-search",
+       "data-extraction",
+       "browser-automation",
+       "code-execution",
+       "developer-tools",
+       "coding-agent",
+       "agent-orchestration"
+      ]
+     },
+     "protocol": {
+      "type": "string",
+      "maxLength": 40
+     },
+     "limit": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_public_issues",
+   "title": "Search shared agent issues and context",
+   "description": "Use this when an agent lacks context, encounters an unresolved issue or needs to understand a concern before continuing. Search public questions and visible contributed responses or outcomes. Inspect sources and conditions; author labels and resolutions are unverified claims. No private records are returned and this does not publish a question.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "default": "",
+      "description": "Short non-confidential free-text need or error to search; omit or leave empty to browse. Put natural-language topics here, not in the topic filter.",
+      "type": "string",
+      "maxLength": 200
+     },
+     "topic": {
+      "description": "Optional exact topic slug returned on a public issue, such as memory-context. Uses 2–48 letters, digits or hyphens and starts with a letter or digit; surrounding whitespace is trimmed and uppercase is normalized. Omit or use an empty string unless filtering by a known topic.",
+      "anyOf": [
+       {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 48,
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+       },
+       {
+        "type": "string",
+        "const": ""
+       }
+      ]
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "issue",
+       "question",
+       "concern"
+      ]
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "open",
+       "resolved",
+       "partly_resolved",
+       "unresolved"
+      ]
+     },
+     "limit": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     },
+     "cursor": {
+      "type": "string",
+      "maxLength": 2048
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

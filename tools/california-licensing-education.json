@@ -1,0 +1,265 @@
+{
+ "server": "California Licensing Education",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "calculate_insurance_comparison",
+   "title": "Compare insurance scenarios and school costs",
+   "description": "Compares two premiums the user supplies for the same coverage over a chosen number of months, then adds the user’s school, court and optional costs. Returns prorated totals, their difference and a break-even month. Amounts are integer US cents; the tool does not estimate premiums, surcharges, durations or fees, is not an insurance quote or prediction, and excludes the citation fine common to both scenarios. Its inputs are amounts only; names, policy numbers and ticket details are not part of them.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     },
+     "baselinePremiumCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000,
+      "description": "User-supplied baseline premium for the selected policy period."
+     },
+     "comparisonPremiumCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000,
+      "description": "User-supplied alternative premium for the same coverage and policy period."
+     },
+     "premiumPeriodMonths": {
+      "anyOf": [
+       {
+        "type": "number",
+        "const": 1
+       },
+       {
+        "type": "number",
+        "const": 6
+       },
+       {
+        "type": "number",
+        "const": 12
+       }
+      ]
+     },
+     "comparisonMonths": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 60
+     },
+     "tuitionCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000
+     },
+     "courtSchoolFeeCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000
+     },
+     "optionalFeesCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000
+     }
+    },
+    "required": [
+     "baselinePremiumCents",
+     "comparisonPremiumCents",
+     "premiumPeriodMonths",
+     "comparisonMonths",
+     "tuitionCents",
+     "courtSchoolFeeCents",
+     "optionalFeesCents"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_court_information",
+   "title": "Court websites and next steps",
+   "description": "Official superior court website and California Courts directory record for one county (the county on the citation), or all 58 when county is omitted. website is the court’s destination and sourceUrl its directory evidence. For counties with a published school guide, nextSteps links that guide’s permission, deadline and court-receipt sections; generalGuidance links the school’s general court guide; pageUpdatedAt is that page’s update date. The handling court is the one named on the citation; a city or ZIP code does not determine it. It does not look up cases, rule on eligibility or submit anything.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     },
+     "county": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_eligibility_checklist",
+   "title": "Court permission checklist",
+   "description": "Steps for confirming traffic-school permission with the court: the deadline, separate court fees, choosing a licensed school, and confirming the court received the completion. It lists what to check with the court; it is not an eligibility decision.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_guidance",
+   "title": "Read public guidance",
+   "description": "One reviewed guidance answer by ID (from search_guidance, availableGuidanceIds or list_programs), with its source URLs, review date and the school’s live availability. An answer may be a short summary; open its linked school page for the complete page. Answers summarize cited pages as of their review date; they are not a fresh source check.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     },
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_school_status",
+   "title": "School availability and license",
+   "description": "California Licensing Education’s current enrollment and completion-reporting availability as its service reports it, its DMV license details and public contact information. Availability is not a payment processor’s status or a court’s receipt of a completion.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_programs",
+   "title": "School programs",
+   "description": "The school’s published program pages with live availability. Each program has a guidanceId that get_guidance accepts.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_guidance",
+   "title": "Search public guidance",
+   "description": "Search the school’s reviewed public guidance on California traffic school: licensing, school and court costs, court fees by county, eligibility and the 18-month rule, deadlines and extensions, points and insurance, completion reporting, commercial licenses, and county court steps. Returns navigational topic IDs, titles and exact article URLs; reviewed answers and complete source lists are supplied by get_guidance. Empty results include availableGuidanceIds listing every article. Contains no course lessons or exam content.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "language": {
+      "default": "en",
+      "description": "Information language code. Only en is accepted; omit it to use the default.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+     },
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+     },
+     "limit": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

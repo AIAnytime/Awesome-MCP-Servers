@@ -1,0 +1,2714 @@
+{
+ "server": "Lintelly HR Deutschland",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "abfindung_faustformel",
+   "title": "Abfindung nach Faustformel",
+   "description": "Rule-of-thumb severance pay under German law (Abfindung, § 1a KSchG): monthly pay × factor × years of service, with the usual range of factors and the legal cap if a court dissolves the employment (§ 10 KSchG). There is usually no legal right to severance; use it to size an offer or a settlement. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "monatsgehalt_brutto": {
+      "type": "number",
+      "description": "Gross monthly salary incl. regular allowances, in euros",
+      "minimum": 0
+     },
+     "sonderzahlungen_jahr": {
+      "type": "number",
+      "description": "Annual one-off payments such as Christmas or holiday bonus, in euros; added with 1/12",
+      "minimum": 0
+     },
+     "eintritt": {
+      "type": "string",
+      "description": "First day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "austritt": {
+      "type": "string",
+      "description": "Last day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "zugang_kuendigung": {
+      "type": "string",
+      "description": "Day the notice of termination was received; the 6-month waiting period of the KSchG counts to this day (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "faktor": {
+      "type": "number",
+      "description": "Monthly salaries per year of service, default 0.5 (statutory value), commonly up to 1.0",
+      "minimum": 0.25,
+      "maximum": 2
+     },
+     "alter": {
+      "type": "integer",
+      "description": "Age at leaving in whole years, only for the legal cap",
+      "minimum": 14,
+      "maximum": 80
+     },
+     "kleinbetrieb": {
+      "type": "boolean",
+      "description": "True for a small business with regularly 10 or fewer full-time employees (part-time counted pro rata)"
+     }
+    },
+    "required": [
+     "monatsgehalt_brutto",
+     "eintritt",
+     "austritt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ablauf",
+   "title": "HR-Ablauf mit Daten",
+   "description": "German employment law, Germany only: a complete HR workflow (Ablauf) with dates, roles and legal norms for a situation, e.g. first hire (erste Einstellung), onboarding (Eintritt), leaving (Austritt), sick employee (Krankheit, Entgeltfortzahlung, U1, BEM), pregnancy (Mutterschutz), parental leave (Elternzeit), preparing a dismissal (Kündigung), end of probation, end of a fixed-term contract, monthly payroll (Lohn). Use it when a founder describes a situation such as a first hire, a sick employee, a pregnancy or a planned dismissal. Takes only dates, numbers and choices, never names.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "art": {
+      "type": "string",
+      "description": "Which workflow",
+      "enum": [
+       "erste_einstellung",
+       "eintritt",
+       "austritt",
+       "krankheit",
+       "mutterschutz",
+       "elternzeit",
+       "kuendigung_vorbereiten",
+       "probezeit_ende",
+       "befristung_ende",
+       "monatsende_lohn"
+      ]
+     },
+     "datum": {
+      "type": "string",
+      "description": "Anchor date, meaning per art: erste_einstellung = erster Arbeitstag; eintritt = erster Arbeitstag; austritt = letzter Arbeitstag; krankheit = erster Krankheitstag; mutterschutz = voraussichtlicher Entbindungstermin; elternzeit = Beginn der Elternzeit; kuendigung_vorbereiten = geplanter Tag des Zugangs der Kündigung; probezeit_ende = erster Arbeitstag (Beginn der Probezeit); befristung_ende = letzter Tag der Befristung; monatsende_lohn = ein Tag im Lohnmonat (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "beschaeftigungsart": {
+      "type": "string",
+      "description": "Type of employment (Beschäftigungsart)",
+      "enum": [
+       "vollzeit",
+       "teilzeit",
+       "werkstudent",
+       "azubi",
+       "minijob",
+       "praktikum"
+      ]
+     },
+     "befristet": {
+      "type": "boolean",
+      "description": "Fixed-term contract (befristet), eintritt and erste_einstellung"
+     },
+     "probezeit_monate": {
+      "type": "integer",
+      "description": "Agreed probation in whole months (Probezeit), required for probezeit_ende",
+      "minimum": 0,
+      "maximum": 12
+     },
+     "branche_sofortmeldung": {
+      "type": "string",
+      "description": "Sector with immediate registration duty (Sofortmeldung, § 28a Abs. 4 SGB IV) or keine",
+      "enum": [
+       "bau",
+       "gastro",
+       "personenbefoerderung",
+       "spedition",
+       "schausteller",
+       "gebaeudereinigung",
+       "messebau",
+       "fleisch",
+       "prostitution",
+       "sicherheit",
+       "friseur",
+       "keine"
+      ]
+     },
+     "drittstaat": {
+      "type": "boolean",
+      "description": "Person needs a residence and work permit (Drittstaat)"
+     },
+     "grund": {
+      "type": "string",
+      "description": "Reason for leaving (Austrittsgrund), required for austritt; arbeitgeber = dismissal by the company",
+      "enum": [
+       "arbeitnehmer",
+       "arbeitgeber",
+       "aufhebung",
+       "befristung",
+       "rente",
+       "tod",
+       "vergleich",
+       "sonstiges"
+      ]
+     },
+     "zugang": {
+      "type": "string",
+      "description": "Day the notice or termination agreement was received (Zugang), austritt (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "wettbewerbsverbot": {
+      "type": "boolean",
+      "description": "Contract has a post-contractual non-compete or customer protection clause (austritt, befristung_ende, kuendigung_vorbereiten)"
+     },
+     "sonderkuendigungsschutz": {
+      "type": "boolean",
+      "description": "Person is pregnant, on parental leave or severely disabled (austritt with dismissal)"
+     },
+     "eintritt": {
+      "type": "string",
+      "description": "First working day of the person, for krankheit (waiting period) and kuendigung_vorbereiten (notice period) (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "nach_drittem_geburtstag": {
+      "type": "boolean",
+      "description": "Parental leave lies between the 3rd and 8th birthday of the child (elternzeit)"
+     },
+     "abgabetag": {
+      "type": "string",
+      "description": "Day the payroll input is due at the payroll office (monatsende_lohn) (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "beschaeftigte": {
+      "type": "number",
+      "description": "Employees in the business, part-time pro rata, apprentices not counted",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "betriebsrat": {
+      "type": "boolean",
+      "description": "A works council (Betriebsrat) exists"
+     },
+     "bundesland": {
+      "type": "string",
+      "description": "Federal state of the company for public holidays (Bundesland), e.g. HE",
+      "enum": [
+       "BW",
+       "BY",
+       "BY-OHNE-MH",
+       "BY-AUGSBURG",
+       "BE",
+       "BB",
+       "HB",
+       "HH",
+       "HE",
+       "MV",
+       "NI",
+       "NW",
+       "RP",
+       "SL",
+       "SN",
+       "ST",
+       "SH",
+       "TH"
+      ]
+     }
+    },
+    "required": [
+     "art"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "abmahnung",
+   "title": "Abmahnung",
+   "description": "German employment law, Germany only. Gives you what you need to write a formal warning letter (Abmahnung) yourself: the required parts (Rüge with date and time, verletzte Pflicht, Hinweis, Warnung vor Kündigung), a letter template with placeholders, writing rules, checklist and pitfalls. Use it when an employer wants to warn an employee about misconduct. The template uses roles instead of names of third parties. The facts themselves never go into this tool.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "verstoss": {
+      "type": "string",
+      "description": "Kind of misconduct (Art des Verstoßes)",
+      "enum": [
+       "Unpünktlichkeit",
+       "Unentschuldigtes Fehlen",
+       "Verspätete Krankmeldung oder fehlende AU-Bescheinigung",
+       "Arbeitsverweigerung",
+       "Verstoß gegen eine Anweisung",
+       "Verhalten gegenüber Kollegen oder Kunden",
+       "Sonstiges"
+      ]
+     },
+     "datum_vorfall": {
+      "type": "string",
+      "description": "Day of the incident (Datum des Vorfalls) (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "uhrzeit": {
+      "type": "string",
+      "description": "Time of the incident, HH:MM, optional",
+      "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+      "maxLength": 5
+     },
+     "pflicht_aus": {
+      "type": "string",
+      "description": "Where the breached duty is written (Die verletzte Pflicht steht in), default Arbeitsvertrag",
+      "enum": [
+       "Arbeitsvertrag",
+       "Weisung der Vorgesetzten",
+       "Betriebsordnung oder Betriebsvereinbarung",
+       "Gesetz",
+       "Weiß ich nicht genau"
+      ]
+     },
+     "fruehere_abmahnung": {
+      "type": "string",
+      "description": "Earlier warning (frühere Abmahnung): none, for the same kind of misconduct, or for a different kind; default nein",
+      "enum": [
+       "nein",
+       "gleich",
+       "andere"
+      ]
+     },
+     "datum_fruehere_abmahnung": {
+      "type": "string",
+      "description": "Date of the earlier warning, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "anrede": {
+      "type": "string",
+      "description": "Form of address in the letter, default sie",
+      "enum": [
+       "sie",
+       "du"
+      ]
+     },
+     "briefdatum": {
+      "type": "string",
+      "description": "Date of the letter; placeholder if empty (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "required": [
+     "verstoss",
+     "datum_vorfall"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "arbeitgeberkosten",
+   "title": "Was kostet mich eine Person",
+   "description": "Germany only. Employer costs (Arbeitgeberkosten) of one employee in Germany per month and year: gross pay plus the employer share of social security (Sozialversicherung) for full-time, part-time, working students (Werkstudent) and mini-jobs (Minijob), with rates, contribution ceilings and sources. In the transition zone (Midijob, Übergangsbereich) it calculates the exact employer share with the official factor F, or only the lower bound for years whose factor F is not yet published.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "art": {
+      "type": "string",
+      "description": "Type of employment",
+      "enum": [
+       "vollzeit",
+       "teilzeit",
+       "werkstudent",
+       "minijob"
+      ]
+     },
+     "brutto_monat": {
+      "type": "number",
+      "description": "Gross pay per month in euro",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "stichtag": {
+      "type": "string",
+      "description": "Any day in the month the costs apply to; the rates valid on that day are used. Default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "gesetzlich_versichert": {
+      "type": "boolean",
+      "description": "Mini-job: person has statutory health insurance, default true"
+     },
+     "pauschsteuer": {
+      "type": "boolean",
+      "description": "Mini-job: employer pays the 2 % flat-rate tax, default true"
+     }
+    },
+    "required": [
+     "art",
+     "brutto_monat"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "arbeitszeugnis",
+   "title": "Arbeitszeugnis: Aufbau und Zeugnissprache",
+   "description": "German employment reference (Arbeitszeugnis, Zwischenzeugnis, Endzeugnis), Germany only. Use it when a founder wants a reference written: give the kind of reference and a grade from 1 to 5 per area, never names. Returns the structure with mandatory parts, the coded wording (Zeugnissprache) for each grade, the overall grade with its satisfaction formula, forbidden codes and traps, and the legal claim under § 109 GewO.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "art": {
+      "type": "string",
+      "description": "endzeugnis (final reference at the end of employment) or zwischenzeugnis (interim reference while employed), default endzeugnis",
+      "enum": [
+       "endzeugnis",
+       "zwischenzeugnis"
+      ]
+     },
+     "umfang": {
+      "type": "string",
+      "description": "qualifiziert (with performance and conduct, the usual case) or einfach (only kind and duration of work), default qualifiziert",
+      "enum": [
+       "qualifiziert",
+       "einfach"
+      ]
+     },
+     "note_arbeitsbereitschaft": {
+      "type": "integer",
+      "description": "Grade for willingness to work (Arbeitsbereitschaft: commitment, initiative), 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "note_fachwissen": {
+      "type": "integer",
+      "description": "Grade for expertise (Fachwissen), 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "note_arbeitsweise": {
+      "type": "integer",
+      "description": "Grade for way of working (Arbeitsweise: care, reliability, pace), 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "note_arbeitserfolg": {
+      "type": "integer",
+      "description": "Grade for results (Arbeitserfolg: quality and quantity), 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "fuehrungsverantwortung": {
+      "type": "boolean",
+      "description": "The person leads staff (Führungsverantwortung); then note_fuehrung counts toward the overall grade"
+     },
+     "note_fuehrung": {
+      "type": "integer",
+      "description": "Grade for leadership (Führungsleistung), only with fuehrungsverantwortung, 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "note_verhalten": {
+      "type": "integer",
+      "description": "Grade for conduct towards superiors, colleagues and customers (Verhalten), graded separately, 1 (sehr gut) to 5 (mangelhaft), default 2",
+      "minimum": 1,
+      "maximum": 5
+     },
+     "beginn": {
+      "type": "string",
+      "description": "First day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ende": {
+      "type": "string",
+      "description": "Last day of employment, final reference only (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "grund": {
+      "type": "string",
+      "description": "Why the employment ends, final reference only, default ohne (no reason stated)",
+      "enum": [
+       "eigener-wunsch",
+       "einvernehmlich",
+       "betriebsbedingt",
+       "befristung",
+       "ruhestand",
+       "ohne"
+      ]
+     },
+     "zwischen_anlass": {
+      "type": "string",
+      "description": "Occasion of an interim reference, default wunsch (employee asked)",
+      "enum": [
+       "vorgesetztenwechsel",
+       "versetzung",
+       "elternzeit",
+       "betriebsuebergang",
+       "wunsch"
+      ]
+     },
+     "schluss": {
+      "type": "string",
+      "description": "Closing formula: note (thanks, regret and wishes matching the grade, default), dank (thanks only), keine (none)",
+      "enum": [
+       "note",
+       "dank",
+       "keine"
+      ]
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "aufbewahrungsfristen",
+   "title": "Aufbewahrungsfristen",
+   "description": "German employment law, Germany only: retention periods for HR documents (Aufbewahrungsfristen) and the earliest day to delete them: payslips, payroll account, social security pay records, time records, contract and personnel file after exit, rejected applications, warning letters. With modus austritt it returns a deletion plan (Löschplan) for the personnel file after an exit date. Use it when someone asks how long to keep employee documents or when they may or must be deleted.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "modus": {
+      "type": "string",
+      "description": "dokument (one document type) or austritt (deletion plan after exit). Default dokument",
+      "enum": [
+       "dokument",
+       "austritt"
+      ]
+     },
+     "dokument": {
+      "type": "string",
+      "description": "Document type: lohn (payslips, Lohnabrechnungen), reise (travel expense reports), lohnkonto (payroll account), sv (social security pay records, Entgeltunterlagen), arbeitszeit (time records), vertrag (employment contract after exit), akte (personnel file after exit), bewerbung (rejected applications), abmahnung (warning letter in ongoing employment)",
+      "enum": [
+       "lohn",
+       "reise",
+       "lohnkonto",
+       "sv",
+       "arbeitszeit",
+       "vertrag",
+       "akte",
+       "bewerbung",
+       "abmahnung"
+      ]
+     },
+     "datum": {
+      "type": "string",
+      "description": "Start date: date of the document, last entry (lohnkonto), pay month (sv), rejection (bewerbung) or exit date (vertrag, akte, modus austritt). Not needed for abmahnung (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "pruefung_zeitraum_bis": {
+      "type": "string",
+      "description": "Only sv: end of the period covered by the last social security audit (Betriebsprüfung), from the audit notice (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "pruefung_am": {
+      "type": "string",
+      "description": "Only sv: day of that audit (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "verfahren_laeuft": {
+      "type": "boolean",
+      "description": "A lawsuit or an audit about these documents is ongoing"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ausgleichsabgabe",
+   "title": "Ausgleichsabgabe",
+   "description": "Compensatory levy for unfilled jobs for severely disabled people under German law (Ausgleichsabgabe, §§ 154, 160 SGB IX), years 2024 to 2026. Takes the jobs and the severely disabled employees per month (or one value for all months) and returns required places, employment rate, rate per place and month, the levy and the 31 March deadline. Only employers with 20 or more jobs on annual average are affected. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "jahr": {
+      "type": "integer",
+      "description": "Calendar year of employment, default the current year",
+      "minimum": 2024,
+      "maximum": 2026
+     },
+     "arbeitsplaetze": {
+      "type": "array",
+      "description": "Jobs (Arbeitsplätze) of 18 or more hours per week without apprentices and fixed terms up to 8 weeks: one value for every month or 12 values January to December",
+      "items": {
+       "type": "integer",
+       "description": "Number of jobs",
+       "minimum": 0,
+       "maximum": 100000
+      },
+      "maxItems": 12
+     },
+     "schwerbehinderte": {
+      "type": "array",
+      "description": "Severely disabled or equivalent employees as counted by the employment agency (angerechnet): one value or 12 monthly values, default 0",
+      "items": {
+       "type": "integer",
+       "description": "Number of people",
+       "minimum": 0,
+       "maximum": 100000
+      },
+      "maxItems": 12
+     }
+    },
+    "required": [
+     "arbeitsplaetze"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "befristung",
+   "title": "Befristungs-Rechner",
+   "description": "German employment law, Germany only: checks a fixed-term contract without objective reason (sachgrundlose Befristung, § 14 TzBfG). Returns the latest allowed end date (2 years, 4 for new companies, 5 from age 52), extensions used and left, and a traffic light with findings on prior employment (Vorbeschäftigung), written form (Schriftform) and extensions (Verlängerung). Use it before signing or extending a fixed-term contract.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "beginn": {
+      "type": "string",
+      "description": "Start of the first fixed-term contract (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ende": {
+      "type": "string",
+      "description": "End of the first contract, without extensions (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "verlaengerungen": {
+      "type": "array",
+      "description": "Extensions in order",
+      "items": {
+       "type": "object",
+       "properties": {
+        "vereinbart_am": {
+         "type": "string",
+         "description": "Day both sides signed the extension (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "neues_ende": {
+         "type": "string",
+         "description": "New end date (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "bedingungen_geaendert": {
+         "type": "boolean",
+         "description": "Salary, hours or tasks were changed together with the extension"
+        }
+       },
+       "required": [
+        "vereinbart_am",
+        "neues_ende"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 6
+     },
+     "vorbeschaeftigung": {
+      "type": "string",
+      "description": "Employed before by the same employer: nein (never), arbeit (as employee, also mini-job or working student), azubi (only apprenticeship), praktikum (internship), leih (temp agency worker). Default nein",
+      "enum": [
+       "nein",
+       "arbeit",
+       "azubi",
+       "praktikum",
+       "leih"
+      ]
+     },
+     "vorbeschaeftigung_ende": {
+      "type": "string",
+      "description": "End of the earlier employment, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "regelaltersgrenze": {
+      "type": "boolean",
+      "description": "Person had reached the standard retirement age at contract start (§ 41 Abs. 2 SGB VI)"
+     },
+     "gruendung": {
+      "type": "string",
+      "description": "Founding date if the company is a new business (§ 14 Abs. 2a TzBfG) (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ab52": {
+      "type": "boolean",
+      "description": "Special case: at least 52 at start and unemployed for at least 4 months before (§ 14 Abs. 3 TzBfG)"
+     },
+     "schriftform": {
+      "type": "string",
+      "description": "Signed on paper by both sides before the first working day: ja, nein, unklar. Default unklar",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     }
+    },
+    "required": [
+     "beginn"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "bem_pflicht",
+   "title": "BEM-Pflicht prüfen",
+   "description": "Checks whether an employer must offer occupational integration management under German law (betriebliches Eingliederungsmanagement, BEM, § 167 Abs. 2 SGB IX): more than 6 weeks of incapacity to work within the last 12 months, counted in calendar days and in working days, whatever the cause. Returns the counts, the day the limit was crossed and the next steps. Applies from the first employee. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "stichtag": {
+      "type": "string",
+      "description": "Reference date, the 12 months before it are counted; default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "zeitraeume": {
+      "type": "array",
+      "description": "Periods of incapacity to work (Arbeitsunfähigkeit) of any cause, incl. partial incapacity. Follow-up notes as one period.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "von": {
+         "type": "string",
+         "description": "First day (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "bis": {
+         "type": "string",
+         "description": "Last day; leave out if still ongoing (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        }
+       },
+       "required": [
+        "von"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 20
+     },
+     "arbeitstage": {
+      "type": "array",
+      "description": "Working days of the person, default Mo to Fr",
+      "items": {
+       "type": "string",
+       "description": "Weekday",
+       "enum": [
+        "Mo",
+        "Di",
+        "Mi",
+        "Do",
+        "Fr",
+        "Sa",
+        "So"
+       ]
+      },
+      "maxItems": 7
+     }
+    },
+    "required": [
+     "zeitraeume"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "elternzeit_fristen",
+   "title": "Elternzeit-Fristen",
+   "description": "German employment law, Germany only: deadlines for parental leave (Elternzeit, §§ 15 to 18 BEEG). Returns the last day the request must reach the employer (7 weeks, 13 weeks after the 3rd birthday), the required form, start and end of protection against dismissal (Kündigungsschutz), the end of maternity protection for the mother and the possible cut of annual leave (Urlaubskürzung). Use it when an employee announces parental leave or a request has arrived.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "geburt": {
+      "type": "string",
+      "description": "Child's date of birth, or the expected date if not born yet (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "noch_nicht_geboren": {
+      "type": "boolean",
+      "description": "true if the child is not born yet, geburt is then the expected date"
+     },
+     "elternteil": {
+      "type": "string",
+      "description": "Who takes the leave: mutter (mother) or anderer (father or other parent). Default anderer",
+      "enum": [
+       "mutter",
+       "anderer"
+      ]
+     },
+     "mutterschutz_12_wochen": {
+      "type": "boolean",
+      "description": "Mother only: premature or multiple birth or disability, maternity protection 12 instead of 8 weeks after birth"
+     },
+     "errechneter_termin": {
+      "type": "string",
+      "description": "Mother only, child born: expected date of delivery if the child came early, extends maternity protection (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "beginn": {
+      "type": "string",
+      "description": "First day of parental leave (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ende": {
+      "type": "string",
+      "description": "Last day of parental leave (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "antrag_zugang": {
+      "type": "string",
+      "description": "Day the request reached the employer, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "jahresurlaub": {
+      "type": "number",
+      "description": "Annual leave in days, optional, for the possible cut",
+      "minimum": 0,
+      "maximum": 60
+     },
+     "teilzeit": {
+      "type": "boolean",
+      "description": "Employee works part-time for you during parental leave"
+     },
+     "beschaeftigte": {
+      "type": "number",
+      "description": "Employees without apprentices, optional, decides the claim to part-time (more than 15)",
+      "minimum": 0,
+      "maximum": 100000
+     }
+    },
+    "required": [
+     "geburt",
+     "beginn",
+     "ende"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "entgeltfortzahlung",
+   "title": "Entgeltfortzahlung bei Krankheit",
+   "description": "Continued pay during sickness under German law (Entgeltfortzahlung, § 3 EFZG): up to 6 weeks per illness after a 4-week waiting period, with repeated sickness from the same illness (Fortsetzungserkrankung). Returns paid days, the last day of continued pay and when sickness benefit (Krankengeld) starts, the refund via the U1 levy (Umlage U1) and when a BEM is due. Use it when an employee is or was sick. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "beginn": {
+      "type": "string",
+      "description": "First day of the employment relationship, starts the 4-week waiting period (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "zeitraeume": {
+      "type": "array",
+      "description": "Periods of incapacity to work (Arbeitsunfähigkeit) in date order, first and last day as on the sick note. Follow-up notes without a gap are one period.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "von": {
+         "type": "string",
+         "description": "First day of incapacity to work (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "bis": {
+         "type": "string",
+         "description": "Last day of incapacity to work (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "gleiche_erkrankung_wie": {
+         "type": "integer",
+         "description": "Number of an earlier period (1 = first) with the same illness (Fortsetzungserkrankung). Leave out for a new illness",
+         "minimum": 1,
+         "maximum": 11
+        },
+        "ursache_unsicher": {
+         "type": "boolean",
+         "description": "True if it is not certain that it is the same illness; both variants are then calculated"
+        },
+        "erster_tag_gearbeitet": {
+         "type": "boolean",
+         "description": "True if the person still worked on the first day; that day does not count"
+        }
+       },
+       "required": [
+        "von",
+        "bis"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 12
+     }
+    },
+    "required": [
+     "beginn",
+     "zeitraeume"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "frist_merken",
+   "title": "Frist merken",
+   "description": "Germany only. Remember an HR deadline without storing anything here: returns a calendar entry (iCalendar text the user can save) and a link to the matching calculator on lintelly.com, where the user can request an e-mail reminder (double opt-in). Lintelly HR has no memory and stores no personal data.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "datum": {
+      "type": "string",
+      "description": "The deadline (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "frist": {
+      "type": "string",
+      "description": "Kind of deadline",
+      "enum": [
+       "Ende des Arbeitsverhältnisses",
+       "Ende des befristeten Vertrags",
+       "Spätestes Ende ohne Sachgrund",
+       "Wiedervorlage BEM-Prüfung",
+       "Spätester Eingang des Elternzeit-Antrags",
+       "Beginn der Elternzeit",
+       "Verfall des Resturlaubs",
+       "Anzeige und Zahlung der Ausgleichsabgabe",
+       "Ende der Probezeit",
+       "Beginn der Schutzfrist vor der Geburt",
+       "Ende der Aufbewahrungsfrist",
+       "Ende der Entgeltfortzahlung"
+      ]
+     }
+    },
+    "required": [
+     "datum",
+     "frist"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "interviewfragen_check",
+   "title": "Vorstellungsgespräch: erlaubte und verbotene Fragen",
+   "description": "Checklist for job interviews in Germany (Vorstellungsgespräch, Interviewfragen), Germany only. Use it when a founder prepares an interview or asks whether a question is allowed, e.g. about pregnancy (Schwangerschaft), religion, health or age under the AGG. Returns forbidden and sensitive topics with the reason, allowed questions, the method for structured questions with rating anchors and the interview flow.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "senioritaet": {
+      "type": "string",
+      "description": "Seniority of the role: ausbildung (apprenticeship or internship), berufseinstieg (entry level), berufserfahren (2 to 5 years), senior, fuehrungskraft (manager)",
+      "enum": [
+       "ausbildung",
+       "berufseinstieg",
+       "berufserfahren",
+       "senior",
+       "fuehrungskraft"
+      ]
+     },
+     "form": {
+      "type": "string",
+      "description": "Interview setting: vor_ort (in person) or telefon_video (phone or video)",
+      "enum": [
+       "vor_ort",
+       "telefon_video"
+      ]
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "klagefrist",
+   "title": "Klagefrist nach einer Kündigung",
+   "description": "Germany only. Calculate the deadline for an unfair dismissal claim (Klagefrist, Kündigungsschutzklage) in Germany: 3 weeks after the written notice was received (§ 4 KSchG), moved to the next working day if it ends on a weekend or public holiday (§ 222 Abs. 2 ZPO). Applies in small businesses too. Use it to know from when a dismissal can be treated as final.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "zugang": {
+      "type": "string",
+      "description": "Day the written notice was received (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "bundesland": {
+      "type": "string",
+      "description": "Federal state of the company for public holidays (Bundesland), e.g. HE",
+      "enum": [
+       "BW",
+       "BY",
+       "BY-OHNE-MH",
+       "BY-AUGSBURG",
+       "BE",
+       "BB",
+       "HB",
+       "HH",
+       "HE",
+       "MV",
+       "NI",
+       "NW",
+       "RP",
+       "SL",
+       "SN",
+       "ST",
+       "SH",
+       "TH"
+      ]
+     }
+    },
+    "required": [
+     "zugang"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "klausel_pruefen",
+   "title": "Klausel gegen die rote Liste lesen",
+   "description": "Germany only. Read one clause of a German employment contract against 17 clause types that are void or prohibited under German law (rote Liste), e.g. all overtime paid with the salary, non-compete without compensation, cut-off periods without exceptions. Returns matches with reason, norm and the safe alternative clause. No match is not a legal review of validity. The text is only read, never stored.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "klausel": {
+      "type": "string",
+      "description": "Clause text, up to 3,000 characters",
+      "maxLength": 3000
+     }
+    },
+    "required": [
+     "klausel"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "kuendigung_pflichtangaben",
+   "title": "Kündigung: Formalien prüfen",
+   "description": "German employment law, Germany only. Checklist of the formal requirements when an employer gives notice (Kündigung durch den Arbeitgeber), each item with its legal norm: written form, receipt (Zugang), notice period, works council hearing, special protection (Sonderkündigungsschutz), small business without the Kündigungsschutzgesetz up to 10 employees, 3-week deadline for a claim, Arbeitsbescheinigung, reference (Zeugnis), remaining holiday. Use it before a dismissal.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "beschaeftigte": {
+      "type": "number",
+      "description": "Number of employees counted under § 23 KSchG: apprentices not counted, part-time pro rata",
+      "minimum": 1,
+      "maximum": 10000
+     },
+     "betriebsrat": {
+      "type": "boolean",
+      "description": "There is a works council (Betriebsrat), default false"
+     }
+    },
+    "required": [
+     "beschaeftigte"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "kuendigungsfrist_rechnen",
+   "title": "Kündigungsfrist rechnen",
+   "description": "Germany only. Calculate the notice period (Kündigungsfrist) for a German employment contract under §§ 187, 188, 622 BGB: end of employment, latest day the notice must be received, the next three possible end dates, the rule applied and warnings (e.g. notice received on a Sunday). Covers probation, length of service, small businesses and longer contractual periods. Use it for dismissals by the employer and resignations.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "eintritt": {
+      "type": "string",
+      "description": "First day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "zugang": {
+      "type": "string",
+      "description": "Day the notice is received by the other side, not the date of the letter (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "wer_kuendigt": {
+      "type": "string",
+      "description": "Who gives notice, default arbeitgeber",
+      "enum": [
+       "arbeitgeber",
+       "arbeitnehmer"
+      ]
+     },
+     "probezeit_monate": {
+      "type": "integer",
+      "description": "Agreed probation in whole months (Probezeit), 0 for none. If left out, no probation is assumed and the longer notice period applies",
+      "minimum": 0,
+      "maximum": 12
+     },
+     "kleinbetrieb_vier_wochen": {
+      "type": "boolean",
+      "description": "Small business with at most 20 employees that agreed 4 weeks to any day (§ 622 Abs. 5 Nr. 2 BGB)"
+     },
+     "vertrag_monate": {
+      "type": "integer",
+      "description": "Longer notice period in the contract, whole months",
+      "minimum": 0,
+      "maximum": 24
+     },
+     "vertrag_termin": {
+      "type": "string",
+      "description": "End date of the contractual period",
+      "enum": [
+       "monatsende",
+       "quartalsende"
+      ]
+     },
+     "staffel_auch_arbeitnehmer": {
+      "type": "boolean",
+      "description": "Contract extends the longer statutory periods to resignations too"
+     },
+     "tarifvertrag": {
+      "type": "boolean",
+      "description": "A collective agreement applies (it may set other periods)"
+     },
+     "bundesland": {
+      "type": "string",
+      "description": "Federal state of the company for public holidays (Bundesland), e.g. HE",
+      "enum": [
+       "BW",
+       "BY",
+       "BY-OHNE-MH",
+       "BY-AUGSBURG",
+       "BE",
+       "BB",
+       "HB",
+       "HH",
+       "HE",
+       "MV",
+       "NI",
+       "NW",
+       "RP",
+       "SL",
+       "SN",
+       "ST",
+       "SH",
+       "TH"
+      ]
+     }
+    },
+    "required": [
+     "eintritt",
+     "zugang"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "kuendigungsschreiben",
+   "title": "Kündigungsschreiben",
+   "description": "German employment law, Germany only. Builds an employer's termination letter (Kündigungsschreiben, ordentliche Kündigung) in DIN 5008 form with the end date calculated under § 622 BGB from start date and day of receipt (Zugang), plus the checklist before sending (Schriftform § 623 BGB, Zugang, Vollmacht, Klagefrist). Names, addresses and signer stay placeholders in square brackets. Not for summary dismissal (fristlose Kündigung) or apprentices.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "eintritt": {
+      "type": "string",
+      "description": "First day of employment (Eintritt); apprenticeship in the same company counts (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "zugang": {
+      "type": "string",
+      "description": "Day the employee receives the signed original (Zugang), not the date of the letter (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "probezeit_monate": {
+      "type": "integer",
+      "description": "Agreed probation in whole months (Probezeit), 0 for none. If left out, no probation is assumed and the longer notice period applies",
+      "minimum": 0,
+      "maximum": 12
+     },
+     "vertragsfrist": {
+      "type": "string",
+      "description": "Longer notice period agreed in the contract (Vertrag), default keine",
+      "enum": [
+       "keine",
+       "monatsende",
+       "quartalsende"
+      ]
+     },
+     "vertragsfrist_monate": {
+      "type": "integer",
+      "description": "Whole months of that contractual notice period, default 3",
+      "minimum": 1,
+      "maximum": 12
+     },
+     "kleinbetrieb_vier_wochen": {
+      "type": "boolean",
+      "description": "At most 20 employees and the contract agrees 4 weeks without a fixed end date (§ 622 Abs. 5 BGB)"
+     },
+     "tarifvertrag": {
+      "type": "boolean",
+      "description": "A collective agreement (Tarifvertrag) applies; its periods are not calculated"
+     },
+     "ausbildung": {
+      "type": "boolean",
+      "description": "Apprenticeship (Ausbildungsverhältnis); the template does not fit then"
+     },
+     "anrede": {
+      "type": "string",
+      "description": "Form of address in the letter, default sie",
+      "enum": [
+       "sie",
+       "du"
+      ]
+     },
+     "briefdatum": {
+      "type": "string",
+      "description": "Date of the letter; placeholder if empty (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "unterschrift": {
+      "type": "string",
+      "description": "Who signs: owner or managing director, Prokura (ppa.), in Vertretung (i. V.) or im Auftrag (i. A.); default geschaeftsfuehrung",
+      "enum": [
+       "geschaeftsfuehrung",
+       "prokura",
+       "in_vertretung",
+       "im_auftrag"
+      ]
+     },
+     "zustellung": {
+      "type": "string",
+      "description": "Delivery: personal handover or messenger (Bote), default persoenlich",
+      "enum": [
+       "persoenlich",
+       "bote"
+      ]
+     },
+     "freistellung": {
+      "type": "string",
+      "description": "Release from work until the end (Freistellung), default keine",
+      "enum": [
+       "keine",
+       "widerruflich",
+       "unwiderruflich"
+      ]
+     },
+     "freistellung_ab": {
+      "type": "string",
+      "description": "First day of the release; placeholder if empty (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "resturlaub_tage": {
+      "type": "number",
+      "description": "Remaining holiday in working days, set off against an irrevocable release",
+      "minimum": 0,
+      "maximum": 365
+     },
+     "betriebsrat": {
+      "type": "string",
+      "description": "Works council (Betriebsrat): none, already heard, or not yet heard; default keiner",
+      "enum": [
+       "keiner",
+       "angehoert",
+       "nicht_angehoert"
+      ]
+     },
+     "rueckgabe": {
+      "type": "boolean",
+      "description": "Ask for return of work equipment, default true"
+     }
+    },
+    "required": [
+     "eintritt",
+     "zugang"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "mindestlohn_check",
+   "title": "Mindestlohn prüfen",
+   "description": "Germany only. Check a monthly salary and weekly hours against the German statutory minimum wage (Mindestlohn) on a given date: hourly wage, minimum wage, required monthly pay and the shortfall. Uses 13/3 weeks per month like payroll. Not for apprentices (they have a minimum training allowance).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "brutto_monat": {
+      "type": "number",
+      "description": "Gross pay per month in euro",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "wochenstunden": {
+      "type": "number",
+      "description": "Contractual hours per week",
+      "minimum": 0.5,
+      "maximum": 60
+     },
+     "stichtag": {
+      "type": "string",
+      "description": "Date to check, default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "required": [
+     "brutto_monat",
+     "wochenstunden"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "minijob",
+   "title": "Minijob: Stunden, Grenze und Kosten",
+   "description": "Mini-job check under German law (Minijob, geringfügige Beschäftigung, § 8 SGB IV) for 2026 and 2027: maximum hours under the monthly earnings limit, minimum wage check (Mindestlohn), annual limit including one-off payments, and the employer's flat-rate contributions and levies (Pauschalabgaben) for the years whose rates are published. Use it before hiring a mini-jobber or changing hours or pay. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "jahr": {
+      "type": "integer",
+      "description": "Year, default the current year",
+      "minimum": 2026,
+      "maximum": 2027
+     },
+     "stundenlohn": {
+      "type": "number",
+      "description": "Gross hourly wage in euros",
+      "minimum": 0.01,
+      "maximum": 200
+     },
+     "stunden": {
+      "type": "number",
+      "description": "Planned working hours, leave out to get only the maximum hours",
+      "minimum": 0,
+      "maximum": 300
+     },
+     "stunden_je": {
+      "type": "string",
+      "description": "Whether the hours are per week or per month, default week",
+      "enum": [
+       "woche",
+       "monat"
+      ]
+     },
+     "einmalzahlungen_jahr": {
+      "type": "number",
+      "description": "Promised one-off payments in the year in euros, e.g. Christmas bonus",
+      "minimum": 0
+     },
+     "gesetzlich_krankenversichert": {
+      "type": "boolean",
+      "description": "True (default) if the person has statutory health insurance; then the employer pays the health flat rate (Pauschale zur Krankenversicherung)"
+     },
+     "pauschsteuer": {
+      "type": "boolean",
+      "description": "True (default) for the usual 2 % flat-rate tax"
+     },
+     "unter_18_ohne_berufsabschluss": {
+      "type": "boolean",
+      "description": "True if the person is under 18 without vocational qualification; then the minimum wage does not apply (§ 22 Abs. 2 MiLoG)"
+     }
+    },
+    "required": [
+     "stundenlohn"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "mitarbeitergespraech_leitfaden",
+   "title": "Mitarbeitergespräch: Leitfaden",
+   "description": "Guide for employee meetings in German companies (Mitarbeitergespräch), Germany only: critical feedback (Kritikgespräch), probation review (Probezeitgespräch), annual review (Jahresgespräch) or return after illness (Rückkehrgespräch). Use it when a founder has to hold such a meeting. Returns duration, preparation, phases with goal and open questions, difficult moments, a minutes template and legal traps such as BEM or works council rights.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "art": {
+      "type": "string",
+      "description": "Kind of meeting: kritik (critical feedback), probezeit (probation review), jahr (annual review), rueckkehr (return after illness)",
+      "enum": [
+       "kritik",
+       "probezeit",
+       "jahr",
+       "rueckkehr"
+      ]
+     },
+     "betriebsrat": {
+      "type": "boolean",
+      "description": "The company has a works council (Betriebsrat), default false"
+     }
+    },
+    "required": [
+     "art"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "mutterschutz",
+   "title": "Mutterschutz-Rechner",
+   "description": "German employment law, Germany only: maternity protection periods (Mutterschutz, MuSchG) from the expected delivery date, protection before and after birth, extension after premature or multiple birth, the ban on dismissal (Kündigungsverbot) and the employer's duties: notify the supervisory authority (Aufsichtsbehörde) and get the maternity pay supplement refunded (Umlage U2). Also covers miscarriage and stillbirth (Fehlgeburt, Totgeburt). Use it when an employee is pregnant, has given birth or lost a pregnancy.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "fall": {
+      "type": "string",
+      "description": "schwangerschaft (pregnancy or birth) or fehlgeburt (miscarriage or stillbirth). Default schwangerschaft",
+      "enum": [
+       "schwangerschaft",
+       "fehlgeburt"
+      ]
+     },
+     "errechneter_termin": {
+      "type": "string",
+      "description": "Expected date of delivery from the maternity record; for a stillbirth it extends the period (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "geburt": {
+      "type": "string",
+      "description": "Actual date of birth, leave out while the child is not born (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "fruehgeburt": {
+      "type": "boolean",
+      "description": "Premature birth as medically certified (12 weeks after birth)"
+     },
+     "mehrlinge": {
+      "type": "boolean",
+      "description": "Twins or more (12 weeks after birth)"
+     },
+     "behinderung": {
+      "type": "boolean",
+      "description": "Disability of the child certified within 8 weeks, on request (12 weeks after birth)"
+     },
+     "fehlgeburt_am": {
+      "type": "string",
+      "description": "Date of the miscarriage or stillbirth (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "schwangerschaftswoche": {
+      "type": "integer",
+      "description": "Week of pregnancy at the miscarriage, the 13th week starts after 12 completed weeks",
+      "minimum": 1,
+      "maximum": 45
+     },
+     "ab_500_gramm": {
+      "type": "boolean",
+      "description": "Weight at least 500 grams, then it counts as stillbirth even before week 24"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "nachweis_pflichtangaben",
+   "title": "Arbeitsvertrag-Check: Pflichtangaben nach NachwG",
+   "description": "Checklist of the mandatory written terms of employment under § 2 Abs. 1 NachwG (Nachweisgesetz, Arbeitsvertrag-Check), Germany only. Use it when a founder hires someone or checks a contract: with the start date it gives the deadline for each of the 15 items (first working day, 7th calendar day, one month), with an answer per item it shows what is missing or overdue. It also checks the form: written form, text form since 2025 under conditions, paper-only industries and fixed-term contracts.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "beginn": {
+      "type": "string",
+      "description": "Agreed first day of employment; deadlines count from it (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "befristet": {
+      "type": "boolean",
+      "description": "Fixed-term contract (befristet), default false"
+     },
+     "papierpflicht_branche": {
+      "type": "boolean",
+      "description": "Industry under § 2a SchwarzArbG (construction, hospitality, passenger transport, logistics, fairground, building cleaning, trade fair construction, meat industry, prostitution, security, hairdressing and cosmetics): paper only, default false"
+     },
+     "form": {
+      "type": "string",
+      "description": "How the written statement is given: papier (signed paper), textform (PDF or e-mail), nichts (nothing in writing yet)",
+      "enum": [
+       "papier",
+       "textform",
+       "nichts"
+      ]
+     },
+     "empfangsbestaetigung": {
+      "type": "boolean",
+      "description": "With textform: the employee is asked to confirm receipt"
+     },
+     "angaben": {
+      "type": "array",
+      "description": "What the contract already contains, per item 1 to 15: drin (included), fehlt (missing), entfaellt (not applicable, only for items that apply only if agreed). Items without an answer count as open",
+      "items": {
+       "type": "object",
+       "properties": {
+        "nr": {
+         "type": "integer",
+         "description": "Item number 1 to 15",
+         "minimum": 1,
+         "maximum": 15
+        },
+        "stand": {
+         "type": "string",
+         "description": "drin, fehlt or entfaellt",
+         "enum": [
+          "drin",
+          "fehlt",
+          "entfaellt"
+         ]
+        }
+       },
+       "required": [
+        "nr",
+        "stand"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 15
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "pausen",
+   "title": "Pausen und Ruhezeit",
+   "description": "German employment law, Germany only: checks shifts against the rules on breaks (Pausen), maximum daily and weekly working time (Höchstarbeitszeit) and rest between shifts (Ruhezeit) under the ArbZG, or the stricter JArbSchG for employees under 18. Returns working time, required and actual break per day, rest period and each violation. Use it to check a shift plan or a time sheet.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tage": {
+      "type": "array",
+      "description": "Shifts in order, one per day",
+      "items": {
+       "type": "object",
+       "properties": {
+        "datum": {
+         "type": "string",
+         "description": "Date of the shift, optional, needed for Sundays and totals per calendar week (YYYY-MM-DD)",
+         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+         "format": "date",
+         "maxLength": 10
+        },
+        "beginn": {
+         "type": "string",
+         "description": "Start (HH:MM, 24 h)",
+         "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+         "maxLength": 5
+        },
+        "ende": {
+         "type": "string",
+         "description": "End, after midnight allowed (HH:MM, 24 h)",
+         "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+         "maxLength": 5
+        },
+        "pausen": {
+         "type": "array",
+         "description": "Breaks within the shift",
+         "items": {
+          "type": "object",
+          "properties": {
+           "von": {
+            "type": "string",
+            "description": "Break start (HH:MM, 24 h)",
+            "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+            "maxLength": 5
+           },
+           "bis": {
+            "type": "string",
+            "description": "Break end (HH:MM, 24 h)",
+            "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+            "maxLength": 5
+           }
+          },
+          "required": [
+           "von",
+           "bis"
+          ],
+          "additionalProperties": false
+         },
+         "maxItems": 4
+        }
+       },
+       "required": [
+        "beginn",
+        "ende"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 14
+     },
+     "jugendlich": {
+      "type": "boolean",
+      "description": "Person is under 18 (JArbSchG)"
+     },
+     "branche_10_stunden_ruhezeit": {
+      "type": "boolean",
+      "description": "Industry that may shorten rest to 10 hours: hospital, care, restaurants, transport, broadcasting, agriculture (§ 5 Abs. 2 ArbZG)"
+     },
+     "vortag_ende": {
+      "type": "string",
+      "description": "End of the last shift on the day before the first day, optional (HH:MM, 24 h)",
+      "pattern": "^([01]?\\d|2[0-3]):[0-5]\\d$",
+      "maxLength": 5
+     }
+    },
+    "required": [
+     "tage"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "probezeit",
+   "title": "Probezeit-Rechner",
+   "description": "German employment law, Germany only: end of the probation period (Probezeit) from the first working day, the last day a dismissal with 2 weeks notice can be delivered (§ 622 Abs. 3 BGB), when protection against dismissal (Kündigungsschutz, KSchG) starts and dates for the review meeting. Covers apprenticeships (Ausbildung, BBiG) and fixed-term contracts (Befristung). Use it when someone asks when a probation period ends or until when they can still dismiss with the short notice.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "beginn": {
+      "type": "string",
+      "description": "First working day according to the contract (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "dauer": {
+      "type": "integer",
+      "description": "Length of the probation period as a whole number, unit see einheit",
+      "minimum": 1,
+      "maximum": 26
+     },
+     "einheit": {
+      "type": "string",
+      "description": "Unit of dauer, default monate",
+      "enum": [
+       "monate",
+       "wochen"
+      ]
+     },
+     "beschaeftigte": {
+      "type": "number",
+      "description": "Employees in the business, part-time counted pro rata, apprentices not counted (§ 23 KSchG). Leave out if unknown",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "befristet_bis": {
+      "type": "string",
+      "description": "End date if the contract is fixed-term (Befristung) (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ausbildung": {
+      "type": "boolean",
+      "description": "true for an apprenticeship (Ausbildung, BBiG): 1 to 4 months, dismissal without notice period"
+     }
+    },
+    "required": [
+     "beginn",
+     "dauer"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "rechtsaenderungen",
+   "title": "Was ändert sich wann",
+   "description": "Germany only. Calendar of changes in German employment law values between two dates (Rechtsänderungen), e.g. what changes on 1 January: minimum wage, mini-job limit, contribution ceilings and rates. Lists each new value with the previous one and the source, and values that are not yet officially published.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "von": {
+      "type": "string",
+      "description": "First day, default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "bis": {
+      "type": "string",
+      "description": "Last day, default one year after the first day (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "rechtswert",
+   "title": "Rechtswert mit Quelle",
+   "description": "Germany only. Look up one German employment law value (Rechtswert) by its key, e.g. mindestlohn (minimum wage), minijobGrenze, bbgRv, urlaubMindest. Returns the value valid on the given date, all dated values, the legal norm, the official source link, the date it was last checked and its status.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kennung": {
+      "type": "string",
+      "description": "Key of the value, e.g. mindestlohn",
+      "pattern": "^[A-Za-z0-9_-]{1,60}$",
+      "maxLength": 60
+     },
+     "stichtag": {
+      "type": "string",
+      "description": "Date the value should apply to, default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "required": [
+     "kennung"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "rechtswerte_suchen",
+   "title": "Rechtswerte suchen",
+   "description": "Germany only. Search the register of German employment law values (228 values with norm, official source and review date): minimum wage, mini-job limit, notice periods, probation, holiday, sick pay, maternity protection, retention periods, thresholds. Returns up to 20 matches with key, title, value on the date and status.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "suchtext": {
+      "type": "string",
+      "description": "Words to search for, German or key, e.g. Mindestlohn, Urlaub, Aufbewahrung",
+      "maxLength": 100
+     },
+     "gebiet": {
+      "type": "string",
+      "description": "Optional area of law",
+      "enum": [
+       "Kündigung und Vertrag",
+       "Befristung und Teilzeit",
+       "Schwellenwerte",
+       "Urlaub",
+       "Krankheit und BEM",
+       "Entgelttransparenz",
+       "Mutterschutz und Elternzeit",
+       "Ausbildung und Werkstudium",
+       "Lohn und Sozialversicherung",
+       "Pflege",
+       "Arbeitsschutz",
+       "Arbeitszeit",
+       "Datenschutz und Hinweisgeber",
+       "Freelancer",
+       "Wettbewerb und Vertragsstrafe",
+       "Vergütung und Provision",
+       "Erfindungen und Urheberrecht",
+       "Aufbewahrung",
+       "Feiertage"
+      ]
+     },
+     "stichtag": {
+      "type": "string",
+      "description": "Date the values should apply to, default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "schwellen_check",
+   "title": "Schwellenwerte: was gilt bei wie vielen Leuten",
+   "description": "Size thresholds in German employment law (Schwellenwerte): which duties apply at how many employees, each counted the way its law counts (heads, part-time weighting, apprentices). Covers works council, unfair dismissal protection above 10 (KSchG), part-time claims, U1 levy, severely disabled quota, data protection officer, whistleblower channel and more, plus what changes at the next threshold. Use it when a founder asks what applies to a team of their size or what changes with the next hire. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "koepfe": {
+      "type": "integer",
+      "description": "Employees by head count without apprentices; part-time staff and mini-jobbers count, managing directors, freelancers and agency workers do not",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "azubis": {
+      "type": "integer",
+      "description": "Apprentices (Auszubildende)",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "teilzeit_bis_10_stunden": {
+      "type": "integer",
+      "description": "Of the employees, those with up to 10 regular hours per week",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "teilzeit_11_bis_20_stunden": {
+      "type": "integer",
+      "description": "Of the employees, those with more than 10 up to 20 hours per week",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "teilzeit_21_bis_30_stunden": {
+      "type": "integer",
+      "description": "Of the employees, those with more than 20 up to 30 hours per week",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "arbeitsplaetze_ab_18_stunden": {
+      "type": "integer",
+      "description": "Jobs with 18 or more hours per week without apprentices, for the severely disabled quota; estimated if left out",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "schwerbehinderte": {
+      "type": "integer",
+      "description": "Severely disabled employees without apprentices",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "personen_mit_personendaten": {
+      "type": "integer",
+      "description": "People who constantly process personal data by computer, incl. part-time, apprentices and freelancers; for the data protection officer",
+      "minimum": 0,
+      "maximum": 100000
+     },
+     "betriebsrat": {
+      "type": "boolean",
+      "description": "True if there is a works council (Betriebsrat)"
+     }
+    },
+    "required": [
+     "koepfe"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "sofortmeldepflicht",
+   "title": "Sofortmeldung nötig?",
+   "description": "Germany only. Check whether a German employer must file an immediate registration (Sofortmeldung) before the first working hour, by industry under § 28a Abs. 4 SGB IV: construction, hospitality, passenger transport, logistics and delivery, showmen, building cleaning, trade fair construction, meat industry, prostitution, security, hairdressing and cosmetics.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "branche": {
+      "type": "string",
+      "description": "Industry of the company",
+      "enum": [
+       "bau",
+       "gastro",
+       "personenbefoerderung",
+       "spedition",
+       "schausteller",
+       "gebaeudereinigung",
+       "messebau",
+       "fleisch",
+       "prostitution",
+       "sicherheit",
+       "friseur",
+       "keine"
+      ]
+     }
+    },
+    "required": [
+     "branche"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "sonderkuendigungsschutz_check",
+   "title": "Sonderkündigungsschutz prüfen",
+   "description": "Special protection against dismissal under German law (Sonderkündigungsschutz): checks 11 grounds such as pregnancy, parental leave, care leave, works council, severe disability, data protection officer, apprentices and whistleblowers. Returns a traffic light, the authority whose consent is needed, the protected period and the steps before giving notice. Use it before any dismissal, also in small businesses. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mutterschutz": {
+      "type": "string",
+      "description": "Is the person pregnant, gave birth up to 4 months ago, still in the protection period after birth, or had a miscarriage after the 12th week of pregnancy? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "elternzeit": {
+      "type": "string",
+      "description": "Has the person requested parental leave (Elternzeit) or is on it, or works part-time while receiving parental allowance? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "pflege": {
+      "type": "string",
+      "description": "Has the person announced or is taking short-term care leave, care leave or family care leave (Pflegezeit, Familienpflegezeit)? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "betriebsrat": {
+      "type": "string",
+      "description": "Is the person a member of the works council, the youth representation or representative of severely disabled employees, or left such office within the last 12 months? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "wahl": {
+      "type": "string",
+      "description": "Is the person on the election board or a candidate, or did they invite to or prepare a works council election? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "schwerbehindert": {
+      "type": "string",
+      "description": "Is the person severely disabled (degree of disability 50 or more) or treated as equal (gleichgestellt)? Answer unklar if an application is pending or you do not know. Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "dsb": {
+      "type": "string",
+      "description": "Is the person your mandatory data protection officer, or was removed from that role within the last 12 months? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "azubi": {
+      "type": "string",
+      "description": "Is the person an apprentice whose probation period is over? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "beauftragte": {
+      "type": "string",
+      "description": "Is the person an appointed officer for emission control, incidents, waste or water protection, or was removed from that role within the last 12 months? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "wehrdienst": {
+      "type": "string",
+      "description": "Has the person received a call-up notice or is doing military service or a military exercise? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "hinweisgeber": {
+      "type": "string",
+      "description": "Has the person recently reported a violation (whistleblowing), internally or to an external reporting channel? Answer ja, nein or unklar. Unanswered questions stay open, the result is then not green.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "laenger_als_6_monate": {
+      "type": "string",
+      "description": "Only for severe disability: has the employment lasted more than 6 months without interruption? Answer ja, nein or unklar. If left out, ja is assumed.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     },
+     "betriebsrat_vorhanden": {
+      "type": "string",
+      "description": "Is there a works council (Betriebsrat) in the business? Answer ja, nein or unklar. If left out, nein is assumed.",
+      "enum": [
+       "ja",
+       "nein",
+       "unklar"
+      ]
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "stellenanzeige_check",
+   "title": "Stellenanzeige: AGG-Check",
+   "description": "Checks a German job ad (Stellenanzeige) for discrimination traps under the AGG (Allgemeines Gleichbehandlungsgesetz), Germany only. Use it before a founder publishes a job ad or after you drafted one: pass the ad text. Returns each risky word with the protected characteristic (Merkmal), the reason and a better wording, plus the parts of a good ad; the text itself is neither stored nor returned.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "anzeigentext": {
+      "type": "string",
+      "description": "Full text of the job ad, at most 3000 characters, without names or contact details",
+      "maxLength": 3000
+     }
+    },
+    "required": [
+     "anzeigentext"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "urlaubsabgeltung",
+   "title": "Urlaubsabgeltung",
+   "description": "Payment in lieu of untaken holiday when employment ends under German law (Urlaubsabgeltung, § 7 Abs. 4 and § 11 BUrlG). Calculates the holiday entitlement in the year of leaving (full or partial, Teilurlaub), adds carry-over, subtracts days taken and multiplies the open days by the daily rate from the last 13 weeks' pay. Use it when someone leaves with holiday left. Germany only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "eintritt": {
+      "type": "string",
+      "description": "First day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "austritt": {
+      "type": "string",
+      "description": "Last day of employment (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "jahresurlaub": {
+      "type": "number",
+      "description": "Contractual annual holiday for full time in a 5-day week, in days (legal minimum 20)",
+      "minimum": 20,
+      "maximum": 60
+     },
+     "tage_pro_woche": {
+      "type": "number",
+      "description": "Working days per week of the person, 0.5 to 6",
+      "minimum": 0.5,
+      "maximum": 6
+     },
+     "schon_genommen": {
+      "type": "number",
+      "description": "Holiday days already taken in the year of leaving",
+      "minimum": 0,
+      "maximum": 200
+     },
+     "rest_vorjahr": {
+      "type": "number",
+      "description": "Holiday carried over from the previous year that has not lapsed. Leave out to add partial holiday from the year of entry automatically where it applies",
+      "minimum": 0,
+      "maximum": 200
+     },
+     "mehrurlaub_gezwoelftelt": {
+      "type": "boolean",
+      "description": "True only if the contract expressly reduces holiday above the legal minimum pro rata (1/12 per month) when leaving"
+     },
+     "schwerbehindert": {
+      "type": "boolean",
+      "description": "True if the person is severely disabled; the additional holiday (§ 208 SGB IX) is paid out too"
+     },
+     "offene_tage": {
+      "type": "number",
+      "description": "Open holiday days if already known; then entry and exit dates are not needed",
+      "minimum": 0,
+      "maximum": 200
+     },
+     "monatsgehalt_brutto": {
+      "type": "number",
+      "description": "Fixed gross monthly salary in euros",
+      "minimum": 1
+     },
+     "variabel_13_wochen": {
+      "type": "number",
+      "description": "Variable pay (commission, allowances) in the last 13 weeks in euros, without overtime pay",
+      "minimum": 0
+     },
+     "verdienst_13_wochen": {
+      "type": "number",
+      "description": "Alternative to the monthly salary: gross pay of the last 13 weeks in euros, without overtime pay and one-off payments",
+      "minimum": 1
+     }
+    },
+    "required": [
+     "tage_pro_woche"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "urlaubsanspruch",
+   "title": "Urlaubsanspruch",
+   "description": "German employment law, Germany only: annual leave entitlement (Urlaubsanspruch, BUrlG) in working days, split into statutory minimum (gesetzlicher Mindesturlaub) and contractual extra leave (Mehrurlaub). Handles part-time (Teilzeit), alternating weeks, a change of working days during the year, entry or exit during the year (Teilurlaub) and extra leave for severe disability (§ 208 SGB IX). Use it when someone asks how many leave days an employee has.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "jahresurlaub": {
+      "type": "number",
+      "description": "Annual leave in the contract for full time, in days of the reference week",
+      "minimum": 1,
+      "maximum": 60
+     },
+     "bezugswoche": {
+      "type": "string",
+      "description": "Reference week of the contract: 5_tage (working days) or 6_tage (Werktage). Default 5_tage",
+      "enum": [
+       "5_tage",
+       "6_tage"
+      ]
+     },
+     "arbeitstage_pro_woche": {
+      "type": "number",
+      "description": "Days with work per week, each day counts fully however short; average for alternating weeks, e.g. 2.5",
+      "minimum": 0.5,
+      "maximum": 6
+     },
+     "jahr": {
+      "type": "integer",
+      "description": "Leave year, default the current year",
+      "minimum": 1950,
+      "maximum": 2100
+     },
+     "eintritt": {
+      "type": "string",
+      "description": "Entry date if in or after the start of the year, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "austritt": {
+      "type": "string",
+      "description": "Last day of employment if in the year, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "wechsel_ab": {
+      "type": "string",
+      "description": "Day the number of working days changes, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "wechsel_tage": {
+      "type": "number",
+      "description": "Working days per week from wechsel_ab",
+      "minimum": 0.5,
+      "maximum": 6
+     },
+     "schwerbehindert": {
+      "type": "boolean",
+      "description": "Recognised severe disability (GdB from 50), not equal status"
+     },
+     "schwerbehindert_ab": {
+      "type": "string",
+      "description": "Recognised only from this date in the year, optional (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "mehrurlaub": {
+      "type": "string",
+      "description": "Contract rule for extra leave on entry or exit in the year: wie-gesetz (contract says nothing, follows the law) or anteilig (contract cuts it pro rata). Default wie-gesetz",
+      "enum": [
+       "wie-gesetz",
+       "anteilig"
+      ]
+     }
+    },
+    "required": [
+     "jahresurlaub",
+     "arbeitstage_pro_woche"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "urlaubsverfall_hinweis",
+   "title": "Hinweis Urlaubsverfall",
+   "description": "German employment law, Germany only: writes the notice an employer must give before unused leave can expire (Hinweis auf Urlaubsverfall, § 7 Abs. 3 BUrlG, BAG 9 AZR 423/16), as a finished letter with placeholders instead of names. Returns open days, expiry date, end of carry-over (Übertragung) and whether the letter comes too late. Use it at the start of the year or in autumn when someone asks how to stop leave from piling up or whether leave expires.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "art": {
+      "type": "string",
+      "description": "jahresbeginn (start of year) or erinnerung (autumn reminder). Default by date: from July erinnerung",
+      "enum": [
+       "jahresbeginn",
+       "erinnerung"
+      ]
+     },
+     "jahr": {
+      "type": "integer",
+      "description": "Leave year, default the year of datum",
+      "minimum": 1950,
+      "maximum": 2100
+     },
+     "datum": {
+      "type": "string",
+      "description": "Date of the letter, must be in the leave year, default today (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "anspruch": {
+      "type": "number",
+      "description": "Leave entitlement of the year in working days",
+      "minimum": 0.5,
+      "maximum": 60
+     },
+     "genommen": {
+      "type": "number",
+      "description": "Days already taken, default 0",
+      "minimum": 0,
+      "maximum": 60
+     },
+     "geplant": {
+      "type": "number",
+      "description": "Days approved and planned, default 0",
+      "minimum": 0,
+      "maximum": 60
+     },
+     "vorjahr": {
+      "type": "number",
+      "description": "Days left from the previous year that were carried over after a timely notice, default 0",
+      "minimum": 0,
+      "maximum": 60
+     },
+     "uebertragung": {
+      "type": "string",
+      "description": "Carry-over: gesetzlich (until 31 March) or vertraglich (contract allows longer). Default gesetzlich",
+      "enum": [
+       "gesetzlich",
+       "vertraglich"
+      ]
+     },
+     "uebertragung_bis": {
+      "type": "string",
+      "description": "Only vertraglich: carry-over end date in the following year, at the earliest 31 March (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     },
+     "ansprache": {
+      "type": "string",
+      "description": "Form of address in the letter: sie or du. Default sie",
+      "enum": [
+       "sie",
+       "du"
+      ]
+     }
+    },
+    "required": [
+     "anspruch"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "vertragsbaustein",
+   "title": "Vertragsbaustein mit Text",
+   "description": "Germany only. Get one German employment contract clause (Vertragsbaustein) by key, e.g. B3 (home office), C2 (overtime allowance), D18 (Christmas bonus). Returns when it fits, the inputs with limits and safe defaults, norms, court rulings, mandatory safeguards, what is blocked and the clause text in German with [Name] as placeholder. If required inputs are missing, it lists them instead of returning a text with gaps; call again with angaben.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kennung": {
+      "type": "string",
+      "description": "Key of the clause, e.g. B3",
+      "pattern": "^[A-S][0-9]{1,2}$",
+      "maxLength": 3
+     },
+     "angaben": {
+      "type": "array",
+      "description": "Inputs of the clause as field and value, e.g. {feld: tage, wert: 2}. Numbers German style (4.500,50), options exactly as listed",
+      "items": {
+       "type": "object",
+       "properties": {
+        "feld": {
+         "type": "string",
+         "description": "Field key from angaben",
+         "pattern": "^[A-Za-z0-9]{1,40}$",
+         "maxLength": 40
+        },
+        "wert": {
+         "type": "string",
+         "description": "Value",
+         "maxLength": 500
+        }
+       },
+       "required": [
+        "feld",
+        "wert"
+       ],
+       "additionalProperties": false
+      },
+      "maxItems": 30
+     },
+     "gehalt_monat": {
+      "type": "number",
+      "description": "Gross monthly salary in euro, only if the clause needs it",
+      "minimum": 0,
+      "maximum": 1000000
+     },
+     "wochenstunden": {
+      "type": "number",
+      "description": "Weekly working hours, only if the clause needs it",
+      "minimum": 0,
+      "maximum": 60
+     },
+     "eintritt": {
+      "type": "string",
+      "description": "Start of employment, only if the clause needs it (YYYY-MM-DD)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date",
+      "maxLength": 10
+     }
+    },
+    "required": [
+     "kennung"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "vertragsbausteine_suchen",
+   "title": "Vertragsbausteine suchen",
+   "description": "Germany only. Search 127 German employment contract clauses (Vertragsbausteine), e.g. home office (Homeoffice), overtime (Überstunden), bonus, company car (Dienstwagen), non-compete (Wettbewerbsverbot), probation (Probezeit). Returns matching clauses with key and when they fit, and void clause types from the red list with the reason and the safe alternative.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "suchtext": {
+      "type": "string",
+      "description": "What the clause should cover, German works best, e.g. Homeoffice",
+      "maxLength": 100
+     },
+     "vertragsart": {
+      "type": "string",
+      "description": "Type of contract, default arbeitsvertrag",
+      "enum": [
+       "arbeitsvertrag",
+       "befristet",
+       "teilzeit",
+       "minijob",
+       "werkstudent",
+       "ausbildung",
+       "aenderung"
+      ]
+     }
+    },
+    "required": [
+     "suchtext"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "workflow_vorlage",
+   "title": "HR-Workflow",
+   "description": "German employment law, Germany only: 11 follow-up workflows for HR tasks (HR-Workflows), e.g. payroll input deadline, missing onboarding documents, sick leave with eAU and BEM, maternity protection, probation decision, fixed-term contract signed before start. Each shows the chain 'when ... then ...' with default days and roles. Use it as a template for your own reminders. Without kennung it lists all.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kennung": {
+      "type": "string",
+      "description": "Key of the workflow, leave out for the list",
+      "enum": [
+       "lohn-stichtag",
+       "eintritt-unterlagen",
+       "austritt-rueckgabe",
+       "probezeit",
+       "krankheit",
+       "mutterschutz",
+       "resturlaub",
+       "lesebestaetigung",
+       "mindestlohn",
+       "befristung",
+       "arbeitszeit"
+      ]
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "uri": "lintelly-hr://rechtswerte",
+   "name": "rechtswerte",
+   "title": "Rechtswerte mit Quelle",
+   "description": "All German employment law values in the register with dated values, norm, official source, review date and status (JSON).",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/erste_einstellung",
+   "name": "ablauf-erste_einstellung",
+   "title": "Ablauf: Erste Einstellung",
+   "description": "HR workflow template as Markdown: Erste Einstellung.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/eintritt",
+   "name": "ablauf-eintritt",
+   "title": "Ablauf: Eintritt",
+   "description": "HR workflow template as Markdown: Eintritt.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/austritt",
+   "name": "ablauf-austritt",
+   "title": "Ablauf: Austritt",
+   "description": "HR workflow template as Markdown: Austritt.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/krankheit",
+   "name": "ablauf-krankheit",
+   "title": "Ablauf: Krankheit",
+   "description": "HR workflow template as Markdown: Krankheit.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/mutterschutz",
+   "name": "ablauf-mutterschutz",
+   "title": "Ablauf: Mutterschutz",
+   "description": "HR workflow template as Markdown: Mutterschutz.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/elternzeit",
+   "name": "ablauf-elternzeit",
+   "title": "Ablauf: Elternzeit",
+   "description": "HR workflow template as Markdown: Elternzeit.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/kuendigung_vorbereiten",
+   "name": "ablauf-kuendigung_vorbereiten",
+   "title": "Ablauf: Kündigung vorbereiten",
+   "description": "HR workflow template as Markdown: Kündigung vorbereiten.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/probezeit_ende",
+   "name": "ablauf-probezeit_ende",
+   "title": "Ablauf: Ende der Probezeit",
+   "description": "HR workflow template as Markdown: Ende der Probezeit.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/befristung_ende",
+   "name": "ablauf-befristung_ende",
+   "title": "Ablauf: Ende einer Befristung",
+   "description": "HR workflow template as Markdown: Ende einer Befristung.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "lintelly-hr://ablauf/monatsende_lohn",
+   "name": "ablauf-monatsende_lohn",
+   "title": "Ablauf: Monatsende Lohn",
+   "description": "HR workflow template as Markdown: Monatsende Lohn.",
+   "mimeType": "text/markdown"
+  }
+ ],
+ "prompts": [
+  {
+   "name": "hr_sprechstunde",
+   "title": "HR-Sprechstunde",
+   "description": "Open HR consultation: describe the situation, Lintelly HR asks what it needs and answers with dates, costs and sources."
+  },
+  {
+   "name": "erste_einstellung",
+   "title": "Erste Einstellung",
+   "description": "First hire: all steps with dates, from company number and accident insurance to the written terms of employment and the end of probation."
+  },
+  {
+   "name": "jemand_ist_krank",
+   "title": "Jemand ist krank",
+   "description": "Someone is sick: how long the employer pays, what the U1 levy refunds, when BEM is due and what to do with the eAU."
+  },
+  {
+   "name": "kuendigung_vorbereiten",
+   "title": "Kündigung vorbereiten",
+   "description": "Prepare a dismissal: notice period, latest day of receipt, special protection, form and delivery, holiday left, reference and papers. Says clearly when a human should check."
+  }
+ ]
+}

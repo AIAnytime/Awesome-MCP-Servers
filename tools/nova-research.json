@@ -1,0 +1,110 @@
+{
+ "server": "Nova Research (CIVAI)",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "research__conduct-deep-research",
+   "description": "Conduct deep, iterative research on a topic by generating multiple search queries, processing the results, and recursively exploring new research directions.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "topic",
+     "objective"
+    ],
+    "properties": {
+     "topic": {
+      "type": "string",
+      "description": "The main topic or question to research"
+     },
+     "objective": {
+      "type": "string",
+      "description": "The specific goal or objective of the research"
+     },
+     "breadth": {
+      "type": "integer",
+      "description": "Number of search queries per research direction (1-5)",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 5
+     },
+     "depth": {
+      "type": "integer",
+      "description": "Depth of recursive exploration (0-2)",
+      "default": 1,
+      "minimum": 0,
+      "maximum": 2
+     },
+     "max_total_queries": {
+      "type": "integer",
+      "description": "Maximum number of search queries to process (2-5)",
+      "default": 2,
+      "minimum": 2,
+      "maximum": 5
+     },
+     "max_duration_seconds": {
+      "type": "integer",
+      "description": "Maximum duration for the research process in seconds (60-300)",
+      "default": 120,
+      "minimum": 60,
+      "maximum": 300
+     },
+     "connection_id": {
+      "type": "string",
+      "description": "Optional connection ID for the user",
+      "default": ""
+     }
+    }
+   }
+  },
+  {
+   "name": "research__generate-research-report",
+   "description": "Generate a comprehensive research report from existing research data.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "research_data",
+     "objective"
+    ],
+    "properties": {
+     "research_data": {
+      "type": "string",
+      "description": "The research data and findings to include in the report"
+     },
+     "objective": {
+      "type": "string",
+      "description": "The specific goal or objective of the report"
+     }
+    }
+   }
+  },
+  {
+   "name": "search__converse",
+   "description": "Reply conversationally when the request is ambiguous or needs clarification.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "reply_hint": {
+      "type": "string",
+      "description": "Optional hint for the conversational reply."
+     }
+    }
+   }
+  },
+  {
+   "name": "search__search",
+   "description": "Run live Google search and summarize results.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   }
+  }
+ ],
+ "resources": []
+}

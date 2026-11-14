@@ -1,0 +1,588 @@
+{
+ "server": "Grey Ridge x402 Market & DeFi Data",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "chain_balance",
+   "description": "Native ETH balance of a Base mainnet address, incl. balance_usd (ETH price cross-call — no price oracle on ETH-only competitors), via multi-provider JSON-RPC. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte Base address"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   }
+  },
+  {
+   "name": "chain_block_number",
+   "description": "Current Base mainnet block number via multi-provider JSON-RPC (automatic failover across 4 providers, never fails on one provider's rate limit). Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_block_number_preview",
+   "description": "FREE live sample of the current Base mainnet block number — identical data to the paid chain_block_number tool. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_gas_price",
+   "description": "Current Base mainnet gas price (wei/gwei), EIP-1559 base_fee_gwei/priority_fee_gwei, and gas_price_usd (ETH price cross-call — no price oracle on ETH-only competitors) via multi-provider JSON-RPC. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_gas_price_preview",
+   "description": "FREE live sample of the current Base mainnet gas price — identical data to the paid chain_gas_price tool. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_token_balance",
+   "description": "ERC-20 token balance of a Base mainnet address via multi-provider JSON-RPC, incl. symbol/decimals/balance_formatted (per-token-contract cached in-isolate). Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte holder address"
+     },
+     "token": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte ERC-20 contract address"
+     }
+    },
+    "required": [
+     "address",
+     "token"
+    ]
+   }
+  },
+  {
+   "name": "chain_token_report",
+   "description": "Token security check (honeypot detector + rug-pull risk score) for a Base ERC-20 in one call, decision-grade trade-safety verdict: SAFE | CAUTION | AVOID plus risk_score (0-100) and reasons, bundling honeypot/sellability simulation, owner-renounced + mint/pause/blacklist/fee-setter/upgradeable-proxy checks, token symbol/name/decimals, and Uniswap v3 WETH-pool liquidity (USD). Replaces many RPC calls and prevents a bad trade. Cost: $0.005 USDC per call via the shared MCP payment gate (the direct HTTP endpoint GET /chain/token-report is $0.01 — MCP tools/call is gated at a flat $0.005 per request).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "token": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte ERC-20 contract address on Base mainnet"
+     }
+    },
+    "required": [
+     "token"
+    ]
+   }
+  },
+  {
+   "name": "chain_token_report_preview",
+   "description": "FREE full real trade-safety report (SAFE/CAUTION/AVOID verdict) for Base USDC, same depth as the paid chain_token_report tool. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_token_security",
+   "description": "Token security / honeypot detector for a Base mainnet ERC-20: EIP-1967/1822 proxy + upgradeability detection, bytecode dispatcher scan for mint/pause/blacklist/fee-setter/ownership selectors, owner() renouncement check, and a live eth_call state-override simulation testing whether a synthetic wallet can actually transfer() the token. Returns risk_score (0-100) + verdict (clear/review/block) + human-readable flags. Real compute an agent can't trivially self-serve. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "token": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte ERC-20 contract address on Base mainnet"
+     }
+    },
+    "required": [
+     "token"
+    ]
+   }
+  },
+  {
+   "name": "chain_token_security_preview",
+   "description": "FREE full real analysis of a fixed well-known token (Base WETH) via the token security / honeypot detector — same depth as the paid chain_token_security tool, so you can see the real product before paying. To analyze an arbitrary token, use the paid chain_token_security tool. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "chain_tx",
+   "description": "Transaction details by hash on Base mainnet via multi-provider JSON-RPC. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "hash": {
+      "type": "string",
+      "description": "0x-prefixed 32-byte transaction hash"
+     }
+    },
+    "required": [
+     "hash"
+    ]
+   }
+  },
+  {
+   "name": "chain_wallet",
+   "description": "Wallet screening bundle (balance, activity, contract vs EOA check): ETH balance + balance_usd (ETH price cross-call) + tx count + contract-code check (EIP-7702 delegated-EOA aware) for a Base mainnet address, in one call. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte Base address"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   }
+  },
+  {
+   "name": "chain_wallet_screen",
+   "description": "Is this wallet sanctioned OR a known scammer? Pre-trade screen for a counterparty / recipient / token-spender address before an agent sends, swaps or approves: exact match against (1) the U.S. Treasury OFAC SDN crypto-address list and (2) community scam/phishing/wallet-drainer threat-intel (ScamSniffer + MEW darklist). Returns sanctioned (bool) + malicious (bool) + verdict (blocked/clear) + the list sources and snapshot dates. 'clear' means not on these lists — not a safety guarantee. Cost: $0.005 USDC per call via x402 on MCP tools/call (direct HTTP route: $0.004).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "0x-prefixed 20-byte address to screen (counterparty / recipient / spender)"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   }
+  },
+  {
+   "name": "crypto_funding",
+   "description": "Live 6-venue perpetual-futures funding rates from Binance+Bybit+OKX+Hyperliquid+dYdX+Gate (per-venue rate, per-venue open interest in USD, an OI-WEIGHTED CEX↔DEX arb verdict — funding_spread_bps + cheapest-long/richest-short venue computed over an OI-screened set so a thin-book outlier never names an unexecutable venue; excluded_thin_venues + oi_weighted flag report what was screened — premium/basis, annualized_hl/okx/binance/bybit/gate, LONGS_PAY/SHORTS_PAY/NEUTRAL signal, next_funding_ts, mark/oracle price, day volume), ranked by volume. Venues unreachable or not listing a coin are omitted per-coin — Hyperliquid is always present. Cost: $0.005 USDC per call via x402 on MCP tools/call (direct HTTP route: $0.004).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "limit": {
+      "description": "Number of results, default 20, max 100",
+      "type": "number"
+     }
+    }
+   }
+  },
+  {
+   "name": "crypto_funding_preview",
+   "description": "FREE 1-item sample of live cross-venue funding rates. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "crypto_prices",
+   "description": "Live spot token prices (price, change_24h, symbol, confidence, timestamp) for CoinGecko ids, sourced from DefiLlama. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "coins": {
+      "description": "Comma-separated ticker symbols or CoinGecko ids, e.g. \"ETH,BTC\" or \"bitcoin,ethereum,solana\" (default; max 25)",
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "crypto_prices_preview",
+   "description": "FREE 1-item sample of live token prices. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "defi_yields",
+   "description": "Live DeFi lending/LP yield pools, and every pool is tagged with an entry verdict (SUSTAINABLE | DECAYING | OUTLIER | AVOID) + a 0-100 risk_score right in the list — a go/no-go at the browse stage, not just raw rows. Each row carries project, chain, symbol, pool id, APY breakdown incl. 1d/7d/30d trend + apyBase7d/apyMean30d, IL risk incl. il7d, exposure, reward/underlying tokens, outlier flag, mu/sigma, DefiLlama stability forecast, TVL and a stablecoin flag, from DefiLlama, ranked by TVL (or risk-adjusted APY = apy/sigma). For the deep go/no-go on the one pool you're sizing into, pass its pool id to yield_entry_verdict. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "limit": {
+      "description": "Number of results, default 20, max 100",
+      "type": "number"
+     },
+     "project": {
+      "description": "Filter by protocol — the family name (aave, uniswap, curve) resolves all versions, or an exact DefiLlama slug (aave-v3)",
+      "type": "string"
+     },
+     "chain": {
+      "description": "Filter by chain. Short names like eth, arb, op, avax, matic, sol, bnb resolve to the DefiLlama canonical chain name.",
+      "type": "string"
+     },
+     "stable": {
+      "description": "Only stablecoin pools",
+      "type": "boolean"
+     },
+     "sort": {
+      "description": "Sort order: 'tvl' (default) or 'risk_adjusted' (apy/sigma)",
+      "type": "string",
+      "enum": [
+       "tvl",
+       "risk_adjusted"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "defi_yields_preview",
+   "description": "FREE 1-item sample of live DeFi yield pools. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "enrich_domain",
+   "description": "Firmographic + tech-stack enrichment: RDAP registrant/registrar, DNS records, full subdomain enumeration + certificate-transparency history, tech-stack fingerprint, verdict (clear/review/block, based on domain age) for a domain. Cost: $0.005 USDC per call via the shared MCP payment gate (the direct HTTP endpoint GET /enrich/domain is $0.01 — MCP tools/call is gated at a flat $0.005 per request).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "domain": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   }
+  },
+  {
+   "name": "enrich_tech_risk",
+   "description": "Security enrichment: tech-stack fingerprint + CVE mapping + EPSS + CISA KEV + verdict (clear/review/block) for a domain. Cost: $0.005 USDC per call (x402 micropayment).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "domain": {
+      "type": "string"
+     },
+     "techstack": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "gate_swap",
+   "description": "Pre-trade GO / HOLD / BLOCK gate for a Base ERC-20 swap: honeypot/sellability + admin-control checks + Uniswap v3 liquidity vs. your trade size. Returns a top-level `sized_verdict` one-liner (decision + pool-depth % + max-safe size + round-trip breakeven + exit recovery, read in one shot) AND the full decision-grade sizing — per $100 / $1k / $10k / $50k (and your exact notional_usd): entry-slippage + exit-simulation (net USD recovered vs lost to slippage), round-trip breakeven move %, and max_safe_notional_usd. Cost: $0.005 USDC per call via the shared MCP payment gate (the direct HTTP endpoint GET /gate/swap is $0.008 — MCP tools/call is gated at a flat $0.005 per request).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "token": {
+      "type": "string",
+      "description": "0x-prefixed ERC-20 contract on Base mainnet"
+     },
+     "side": {
+      "description": "default buy",
+      "type": "string",
+      "enum": [
+       "buy",
+       "sell"
+      ]
+     },
+     "notional_usd": {
+      "description": "intended trade size in USD (default 100)",
+      "type": "number",
+      "exclusiveMinimum": 0
+     }
+    },
+    "required": [
+     "token"
+    ]
+   }
+  },
+  {
+   "name": "gate_swap_preview",
+   "description": "FREE live sample of the gate_swap pre-trade GO/HOLD/BLOCK decision for a demo Base token (usdc|weth|cbbtc|aero|degen), same shape as the paid gate_swap tool. The paid gate_swap tool additionally returns a top-level `sized_verdict` one-liner plus the full `sizing` object (entry/exit slippage simulation + round-trip breakeven + max_safe_notional_usd); the `paid_adds` block here names those fields. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "token": {
+      "description": "demo token, default usdc",
+      "type": "string",
+      "enum": [
+       "usdc",
+       "weth",
+       "cbbtc",
+       "aero",
+       "degen"
+      ]
+     },
+     "side": {
+      "description": "default buy",
+      "type": "string",
+      "enum": [
+       "buy",
+       "sell"
+      ]
+     },
+     "notional_usd": {
+      "description": "trade size in USD (default 100)",
+      "type": "number",
+      "exclusiveMinimum": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "pm_markets",
+   "description": "Live Polymarket prediction-market data — question, outcomes, outcome prices, bestBid/bestAsk/spread, volume24hr/volume1wk, oneDayPriceChange, clobTokenIds, conditionId, category tags, liquidity, end date — ranked by volume24hr. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "description": "Case-insensitive keyword filter on the market question",
+      "type": "string"
+     },
+     "limit": {
+      "description": "Number of results, default 20, max 100",
+      "type": "number"
+     }
+    }
+   }
+  },
+  {
+   "name": "pm_markets_preview",
+   "description": "FREE top-1 sample of live Polymarket prediction markets, ranked by volume24hr. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "scan_mcp_preview",
+   "description": "FREE preview scan of a target MCP server for tool-poisoning / prompt-injection. Returns issue count, severity breakdown, risk score, and verdict (clear/review/block) — but NOT which tools or the evidence. Use this to check any MCP server (including your own) at no cost; if issues are found, call the paid scan_mcp_server for the itemized findings + remediation. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Target MCP server endpoint URL to preview-scan (free)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "scan_mcp_server",
+   "description": "Security-audit a target MCP server for prompt-injection / tool-poisoning. Fetches the server's advertised tools and statically analyzes each for hidden instructions, data-exfiltration hints, dangerous capabilities, cross-tool shadowing, and invisible-unicode payloads (OWASP LLM01/LLM08). Returns findings + a 0-100 risk score + verdict (clear/review/block). Cost: $0.005 USDC per scan via x402 (GET /scan/mcp HTTP variant is $0.05).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Target MCP server endpoint URL to audit"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "simulate",
+   "description": "Will this Base transaction revert? Prospective-tx dry-run via eth_simulateV1: pass from, to, optional data (0x calldata) and value (wei) and get will_revert + revert_reason + gas_used + token asset_changes BEFORE the agent spends gas sending it. Keyless, Base-native, Tenderly/Alchemy-class output with no API key. Use before a swap/approve/transfer or alongside gate_swap. Cost: $0.005 USDC per call via x402.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "from": {
+      "type": "string",
+      "description": "Sender (0x, Base) — required"
+     },
+     "to": {
+      "type": "string",
+      "description": "Target contract or address (0x, Base) — required"
+     },
+     "data": {
+      "description": "Optional 0x calldata (omit for a plain transfer)",
+      "type": "string"
+     },
+     "value": {
+      "description": "Optional wei to send (decimal or 0x hex)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "from",
+     "to"
+    ]
+   }
+  },
+  {
+   "name": "simulate_preview",
+   "description": "FREE sample prospective-tx dry-run (benign 0-value call) showing the will_revert/gas_used/asset_changes output shape before you pay. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  },
+  {
+   "name": "x402_preflight",
+   "description": "Should an agent pay this x402 endpoint? Pre-payment check of an UNKNOWN x402 URL: fetch it once (never pays) to validate the 402 challenge + accepts[] (scheme/network/payTo/amount/asset/resource = will it settle) AND label its LIVENESS (LIVE | ZOMBIE | DEAD — is it a working payable endpoint right now, or listed-active-but-broken) AND flag an absolute PRICE TRAP (a honeypot charging >= $1,000/call trips AVOID even when its advertised==live price looks self-consistent; pass max=<usdc> for your own budget ceiling) AND scan the resource + any advertised MCP tools for LLM01/LLM08 prompt-injection and screen payTo against the OFAC SDN + community scam lists (safe to pay) AND verify the PRICE — does the live accepts[].amount match the advertised price? pass advertised=<usdc> (the figure your catalog quoted) or it self-checks the endpoint's /.well-known/x402: MATCH | OVERCHARGE | UNDERCHARGE. Optional samples=N (1-5) runs a reliability/payability burst (settle-consistency + latency; a flapping endpoint downgrades PAY to CAUTION). Returns verdict PAY | CAUTION | AVOID + per-check fix hints + latency. Read-only, never a settlement guarantee. Cost: $0.005 USDC per call via x402 on MCP tools/call (direct HTTP route: $0.001).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "the x402 endpoint URL to pre-check before paying"
+     },
+     "advertised": {
+      "description": "optional: the price (USDC dollars, e.g. 0.001) your catalog/listing quoted — returns MATCH/OVERCHARGE/UNDERCHARGE vs the live accepts[].amount; omit to self-check against the endpoint's own /.well-known/x402",
+      "type": "string"
+     },
+     "max": {
+      "description": "optional: your per-call budget ceiling in USDC dollars (e.g. 0.05) — the result flags price_trap.exceeds_caller_max if the live charge is over it; an absolute >=$1000/call trap trips AVOID regardless",
+      "type": "string"
+     },
+     "samples": {
+      "description": "optional reliability burst: sample the 402 challenge N times (1-5) for settle-consistency + latency; default 1",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "x402_receipt_verify",
+   "description": "Did my x402 payment actually settle? POST-payment on-chain proof — the other half of x402_preflight (which checks BEFORE paying). Bring your Base settlement tx hash + the resource URL you paid, and this reads the tx receipt from Base mainnet, decodes its USDC Transfer events, and reconciles them against the endpoint's advertised payTo + amount (resolved from the resource's live 402, or pass payto/expect to bind it directly). Returns verdict SETTLED | UNDERPAID | WRONG_RECIPIENT | NO_TRANSFER | REVERTED | NOT_FOUND | UNVERIFIED, the matched transfer, and all USDC transfers in the tx. Read-only ground truth; confirms settlement to the right address + amount, not off-chain resource delivery. Cost: $0.005 USDC per call via x402 on MCP tools/call (direct HTTP route: $0.004).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "tx": {
+      "type": "string",
+      "description": "0x-prefixed 32-byte Base-mainnet settlement transaction hash"
+     },
+     "url": {
+      "description": "the x402 resource URL you paid — its live 402 challenge supplies the advertised payTo + amount to reconcile against",
+      "type": "string"
+     },
+     "payto": {
+      "description": "optional: 0x payTo to reconcile against directly (binds the check without fetching the endpoint)",
+      "type": "string"
+     },
+     "expect": {
+      "description": "optional: advertised amount in USDC dollars (e.g. 0.004) to verify the settled amount against",
+      "type": "string"
+     }
+    },
+    "required": [
+     "tx"
+    ]
+   }
+  },
+  {
+   "name": "x402_receipt_verify_preview",
+   "description": "FREE keyless x402 settlement check on Base: pass a tx hash plus payto (and optionally expect, in USDC). Dual-RPC reads the receipt, decodes USDC Transfers and returns SETTLED | UNDERPAID | WRONG_RECIPIENT | NO_TRANSFER | REVERTED | NOT_FOUND. Binds to the payTo you supply; resolving the payTo from a live 402 url is the paid x402_receipt_verify.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "tx": {
+      "type": "string",
+      "description": "0x-prefixed 32-byte Base-mainnet settlement transaction hash"
+     },
+     "payto": {
+      "type": "string",
+      "description": "0x payTo address the payment should have reached"
+     },
+     "expect": {
+      "description": "optional: advertised amount in USDC dollars (e.g. 0.004)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "tx",
+     "payto"
+    ]
+   }
+  },
+  {
+   "name": "yield_entry_verdict",
+   "description": "Per-pool DeFi yield-entry go/no-go. Pass a DefiLlama poolId (the 'pool' field from defi_yields) and get a packaged SUSTAINABLE | DECAYING | OUTLIER | AVOID verdict + 0-100 risk score + field-cited reasons, built from the pool's APY trend (1d/7d/30d), DefiLlama stability forecast, impermanent loss (il7d), volatility (sigma), outlier flag and TVL. Optional token (0x underlying, Base) adds a honeypot-check pointer. The should-I-enter-THIS-pool call after defi_yields. Cost: $0.005 USDC per call via x402 on MCP tools/call (direct HTTP route: $0.01).",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "pool": {
+      "type": "string",
+      "description": "DefiLlama poolId — the 'pool' field from defi_yields (required)"
+     },
+     "token": {
+      "description": "Optional underlying token (0x, Base) — adds a honeypot-check pointer",
+      "type": "string"
+     }
+    },
+    "required": [
+     "pool"
+    ]
+   }
+  },
+  {
+   "name": "yield_entry_verdict_preview",
+   "description": "FREE sample yield-entry verdict for the current top-TVL pool. Shows the packaged SUSTAINABLE/DECAYING/OUTLIER/AVOID + risk-score output shape before you pay. No payment required.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {}
+   }
+  }
+ ]
+}

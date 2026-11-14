@@ -1,0 +1,30 @@
+{
+ "server": "xmcp",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "search",
+   "title": "Search xmcp documentation.",
+   "description": "Search xmcp documentation.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "description": "Search query for docs"
+     },
+     "id": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "description": "Document ID (e.g. 'configuration/transports')"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true
+   }
+  }
+ ]
+}

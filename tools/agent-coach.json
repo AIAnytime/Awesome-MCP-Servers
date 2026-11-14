@@ -1,0 +1,1148 @@
+{
+ "server": "Agent Coach",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "check_in",
+   "title": "Daily check-in",
+   "description": "Use this once a day. Report the north-star value, secondary KPIs, releases (shipped vs verified live), build vs distribution actions, owner blockers, repeated corrections, timeouts, unsupported claims, incidents, deliverable progress, and per-item usage. Value format everywhere: {value, evidence: self_reported|verified, source} (a bare number is accepted and treated as self_reported). Returns health, signals, item verdicts and actions.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "north_star": {
+      "description": "Your north-star value right now. Report it every day.",
+      "type": "object",
+      "properties": {
+       "value": {
+        "type": "number"
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "value"
+      ]
+     },
+     "kpis": {
+      "default": {},
+      "description": "Secondary KPI values: number, or {value, evidence, source}",
+      "type": "object",
+      "propertyNames": {
+       "type": "string"
+      },
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "object",
+         "properties": {
+          "value": {
+           "type": "number"
+          },
+          "evidence": {
+           "type": "string",
+           "enum": [
+            "self_reported",
+            "verified"
+           ],
+           "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+          },
+          "source": {
+           "description": "Where the number comes from: a URL, query name, or system",
+           "type": "string",
+           "maxLength": 500
+          }
+         },
+         "required": [
+          "value"
+         ]
+        }
+       ]
+      }
+     },
+     "releases": {
+      "type": "object",
+      "properties": {
+       "shipped": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "verified_live": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "How many of those you verified live end to end (real URL, real request) before calling them done"
+       },
+       "evidence_urls": {
+        "maxItems": 20,
+        "type": "array",
+        "items": {
+         "type": "string",
+         "maxLength": 500
+        }
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "shipped",
+       "verified_live"
+      ]
+     },
+     "work": {
+      "type": "object",
+      "properties": {
+       "build_actions": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Features/fixes shipped or built"
+       },
+       "distribution_actions": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Listings, posts, launches, outreach sent, directory submissions"
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "build_actions",
+       "distribution_actions"
+      ]
+     },
+     "owner_blockers": {
+      "type": "object",
+      "properties": {
+       "asked": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "New asks to your owner since last check-in"
+       },
+       "cleared": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "open_now": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "total_wait_hours": {
+        "description": "Sum of hours the cleared asks waited",
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100000
+       },
+       "open_asks": {
+        "description": "Each ask still open, with its age",
+        "maxItems": 20,
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "age_hours": {
+           "type": "number",
+           "minimum": 0,
+           "maximum": 100000,
+           "description": "How long this ask has been open, in hours"
+          },
+          "summary": {
+           "type": "string",
+           "maxLength": 200
+          }
+         },
+         "required": [
+          "age_hours"
+         ]
+        }
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "asked",
+       "cleared",
+       "open_now"
+      ]
+     },
+     "owner_corrections": {
+      "type": "object",
+      "properties": {
+       "total": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "repeated": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Corrections your owner had already given you before"
+       },
+       "examples": {
+        "maxItems": 5,
+        "type": "array",
+        "items": {
+         "type": "string",
+         "maxLength": 200
+        }
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "total",
+       "repeated"
+      ]
+     },
+     "interruptions": {
+      "type": "object",
+      "properties": {
+       "timeouts": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "killed_tasks": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Tasks stopped for running too long"
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "timeouts",
+       "killed_tasks"
+      ]
+     },
+     "claims": {
+      "type": "object",
+      "properties": {
+       "made": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Claims about users, metrics or results you made to your owner or in public"
+       },
+       "unsupported": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Of those, ones without a linked source"
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "made",
+       "unsupported"
+      ]
+     },
+     "incidents": {
+      "type": "object",
+      "properties": {
+       "destructive": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Deletes/sends/charges outside policy"
+       },
+       "wrong_entity": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000,
+        "description": "Wrong account, card, email or identity used"
+       },
+       "notes": {
+        "type": "string",
+        "maxLength": 500
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "destructive",
+       "wrong_entity"
+      ]
+     },
+     "deliverable_progress_pct": {
+      "description": "0-100: how far along the named deliverable is",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+     },
+     "items": {
+      "default": [],
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "item_id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 120
+        },
+        "used": {
+         "type": "boolean",
+         "description": "Did you use this item since the last check-in?"
+        },
+        "uses": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 1000000
+        },
+        "successes": {
+         "description": "Uses where it did what you needed",
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 1000000
+        },
+        "failures": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 1000000
+        },
+        "minutes_saved": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 100000
+        },
+        "cost_usd": {
+         "type": "number",
+         "minimum": 0,
+         "maximum": 1000000
+        },
+        "helped": {
+         "type": "string",
+         "enum": [
+          "yes",
+          "no",
+          "unsure"
+         ]
+        },
+        "scope": {
+         "description": "'task' if you used it only for one specific task",
+         "type": "string",
+         "enum": [
+          "ongoing",
+          "task"
+         ]
+        },
+        "owner_feedback": {
+         "description": "Only if your owner actually said so",
+         "type": "string",
+         "enum": [
+          "up",
+          "down",
+          "none"
+         ]
+        },
+        "evidence": {
+         "type": "string",
+         "enum": [
+          "self_reported",
+          "verified"
+         ],
+         "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+        },
+        "notes": {
+         "type": "string",
+         "maxLength": 500
+        }
+       },
+       "required": [
+        "item_id",
+        "used"
+       ]
+      }
+     },
+     "mode": {
+      "default": "auto",
+      "description": "auto (default): a second check-in on the same UTC day merges into that day's check-in (new values replace old ones, nothing is double counted). merge: always merge into your latest check-in. new: force a separate check-in.",
+      "type": "string",
+      "enum": [
+       "auto",
+       "new",
+       "merge"
+      ]
+     },
+     "tasks": {
+      "type": "object",
+      "properties": {
+       "attempted": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "succeeded": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+       },
+       "minutes": {
+        "type": "number",
+        "minimum": 0
+       },
+       "cost_usd": {
+        "type": "number",
+        "minimum": 0
+       }
+      }
+     },
+     "owner_feedback": {
+      "type": "object",
+      "properties": {
+       "rating": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5
+       },
+       "comment": {
+        "type": "string",
+        "maxLength": 500
+       }
+      }
+     },
+     "notes": {
+      "type": "string",
+      "maxLength": 2000
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_agent",
+   "title": "Delete this agent",
+   "description": "Use this only when your owner asks. Permanently deletes your Agent Coach profile, items, check-ins and public report. confirm must equal your agent_id.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "confirm": {
+      "type": "string",
+      "description": "Your agent_id, to confirm"
+     }
+    },
+    "required": [
+     "confirm"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_digest",
+   "title": "Owner digest preview",
+   "description": "Use this to preview the daily owner digest (subject, html, text). This call sends nothing; the daily email goes out only if owner_digest was turned on.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_library_item",
+   "title": "Get one library item",
+   "description": "Use this to fetch one vetted library item by slug: install, source, license and (when the license allows) the full SKILL.md text. Counts as a download. Unvetted items are not returned.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "slug": {
+      "type": "string",
+      "maxLength": 120
+     }
+    },
+    "required": [
+     "slug"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_recommendations",
+   "title": "Get matched skills, MCPs, repos and prompts",
+   "description": "Use this after set_goals. Returns up to `limit` catalog items matched to your goals (plus at most one extra per declared capability gap), each with reasons, its vetting status and basis, cautions, and whether it needs owner approval. Show them to your owner before installing anything.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_report",
+   "title": "Progress report",
+   "description": "Use this to see your KPIs vs baseline, every item's verdict with evidence, and check-in history.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_rules",
+   "title": "Verdict rules",
+   "description": "Use this to see exactly how the coach decides item verdicts (permanent / promising / temporary / trial / unproven / pending_removal), signals, and overall health.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "register_agent",
+   "title": "Register with Agent Coach",
+   "description": "Use this first, once. Creates your Agent Coach profile and returns agent_id and api_key (shown once: save it in the owner's sanctioned secret store or a restricted credential file, not in chat or memory). Also returns example north-star metrics and suggested KPIs for your job type.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Display name for this agent. Shown on the public report if you opt in, so no confidential info."
+     },
+     "platform": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "description": "Where you run: claude-code, cursor, codex, openclaw, hermes, grok-bot, chatgpt, claude, or other."
+     },
+     "job_type": {
+      "description": "Primary axis. venture-operator (ship and grow a product you own), owners-operator (work inside your owner's accounts), capital-forecasting (bets/trades), content-producer. Default venture-operator.",
+      "type": "string",
+      "maxLength": 60
+     },
+     "stage": {
+      "description": "Per job type (GET /api/v1/taxonomy): venture-operator build|launch|grow|monetize; owners-operator setup|assist|autonomous|trusted; capital-forecasting research|paper|live|scale; content-producer plan|publish|grow|monetize. Default: the job type's default_stage.",
+      "type": "string",
+      "maxLength": 30
+     },
+     "job_title": {
+      "description": "Free-text title, e.g. 'GTM engineer'. Label only.",
+      "type": "string",
+      "maxLength": 80
+     },
+     "persona": {
+      "description": "Deprecated alias of job_title.",
+      "type": "string",
+      "maxLength": 80
+     },
+     "owner_email": {
+      "description": "Strongly recommended. Your owner's email: the ONLY way to recover a lost api_key, and where the owner digest goes (if owner_digest is true).",
+      "type": "string",
+      "maxLength": 200,
+      "format": "email",
+      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+     },
+     "owner_digest": {
+      "description": "Opt in to a daily owner digest email to owner_email (double opt-in: your owner first gets a confirmation email and must click Confirm; then it is sent once a day around 13:00 UTC from Agent Coach <upskill-coach@cooperemail.com>; every email has a one-click unsubscribe). Default false: no digest is emailed. Turn on only if your owner wants it.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "name",
+     "platform"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "rotate_key",
+   "title": "Rotate your api_key",
+   "description": "Use this if your key may have leaked. Returns a new api_key; the old one stops working immediately. Save the new one.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_library",
+   "title": "Search the Upskill library",
+   "description": "Use this to find skills, MCP servers, prompts or repos by keyword outside your matched recommendations. Returns only items that passed the security scan, each with install, license, source and a page link. Catalog data only: no user comments. Show results to your owner before installing.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "description": "Keywords, e.g. 'cold email', 'scraping', 'memory'. Empty or missing lists top items.",
+      "type": "string",
+      "maxLength": 200
+     },
+     "q": {
+      "description": "Alias of query (same name as the REST ?q= parameter).",
+      "type": "string",
+      "maxLength": 200
+     },
+     "category": {
+      "description": "Optional section slug: go-to-market, developer, sales, marketing, content, research, data-scraping, ops-automation, finance-trading, security, memory-context, evals-quality, design, productivity, writing, devops-deploy",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "skill",
+       "mcp",
+       "repo",
+       "prompt"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_goals",
+   "title": "Set goals and KPIs",
+   "description": "Use this after registering (and whenever goals change). Goal intake: job_type, stage, ONE north-star metric with a fixed definition and baseline, the named deliverable, capability gaps, goals, optional secondary KPIs, tools, constraints. Changing the north-star definition is recorded as drift.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "job_type": {
+      "type": "string",
+      "maxLength": 60
+     },
+     "stage": {
+      "type": "string",
+      "maxLength": 30
+     },
+     "job_title": {
+      "type": "string",
+      "maxLength": 80
+     },
+     "owner_email": {
+      "description": "Add or change your owner's email (enables key recovery)",
+      "type": "string",
+      "maxLength": 200,
+      "format": "email",
+      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+     },
+     "owner_digest": {
+      "description": "true: email your owner a daily digest at owner_email; false: stop it. Omit to keep the current setting (default off).",
+      "type": "boolean"
+     },
+     "role": {
+      "description": "One line: what you do for your owner",
+      "type": "string",
+      "maxLength": 200
+     },
+     "goals": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 300
+      },
+      "description": "Plain-language goals"
+     },
+     "north_star": {
+      "type": "object",
+      "properties": {
+       "key": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60,
+        "pattern": "^[a-z0-9_]+$"
+       },
+       "label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+       },
+       "unit": {
+        "description": "e.g. count, %, usd, minutes",
+        "type": "string",
+        "maxLength": 20
+       },
+       "direction": {
+        "description": "up = higher is better, down = lower is better. If omitted it is inferred from baseline vs target (target > baseline means up); if that is impossible and the key is not a known KPI, the request is rejected.",
+        "type": "string",
+        "enum": [
+         "up",
+         "down"
+        ]
+       },
+       "tags": {
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+         "type": "string",
+         "maxLength": 40
+        }
+       },
+       "baseline": {
+        "description": "Value BEFORE coaching. Needed for before/after.",
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "target": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "definition": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 600,
+        "description": "Fixed, precise definition: what is counted, from which system, what is excluded. Changing it later is flagged as definition drift."
+       },
+       "evidence": {
+        "type": "string",
+        "enum": [
+         "self_reported",
+         "verified"
+        ],
+        "description": "self_reported (default): your own count. verified: read from a system of record (prod DB, Stripe, analytics, live E2E check) and you can link it in source."
+       },
+       "source": {
+        "description": "Where the number comes from: a URL, query name, or system",
+        "type": "string",
+        "maxLength": 500
+       }
+      },
+      "required": [
+       "key",
+       "label",
+       "definition"
+      ],
+      "description": "ONE declared north-star metric with a fixed definition and today's baseline"
+     },
+     "deliverable": {
+      "description": "The named deliverable you're working toward, e.g. 'first 10 paying accounts' or 'iPhone app on TestFlight'",
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+       },
+       "description": {
+        "type": "string",
+        "maxLength": 600
+       },
+       "due": {
+        "type": "string",
+        "maxLength": 40
+       },
+       "kpi_key": {
+        "description": "Optional: the KPI (or north-star key) that measures this deliverable, e.g. paying_accounts. Progress is then computed from baseline to target automatically.",
+        "type": "string",
+        "maxLength": 60
+       },
+       "target": {
+        "description": "Target value of kpi_key that means 'done'",
+        "type": "number"
+       }
+      },
+      "required": [
+       "name"
+      ]
+     },
+     "capability_gaps": {
+      "default": [],
+      "description": "Where you get stuck: auth-identity, payments-credential-separation, deploy-release, distribution, measurement, long-task-durability, quality-verification, owner-alignment",
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 60
+      }
+     },
+     "kpis": {
+      "default": [],
+      "description": "Optional secondary KPIs",
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "key": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 60,
+         "pattern": "^[a-z0-9_]+$"
+        },
+        "label": {
+         "description": "Human label, e.g. 'Briefs delivered on time'",
+         "type": "string",
+         "maxLength": 100
+        },
+        "unit": {
+         "description": "e.g. count, %, usd, minutes",
+         "type": "string",
+         "maxLength": 20
+        },
+        "direction": {
+         "description": "up = higher is better, down = lower is better. If omitted it is inferred from baseline vs target (target > baseline means up); if that is impossible and the key is not a known KPI, the request is rejected.",
+         "type": "string",
+         "enum": [
+          "up",
+          "down"
+         ]
+        },
+        "tags": {
+         "maxItems": 10,
+         "type": "array",
+         "items": {
+          "type": "string",
+          "maxLength": 40
+         }
+        },
+        "baseline": {
+         "description": "Value BEFORE coaching. Needed for before/after.",
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "target": {
+         "type": [
+          "number",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "key"
+       ]
+      }
+     },
+     "tools": {
+      "default": [],
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 60
+      }
+     },
+     "platform": {
+      "type": "string",
+      "maxLength": 40
+     },
+     "constraints": {
+      "default": {},
+      "description": "constraints: {free_only, monthly_budget_usd, owner_present, notes}",
+      "type": "object",
+      "properties": {
+       "free_only": {
+        "description": "true = recommend only free items",
+        "type": "boolean"
+       },
+       "monthly_budget_usd": {
+        "description": "Max monthly spend on recommended tools, in USD",
+        "type": "number",
+        "minimum": 0
+       },
+       "owner_present": {
+        "description": "false if your owner isn't around to approve installs right now",
+        "type": "boolean"
+       },
+       "notes": {
+        "type": "string",
+        "maxLength": 500
+       }
+      }
+     },
+     "tags": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 40
+      }
+     }
+    },
+    "required": [
+     "goals",
+     "north_star"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "share_report",
+   "title": "Share or hide the public progress report",
+   "description": "Use this only with your owner's OK. public=true returns a public URL (display name, goals, KPIs, verdicts; never email, notes or keys). public=false hides it.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "public": {
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "public"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "update_items",
+   "title": "Adopt, decline, mark not relevant, or remove items",
+   "description": "Use this after your owner approves an item (action=adopt), rejects one (decline), when an item doesn't fit your job (not_relevant: not a judgment on its quality), or confirms removing a pending_removal item (remove). The coach measures only adopted items.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "description": "Your Agent Coach api_key from register_agent. Optional if you send it as an Authorization: Bearer header.",
+      "type": "string"
+     },
+     "item_ids": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 120
+      }
+     },
+     "action": {
+      "default": "adopt",
+      "description": "adopt; remove (was adopted, now uninstalled); decline (owner said no); not_relevant (doesn't fit your job; not a judgment on the item's quality)",
+      "type": "string",
+      "enum": [
+       "adopt",
+       "remove",
+       "decline",
+       "not_relevant"
+      ]
+     },
+     "reason": {
+      "type": "string",
+      "maxLength": 300
+     }
+    },
+    "required": [
+     "item_ids"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

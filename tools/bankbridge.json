@@ -1,0 +1,575 @@
+{
+ "server": "BankBridge",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "connect_bank",
+   "title": "Connect a Bank",
+   "description": "Get a link for connecting a new bank account to BankBridge, plus reconnect links for any already-connected bank that needs re-authorization or whose consent expires within 30 days. This tool only returns links: the bank connection itself happens when the user opens the link in their browser and signs in to their bank on bankbridge.money. Nothing is connected or changed by calling it.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_account",
+   "title": "Get Account Details",
+   "description": "Get one account's live details (balances, credit limit, type, institution, last 4 digits) by its account id from list_accounts. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "account_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The account id, as returned by list_accounts (for example demo_acc_chase_checking)."
+     }
+    },
+    "required": [
+     "account_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_merchant_history",
+   "title": "Merchant Charge History",
+   "description": "Charge history for one merchant (case-insensitive substring match on merchant name or description): charge count, total spent, average amount, first and last charge dates, and the matching transactions, newest first. Default window is the last 12 months. Transactions are paginated with limit/offset (default 50, max 200); the totals cover every match. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "merchant": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Merchant name or part of it, for example \"starbucks\"."
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 12 months ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 200). Defaults to 50.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200
+     },
+     "offset": {
+      "description": "Number of results to skip, for paging. Defaults to 0. Use with has_more.",
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "required": [
+     "merchant"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_monthly_cashflow",
+   "title": "Monthly Cashflow",
+   "description": "Income, expenses, and net for one calendar month across connected accounts, with the top 5 income sources and top 5 expense categories. Pending transactions are left out. Income is money coming in (negative transaction amounts); expenses are money going out (positive amounts). The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "month": {
+      "type": "string",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+      "description": "The month to report, in YYYY-MM format, for example 2026-03."
+     },
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     }
+    },
+    "required": [
+     "month"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_recurring_charges",
+   "title": "Find Recurring Charges",
+   "description": "Find recurring charges such as subscriptions and bills by grouping charges per merchant and detecting a steady weekly, biweekly, monthly, quarterly, or yearly interval. Returns each merchant's typical amount, frequency, last charge date, and total. Default window is the last 6 months; yearly charges need a window of 13 months or more. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 6 months ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "min_occurrences": {
+      "description": "Minimum number of charges from a merchant to count as recurring. Defaults to 2.",
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 60
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_spending_summary",
+   "title": "Spending Summary",
+   "description": "Total posted spending (positive amounts only) grouped by category, merchant, month, or week, largest first, with transaction count and average per group. Default window is the last 30 days. Returns the top 20 groups by default (max 100); total_groups gives the full count. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "group_by": {
+      "type": "string",
+      "enum": [
+       "category",
+       "merchant",
+       "month",
+       "week"
+      ],
+      "description": "How to group spending: category, merchant, month (YYYY-MM), or week (YYYY-Www)."
+     },
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 30 days ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 100). Defaults to 20.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     }
+    },
+    "required": [
+     "group_by"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_accounts",
+   "title": "List Bank Accounts",
+   "description": "List every connected account (checking, savings, credit card, loan, investment) with live balances, credit limits, institution, and last 4 digits. Each account's id is what the account_id parameter of the other tools accepts. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_categories",
+   "title": "List Spending Categories",
+   "description": "List the spending categories that appear in the user's transactions, with transaction count and net dollar total per category, largest first. Default window is the last 90 days. These are the values the category parameter of list_transactions accepts. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 90 days ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_holdings",
+   "title": "List Investment Holdings",
+   "description": "List current investment positions (ticker, name, quantity, price, market value, cost basis, gain/loss) across connected investment accounts, largest value first, plus portfolio totals. Cost basis and gain/loss are null when the institution doesn't report cost basis. Paginated with limit/offset (default 50, max 200). The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "account_id": {
+      "description": "Limit results to one investment account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 200). Defaults to 50.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200
+     },
+     "offset": {
+      "description": "Number of results to skip, for paging. Defaults to 0. Use with has_more.",
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_investment_transactions",
+   "title": "List Investment Transactions",
+   "description": "List investment account activity (buys, sells, dividends and other cash events, fees, transfers), newest first, with ticker, quantity, price, and amount. Dividends have type \"cash\" and subtype \"dividend\". Default window is the last 90 days. Paginated with limit/offset (default 50, max 100). The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "account_id": {
+      "description": "Limit results to one investment account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "type": {
+      "description": "Only this transaction type: buy, sell, cash (dividends, interest, deposits), transfer, fee, or cancel.",
+      "type": "string",
+      "enum": [
+       "buy",
+       "sell",
+       "cash",
+       "transfer",
+       "fee",
+       "cancel"
+      ]
+     },
+     "subtype": {
+      "description": "Only this subtype, for example dividend, interest, contribution, or management fee.",
+      "type": "string",
+      "minLength": 1
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 90 days ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 100). Defaults to 50.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "description": "Number of results to skip, for paging. Defaults to 0. Use with has_more.",
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_transactions",
+   "title": "List Transactions",
+   "description": "List transactions across connected accounts, newest first, with optional filters for date range, account, category, amount, and pending status. Positive amounts are money spent; negative amounts are money received. Default window is the last 30 days; banks provide up to 24 months. Paginated with limit/offset (default 50, max 100); the response includes total_count and has_more. Each call reads the bank live and banks allow about 30 reads a minute, so totals by category, merchant or month come from get_spending_summary or get_monthly_cashflow in one call rather than from paging through every transaction; when paging is needed, limit=100 keeps the number of calls down. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 30 days ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "min_amount": {
+      "description": "Only transactions whose absolute amount is at least this many dollars.",
+      "type": "number",
+      "minimum": 0
+     },
+     "max_amount": {
+      "description": "Only transactions whose absolute amount is at most this many dollars.",
+      "type": "number",
+      "minimum": 0
+     },
+     "category": {
+      "description": "Spending category, case-insensitive. One of: INCOME, TRANSFER_IN, TRANSFER_OUT, LOAN_PAYMENTS, LOAN_DISBURSEMENTS, BANK_FEES, ENTERTAINMENT, FOOD_AND_DRINK, GENERAL_MERCHANDISE, HOME_IMPROVEMENT, MEDICAL, PERSONAL_CARE, GENERAL_SERVICES, GOVERNMENT_AND_NON_PROFIT, TRANSPORTATION, TRAVEL, RENT_AND_UTILITIES, OTHER.",
+      "type": "string",
+      "minLength": 1
+     },
+     "pending": {
+      "description": "Set to false to leave out pending (not yet posted) transactions.",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 100). Defaults to 50.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "description": "Number of results to skip, for paging. Defaults to 0. Use with has_more.",
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_transactions",
+   "title": "Search Transactions",
+   "description": "Search transactions by merchant name or bank description (case-insensitive substring match), newest first. Default window is the last 30 days. Paginated with limit/offset (default 50, max 100); the response includes total_count and has_more. The response includes a `warnings` array of notices about banks that could not contribute (for example, a bank that needs reconnecting), each with a message and, when relevant, a reconnect_url.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Text to look for in the merchant name or description, for example \"netflix\"."
+     },
+     "account_id": {
+      "description": "Limit results to a specific account. Use an account id returned by list_accounts.",
+      "type": "string",
+      "minLength": 1
+     },
+     "start_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to 30 days ago.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "end_date": {
+      "description": "Date in YYYY-MM-DD format. Defaults to today.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+     },
+     "limit": {
+      "description": "Maximum number of results to return (1 to 100). Defaults to 50.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "offset": {
+      "description": "Number of results to skip, for paging. Defaults to 0. Use with has_more.",
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ],
+ "prompts": [
+  {
+   "name": "balances",
+   "title": "Balances",
+   "description": "Quick balance snapshot. Every account, a rolling total, and credit utilization at a glance."
+  },
+  {
+   "name": "weekly-review",
+   "title": "Weekly review",
+   "description": "Last 7 days at a glance. Total spend, biggest charges, and anything new or unusual."
+  },
+  {
+   "name": "spending-by",
+   "title": "Spending by …",
+   "description": "Flexible group-by. Slice your spend by category, merchant, month, or week, for any window."
+  },
+  {
+   "name": "compare-months",
+   "title": "Compare months",
+   "description": "Side-by-side month comparison with category deltas and callouts for meaningful changes."
+  },
+  {
+   "name": "category-deep-dive",
+   "title": "Category deep dive",
+   "description": "Zoom into one category. Every transaction, top merchants, cadence, and the biggest outliers."
+  },
+  {
+   "name": "monthly-check",
+   "title": "Monthly check",
+   "description": "One-page monthly report. Cashflow, top categories, top merchants, subscriptions, investment delta."
+  },
+  {
+   "name": "cashflow-trend",
+   "title": "Cashflow trend",
+   "description": "Multi-month income vs expenses table + takeaways on where things are trending."
+  },
+  {
+   "name": "budget-draft",
+   "title": "Budget draft",
+   "description": "Draft a realistic monthly budget from your actual last-3-months spending, split into fixed vs variable."
+  },
+  {
+   "name": "portfolio-health",
+   "title": "Portfolio health",
+   "description": "Total value, gain/loss, and concentration check. Flags any single position >20% of portfolio."
+  },
+  {
+   "name": "dividends",
+   "title": "Dividends",
+   "description": "YTD dividends received by ticker, with run-rate and recent payments."
+  },
+  {
+   "name": "monthly-chart",
+   "title": "Monthly chart",
+   "description": "Plot a bar chart of income vs expenses for the last N months. Writes cashflow.png."
+  },
+  {
+   "name": "category-pie",
+   "title": "Category pie",
+   "description": "Pie chart of spending by category (or ASCII donut fallback). Writes spending-pie.png."
+  },
+  {
+   "name": "tax-prep",
+   "title": "Tax prep export",
+   "description": "Exports a full year of transactions + category totals to CSV for bookkeeping or tax filing."
+  },
+  {
+   "name": "subscriptions",
+   "title": "Subscription audit",
+   "description": "Every recurring charge, sorted, with age and price-drift flags. Surfaces forgettable ones under $20/mo."
+  },
+  {
+   "name": "price-creep",
+   "title": "Price creep",
+   "description": "Subscriptions whose price increased over the last 12 months. Catch Netflix hikes before your card does."
+  },
+  {
+   "name": "duplicate-check",
+   "title": "Duplicate check",
+   "description": "Finds same-merchant + same-amount charges within 48 hours plus statistical outliers."
+  },
+  {
+   "name": "fraud-check",
+   "title": "Fraud check (broad)",
+   "description": "Wider net than duplicate-check: unfamiliar merchants, amount outliers, off-hours charges."
+  },
+  {
+   "name": "monthly-report",
+   "title": "Monthly report (narrative)",
+   "description": "Polished prose report for a given month. Shareable, archivable, email-worthy."
+  },
+  {
+   "name": "year-in-review",
+   "title": "Year in review",
+   "description": "Spotify Wrapped for your money. Full-year cashflow, top merchants, recurring tax, fun stats."
+  }
+ ]
+}

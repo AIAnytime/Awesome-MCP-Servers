@@ -1,0 +1,1152 @@
+{
+ "server": "FrameThrower",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "commercials_profile",
+   "description": "The track record of a brand, director, agency, production company, DP, editor or composer in FrameThrower's ads library: how many spots, which years, who they work with (clients, agencies, directors, production companies), awards by show, typical tones and genres, their best and most recent work — and, for directors / agencies / production companies with a public page, the researched profile (description, founded, HQ, website).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "brand",
+       "director",
+       "agency",
+       "production",
+       "dp",
+       "editor",
+       "edit_house",
+       "post",
+       "music",
+       "sound",
+       "vfx"
+      ],
+      "description": "brand, director, agency, production, dp, editor, edit_house, post, music, sound or vfx"
+     },
+     "name": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind",
+     "name"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "commercials_stats",
+   "description": "Count and rank the ads library: how many commercials match a filter, broken down by any of brand, director, agency, production, dp, editor, music, industry, market, year, genre, structure, format, tone, trope, award_show, season. E.g. \"which agencies won the most Cannes Lions for car ads since 2015\" = fields [agency], award_show Cannes Lions, industry Auto, year_min 2015.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "fields": {
+      "minItems": 1,
+      "maxItems": 6,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "brand",
+        "director",
+        "agency",
+        "production",
+        "dp",
+        "editor",
+        "edit_house",
+        "post",
+        "music",
+        "sound",
+        "vfx",
+        "industry",
+        "market",
+        "language",
+        "year",
+        "genre",
+        "structure",
+        "format",
+        "tone",
+        "trope",
+        "award_show",
+        "award_year",
+        "season",
+        "collection"
+       ]
+      }
+     },
+     "brand": {
+      "description": "Advertiser, e.g. \"Nike\", \"Guinness\"",
+      "type": "string"
+     },
+     "director": {
+      "type": "string"
+     },
+     "agency": {
+      "description": "Creative agency, e.g. \"Wieden+Kennedy\"",
+      "type": "string"
+     },
+     "production": {
+      "description": "Production company, e.g. \"MJZ\", \"Smuggler\"",
+      "type": "string"
+     },
+     "dp": {
+      "description": "Director of photography",
+      "type": "string"
+     },
+     "editor": {
+      "type": "string"
+     },
+     "music": {
+      "description": "Composer / track / music house",
+      "type": "string"
+     },
+     "person": {
+      "description": "Anyone credited, any role",
+      "type": "string"
+     },
+     "industry": {
+      "description": "Ad category: Auto, Beer, Spirits, Drinks, Food & QSR, Retail, Tech, Telecom, Finance & Insurance, Fashion & Luxury, Beauty & Personal care, Sport, Travel, Gaming, Health & Pharma, Media & Entertainment, Public service & NGO, Home, FMCG",
+      "type": "string"
+     },
+     "market": {
+      "description": "Country code: US, UK, FR, DE, BR, JP…",
+      "type": "string"
+     },
+     "award_show": {
+      "description": "One of: Cannes Lions, Clio Awards, D&AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, shots Awards, New York Festivals, Webby Awards, Emmy (Outstanding Commercial), IPA Effectiveness Awards, AdFest, Dubai Lynx, ADC Europe, Young Director Award",
+      "type": "string"
+     },
+     "min_award": {
+      "description": "Best award at least this level",
+      "type": "string",
+      "enum": [
+       "grand_prix",
+       "gold",
+       "silver",
+       "bronze",
+       "shortlist"
+      ]
+     },
+     "awarded": {
+      "description": "true = won or shortlisted at an award show",
+      "type": "boolean"
+     },
+     "award_year": {
+      "type": "number"
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "tone": {
+      "description": "funny, heartwarming, epic, emotional, absurd, dark, inspiring…",
+      "type": "string"
+     },
+     "genre": {
+      "description": "comedy, drama, documentary, action…",
+      "type": "string"
+     },
+     "structure": {
+      "description": "narrative, montage, vignettes, problem_solution, demo…",
+      "type": "string"
+     },
+     "format": {
+      "description": "live_action, animation_2d, animation_3d, stop_motion, cgi, mixed",
+      "type": "string"
+     },
+     "season": {
+      "description": "halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl",
+      "type": "string"
+     },
+     "celebrity": {
+      "type": "boolean"
+     },
+     "max_duration": {
+      "description": "seconds",
+      "type": "number"
+     },
+     "min_duration": {
+      "type": "number"
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 50
+     }
+    },
+    "required": [
+     "fields"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "find_animation_titles",
+   "description": "Find animated SERIES and FILMS (animation library only — mostly anime, plus Western animation) that fit what the user is making — by a story brief in plain words (\"a quiet coming-of-age story about two sisters in a seaside town, bittersweet, summer\"), by a title it should be like (like: \"Akira\"), by a LOOK (an image or frame ids — titles whose frames look like it), and/or by genre, theme, style, studio, movie/series and year. Signals combine. Returns each title with studio, director, genres, themes, its look, a synopsis, a poster, and for a look search the frames that matched.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "brief": {
+      "description": "The story, premise, mood or world in plain words",
+      "type": "string"
+     },
+     "like": {
+      "description": "A title (name or slug) the results should be like in story",
+      "type": "string"
+     },
+     "image": {
+      "description": "An image URL or data: URL — titles that look like it",
+      "type": "string"
+     },
+     "frame_ids": {
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "title": {
+      "description": "Only inside this series / film (slug or name)",
+      "type": "string"
+     },
+     "genre": {
+      "description": "AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)",
+      "type": "string"
+     },
+     "theme": {
+      "description": "AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…",
+      "type": "string"
+     },
+     "style": {
+      "description": "The title's look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, clean lines, thick outlines, sketchy lines, painterly, watercolour, flat minimal, detailed backgrounds, film grain, realistic proportions, moe big-eyed, chibi, western cartoon, gritty mature, bishonen, soft natural light, dramatic light rays, glow and bloom, neon, high-contrast shadows",
+      "type": "string"
+     },
+     "studio": {
+      "description": "Animation studio, e.g. \"Studio Ghibli\", \"Madhouse\", \"Kyoto Animation\", \"MAPPA\"",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "movie",
+       "series"
+      ]
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "exclude_titles": {
+      "description": "Slugs to leave out (e.g. titles already used)",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "nsfw": {
+      "description": "false = leave out frames flagged as adult (included by default)",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "default 8",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 20
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "find_by_craft",
+   "description": "Find frames by specific cinematography craft attributes — lens character, shot size, visual style, setting, time of day, director, or year range. All optional; combine to narrow. Use this to refine a search precisely.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "lens": {
+      "description": "e.g. \"anamorphic\", \"spherical\", \"vintage_soft\"",
+      "type": "string"
+     },
+     "shot_size": {
+      "description": "e.g. \"closeup\", \"wide\", \"medium\"",
+      "type": "string"
+     },
+     "visual_style": {
+      "type": "string"
+     },
+     "setting": {
+      "description": "\"interior\" or \"exterior\"",
+      "type": "string"
+     },
+     "time_of_day": {
+      "description": "e.g. \"night\", \"day\"",
+      "type": "string"
+     },
+     "director": {
+      "type": "string"
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 40
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "find_similar",
+   "description": "Find frames visually/semantically similar to a given frame id (from a prior result). Use this to pull more references like one the user shortlisted.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "frameId": {
+      "type": "string"
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 40
+     }
+    },
+    "required": [
+     "frameId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_animation_sequence",
+   "description": "A frame in its sequence: the shots just before and after it in the same episode / film, in order, each with its still and caption — to see how a moment is built, or to lay a beat out across several canvas panels. With clips: true, each shot's clip plus the continuous \"run\" video that covers them (run_url, with from/to seconds).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "frame_id": {
+      "type": "string",
+      "description": "A frame id from earlier results (or \"slug:label\")"
+     },
+     "before": {
+      "description": "default 2",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8
+     },
+     "after": {
+      "description": "default 2",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8
+     },
+     "clips": {
+      "description": "true = also return each frame's clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "frame_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_animation_title",
+   "description": "One anime series or film in depth, by slug or name: synopsis, studio and key credits, main characters, genres, themes, its look, the trailer, how many shots are indexed, titles with a similar look and a similar story, and sample frames spread across it (frames: 0–24, default 6).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "description": "Slug or name, e.g. \"akira-1988\" or \"Your Name\""
+     },
+     "frames": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
+     },
+     "clips": {
+      "description": "true = also return each frame's clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "title"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_commercial",
+   "description": "The full breakdown of one commercial by id: idea, logline, tagline, product, audience, every credit by role (director, agency, production company, DP, editor, music, post, sound, VFX), every award (show, year, level, category), craft numbers (shots, average shot length, cuts per minute, when the product / brand / emotional peak / end card land), the script with timings, and the shot list (caption, tags and still per shot; with clips: true, each shot's clip too).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Commercial id, e.g. AD-0505"
+     },
+     "shots": {
+      "description": "Include the shot list (default true)",
+      "type": "boolean"
+     },
+     "stills": {
+      "description": "Include each shot's still image (1 credit per shot). Leave off unless the user wants to see the shots.",
+      "type": "boolean"
+     },
+     "clips": {
+      "description": "true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_frame_details",
+   "description": "Get the full metadata, a preview image and the FrameThrower link for a single frame id. For the full-resolution file or the depth map (camera geometry for image generation), call get_frame_image.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "frameId": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "frameId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_frame_image",
+   "description": "One frame's image at a paid size, as a link valid for an hour: \"full\" = the original full-resolution file (5 credits), \"large\" = 1280px (2), \"depth\" = the precomputed depth map, ControlNet-ready (2). Search results show a preview only — use this when the user wants the actual image for a deck, document, download or an image-generation pipeline.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "frameId": {
+      "type": "string"
+     },
+     "size": {
+      "description": "default full",
+      "type": "string",
+      "enum": [
+       "full",
+       "large",
+       "depth"
+      ]
+     }
+    },
+    "required": [
+     "frameId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_animation_frames",
+   "description": "Find frames in FrameThrower's ANIMATION library — animated series and films only, never live-action (mostly anime, plus Western animation; the whole of every title, not a sample) for a scene, a moment or a CHARACTER LOOK, described in plain words: \"a girl on a rooftop at dusk watching the city lights\", \"two kids running through a summer field\", \"a tall man with a scarred face and a long black coat, rain\". Narrow by title, genre, theme, style (80s cel, watercolour, neon night…), studio, movie/series and year. Each frame has a caption of what is in it, a 640px still for looking at, the full-size still, the frame id and a link. At most 3 frames per title unless per_title says otherwise.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "The scene or character in plain words, as a description of one frame"
+     },
+     "title": {
+      "description": "Only inside this series / film (slug or name)",
+      "type": "string"
+     },
+     "genre": {
+      "description": "AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)",
+      "type": "string"
+     },
+     "theme": {
+      "description": "AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…",
+      "type": "string"
+     },
+     "style": {
+      "description": "The title's look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, clean lines, thick outlines, sketchy lines, painterly, watercolour, flat minimal, detailed backgrounds, film grain, realistic proportions, moe big-eyed, chibi, western cartoon, gritty mature, bishonen, soft natural light, dramatic light rays, glow and bloom, neon, high-contrast shadows",
+      "type": "string"
+     },
+     "studio": {
+      "description": "Animation studio, e.g. \"Studio Ghibli\", \"Madhouse\", \"Kyoto Animation\", \"MAPPA\"",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "movie",
+       "series"
+      ]
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "exclude_titles": {
+      "description": "Slugs to leave out (e.g. titles already used)",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "nsfw": {
+      "description": "false = leave out frames flagged as adult (included by default)",
+      "type": "boolean"
+     },
+     "per_title": {
+      "description": "Max frames from one title (default 3)",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 24
+     },
+     "limit": {
+      "description": "default 12",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 24
+     },
+     "offset": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 200
+     },
+     "clips": {
+      "description": "true = also return each frame's clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_commercial_shots",
+   "description": "Find individual SHOTS inside commercials by what is in the frame (\"hand pouring beer in slow motion\", \"car drifting at night in the rain\", \"family laughing at a kitchen table\"), with shot tags (size, angle, setting, time of day, lighting, mood, people, product / logo visible) and any commercial-level filter (brand, director, agency, award show, year…). Each shot has its still, its tags and a link to the exact moment; with clips: true, also a short clip of just that shot.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "What the shot shows, as a description of one frame"
+     },
+     "shot_size": {
+      "description": "extreme_closeup, closeup, medium_closeup, medium, medium_wide, full, wide, extreme_wide, insert",
+      "type": "string"
+     },
+     "camera_angle": {
+      "description": "eye_level, low_angle, high_angle, overhead, aerial, pov, worms_eye, dutch",
+      "type": "string"
+     },
+     "setting": {
+      "description": "interior, exterior, studio_void or virtual_cg",
+      "type": "string"
+     },
+     "time_of_day": {
+      "description": "day, night, golden_hour, dusk, dawn…",
+      "type": "string"
+     },
+     "lighting": {
+      "description": "natural, high_key, low_key, silhouette, chiaroscuro",
+      "type": "string"
+     },
+     "mood": {
+      "type": "string"
+     },
+     "people": {
+      "description": "women, men, kids, teens, adults, seniors (comma-separated = all of them)",
+      "type": "string"
+     },
+     "product_visible": {
+      "type": "boolean"
+     },
+     "logo_visible": {
+      "type": "boolean"
+     },
+     "text_on_screen": {
+      "type": "boolean"
+     },
+     "black_and_white": {
+      "type": "boolean"
+     },
+     "brand": {
+      "description": "Advertiser, e.g. \"Nike\", \"Guinness\"",
+      "type": "string"
+     },
+     "director": {
+      "type": "string"
+     },
+     "agency": {
+      "description": "Creative agency, e.g. \"Wieden+Kennedy\"",
+      "type": "string"
+     },
+     "production": {
+      "description": "Production company, e.g. \"MJZ\", \"Smuggler\"",
+      "type": "string"
+     },
+     "dp": {
+      "description": "Director of photography",
+      "type": "string"
+     },
+     "industry": {
+      "description": "Ad category: Auto, Beer, Spirits, Drinks, Food & QSR, Retail, Tech, Telecom, Finance & Insurance, Fashion & Luxury, Beauty & Personal care, Sport, Travel, Gaming, Health & Pharma, Media & Entertainment, Public service & NGO, Home, FMCG",
+      "type": "string"
+     },
+     "market": {
+      "description": "Country code: US, UK, FR, DE, BR, JP…",
+      "type": "string"
+     },
+     "award_show": {
+      "description": "One of: Cannes Lions, Clio Awards, D&AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, shots Awards, New York Festivals, Webby Awards, Emmy (Outstanding Commercial), IPA Effectiveness Awards, AdFest, Dubai Lynx, ADC Europe, Young Director Award",
+      "type": "string"
+     },
+     "min_award": {
+      "description": "Best award at least this level",
+      "type": "string",
+      "enum": [
+       "grand_prix",
+       "gold",
+       "silver",
+       "bronze",
+       "shortlist"
+      ]
+     },
+     "awarded": {
+      "description": "true = won or shortlisted at an award show",
+      "type": "boolean"
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "season": {
+      "description": "halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl",
+      "type": "string"
+     },
+     "spot": {
+      "description": "Only inside this commercial (its id, e.g. AD-0505)",
+      "type": "string"
+     },
+     "per_spot": {
+      "description": "Max shots from one commercial (default 3)",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 20
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 30
+     },
+     "clips": {
+      "description": "true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_commercials",
+   "description": "Find whole COMMERCIALS (TV / online spots) in FrameThrower's ads library by idea, story or brief (\"two rival neighbours outdo each other at Christmas\", \"a product demo told as a heist\") and/or by facts: brand, director, agency, production company, DP, editor, award show and level, year, industry, market, tone, genre, structure, season. Without a query it lists matching spots, award winners first. Returns each spot with brand, title, year, credits, best award, logline, a still and a link to watch it.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "description": "The idea / story in plain words. Leave out to just filter.",
+      "type": "string"
+     },
+     "brand": {
+      "description": "Advertiser, e.g. \"Nike\", \"Guinness\"",
+      "type": "string"
+     },
+     "director": {
+      "type": "string"
+     },
+     "agency": {
+      "description": "Creative agency, e.g. \"Wieden+Kennedy\"",
+      "type": "string"
+     },
+     "production": {
+      "description": "Production company, e.g. \"MJZ\", \"Smuggler\"",
+      "type": "string"
+     },
+     "dp": {
+      "description": "Director of photography",
+      "type": "string"
+     },
+     "editor": {
+      "type": "string"
+     },
+     "music": {
+      "description": "Composer / track / music house",
+      "type": "string"
+     },
+     "person": {
+      "description": "Anyone credited, any role",
+      "type": "string"
+     },
+     "industry": {
+      "description": "Ad category: Auto, Beer, Spirits, Drinks, Food & QSR, Retail, Tech, Telecom, Finance & Insurance, Fashion & Luxury, Beauty & Personal care, Sport, Travel, Gaming, Health & Pharma, Media & Entertainment, Public service & NGO, Home, FMCG",
+      "type": "string"
+     },
+     "market": {
+      "description": "Country code: US, UK, FR, DE, BR, JP…",
+      "type": "string"
+     },
+     "award_show": {
+      "description": "One of: Cannes Lions, Clio Awards, D&AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, shots Awards, New York Festivals, Webby Awards, Emmy (Outstanding Commercial), IPA Effectiveness Awards, AdFest, Dubai Lynx, ADC Europe, Young Director Award",
+      "type": "string"
+     },
+     "min_award": {
+      "description": "Best award at least this level",
+      "type": "string",
+      "enum": [
+       "grand_prix",
+       "gold",
+       "silver",
+       "bronze",
+       "shortlist"
+      ]
+     },
+     "awarded": {
+      "description": "true = won or shortlisted at an award show",
+      "type": "boolean"
+     },
+     "award_year": {
+      "type": "number"
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "tone": {
+      "description": "funny, heartwarming, epic, emotional, absurd, dark, inspiring…",
+      "type": "string"
+     },
+     "genre": {
+      "description": "comedy, drama, documentary, action…",
+      "type": "string"
+     },
+     "structure": {
+      "description": "narrative, montage, vignettes, problem_solution, demo…",
+      "type": "string"
+     },
+     "format": {
+      "description": "live_action, animation_2d, animation_3d, stop_motion, cgi, mixed",
+      "type": "string"
+     },
+     "season": {
+      "description": "halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl",
+      "type": "string"
+     },
+     "celebrity": {
+      "type": "boolean"
+     },
+     "max_duration": {
+      "description": "seconds",
+      "type": "number"
+     },
+     "min_duration": {
+      "type": "number"
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevance",
+       "awards",
+       "newest",
+       "oldest"
+      ]
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 30
+     },
+     "offset": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_frames",
+   "description": "Search the FrameThrower cinematography reference library by concept, mood, color, composition, or scene. Returns reference frames with film/credits metadata, a preview image and a link to view on FrameThrower. For the full-resolution file or the precomputed depth map, call get_frame_image with the frame id.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Natural-language description, e.g. \"neon-lit rainy street at night\""
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 40
+     },
+     "enhance": {
+      "description": "Smart search, on by default: rewrites short queries (\"bear\") into the descriptive language the frames were indexed with, like the website. Set false to search the exact text.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "similar_animation_frames",
+   "description": "More ANIMATION frames (animation library only) like ones the user already has — frame ids from earlier results (\"more like #2\"), or ANY IMAGE: a generated frame on their canvas, an upload, a sketch (pass an http(s) URL or a data: URL, e.g. data:image/png;base64,… for a local file). by = look (composition, drawing and rendering — the default), colour (the palette) or content (what is in it). Same filters as search_animation_frames; other_titles: true keeps it to titles other than the seed frames'.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "frame_ids": {
+      "description": "Frame ids from earlier results (or \"slug:label\")",
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "image": {
+      "description": "An image URL or data: URL — any image, ours or not",
+      "type": "string"
+     },
+     "by": {
+      "type": "string",
+      "enum": [
+       "look",
+       "colour",
+       "content"
+      ]
+     },
+     "other_titles": {
+      "type": "boolean"
+     },
+     "title": {
+      "description": "Only inside this series / film (slug or name)",
+      "type": "string"
+     },
+     "genre": {
+      "description": "AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)",
+      "type": "string"
+     },
+     "theme": {
+      "description": "AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…",
+      "type": "string"
+     },
+     "style": {
+      "description": "The title's look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, clean lines, thick outlines, sketchy lines, painterly, watercolour, flat minimal, detailed backgrounds, film grain, realistic proportions, moe big-eyed, chibi, western cartoon, gritty mature, bishonen, soft natural light, dramatic light rays, glow and bloom, neon, high-contrast shadows",
+      "type": "string"
+     },
+     "studio": {
+      "description": "Animation studio, e.g. \"Studio Ghibli\", \"Madhouse\", \"Kyoto Animation\", \"MAPPA\"",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "movie",
+       "series"
+      ]
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "exclude_titles": {
+      "description": "Slugs to leave out (e.g. titles already used)",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "nsfw": {
+      "description": "false = leave out frames flagged as adult (included by default)",
+      "type": "boolean"
+     },
+     "per_title": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 24
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 24
+     },
+     "clips": {
+      "description": "true = also return each frame's clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.",
+      "type": "boolean"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "similar_commercial_shots",
+   "description": "More shots that look like the given shot ids (from earlier results or a shot list) — the refine loop: \"more like #2\". Takes the same shot tags and commercial filters to steer.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "shot_ids": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "shot_size": {
+      "description": "extreme_closeup, closeup, medium_closeup, medium, medium_wide, full, wide, extreme_wide, insert",
+      "type": "string"
+     },
+     "camera_angle": {
+      "description": "eye_level, low_angle, high_angle, overhead, aerial, pov, worms_eye, dutch",
+      "type": "string"
+     },
+     "setting": {
+      "description": "interior, exterior, studio_void or virtual_cg",
+      "type": "string"
+     },
+     "time_of_day": {
+      "description": "day, night, golden_hour, dusk, dawn…",
+      "type": "string"
+     },
+     "lighting": {
+      "description": "natural, high_key, low_key, silhouette, chiaroscuro",
+      "type": "string"
+     },
+     "mood": {
+      "type": "string"
+     },
+     "people": {
+      "description": "women, men, kids, teens, adults, seniors (comma-separated = all of them)",
+      "type": "string"
+     },
+     "product_visible": {
+      "type": "boolean"
+     },
+     "logo_visible": {
+      "type": "boolean"
+     },
+     "text_on_screen": {
+      "type": "boolean"
+     },
+     "black_and_white": {
+      "type": "boolean"
+     },
+     "brand": {
+      "description": "Advertiser, e.g. \"Nike\", \"Guinness\"",
+      "type": "string"
+     },
+     "industry": {
+      "description": "Ad category: Auto, Beer, Spirits, Drinks, Food & QSR, Retail, Tech, Telecom, Finance & Insurance, Fashion & Luxury, Beauty & Personal care, Sport, Travel, Gaming, Health & Pharma, Media & Entertainment, Public service & NGO, Home, FMCG",
+      "type": "string"
+     },
+     "awarded": {
+      "description": "true = won or shortlisted at an award show",
+      "type": "boolean"
+     },
+     "min_award": {
+      "description": "Best award at least this level",
+      "type": "string",
+      "enum": [
+       "grand_prix",
+       "gold",
+       "silver",
+       "bronze",
+       "shortlist"
+      ]
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "tone": {
+      "description": "funny, heartwarming, epic, emotional, absurd, dark, inspiring…",
+      "type": "string"
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 30
+     },
+     "clips": {
+      "description": "true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "shot_ids"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "similar_commercials",
+   "description": "Commercials like a given one — by STORY (similar idea, tropes and tone) or by LOOK (similar shots: light, framing, palette). Accepts the same filters as search_commercials to narrow (e.g. only award winners, only another brand).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Commercial id, e.g. AD-0505"
+     },
+     "by": {
+      "description": "default story",
+      "type": "string",
+      "enum": [
+       "story",
+       "look"
+      ]
+     },
+     "limit": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 20
+     },
+     "brand": {
+      "description": "Advertiser, e.g. \"Nike\", \"Guinness\"",
+      "type": "string"
+     },
+     "industry": {
+      "description": "Ad category: Auto, Beer, Spirits, Drinks, Food & QSR, Retail, Tech, Telecom, Finance & Insurance, Fashion & Luxury, Beauty & Personal care, Sport, Travel, Gaming, Health & Pharma, Media & Entertainment, Public service & NGO, Home, FMCG",
+      "type": "string"
+     },
+     "awarded": {
+      "description": "true = won or shortlisted at an award show",
+      "type": "boolean"
+     },
+     "min_award": {
+      "description": "Best award at least this level",
+      "type": "string",
+      "enum": [
+       "grand_prix",
+       "gold",
+       "silver",
+       "bronze",
+       "shortlist"
+      ]
+     },
+     "year_min": {
+      "type": "number"
+     },
+     "year_max": {
+      "type": "number"
+     },
+     "tone": {
+      "description": "funny, heartwarming, epic, emotional, absurd, dark, inspiring…",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

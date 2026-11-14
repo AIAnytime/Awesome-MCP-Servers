@@ -1,0 +1,102 @@
+{
+ "server": "AgentTask Atlas",
+ "checked": "2026-11-14",
+ "tools": [
+  {
+   "name": "get_entry",
+   "title": "Get one entry",
+   "description": "Full card for one catalog entry by slug (e.g. 'github-mcp-server'): verdict, install command, credentials, permissions, license, source and maintenance status.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "maxLength": 100
+     }
+    },
+    "required": [
+     "slug"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_categories",
+   "title": "List categories",
+   "description": "All dev-task categories and entry types with entry counts and page URLs.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_catalog",
+   "title": "Search the catalog",
+   "description": "Find MCP servers and Agent Skills for a dev task. Free-text query (every term must match name, vendor, verdict, install or category; common words like postgres, e2e, scraping are expanded) and optional category slug from list_categories (a dev task such as 'database' or a type such as 'agent-skill'). Empty query lists the category.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "default": "",
+      "description": "e.g. 'postgres', 'browser testing', 'sentry'",
+      "type": "string",
+      "maxLength": 200
+     },
+     "category": {
+      "description": "Category slug from list_categories",
+      "type": "string",
+      "enum": [
+       "browser-testing",
+       "database",
+       "repo-git",
+       "code-review",
+       "ci-cd",
+       "infra-deploy",
+       "observability-debug",
+       "docs-research",
+       "web-scraping",
+       "frontend-ui",
+       "payments",
+       "files-local",
+       "docs-writing",
+       "knowledge-memory",
+       "build-mcp",
+       "build-ai-apps",
+       "planning",
+       "prototype",
+       "utilities",
+       "mcp-server",
+       "agent-skill"
+      ]
+     },
+     "limit": {
+      "default": 10,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 40
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}
