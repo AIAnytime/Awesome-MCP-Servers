@@ -1,0 +1,9 @@
+{
+  "name": "zaDojo",
+  "url": "https://github.com/zaDojo/seo-geo-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "SEO and AI search visibility: free Google Search Console, Google Analytics and site audits, plus pay-as-you-go SERP, keyword research, rank tracking and AI visibility tracking (ChatGPT, Gemini, Perplexity, Google AI Overviews). OAuth or API key · [Docs](https://zadojo.com/docs/mcp)",
+  "endpoint": "https://app.zadojo.com/mcp",
+  "registry": "com.zadojo/seo-geo-mcp"
+}
