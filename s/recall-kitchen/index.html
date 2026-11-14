@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recall Kitchen MCP server: status, tools and setup</title>
+<meta name="description" content="Recall Kitchen MCP server. Answered an MCP handshake without credentials and listed 20 tools. Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword,...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/recall-kitchen/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="Recall Kitchen MCP server: status, tools and setup">
+<meta property="og:description" content="Recall Kitchen MCP server. Answered an MCP handshake without credentials and listed 20 tools. Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword,...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/recall-kitchen/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Recall Kitchen MCP server: status, tools and setup">
+<meta name="twitter:description" content="Recall Kitchen MCP server. Answered an MCP handshake without credentials and listed 20 tools. Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword,...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "Recall Kitchen", "description": "Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword, UPC, product name or vehicle, and fetch a full notice. Free API key or anonymous x402 pay-per-call. Endpoint: https://app.recallkitchen.com/mcp · Docs", "url": "https://mcp.aianytime.net/s/recall-kitchen/", "sameAs": "https://github.com/Recall-Kitchen/rk-mcp", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Search & discovery)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "unknown", "featureList": ["add_inventory_product", "add_watch_pattern", "check_tracked_products", "create_api_key", "get_product_recall", "give_feedback", "list_api_keys", "list_inventory", "list_recall_notifications", "list_watch_patterns", "lookup_product", "mark_notification_read", "remove_inventory_product", "remove_watch_pattern", "revoke_api_key", "search_product_recalls", "search_product_recalls_by_upc", "search_product_recalls_from_image", "search_recalls_by_identifier", "signup"], "dateModified": "2026-11-14T10:29:04Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Search & discovery", "item": "https://mcp.aianytime.net/c/search/"}, {"@type": "ListItem", "position": 3, "name": "Recall Kitchen", "item": "https://mcp.aianytime.net/s/recall-kitchen/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/search/">Search &amp; discovery</a></p>
+<h1>Recall Kitchen</h1>
+<p class="lede">Search government product recall notices from CPSC, FDA, USDA, NHTSA and Health Canada by keyword, UPC, product name or vehicle, and fetch a full notice. Free API key or anonymous x402 pay-per-call. Endpoint: <code>https://app.recallkitchen.com/mcp</code> · <a href="https://recallkitchen.com/docs/#mcp" rel="nofollow noopener">Docs</a></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 20 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/search/">Search &amp; discovery</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://github.com/Recall-Kitchen/rk-mcp" rel="nofollow noopener">https://github.com/Recall-Kitchen/rk-mcp</a></dd><dt>Endpoint</dt><dd><code>https://app.recallkitchen.com/mcp</code></dd><dt>Reports itself as</dt><dd>recall-kitchen-mcp unknown</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>20</dd><dt>Context cost</dt><dd>about 3,703 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>2026-11-11</dd><dt>Handshake time</dt><dd>154 ms</dd><dt>Repository</dt><dd>2 stars · last push 2026-10-27 · Apache-2.0</dd><dt>Last checked</dt><dd>2026-11-14 10:29:04 UTC</dd><dt>Listed since</dt><dd>2026-11-03</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 154 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>20 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>logging, prompts, resources, tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-14T10:29:04Z">2026-11-14 10:29:04 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">100% of the last 12 daily checks reachable; median response 296 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http recall-kitchen https://app.recallkitchen.com/mcp</code><button class="copy" data-copy="claude mcp add --transport http recall-kitchen https://app.recallkitchen.com/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://app.recallkitchen.com/mcp</code><button class="copy" data-copy="https://app.recallkitchen.com/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://app.recallkitchen.com/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://app.recallkitchen.com/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=recall-kitchen&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9hcHAucmVjYWxsa2l0Y2hlbi5jb20vbWNwIn0%3D">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22recall-kitchen%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//app.recallkitchen.com/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;recall-kitchen&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;recall-kitchen&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;serverUrl&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;serverUrl&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://app.recallkitchen.com/mcp</code><button class="copy" data-copy="https://app.recallkitchen.com/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;recall-kitchen&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://app.recallkitchen.com/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">20</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-14. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/recall-kitchen.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="add_inventory_product add a product to this api key&#x27;s inventory. optional category is food, beverage, baby, household, electronics, vehicle, medical_device, drug, cosmetics, pet, or other. requires a verified account (sign in at https://app.recallkitchen.com with the signup email). unverified signup keys cannot add inventory."><summary><code>add_inventory_product</code><span class="hint write">can modify</span><span>Add a product to this API key&#x27;s inventory. Optional category is food, beverage, baby, household, electronics, …</span></summary><p class="desc">Add a product to this API key&#x27;s inventory. Optional category is food, beverage, baby, household, electronics, vehicle, medical_device, drug, cosmetics, pet, or other. Requires a verified account (sign in at https://app.recallkitchen.com with the signup email). Unverified signup keys cannot add inventory.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>product name</td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>optional brand</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>optional product category: food, beverage, baby, household, electronics, vehicle, medical_device, drug, cosmetics, pet, or other One of: food, beverage, baby, household, electronics, vehicle, medical_device, drug …</td></tr><tr><td><code>sku</code></td><td>string</td><td>optional</td><td>optional SKU or UPC</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;add_inventory_product&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="add_watch_pattern add a recall watch pattern for this api key. same websearch syntax as search_product_recalls (and, or, -exclude, quoted phrases). new matches show up in recall kitchen. requires an api key."><summary><code>add_watch_pattern</code><span class="hint write">can modify</span><span>Add a recall watch pattern for this API key. Same websearch syntax as search_product_recalls (AND, OR, …</span></summary><p class="desc">Add a recall watch pattern for this API key. Same websearch syntax as search_product_recalls (AND, OR, -exclude, quoted phrases). New matches show up in Recall Kitchen. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pattern</code></td><td>string</td><td>required</td><td>websearch pattern: unquoted words are AND, OR is or, -term excludes, quoted phrases match as a unit</td></tr><tr><td><code>weight</code></td><td>integer</td><td>optional</td><td>optional weight 0-8, default 4</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;add_watch_pattern&quot;,
+    &quot;arguments&quot;: {
+      &quot;pattern&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="check_tracked_products check this api key&#x27;s watch patterns and inventory against current indexed recalls (including historical notices). does not create notifications. generic patterns such as food or hazard only match in titles. requires an api key."><summary><code>check_tracked_products</code><span class="hint read">read-only</span><span>Check this API key&#x27;s watch patterns and inventory against current indexed recalls (including historical …</span></summary><p class="desc">Check this API key&#x27;s watch patterns and inventory against current indexed recalls (including historical notices). Does not create notifications. Generic patterns such as food or hazard only match in titles. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>maximum matches to return</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of matches to skip</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_tracked_products&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="create_api_key create an additional api key for this account. requires an existing api key. unverified accounts may have only one key; verified accounts may have three. usage is counted per account, not per key."><summary><code>create_api_key</code><span class="hint write">can modify</span><span>Create an additional API key for this account. Requires an existing API key. Unverified accounts may have …</span></summary><p class="desc">Create an additional API key for this account. Requires an existing API key. Unverified accounts may have only one key; verified accounts may have three. Usage is counted per account, not per key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>optional</td><td>optional key name</td></tr><tr><td><code>kind</code></td><td>string</td><td>optional</td><td>optional kind: user or agent, default agent One of: user, agent</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_api_key&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_product_recall get a recall by id, including extracted lots, upcs, model numbers, locations, contact info, and product photo urls"><summary><code>get_product_recall</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Get a recall by id, including extracted lots, UPCs, model numbers, locations, contact info, and product photo …</span></summary><p class="desc">Get a recall by id, including extracted lots, UPCs, model numbers, locations, contact info, and product photo URLs</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>recall_id</code></td><td>string</td><td>optional</td><td>recall id returned by search tools</td></tr><tr><td><code>id</code></td><td>string</td><td>optional</td><td>alias for recall_id</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_product_recall&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="give_feedback report a bug, missing capability, bad search result, or confusing schema to the recall kitchen team. use this instead of silently working around a problem. message is required and should include the mcp tool names you called, the actions you took, the query or identifiers, and any recall_id. do not send api keys, photos, or pii. optional category: bad_result, tool_error, missing_capability, confus"><summary><code>give_feedback</code><span class="hint write">can modify</span><span>Report a bug, missing capability, bad search result, or confusing schema to the Recall Kitchen team. Use this …</span></summary><p class="desc">Report a bug, missing capability, bad search result, or confusing schema to the Recall Kitchen team. Use this instead of silently working around a problem. message is required and should include the MCP tool names you called, the actions you took, the query or identifiers, and any recall_id. Do not send API keys, photos, or PII. Optional category: bad_result, tool_error, missing_capability, confusing_schema, docs, other. Optional severity: blocked, workaround, annoyance. No API key or x402 required. Does not count against search quotas.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>message</code></td><td>string</td><td>required</td><td>describe the problem. Include the MCP tool names you called, the actions you took, the query or identifiers, and any recall_id. Do not send API keys, photos, or PII.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>optional: bad_result, tool_error, missing_capability, confusing_schema, docs, or other One of: bad_result, tool_error, missing_capability, confusing_schema, docs, other</td></tr><tr><td><code>severity</code></td><td>string</td><td>optional</td><td>optional: blocked, workaround, or annoyance One of: blocked, workaround, annoyance</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;give_feedback&quot;,
+    &quot;arguments&quot;: {
+      &quot;message&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_api_keys list this account&#x27;s api keys (id, name, prefix, created). secrets are not shown. requires an api key."><summary><code>list_api_keys</code><span class="hint read">read-only</span><span>List this account&#x27;s API keys (id, name, prefix, created). Secrets are not shown. Requires an API key.</span></summary><p class="desc">List this account&#x27;s API keys (id, name, prefix, created). Secrets are not shown. Requires an API key.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_api_keys&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_inventory list this api key&#x27;s tracked inventory products. requires an api key."><summary><code>list_inventory</code><span class="hint read">read-only</span><span>List this API key&#x27;s tracked inventory products. Requires an API key.</span></summary><p class="desc">List this API key&#x27;s tracked inventory products. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>optional</td><td>optional inventory search</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of products to return</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of products to skip</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_inventory&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_recall_notifications list recall notifications for this api key. unread defaults to true (unread only); pass false for all. new matches show up in recall kitchen. empty for new accounts until a new matching recall is published; not a backfill of check_tracked_products. message is a short plain-text summary. requires an api key."><summary><code>list_recall_notifications</code><span class="hint read">read-only</span><span>List recall notifications for this API key. unread defaults to true (unread only); pass false for all. New …</span></summary><p class="desc">List recall notifications for this API key. unread defaults to true (unread only); pass false for all. New matches show up in Recall Kitchen. Empty for new accounts until a new matching recall is published; not a backfill of check_tracked_products. message is a short plain-text summary. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>unread</code></td><td>null | boolean</td><td>optional</td><td>if true, only unread notifications; if false, include read. Default: true (unread only)</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of notifications to return</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of notifications to skip</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_recall_notifications&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_watch_patterns list this api key&#x27;s recall watch patterns. requires an api key."><summary><code>list_watch_patterns</code><span class="hint read">read-only</span><span>List this API key&#x27;s recall watch patterns. Requires an API key.</span></summary><p class="desc">List this API key&#x27;s recall watch patterns. Requires an API key.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_watch_patterns&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="lookup_product look up a product by upc/ean. returns found=false when unknown. does not search recalls."><summary><code>lookup_product</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Look up a product by UPC/EAN. Returns found=false when unknown. Does not search recalls.</span></summary><p class="desc">Look up a product by UPC/EAN. Returns found=false when unknown. Does not search recalls.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>upc</code></td><td>string</td><td>required</td><td>UPC or EAN barcode digits</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;lookup_product&quot;,
+    &quot;arguments&quot;: {
+      &quot;upc&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="mark_notification_read mark a recall notification as read (default) or unread. requires an api key."><summary><code>mark_notification_read</code><span class="hint write">can modify</span><span>Mark a recall notification as read (default) or unread. Requires an API key.</span></summary><p class="desc">Mark a recall notification as read (default) or unread. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>recall_id</code></td><td>string</td><td>required</td><td>recall id from list_recall_notifications</td></tr><tr><td><code>read</code></td><td>null | boolean</td><td>optional</td><td>if true, mark read; if false, mark unread. Default true</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;mark_notification_read&quot;,
+    &quot;arguments&quot;: {
+      &quot;recall_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="remove_inventory_product remove a product from this api key&#x27;s inventory by id. requires an api key."><summary><code>remove_inventory_product</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Remove a product from this API key&#x27;s inventory by id. Requires an API key.</span></summary><p class="desc">Remove a product from this API key&#x27;s inventory by id. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>integer</td><td>required</td><td>inventory product id from list_inventory</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;remove_inventory_product&quot;,
+    &quot;arguments&quot;: {
+      &quot;id&quot;: 0
+    }
+  }
+}</code></pre></details><details class="tool" data-text="remove_watch_pattern remove a recall watch pattern for this api key. requires an api key."><summary><code>remove_watch_pattern</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Remove a recall watch pattern for this API key. Requires an API key.</span></summary><p class="desc">Remove a recall watch pattern for this API key. Requires an API key.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pattern</code></td><td>string</td><td>required</td><td>watch pattern to remove</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;remove_watch_pattern&quot;,
+    &quot;arguments&quot;: {
+      &quot;pattern&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="revoke_api_key revoke an api key by key_id from list_api_keys. requires an api key. revoking the current key will fail subsequent calls."><summary><code>revoke_api_key</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Revoke an API key by key_id from list_api_keys. Requires an API key. Revoking the current key will fail …</span></summary><p class="desc">Revoke an API key by key_id from list_api_keys. Requires an API key. Revoking the current key will fail subsequent calls.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>key_id</code></td><td>string</td><td>required</td><td>key_id from list_api_keys</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;revoke_api_key&quot;,
+    &quot;arguments&quot;: {
+      &quot;key_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_product_recalls search product recalls by query. query uses websearch syntax: unquoted words are and, or is or, -term excludes, quoted phrases match as a unit (example: generac generator -portable). optional filters: source (cpsc, fdafoodsafety, fdamedwatch, usda, nhtsa, canada, openfda), since/until (yyyy-mm-dd), location (country, region, or place, anded with the query), offset, limit. descriptions are truncate"><summary><code>search_product_recalls</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Search product recalls by query. Query uses websearch syntax: unquoted words are AND, OR is or, -term …</span></summary><p class="desc">Search product recalls by query. Query uses websearch syntax: unquoted words are AND, OR is or, -term excludes, quoted phrases match as a unit (example: Generac Generator -Portable). Optional filters: source (cpsc, fdafoodsafety, FDAMedWatch, usda, nhtsa, canada, openfda), since/until (YYYY-MM-DD), location (country, region, or place, ANDed with the query), offset, limit. Descriptions are truncated and extracted products are capped; use get_product_recall for the full text.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>optional</td><td>websearch query: unquoted words are AND, OR is or, -term excludes, quoted phrases match as a unit. Example: Generac Generator -Portable</td></tr><tr><td><code>source</code></td><td>string</td><td>optional</td><td>optional source filter: cpsc, fdafoodsafety, FDAMedWatch, usda, nhtsa, canada, or openfda. Aliases: FDA and food map to fdafoodsafety; medwatch maps to FDAMedWatch; vehicle, vin, and car map to nhtsa; healthcanada, cfia, and hc-sc map to canada; enforcement, … One of: cpsc, fdafoodsafety, FDAMedWatch, usda, nhtsa, canada, openfda</td></tr><tr><td><code>sources</code></td><td>string[]</td><td>optional</td><td>optional sources to include (OR). Same values as source</td></tr><tr><td><code>since</code></td><td>string</td><td>optional</td><td>optional published-on start date YYYY-MM-DD</td></tr><tr><td><code>until</code></td><td>string</td><td>optional</td><td>optional published-on end date YYYY-MM-DD</td></tr><tr><td><code>years</code></td><td>integer</td><td>optional</td><td>optional published window in years (1-50). Ignored when since is set</td></tr><tr><td><code>location</code></td><td>string</td><td>optional</td><td>optional country, region, or place; ANDed with the query. USA, Canada, Mexico, EU, and Europe match places in that region. CA is California, not Canada.</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of recalls to skip</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of recalls to return, 1-100, default 3</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_product_recalls&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="search_product_recalls_by_upc search recalls by upc/ean or a barcode image url/data uri/mcp image content. matches extracted recall upcs first. returns found=false when the upc is unknown."><summary><code>search_product_recalls_by_upc</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Search recalls by UPC/EAN or a barcode image URL/data URI/MCP image content. Matches extracted recall UPCs …</span></summary><p class="desc">Search recalls by UPC/EAN or a barcode image URL/data URI/MCP image content. Matches extracted recall UPCs first. Returns found=false when the UPC is unknown.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>upc</code></td><td>string</td><td>optional</td><td>UPC or EAN barcode digits</td></tr><tr><td><code>barcode</code></td><td>string</td><td>optional</td><td>alias for upc</td></tr><tr><td><code>image_url</code></td><td>string</td><td>optional</td><td>optional HTTPS URL or data:image/...;base64 URI of a barcode image</td></tr><tr><td><code>url</code></td><td>string</td><td>optional</td><td>alias for image_url</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of recalls to return, 1-100, default 3</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of recalls to skip</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_product_recalls_by_upc&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="search_product_recalls_from_image photo (beta): identify products in a public https image url, data:image/...;base64 uri, or mcp image content part. local files are not supported. each product includes match (upc, model, text, category) and confidence. category matches omit recalls unless include_category_matches=true. requires an api key or x402; not included in the free anonymous per-ip quota."><summary><code>search_product_recalls_from_image</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Photo (beta): identify products in a public HTTPS image URL, data:image/...;base64 URI, or MCP image content …</span></summary><p class="desc">Photo (beta): identify products in a public HTTPS image URL, data:image/...;base64 URI, or MCP image content part. Local files are not supported. Each product includes match (upc, model, text, category) and confidence. Category matches omit recalls unless include_category_matches=true. Requires an API key or x402; not included in the free anonymous per-IP quota.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>image_url</code></td><td>string</td><td>optional</td><td>photo (beta). HTTPS URL or data:image/...;base64 URI of a photo containing products. Local file paths are not supported.</td></tr><tr><td><code>url</code></td><td>string</td><td>optional</td><td>alias for image_url</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of recalls to return per product, 1-100, default 3</td></tr><tr><td><code>include_category_matches</code></td><td>boolean</td><td>optional</td><td>if true, attach keyword recalls for generic items such as cups; default false</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_product_recalls_from_image&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="search_recalls_by_identifier search recalls by extracted upc, lot code, model number, product name, or vin. multiple identifiers are and-matched on the same product. vin lookup lists nhtsa campaigns for the decoded year and make; confirm your vehicle on nhtsa.gov/recalls. lot_code: label prefixes (bb:, lot#, best by, exp, etc.) are ignored. extracted lots match exactly or as a prefix of at least 4 characters, after normalizin"><summary><code>search_recalls_by_identifier</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Search recalls by extracted UPC, lot code, model number, product name, or VIN. Multiple identifiers are …</span></summary><p class="desc">Search recalls by extracted UPC, lot code, model number, product name, or VIN. Multiple identifiers are AND-matched on the same product. VIN lookup lists NHTSA campaigns for the decoded year and make; confirm your vehicle on nhtsa.gov/recalls. lot_code: Label prefixes (BB:, Lot#, Best By, Exp, etc.) are ignored. Extracted lots match exactly or as a prefix of at least 4 characters, after normalizing spaces, case, and punctuation. If lots were not extracted, notice title and description search needs at least 4 characters — verify against the notice. product_name falls back to the same full-text search as search_product_recalls when no exact extracted name matches, and returns a hint if still empty.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>upc</code></td><td>string</td><td>optional</td><td>product UPC or EAN as stored on the recall</td></tr><tr><td><code>lot_code</code></td><td>string</td><td>optional</td><td>lot or batch code. Label prefixes (BB:, Lot#, Best By, Exp, etc.) are ignored. Extracted lots match exactly or as a prefix of at least 4 characters, after normalizing spaces, case, and punctuation. Lot-only lookup uses the extracted identifier index and does …</td></tr><tr><td><code>model_number</code></td><td>string</td><td>optional</td><td>model number as stored on the recall</td></tr><tr><td><code>product_name</code></td><td>string</td><td>optional</td><td>extracted product name (exact match; if none, falls back to the same full-text search as search_product_recalls)</td></tr><tr><td><code>vin</code></td><td>string</td><td>optional</td><td>17-character VIN. Lookup lists NHTSA campaigns for the decoded year and make; confirm your vehicle on nhtsa.gov/recalls.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>number of recalls to return</td></tr><tr><td><code>offset</code></td><td>integer</td><td>optional</td><td>number of recalls to skip</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_recalls_by_identifier&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="signup create a recall kitchen account and api key from an email. no api key or x402 payment required. set accept_terms true only after you ask the person and they confirm they are 13 or older and accept the terms (https://recallkitchen.com/terms), privacy policy (https://recallkitchen.com/privacy) and api terms (https://recallkitchen.com/api-terms); never set it automatically or on the person&#x27;s behalf. "><summary><code>signup</code><span class="hint write">can modify</span><span>Create a Recall Kitchen account and API key from an email. No API key or x402 payment required. Set …</span></summary><p class="desc">Create a Recall Kitchen account and API key from an email. No API key or x402 payment required. Set accept_terms true only after you ask the person and they confirm they are 13 or older and accept the Terms (https://recallkitchen.com/terms), Privacy Policy (https://recallkitchen.com/privacy) and API Terms (https://recallkitchen.com/api-terms); never set it automatically or on the person&#x27;s behalf. The key is returned once. Unverified accounts have lower rate limits (60 tool calls/hour, 400/day, one key) and can add a few watch patterns. Sign in at https://app.recallkitchen.com with the same email to verify, raise limits, and add inventory. Does not re-issue a key if the email already has an account.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>email</code></td><td>string</td><td>required</td><td>email address for the new account</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>optional display name</td></tr><tr><td><code>accept_terms</code></td><td>boolean</td><td>required</td><td>Set true only after you ask the person and they confirm they are 13 or older and accept the Terms (https://recallkitchen.com/terms), Privacy Policy (https://recallkitchen.com/privacy) and API Terms (https://recallkitchen.com/api-terms). Never set this …</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;signup&quot;,
+    &quot;arguments&quot;: {
+      &quot;email&quot;: &quot;...&quot;,
+      &quot;accept_terms&quot;: false
+    }
+  }
+}</code></pre></details></div><h3>Resources <span class="count">2</span></h3><ul class="plain"><li><code>recall-sources</code> Government recall sources currently indexed.</li><li><code>tool-guide</code> Which MCP tool to use for keyword, UPC, lot, image, and account tasks.</li></ul><h3>Prompts <span class="count">4</span></h3><ul class="plain"><li><code>check_product</code> Search recalls for a product name or brand, then fetch the full notice if there is a hit.</li><li><code>check_upc</code> Look up a UPC and search extracted recall UPCs.</li><li><code>list_vin_campaigns</code> VIN lookup lists NHTSA campaigns for the decoded year and make; confirm your vehicle on nhtsa.gov/recalls.</li><li><code>scan_image</code> Photo (beta): identify products in a photo and search matching recalls.</li></ul>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/recall-kitchen.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/recall-kitchen.svg)](https://mcp.aianytime.net/s/recall-kitchen/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/recall-kitchen.svg)](https://mcp.aianytime.net/s/recall-kitchen/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/recall-kitchen.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Search &amp; discovery</h2>
+<ul class="chips"><li><a href="../rentreboot/">RentReboot</a></li><li><a href="../roles-em-sp/">Rolês em SP</a></li><li><a href="../sitepatent/">SitePatent</a></li><li><a href="../srezai/">srezai</a></li><li><a href="../statorigin/">StatOrigin</a></li><li><a href="../statsnet/">Statsnet</a></li><li><a href="../../c/search/">All of Search &amp; discovery</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>

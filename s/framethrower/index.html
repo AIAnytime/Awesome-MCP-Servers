@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FrameThrower MCP server: status, tools and setup</title>
+<meta name="description" content="FrameThrower MCP server. Answered an MCP handshake without credentials and listed 17 tools. Search film-reference frames by natural language or cinematography attributes, find similar frames, and...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/framethrower/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="FrameThrower MCP server: status, tools and setup">
+<meta property="og:description" content="FrameThrower MCP server. Answered an MCP handshake without credentials and listed 17 tools. Search film-reference frames by natural language or cinematography attributes, find similar frames, and...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/framethrower/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FrameThrower MCP server: status, tools and setup">
+<meta name="twitter:description" content="FrameThrower MCP server. Answered an MCP handshake without credentials and listed 17 tools. Search film-reference frames by natural language or cinematography attributes, find similar frames, and...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "FrameThrower", "description": "Search film-reference frames by natural language or cinematography attributes, find similar frames, and retrieve frame metadata through four read-only tools. Hosted service with OAuth 2.1; $2 signup credits, then paid usage.", "url": "https://mcp.aianytime.net/s/framethrower/", "sameAs": "https://github.com/framethrower-ai/framethrower-mcp", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Media & generation)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "1.2.0", "featureList": ["commercials_profile", "commercials_stats", "find_animation_titles", "find_by_craft", "find_similar", "get_animation_sequence", "get_animation_title", "get_commercial", "get_frame_details", "get_frame_image", "search_animation_frames", "search_commercial_shots", "search_commercials", "search_frames", "similar_animation_frames", "similar_commercial_shots", "similar_commercials"], "dateModified": "2026-11-14T10:28:57Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Media & generation", "item": "https://mcp.aianytime.net/c/media/"}, {"@type": "ListItem", "position": 3, "name": "FrameThrower", "item": "https://mcp.aianytime.net/s/framethrower/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/media/">Media &amp; generation</a></p>
+<h1>FrameThrower</h1>
+<p class="lede">Search film-reference frames by natural language or cinematography attributes, find similar frames, and retrieve frame metadata through four read-only tools. Hosted service with OAuth 2.1; $2 signup credits, then paid usage.</p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 17 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/media/">Media &amp; generation</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://github.com/framethrower-ai/framethrower-mcp" rel="nofollow noopener">https://github.com/framethrower-ai/framethrower-mcp</a></dd><dt>Endpoint</dt><dd><code>https://framethrower.ai/api/mcp</code></dd><dt>Reports itself as</dt><dd>FrameThrower 1.2.0</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>17</dd><dt>Context cost</dt><dd>about 7,318 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>2026-11-12</dd><dt>Handshake time</dt><dd>537 ms</dd><dt>Repository</dt><dd>3 stars · last push 2026-08-12 · MIT</dd><dt>Last checked</dt><dd>2026-11-14 10:28:57 UTC</dd><dt>Listed since</dt><dd>2026-10-25</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 537 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>17 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-14T10:28:57Z">2026-11-14 10:28:57 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">100% of the last 16 daily checks reachable; median response 260 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http framethrower https://framethrower.ai/api/mcp</code><button class="copy" data-copy="claude mcp add --transport http framethrower https://framethrower.ai/api/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://framethrower.ai/api/mcp</code><button class="copy" data-copy="https://framethrower.ai/api/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://framethrower.ai/api/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://framethrower.ai/api/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=framethrower&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9mcmFtZXRocm93ZXIuYWkvYXBpL21jcCJ9">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22framethrower%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//framethrower.ai/api/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;framethrower&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;framethrower&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;serverUrl&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;serverUrl&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://framethrower.ai/api/mcp</code><button class="copy" data-copy="https://framethrower.ai/api/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;framethrower&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://framethrower.ai/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">17</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-14. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/framethrower.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="commercials_profile the track record of a brand, director, agency, production company, dp, editor or composer in framethrower&#x27;s ads library: how many spots, which years, who they work with (clients, agencies, directors, production companies), awards by show, typical tones and genres, their best and most recent work — and, for directors / agencies / production companies with a public page, the researched profile (desc"><summary><code>commercials_profile</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>The track record of a brand, director, agency, production company, DP, editor or composer in FrameThrower&#x27;s …</span></summary><p class="desc">The track record of a brand, director, agency, production company, DP, editor or composer in FrameThrower&#x27;s ads library: how many spots, which years, who they work with (clients, agencies, directors, production companies), awards by show, typical tones and genres, their best and most recent work — and, for directors / agencies / production companies with a public page, the researched profile (description, founded, HQ, website).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>kind</code></td><td>string</td><td>required</td><td>brand, director, agency, production, dp, editor, edit_house, post, music, sound or vfx One of: brand, director, agency, production, dp, editor, edit_house, post …</td></tr><tr><td><code>name</code></td><td>string</td><td>required</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;commercials_profile&quot;,
+    &quot;arguments&quot;: {
+      &quot;kind&quot;: &quot;brand&quot;,
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="commercials_stats count and rank the ads library: how many commercials match a filter, broken down by any of brand, director, agency, production, dp, editor, music, industry, market, year, genre, structure, format, tone, trope, award_show, season. e.g. &quot;which agencies won the most cannes lions for car ads since 2015&quot; = fields [agency], award_show cannes lions, industry auto, year_min 2015."><summary><code>commercials_stats</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Count and rank the ads library: how many commercials match a filter, broken down by any of brand, director, …</span></summary><p class="desc">Count and rank the ads library: how many commercials match a filter, broken down by any of brand, director, agency, production, dp, editor, music, industry, market, year, genre, structure, format, tone, trope, award_show, season. E.g. &quot;which agencies won the most Cannes Lions for car ads since 2015&quot; = fields [agency], award_show Cannes Lions, industry Auto, year_min 2015.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>fields</code></td><td>string[]</td><td>required</td><td></td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>Advertiser, e.g. &quot;Nike&quot;, &quot;Guinness&quot;</td></tr><tr><td><code>director</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>agency</code></td><td>string</td><td>optional</td><td>Creative agency, e.g. &quot;Wieden+Kennedy&quot;</td></tr><tr><td><code>production</code></td><td>string</td><td>optional</td><td>Production company, e.g. &quot;MJZ&quot;, &quot;Smuggler&quot;</td></tr><tr><td><code>dp</code></td><td>string</td><td>optional</td><td>Director of photography</td></tr><tr><td><code>editor</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>music</code></td><td>string</td><td>optional</td><td>Composer / track / music house</td></tr><tr><td><code>person</code></td><td>string</td><td>optional</td><td>Anyone credited, any role</td></tr><tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Ad category: Auto, Beer, Spirits, Drinks, Food &amp; QSR, Retail, Tech, Telecom, Finance &amp; Insurance, Fashion &amp; Luxury, Beauty &amp; Personal care, Sport, Travel, Gaming, Health &amp; Pharma, Media &amp; Entertainment, Public service &amp; NGO, Home, FMCG</td></tr><tr><td><code>market</code></td><td>string</td><td>optional</td><td>Country code: US, UK, FR, DE, BR, JP…</td></tr><tr><td><code>award_show</code></td><td>string</td><td>optional</td><td>One of: Cannes Lions, Clio Awards, D&amp;AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, …</td></tr><tr><td><code>min_award</code></td><td>string</td><td>optional</td><td>Best award at least this level One of: grand_prix, gold, silver, bronze, shortlist</td></tr><tr><td><code>awarded</code></td><td>boolean</td><td>optional</td><td>true = won or shortlisted at an award show</td></tr><tr><td><code>award_year</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>tone</code></td><td>string</td><td>optional</td><td>funny, heartwarming, epic, emotional, absurd, dark, inspiring…</td></tr><tr><td><code>genre</code></td><td>string</td><td>optional</td><td>comedy, drama, documentary, action…</td></tr><tr><td><code>structure</code></td><td>string</td><td>optional</td><td>narrative, montage, vignettes, problem_solution, demo…</td></tr><tr><td><code>format</code></td><td>string</td><td>optional</td><td>live_action, animation_2d, animation_3d, stop_motion, cgi, mixed</td></tr><tr><td><code>season</code></td><td>string</td><td>optional</td><td>halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl</td></tr><tr><td><code>celebrity</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>max_duration</code></td><td>number</td><td>optional</td><td>seconds</td></tr><tr><td><code>min_duration</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;commercials_stats&quot;,
+    &quot;arguments&quot;: {
+      &quot;fields&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="find_animation_titles find animated series and films (animation library only — mostly anime, plus western animation) that fit what the user is making — by a story brief in plain words (&quot;a quiet coming-of-age story about two sisters in a seaside town, bittersweet, summer&quot;), by a title it should be like (like: &quot;akira&quot;), by a look (an image or frame ids — titles whose frames look like it), and/or by genre, theme, style, s"><summary><code>find_animation_titles</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find animated SERIES and FILMS (animation library only — mostly anime, plus Western animation) that fit what …</span></summary><p class="desc">Find animated SERIES and FILMS (animation library only — mostly anime, plus Western animation) that fit what the user is making — by a story brief in plain words (&quot;a quiet coming-of-age story about two sisters in a seaside town, bittersweet, summer&quot;), by a title it should be like (like: &quot;Akira&quot;), by a LOOK (an image or frame ids — titles whose frames look like it), and/or by genre, theme, style, studio, movie/series and year. Signals combine. Returns each title with studio, director, genres, themes, its look, a synopsis, a poster, and for a look search the frames that matched.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>brief</code></td><td>string</td><td>optional</td><td>The story, premise, mood or world in plain words</td></tr><tr><td><code>like</code></td><td>string</td><td>optional</td><td>A title (name or slug) the results should be like in story</td></tr><tr><td><code>image</code></td><td>string</td><td>optional</td><td>An image URL or data: URL — titles that look like it</td></tr><tr><td><code>frame_ids</code></td><td>string[]</td><td>optional</td><td></td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td>Only inside this series / film (slug or name)</td></tr><tr><td><code>genre</code></td><td>string</td><td>optional</td><td>AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)</td></tr><tr><td><code>theme</code></td><td>string</td><td>optional</td><td>AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…</td></tr><tr><td><code>style</code></td><td>string</td><td>optional</td><td>The title&#x27;s look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, …</td></tr><tr><td><code>studio</code></td><td>string</td><td>optional</td><td>Animation studio, e.g. &quot;Studio Ghibli&quot;, &quot;Madhouse&quot;, &quot;Kyoto Animation&quot;, &quot;MAPPA&quot;</td></tr><tr><td><code>kind</code></td><td>string</td><td>optional</td><td>One of: movie, series</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>exclude_titles</code></td><td>string[]</td><td>optional</td><td>Slugs to leave out (e.g. titles already used)</td></tr><tr><td><code>nsfw</code></td><td>boolean</td><td>optional</td><td>false = leave out frames flagged as adult (included by default)</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td>default 8</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;find_animation_titles&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="find_by_craft find frames by specific cinematography craft attributes — lens character, shot size, visual style, setting, time of day, director, or year range. all optional; combine to narrow. use this to refine a search precisely."><summary><code>find_by_craft</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find frames by specific cinematography craft attributes — lens character, shot size, visual style, setting, …</span></summary><p class="desc">Find frames by specific cinematography craft attributes — lens character, shot size, visual style, setting, time of day, director, or year range. All optional; combine to narrow. Use this to refine a search precisely.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>lens</code></td><td>string</td><td>optional</td><td>e.g. &quot;anamorphic&quot;, &quot;spherical&quot;, &quot;vintage_soft&quot;</td></tr><tr><td><code>shot_size</code></td><td>string</td><td>optional</td><td>e.g. &quot;closeup&quot;, &quot;wide&quot;, &quot;medium&quot;</td></tr><tr><td><code>visual_style</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>setting</code></td><td>string</td><td>optional</td><td>&quot;interior&quot; or &quot;exterior&quot;</td></tr><tr><td><code>time_of_day</code></td><td>string</td><td>optional</td><td>e.g. &quot;night&quot;, &quot;day&quot;</td></tr><tr><td><code>director</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;find_by_craft&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="find_similar find frames visually/semantically similar to a given frame id (from a prior result). use this to pull more references like one the user shortlisted."><summary><code>find_similar</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find frames visually/semantically similar to a given frame id (from a prior result). Use this to pull more …</span></summary><p class="desc">Find frames visually/semantically similar to a given frame id (from a prior result). Use this to pull more references like one the user shortlisted.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>frameId</code></td><td>string</td><td>required</td><td></td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;find_similar&quot;,
+    &quot;arguments&quot;: {
+      &quot;frameId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_animation_sequence a frame in its sequence: the shots just before and after it in the same episode / film, in order, each with its still and caption — to see how a moment is built, or to lay a beat out across several canvas panels. with clips: true, each shot&#x27;s clip plus the continuous &quot;run&quot; video that covers them (run_url, with from/to seconds)."><summary><code>get_animation_sequence</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>A frame in its sequence: the shots just before and after it in the same episode / film, in order, each with …</span></summary><p class="desc">A frame in its sequence: the shots just before and after it in the same episode / film, in order, each with its still and caption — to see how a moment is built, or to lay a beat out across several canvas panels. With clips: true, each shot&#x27;s clip plus the continuous &quot;run&quot; video that covers them (run_url, with from/to seconds).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>frame_id</code></td><td>string</td><td>required</td><td>A frame id from earlier results (or &quot;slug:label&quot;)</td></tr><tr><td><code>before</code></td><td>number</td><td>optional</td><td>default 2</td></tr><tr><td><code>after</code></td><td>number</td><td>optional</td><td>default 2</td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return each frame&#x27;s clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_animation_sequence&quot;,
+    &quot;arguments&quot;: {
+      &quot;frame_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_animation_title one anime series or film in depth, by slug or name: synopsis, studio and key credits, main characters, genres, themes, its look, the trailer, how many shots are indexed, titles with a similar look and a similar story, and sample frames spread across it (frames: 0–24, default 6)."><summary><code>get_animation_title</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>One anime series or film in depth, by slug or name: synopsis, studio and key credits, main characters, …</span></summary><p class="desc">One anime series or film in depth, by slug or name: synopsis, studio and key credits, main characters, genres, themes, its look, the trailer, how many shots are indexed, titles with a similar look and a similar story, and sample frames spread across it (frames: 0–24, default 6).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>title</code></td><td>string</td><td>required</td><td>Slug or name, e.g. &quot;akira-1988&quot; or &quot;Your Name&quot;</td></tr><tr><td><code>frames</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return each frame&#x27;s clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_animation_title&quot;,
+    &quot;arguments&quot;: {
+      &quot;title&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_commercial the full breakdown of one commercial by id: idea, logline, tagline, product, audience, every credit by role (director, agency, production company, dp, editor, music, post, sound, vfx), every award (show, year, level, category), craft numbers (shots, average shot length, cuts per minute, when the product / brand / emotional peak / end card land), the script with timings, and the shot list (caption,"><summary><code>get_commercial</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>The full breakdown of one commercial by id: idea, logline, tagline, product, audience, every credit by role …</span></summary><p class="desc">The full breakdown of one commercial by id: idea, logline, tagline, product, audience, every credit by role (director, agency, production company, DP, editor, music, post, sound, VFX), every award (show, year, level, category), craft numbers (shots, average shot length, cuts per minute, when the product / brand / emotional peak / end card land), the script with timings, and the shot list (caption, tags and still per shot; with clips: true, each shot&#x27;s clip too).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>string</td><td>required</td><td>Commercial id, e.g. AD-0505</td></tr><tr><td><code>shots</code></td><td>boolean</td><td>optional</td><td>Include the shot list (default true)</td></tr><tr><td><code>stills</code></td><td>boolean</td><td>optional</td><td>Include each shot&#x27;s still image (1 credit per shot). Leave off unless the user wants to see the shots.</td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_commercial&quot;,
+    &quot;arguments&quot;: {
+      &quot;id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_frame_details get the full metadata, a preview image and the framethrower link for a single frame id. for the full-resolution file or the depth map (camera geometry for image generation), call get_frame_image."><summary><code>get_frame_details</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Get the full metadata, a preview image and the FrameThrower link for a single frame id. For the …</span></summary><p class="desc">Get the full metadata, a preview image and the FrameThrower link for a single frame id. For the full-resolution file or the depth map (camera geometry for image generation), call get_frame_image.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>frameId</code></td><td>string</td><td>required</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_frame_details&quot;,
+    &quot;arguments&quot;: {
+      &quot;frameId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_frame_image one frame&#x27;s image at a paid size, as a link valid for an hour: &quot;full&quot; = the original full-resolution file (5 credits), &quot;large&quot; = 1280px (2), &quot;depth&quot; = the precomputed depth map, controlnet-ready (2). search results show a preview only — use this when the user wants the actual image for a deck, document, download or an image-generation pipeline."><summary><code>get_frame_image</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>One frame&#x27;s image at a paid size, as a link valid for an hour: &quot;full&quot; = the original full-resolution file (5 …</span></summary><p class="desc">One frame&#x27;s image at a paid size, as a link valid for an hour: &quot;full&quot; = the original full-resolution file (5 credits), &quot;large&quot; = 1280px (2), &quot;depth&quot; = the precomputed depth map, ControlNet-ready (2). Search results show a preview only — use this when the user wants the actual image for a deck, document, download or an image-generation pipeline.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>frameId</code></td><td>string</td><td>required</td><td></td></tr><tr><td><code>size</code></td><td>string</td><td>optional</td><td>default full One of: full, large, depth</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_frame_image&quot;,
+    &quot;arguments&quot;: {
+      &quot;frameId&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_animation_frames find frames in framethrower&#x27;s animation library — animated series and films only, never live-action (mostly anime, plus western animation; the whole of every title, not a sample) for a scene, a moment or a character look, described in plain words: &quot;a girl on a rooftop at dusk watching the city lights&quot;, &quot;two kids running through a summer field&quot;, &quot;a tall man with a scarred face and a long black coat"><summary><code>search_animation_frames</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find frames in FrameThrower&#x27;s ANIMATION library — animated series and films only, never live-action (mostly …</span></summary><p class="desc">Find frames in FrameThrower&#x27;s ANIMATION library — animated series and films only, never live-action (mostly anime, plus Western animation; the whole of every title, not a sample) for a scene, a moment or a CHARACTER LOOK, described in plain words: &quot;a girl on a rooftop at dusk watching the city lights&quot;, &quot;two kids running through a summer field&quot;, &quot;a tall man with a scarred face and a long black coat, rain&quot;. Narrow by title, genre, theme, style (80s cel, watercolour, neon night…), studio, movie/series and year. Each frame has a caption of what is in it, a 640px still for looking at, the full-size still, the frame id and a link. At most 3 frames per title unless per_title says otherwise.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>The scene or character in plain words, as a description of one frame</td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td>Only inside this series / film (slug or name)</td></tr><tr><td><code>genre</code></td><td>string</td><td>optional</td><td>AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)</td></tr><tr><td><code>theme</code></td><td>string</td><td>optional</td><td>AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…</td></tr><tr><td><code>style</code></td><td>string</td><td>optional</td><td>The title&#x27;s look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, …</td></tr><tr><td><code>studio</code></td><td>string</td><td>optional</td><td>Animation studio, e.g. &quot;Studio Ghibli&quot;, &quot;Madhouse&quot;, &quot;Kyoto Animation&quot;, &quot;MAPPA&quot;</td></tr><tr><td><code>kind</code></td><td>string</td><td>optional</td><td>One of: movie, series</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>exclude_titles</code></td><td>string[]</td><td>optional</td><td>Slugs to leave out (e.g. titles already used)</td></tr><tr><td><code>nsfw</code></td><td>boolean</td><td>optional</td><td>false = leave out frames flagged as adult (included by default)</td></tr><tr><td><code>per_title</code></td><td>number</td><td>optional</td><td>Max frames from one title (default 3)</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td>default 12</td></tr><tr><td><code>offset</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return each frame&#x27;s clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_animation_frames&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_commercial_shots find individual shots inside commercials by what is in the frame (&quot;hand pouring beer in slow motion&quot;, &quot;car drifting at night in the rain&quot;, &quot;family laughing at a kitchen table&quot;), with shot tags (size, angle, setting, time of day, lighting, mood, people, product / logo visible) and any commercial-level filter (brand, director, agency, award show, year…). each shot has its still, its tags and a link "><summary><code>search_commercial_shots</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find individual SHOTS inside commercials by what is in the frame (&quot;hand pouring beer in slow motion&quot;, &quot;car …</span></summary><p class="desc">Find individual SHOTS inside commercials by what is in the frame (&quot;hand pouring beer in slow motion&quot;, &quot;car drifting at night in the rain&quot;, &quot;family laughing at a kitchen table&quot;), with shot tags (size, angle, setting, time of day, lighting, mood, people, product / logo visible) and any commercial-level filter (brand, director, agency, award show, year…). Each shot has its still, its tags and a link to the exact moment; with clips: true, also a short clip of just that shot.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>What the shot shows, as a description of one frame</td></tr><tr><td><code>shot_size</code></td><td>string</td><td>optional</td><td>extreme_closeup, closeup, medium_closeup, medium, medium_wide, full, wide, extreme_wide, insert</td></tr><tr><td><code>camera_angle</code></td><td>string</td><td>optional</td><td>eye_level, low_angle, high_angle, overhead, aerial, pov, worms_eye, dutch</td></tr><tr><td><code>setting</code></td><td>string</td><td>optional</td><td>interior, exterior, studio_void or virtual_cg</td></tr><tr><td><code>time_of_day</code></td><td>string</td><td>optional</td><td>day, night, golden_hour, dusk, dawn…</td></tr><tr><td><code>lighting</code></td><td>string</td><td>optional</td><td>natural, high_key, low_key, silhouette, chiaroscuro</td></tr><tr><td><code>mood</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>people</code></td><td>string</td><td>optional</td><td>women, men, kids, teens, adults, seniors (comma-separated = all of them)</td></tr><tr><td><code>product_visible</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>logo_visible</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>text_on_screen</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>black_and_white</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>Advertiser, e.g. &quot;Nike&quot;, &quot;Guinness&quot;</td></tr><tr><td><code>director</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>agency</code></td><td>string</td><td>optional</td><td>Creative agency, e.g. &quot;Wieden+Kennedy&quot;</td></tr><tr><td><code>production</code></td><td>string</td><td>optional</td><td>Production company, e.g. &quot;MJZ&quot;, &quot;Smuggler&quot;</td></tr><tr><td><code>dp</code></td><td>string</td><td>optional</td><td>Director of photography</td></tr><tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Ad category: Auto, Beer, Spirits, Drinks, Food &amp; QSR, Retail, Tech, Telecom, Finance &amp; Insurance, Fashion &amp; Luxury, Beauty &amp; Personal care, Sport, Travel, Gaming, Health &amp; Pharma, Media &amp; Entertainment, Public service &amp; NGO, Home, FMCG</td></tr><tr><td><code>market</code></td><td>string</td><td>optional</td><td>Country code: US, UK, FR, DE, BR, JP…</td></tr><tr><td><code>award_show</code></td><td>string</td><td>optional</td><td>One of: Cannes Lions, Clio Awards, D&amp;AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, …</td></tr><tr><td><code>min_award</code></td><td>string</td><td>optional</td><td>Best award at least this level One of: grand_prix, gold, silver, bronze, shortlist</td></tr><tr><td><code>awarded</code></td><td>boolean</td><td>optional</td><td>true = won or shortlisted at an award show</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>season</code></td><td>string</td><td>optional</td><td>halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl</td></tr><tr><td><code>spot</code></td><td>string</td><td>optional</td><td>Only inside this commercial (its id, e.g. AD-0505)</td></tr><tr><td><code>per_spot</code></td><td>number</td><td>optional</td><td>Max shots from one commercial (default 3)</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_commercial_shots&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_commercials find whole commercials (tv / online spots) in framethrower&#x27;s ads library by idea, story or brief (&quot;two rival neighbours outdo each other at christmas&quot;, &quot;a product demo told as a heist&quot;) and/or by facts: brand, director, agency, production company, dp, editor, award show and level, year, industry, market, tone, genre, structure, season. without a query it lists matching spots, award winners first. "><summary><code>search_commercials</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Find whole COMMERCIALS (TV / online spots) in FrameThrower&#x27;s ads library by idea, story or brief (&quot;two rival …</span></summary><p class="desc">Find whole COMMERCIALS (TV / online spots) in FrameThrower&#x27;s ads library by idea, story or brief (&quot;two rival neighbours outdo each other at Christmas&quot;, &quot;a product demo told as a heist&quot;) and/or by facts: brand, director, agency, production company, DP, editor, award show and level, year, industry, market, tone, genre, structure, season. Without a query it lists matching spots, award winners first. Returns each spot with brand, title, year, credits, best award, logline, a still and a link to watch it.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>optional</td><td>The idea / story in plain words. Leave out to just filter.</td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>Advertiser, e.g. &quot;Nike&quot;, &quot;Guinness&quot;</td></tr><tr><td><code>director</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>agency</code></td><td>string</td><td>optional</td><td>Creative agency, e.g. &quot;Wieden+Kennedy&quot;</td></tr><tr><td><code>production</code></td><td>string</td><td>optional</td><td>Production company, e.g. &quot;MJZ&quot;, &quot;Smuggler&quot;</td></tr><tr><td><code>dp</code></td><td>string</td><td>optional</td><td>Director of photography</td></tr><tr><td><code>editor</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>music</code></td><td>string</td><td>optional</td><td>Composer / track / music house</td></tr><tr><td><code>person</code></td><td>string</td><td>optional</td><td>Anyone credited, any role</td></tr><tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Ad category: Auto, Beer, Spirits, Drinks, Food &amp; QSR, Retail, Tech, Telecom, Finance &amp; Insurance, Fashion &amp; Luxury, Beauty &amp; Personal care, Sport, Travel, Gaming, Health &amp; Pharma, Media &amp; Entertainment, Public service &amp; NGO, Home, FMCG</td></tr><tr><td><code>market</code></td><td>string</td><td>optional</td><td>Country code: US, UK, FR, DE, BR, JP…</td></tr><tr><td><code>award_show</code></td><td>string</td><td>optional</td><td>One of: Cannes Lions, Clio Awards, D&amp;AD, Epica, AICP Awards, London International Awards, British Arrows, The One Show, El Ojo de Iberoamérica, Eurobest, Creative Circle, Effie Awards, Ciclope, Spikes Asia, ANDY Awards, ADC Awards, DGA Awards, Kinsale Sharks, …</td></tr><tr><td><code>min_award</code></td><td>string</td><td>optional</td><td>Best award at least this level One of: grand_prix, gold, silver, bronze, shortlist</td></tr><tr><td><code>awarded</code></td><td>boolean</td><td>optional</td><td>true = won or shortlisted at an award show</td></tr><tr><td><code>award_year</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>tone</code></td><td>string</td><td>optional</td><td>funny, heartwarming, epic, emotional, absurd, dark, inspiring…</td></tr><tr><td><code>genre</code></td><td>string</td><td>optional</td><td>comedy, drama, documentary, action…</td></tr><tr><td><code>structure</code></td><td>string</td><td>optional</td><td>narrative, montage, vignettes, problem_solution, demo…</td></tr><tr><td><code>format</code></td><td>string</td><td>optional</td><td>live_action, animation_2d, animation_3d, stop_motion, cgi, mixed</td></tr><tr><td><code>season</code></td><td>string</td><td>optional</td><td>halloween, christmas, black friday, thanksgiving, new year, valentines, easter, mothers day, fathers day, back to school, summer, spring, pride, super bowl</td></tr><tr><td><code>celebrity</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>max_duration</code></td><td>number</td><td>optional</td><td>seconds</td></tr><tr><td><code>min_duration</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>sort</code></td><td>string</td><td>optional</td><td>One of: relevance, awards, newest, oldest</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>offset</code></td><td>number</td><td>optional</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_commercials&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="search_frames search the framethrower cinematography reference library by concept, mood, color, composition, or scene. returns reference frames with film/credits metadata, a preview image and a link to view on framethrower. for the full-resolution file or the precomputed depth map, call get_frame_image with the frame id."><summary><code>search_frames</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Search the FrameThrower cinematography reference library by concept, mood, color, composition, or scene. …</span></summary><p class="desc">Search the FrameThrower cinematography reference library by concept, mood, color, composition, or scene. Returns reference frames with film/credits metadata, a preview image and a link to view on FrameThrower. For the full-resolution file or the precomputed depth map, call get_frame_image with the frame id.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>Natural-language description, e.g. &quot;neon-lit rainy street at night&quot;</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>enhance</code></td><td>boolean</td><td>optional</td><td>Smart search, on by default: rewrites short queries (&quot;bear&quot;) into the descriptive language the frames were indexed with, like the website. Set false to search the exact text.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_frames&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="similar_animation_frames more animation frames (animation library only) like ones the user already has — frame ids from earlier results (&quot;more like #2&quot;), or any image: a generated frame on their canvas, an upload, a sketch (pass an http(s) url or a data: url, e.g. data:image/png;base64,… for a local file). by = look (composition, drawing and rendering — the default), colour (the palette) or content (what is in it). same f"><summary><code>similar_animation_frames</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>More ANIMATION frames (animation library only) like ones the user already has — frame ids from earlier …</span></summary><p class="desc">More ANIMATION frames (animation library only) like ones the user already has — frame ids from earlier results (&quot;more like #2&quot;), or ANY IMAGE: a generated frame on their canvas, an upload, a sketch (pass an http(s) URL or a data: URL, e.g. data:image/png;base64,… for a local file). by = look (composition, drawing and rendering — the default), colour (the palette) or content (what is in it). Same filters as search_animation_frames; other_titles: true keeps it to titles other than the seed frames&#x27;.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>frame_ids</code></td><td>string[]</td><td>optional</td><td>Frame ids from earlier results (or &quot;slug:label&quot;)</td></tr><tr><td><code>image</code></td><td>string</td><td>optional</td><td>An image URL or data: URL — any image, ours or not</td></tr><tr><td><code>by</code></td><td>string</td><td>optional</td><td>One of: look, colour, content</td></tr><tr><td><code>other_titles</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>title</code></td><td>string</td><td>optional</td><td>Only inside this series / film (slug or name)</td></tr><tr><td><code>genre</code></td><td>string</td><td>optional</td><td>AniList genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Mecha, Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, Thriller… (several, comma-separated = all)</td></tr><tr><td><code>theme</code></td><td>string</td><td>optional</td><td>AniList theme tag: Cyberpunk, Post-Apocalyptic, Iyashikei, Coming of Age, Time Travel, Magic, Space, Urban Fantasy…</td></tr><tr><td><code>style</code></td><td>string</td><td>optional</td><td>The title&#x27;s look, read off its frames (several, comma-separated = all): hand-drawn cel, digital 2D, 3D CGI, cel-shaded 3D, stop motion, mixed 2D/3D, 70s look, 80s look, 90s look, 2000s look, modern look, pastel, muted, vivid, dark, warm, cool, monochrome, …</td></tr><tr><td><code>studio</code></td><td>string</td><td>optional</td><td>Animation studio, e.g. &quot;Studio Ghibli&quot;, &quot;Madhouse&quot;, &quot;Kyoto Animation&quot;, &quot;MAPPA&quot;</td></tr><tr><td><code>kind</code></td><td>string</td><td>optional</td><td>One of: movie, series</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>exclude_titles</code></td><td>string[]</td><td>optional</td><td>Slugs to leave out (e.g. titles already used)</td></tr><tr><td><code>nsfw</code></td><td>boolean</td><td>optional</td><td>false = leave out frames flagged as adult (included by default)</td></tr><tr><td><code>per_title</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return each frame&#x27;s clip and sequence videos (1 credit per video on top of the call). Ask only when the user wants to see it move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;similar_animation_frames&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="similar_commercial_shots more shots that look like the given shot ids (from earlier results or a shot list) — the refine loop: &quot;more like #2&quot;. takes the same shot tags and commercial filters to steer."><summary><code>similar_commercial_shots</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>More shots that look like the given shot ids (from earlier results or a shot list) — the refine loop: &quot;more …</span></summary><p class="desc">More shots that look like the given shot ids (from earlier results or a shot list) — the refine loop: &quot;more like #2&quot;. Takes the same shot tags and commercial filters to steer.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>shot_ids</code></td><td>string[]</td><td>required</td><td></td></tr><tr><td><code>shot_size</code></td><td>string</td><td>optional</td><td>extreme_closeup, closeup, medium_closeup, medium, medium_wide, full, wide, extreme_wide, insert</td></tr><tr><td><code>camera_angle</code></td><td>string</td><td>optional</td><td>eye_level, low_angle, high_angle, overhead, aerial, pov, worms_eye, dutch</td></tr><tr><td><code>setting</code></td><td>string</td><td>optional</td><td>interior, exterior, studio_void or virtual_cg</td></tr><tr><td><code>time_of_day</code></td><td>string</td><td>optional</td><td>day, night, golden_hour, dusk, dawn…</td></tr><tr><td><code>lighting</code></td><td>string</td><td>optional</td><td>natural, high_key, low_key, silhouette, chiaroscuro</td></tr><tr><td><code>mood</code></td><td>string</td><td>optional</td><td></td></tr><tr><td><code>people</code></td><td>string</td><td>optional</td><td>women, men, kids, teens, adults, seniors (comma-separated = all of them)</td></tr><tr><td><code>product_visible</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>logo_visible</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>text_on_screen</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>black_and_white</code></td><td>boolean</td><td>optional</td><td></td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>Advertiser, e.g. &quot;Nike&quot;, &quot;Guinness&quot;</td></tr><tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Ad category: Auto, Beer, Spirits, Drinks, Food &amp; QSR, Retail, Tech, Telecom, Finance &amp; Insurance, Fashion &amp; Luxury, Beauty &amp; Personal care, Sport, Travel, Gaming, Health &amp; Pharma, Media &amp; Entertainment, Public service &amp; NGO, Home, FMCG</td></tr><tr><td><code>awarded</code></td><td>boolean</td><td>optional</td><td>true = won or shortlisted at an award show</td></tr><tr><td><code>min_award</code></td><td>string</td><td>optional</td><td>Best award at least this level One of: grand_prix, gold, silver, bronze, shortlist</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>tone</code></td><td>string</td><td>optional</td><td>funny, heartwarming, epic, emotional, absurd, dark, inspiring…</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>clips</code></td><td>boolean</td><td>optional</td><td>true = also return a short clip of each shot (1 credit per clip on top of the call). Ask only when the user wants to see the shots move.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;similar_commercial_shots&quot;,
+    &quot;arguments&quot;: {
+      &quot;shot_ids&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="similar_commercials commercials like a given one — by story (similar idea, tropes and tone) or by look (similar shots: light, framing, palette). accepts the same filters as search_commercials to narrow (e.g. only award winners, only another brand)."><summary><code>similar_commercials</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Commercials like a given one — by STORY (similar idea, tropes and tone) or by LOOK (similar shots: light, …</span></summary><p class="desc">Commercials like a given one — by STORY (similar idea, tropes and tone) or by LOOK (similar shots: light, framing, palette). Accepts the same filters as search_commercials to narrow (e.g. only award winners, only another brand).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>string</td><td>required</td><td>Commercial id, e.g. AD-0505</td></tr><tr><td><code>by</code></td><td>string</td><td>optional</td><td>default story One of: story, look</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>brand</code></td><td>string</td><td>optional</td><td>Advertiser, e.g. &quot;Nike&quot;, &quot;Guinness&quot;</td></tr><tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Ad category: Auto, Beer, Spirits, Drinks, Food &amp; QSR, Retail, Tech, Telecom, Finance &amp; Insurance, Fashion &amp; Luxury, Beauty &amp; Personal care, Sport, Travel, Gaming, Health &amp; Pharma, Media &amp; Entertainment, Public service &amp; NGO, Home, FMCG</td></tr><tr><td><code>awarded</code></td><td>boolean</td><td>optional</td><td>true = won or shortlisted at an award show</td></tr><tr><td><code>min_award</code></td><td>string</td><td>optional</td><td>Best award at least this level One of: grand_prix, gold, silver, bronze, shortlist</td></tr><tr><td><code>year_min</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>year_max</code></td><td>number</td><td>optional</td><td></td></tr><tr><td><code>tone</code></td><td>string</td><td>optional</td><td>funny, heartwarming, epic, emotional, absurd, dark, inspiring…</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;similar_commercials&quot;,
+    &quot;arguments&quot;: {
+      &quot;id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details></div>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/framethrower.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/framethrower.svg)](https://mcp.aianytime.net/s/framethrower/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/framethrower.svg)](https://mcp.aianytime.net/s/framethrower/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/framethrower.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Media &amp; generation</h2>
+<ul class="chips"><li><a href="../magic-hour/">Magic Hour</a></li><li><a href="../motomarks/">Motomarks</a></li><li><a href="../orkasvideostudio/">OrkasVideoStudio</a></li><li><a href="../playable-gift/">Playable Gift</a></li><li><a href="../prompt-to-asset/">prompt-to-asset</a></li><li><a href="../revid/">Revid</a></li><li><a href="../../c/media/">All of Media &amp; generation</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>
