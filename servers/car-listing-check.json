@@ -1,0 +1,9 @@
+{
+  "name": "Car Listing Check",
+  "url": "https://github.com/TRW123123/car-listing-check-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Checks a dealer vehicle listing supplied by the user for completeness and presentation and returns a 0–100 score, missing fields and prioritised fixes; a second tool returns a listing checklist. Hosted Streamable HTTP, no auth. · [Docs](https://aicarvideo.com/mcp/)",
+  "endpoint": "https://mcp.aicarvideo.com/mcp",
+  "registry": "com.aicarvideo/car-listing-check"
+}
