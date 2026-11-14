@@ -1,0 +1,7 @@
+{
+  "name": "Panes",
+  "url": "https://usepanes.com/docs#mcp",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Control Windows desktop computers with PowerShell, screenshots, mouse/keyboard, file transfer and private viewer links. Local `panes-mcp` stdio server, installed with `python -m pip install \"panes[mcp] @ https://usepanes.com/sdk/panes-0.1.3-py3-none-any.whl\"`; requires `PANES_API_KEY` and prepaid credit for running computers."
+}
