@@ -1,0 +1,8 @@
+{
+  "name": "AIHOT",
+  "url": "https://github.com/KKKKhazix/AIHOT",
+  "category": "search",
+  "transport": "http",
+  "description": "Search Chinese-language AI industry news, current topics and briefings through a public read-only MCP endpoint with no API key.",
+  "endpoint": "https://aihot.news/api/mcp"
+}
