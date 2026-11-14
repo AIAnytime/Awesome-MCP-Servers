@@ -1,0 +1,9 @@
+{
+  "name": "EveryApp",
+  "url": "https://everyapp.pro/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Use 300+ EveryApp tools and build your own apps from your AI assistant: compress a PDF, convert a video, make an image. Hosted, OAuth 2.1 sign-in with an EveryApp account. · [Website](https://everyapp.pro)",
+  "endpoint": "https://api.everyapp.pro/mcp",
+  "registry": "io.github.itsmylab/everyapp"
+}
