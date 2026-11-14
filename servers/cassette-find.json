@@ -1,0 +1,9 @@
+{
+  "name": "Cassette Game Finder",
+  "url": "https://cassette.gg/agents/find-a-game.md",
+  "category": "search",
+  "transport": "http",
+  "description": "Search browser games, read game details, find similar games and list genres; read-only, no sign-in. Endpoint: `https://cassette.gg/mcp`",
+  "endpoint": "https://cassette.gg/mcp",
+  "registry": "gg.cassette/find"
+}
