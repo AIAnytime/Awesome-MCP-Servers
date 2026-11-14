@@ -1,0 +1,9 @@
+{
+  "name": "LeadSets",
+  "url": "https://www.leadsets.ai/docs/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Unlimited B2B Contact Data for AI agents: search people and companies, enrich person and company records, verify work emails (verified, catch-all, unknown, invalid) and scrape jobs and company pages. OAuth, free tier of 1,000 records with no card, flat plans from $29/month. Endpoint: `https://mcp.leadsets.ai` · Registry: `io.github.leadsets/leadsets`",
+  "endpoint": "https://mcp.leadsets.ai",
+  "registry": "io.github.leadsets/leadsets"
+}
