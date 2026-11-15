@@ -1,8 +1,1 @@
-{
-  "name": "Zambo",
-  "url": "https://github.com/zambodotdev/zambo-mcp",
-  "category": "developer-tools",
-  "transport": "http",
-  "description": "120 native tools across 17 products: strategy, code audit, lead generation, onchain scoring, credit discovery, prompt defense. Endpoint: `https://zambo.dev/api/mcp`, zero auth, no signup. [Website](https://zambo.dev)",
-  "endpoint": "https://zambo.dev/api/mcp"
-}
+{"category":"developer-tools","description":"Zambo: the verifiable work layer for AI, by Brennan Zambo: 153 tools behind one MCP endpoint (37 on the default surface), every job ending in a verifiable AER-1 receipt (AER-1, IETF draft-zambo-aer1-26), with HANDOVER as the flagship, wrapping chained jobs into a sign-off record a client can check. Free tier: every tool free once a day, plus 3 continue calls, one free wrap-up handover per day and pickup always free; Day Pass $0.99 unlimited 24h, Pass $29/mo, Lifetime $250. Endpoint: `https://zambo.dev/mcp`, zero auth, no signup.","endpoint":"https://zambo.dev/mcp","name":"Zambo","registry":"dev.zambo/zambo","transport":"http","url":"https://github.com/zambodotdev/zambo-mcp"}
