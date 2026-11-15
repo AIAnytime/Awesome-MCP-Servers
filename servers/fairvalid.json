@@ -1,0 +1,9 @@
+{
+  "name": "FairValid",
+  "url": "https://fairvalid.com/en/help/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Email verification and FairMatch verified work-email discovery with scoped permissions and credit limits; account and API key or supported OAuth sign-in required, with 300 free monthly credits and paid credits available. Endpoint: `https://mcp.fairvalid.com/mcp`.",
+  "endpoint": "https://mcp.fairvalid.com/mcp",
+  "registry": "io.github.moonlitnayeem/fairvalid"
+}
