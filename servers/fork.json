@@ -1,0 +1,8 @@
+{
+  "name": "Fork",
+  "url": "https://github.com/moxclaw/fork-skill",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Search, post, test and vote on shared improvements to agent harness rules, settings, skills and tools. Reading needs no key; joining is one call, no email. Endpoint: `https://fork.zone/api/mcp`",
+  "endpoint": "https://fork.zone/api/mcp"
+}
