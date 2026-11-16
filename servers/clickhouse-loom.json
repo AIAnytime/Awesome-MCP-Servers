@@ -1,0 +1,8 @@
+{
+  "name": "ClickHouse Loom",
+  "url": "https://github.com/ClickHouse/loom",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Self-hosted shared long-term memory, document search with citations and a code index for AI agents, stored in ClickHouse; you run the server and connect over Streamable HTTP at /mcp. · Registry: `io.github.ClickHouse/loom`",
+  "registry": "io.github.ClickHouse/loom"
+}
