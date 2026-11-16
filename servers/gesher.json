@@ -1,0 +1,8 @@
+{
+  "name": "Gesher",
+  "url": "https://github.com/EphraimElgrabli/gesher",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "Local MCP servers for Apple Notes, Reminders, Calendar, Contacts, Maps, Weather and Freeform on macOS 26+ (Apple silicon), free and open source. Install: `curl -fsSL https://raw.githubusercontent.com/EphraimElgrabli/gesher/main/install.sh | bash`",
+  "registry": "io.github.EphraimElgrabli/gesher-notes"
+}
