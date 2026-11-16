@@ -1,0 +1,8 @@
+{
+  "name": "Pay2GPT",
+  "url": "https://pay2gpt.com/en/llms.txt",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Plans and current prices for ChatGPT Go/Plus/Pro top-ups and Codex credits, with checkout links, plus how-to guides as Markdown (en/zh-CN/ru); public tools need no API key, `business_*` tools need a business API key. Endpoint: `https://pay2gpt.com/mcp`",
+  "endpoint": "https://pay2gpt.com/mcp"
+}
