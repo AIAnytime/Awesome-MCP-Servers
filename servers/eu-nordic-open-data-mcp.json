@@ -1,0 +1,8 @@
+{
+  "name": "EU & Nordic Open Data MCP",
+  "url": "https://github.com/itulo/eu-nordic-open-data-mcp",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "Official EU and Nordic open data (TED tenders, EU sanctions, VIES VAT, ECB rates, Finnish PRH, Fingrid, FMI, Digitraffic). MIT, no API key except optional Fingrid. Install: `npx -y eu-nordic-open-data-mcp`.",
+  "registry": "io.github.itulo/eu-nordic-open-data-mcp"
+}
