@@ -1,0 +1,9 @@
+{
+  "name": "Agent Flights",
+  "url": "https://github.com/lomiafrica/agent-flights-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Cheapest flights worldwide, strong on Africa: compares Kiwi.com, Duffel and Aviasales fares, with price calendars, cheap destinations and booking links. No API key. Endpoint: `https://lowest.flights/mcp` · [Docs](https://lowest.flights/connect)",
+  "endpoint": "https://lowest.flights/mcp",
+  "registry": "flights.lowest/agent-flights"
+}
