@@ -1,0 +1,9 @@
+{
+  "name": "Plainer",
+  "url": "https://plainer.app/connections",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Find and read Plainer workspace files in Claude Code or Codex, with optional permission to create, edit and delete files.",
+  "endpoint": "https://plainer.app/mcp",
+  "registry": "io.github.fainir/plainer"
+}
