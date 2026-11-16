@@ -1,0 +1,9 @@
+{
+  "name": "CallForMe",
+  "url": "https://github.com/callforme-tel/callforme",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Gives your agent a phone: calls businesses, works the phone menu, waits on hold, asks your agent mid-call and returns answers plus a transcript. Pay per call, OAuth sign-in. Endpoint: `https://callforme.tel/mcp` · [Website](https://callforme.tel)",
+  "endpoint": "https://callforme.tel/mcp",
+  "registry": "tel.callforme/callforme"
+}
