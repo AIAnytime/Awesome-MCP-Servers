@@ -1,0 +1,9 @@
+{
+  "name": "Taskhold",
+  "url": "https://github.com/gettaskhold/taskhold-plugin",
+  "category": "productivity",
+  "transport": "http",
+  "description": "A task list you share with your coding agents: next task, steps, live progress, blocked questions you answer from a web board. Paid, OAuth sign-in or API key. Endpoint: `https://taskhold.com/api/mcp` · [Website](https://taskhold.com) · Registry: `com.taskhold/taskhold`",
+  "endpoint": "https://taskhold.com/api/mcp",
+  "registry": "com.taskhold/taskhold"
+}
