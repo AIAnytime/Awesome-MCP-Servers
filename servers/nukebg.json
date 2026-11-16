@@ -1,0 +1,9 @@
+{
+  "name": "NukeBG",
+  "url": "https://nukebg.com/mcp-server",
+  "category": "media",
+  "transport": "http",
+  "description": "Official hosted server: remove image backgrounds, erase objects by description and upscale images 2x/4x; transparent PNG/WebP or marketplace-ready white. API key in the `X-Api-Key` header, 50 free credits for new accounts. Endpoint: `https://api.nukebg.com/mcp` · [Docs](https://nukebg.com/mcp-server)",
+  "endpoint": "https://api.nukebg.com/mcp",
+  "registry": "io.github.nukebg/nukebg"
+}
