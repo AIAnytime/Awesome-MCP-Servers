@@ -1,0 +1,69 @@
+name: Backfill PR-Agent reviews
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "One PR number (leave blank to review every open, non-draft PR)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PR-Agent CLI
+        run: python -m pip install --disable-pip-version-check pr-agent
+
+      - name: Review existing pull requests
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          config.model: "gemini/gemini-3.8-flash"
+          config.fallback_models: '[]'
+          PR_NUMBER: ${{ inputs.pr_number }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          if [[ -n "$PR_NUMBER" ]]; then
+            numbers="$PR_NUMBER"
+          else
+            numbers="$(gh pr list --repo "$GH_REPO" --state open --limit 100 --json number,isDraft --jq '.[] | select(.isDraft == false) | .number')"
+          fi
+
+          if [[ -z "$numbers" ]]; then
+            echo "No open, non-draft pull requests found."
+            exit 0
+          fi
+
+          failures=0
+          while IFS= read -r number; do
+            [[ -z "$number" ]] && continue
+            url="https://github.com/$GH_REPO/pull/$number"
+            echo "::group::Reviewing $url"
+            if pr-agent --pr_url "$url" review; then
+              echo "Review completed for PR #$number"
+            else
+              echo "::warning::PR-Agent failed for PR #$number"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+            sleep 10
+          done <<< "$numbers"
+
+          echo "Backfill finished. Failed reviews: $failures"
+          [[ "$failures" -eq 0 ]]

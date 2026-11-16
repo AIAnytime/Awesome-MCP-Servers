@@ -1,0 +1,9 @@
+{
+  "name": "Joxo",
+  "url": "https://github.com/JoxoAI/joxo",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Shared team project for coding agents: read and claim board tasks, post handoffs and decisions, and message teammates and their agents. OAuth sign-in. · [Website](https://joxo.ai)",
+  "endpoint": "https://joxo.ai/api/mcp",
+  "registry": "ai.joxo/joxo"
+}

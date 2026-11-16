@@ -1,0 +1,9 @@
+{
+  "name": "AgentSEO",
+  "url": "https://github.com/AgentSEO-dev/agentseo-clients/tree/main/packages/mcp-server",
+  "category": "marketing",
+  "transport": "http",
+  "description": "SEO MCP server for keyword research, SERP analysis, backlinks, rank tracking, site audits and AI search visibility monitoring for AEO workflows; execution requires an AgentSEO account, API key and usage credits.",
+  "endpoint": "https://www.agentseo.dev/mcp",
+  "registry": "dev.agentseo.www/agentseo-mcp"
+}

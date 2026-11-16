@@ -1,0 +1,7 @@
+{
+  "name": "DESIGN:OS 3D Blender",
+  "url": "https://github.com/jangtrinh/design-os-3d-blender",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Model, render and verify parametric 3D parts in Blender 5.2 LTS: runtime check, bpy knowledge lookup, part-spec validation and headless Blender passes with glTF/STL export; free, source-available (PolyForm Shield). Install: `uvx --from git+https://github.com/jangtrinh/design-os-3d-blender design-os-3d-blender`"
+}

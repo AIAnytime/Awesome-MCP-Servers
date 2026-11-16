@@ -1,0 +1,8 @@
+{
+  "name": "Mooi",
+  "url": "https://mooi.fyi/docs",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Plan group gatherings with dates, availability votes, questions and decisions; no login or API key, email required to join an event. Endpoint: `https://mooi.fyi/mcp`",
+  "endpoint": "https://mooi.fyi/mcp"
+}

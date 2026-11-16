@@ -1,0 +1,9 @@
+{
+  "name": "California Licensing Education",
+  "url": "https://traffic.californialicensingeducation.com/developers/",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Read-only California traffic-school guidance and official court links, with sources and review dates; no account or API key.",
+  "endpoint": "https://traffic.californialicensingeducation.com/mcp",
+  "registry": "io.github.Nathan-Roll1/california-traffic-school"
+}

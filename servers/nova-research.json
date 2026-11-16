@@ -1,0 +1,9 @@
+{
+  "name": "Nova Research (CIVAI)",
+  "url": "https://github.com/civai-technologies/research-agent-mcp-by-nova-civai",
+  "category": "search",
+  "transport": "http",
+  "description": "Deep research and report generation over live web search. Requires a Nova account; `tools/list` is open, tool calls need OAuth or an API key. 4 tools. [Docs](https://nova.civai.co/agent/research-agent)",
+  "endpoint": "https://nova.civai.co/mcp/agents/research-agent",
+  "registry": "co.civai.nova/research-agent"
+}

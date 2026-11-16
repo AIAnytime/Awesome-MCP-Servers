@@ -1,0 +1,9 @@
+{
+  "name": "Etsy Search & Shop Sales MCP",
+  "url": "https://github.com/GeminiGeorge22/etsy-sales-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Live Etsy search results by keyword, category or market page (title, price, rating, reviews, Bestseller and Star Seller badges, ad flag, search rank) and sales counters for named Etsy shops, each with the date it was read; tools from two Apify Actors, Apify OAuth or API token. Endpoint: `https://mcp.apify.com/?tools=publicrecords/etsy-shop-velocity,publicrecords/etsy-search-scraper` · [Docs](https://apify.com/publicrecords/etsy-search-scraper)",
+  "endpoint": "https://mcp.apify.com/?tools=publicrecords/etsy-shop-velocity,publicrecords/etsy-search-scraper",
+  "registry": "io.github.GeminiGeorge22/etsy-sales-mcp"
+}

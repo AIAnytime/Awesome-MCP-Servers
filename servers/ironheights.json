@@ -1,0 +1,7 @@
+{
+  "name": "Ironheights",
+  "url": "https://github.com/Frank-Masciopinto/ironheights",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Checks an AI agent skill (OpenClaw, Claude Code, Codex, Cursor) or MCP config with static rules before you install it, returning an allow/blocked decision with findings and a grade; also flags skills or MCP tool descriptions that change after approval. Runs locally as a CLI or MCP server. Run: `npx -y ironheights mcp` · [Website](https://www.ironheights.dev)"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "FindAIforWork",
+  "url": "https://findaiforwork.com/llms.txt",
+  "category": "search",
+  "transport": "http",
+  "description": "Search, read and compare curated AI tools for work by keyword, category or pricing; four read-only tools, no account or API key. Endpoint: `https://findaiforwork.com/mcp`",
+  "endpoint": "https://findaiforwork.com/mcp",
+  "registry": "io.github.brand-lc/findaiforwork"
+}

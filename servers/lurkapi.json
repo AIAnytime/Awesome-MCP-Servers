@@ -1,0 +1,9 @@
+{
+  "name": "LurkAPI",
+  "url": "https://lurkapi.com/docs#claude",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Read-only public data from 16 social platforms: profiles, posts, comments, video transcripts and Meta, Google, TikTok and LinkedIn ad library results, one tool per endpoint. OAuth sign-in or an `x-api-key` header; 100 free credits, no card. Endpoint: `https://api.lurkapi.com/mcp` · [Docs](https://lurkapi.com/docs#claude) · Registry: `io.github.mesmerlord/lurkapi`",
+  "endpoint": "https://api.lurkapi.com/mcp",
+  "registry": "io.github.mesmerlord/lurkapi"
+}

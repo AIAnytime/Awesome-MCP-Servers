@@ -1,0 +1,8 @@
+{
+  "name": "AppScreen",
+  "url": "https://appscreen.pro/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Design App Store and Google Play screenshots in the AppScreen browser editor: slides, phone and tablet frames, captions, backgrounds, the app's own screenshots, PNG export at store sizes and share links. Endpoint: `https://appscreen.pro/mcp` (OAuth, no API key; needs AppScreen Pro, $9 one-time) · [Docs](https://appscreen.pro/mcp)",
+  "endpoint": "https://appscreen.pro/mcp"
+}
