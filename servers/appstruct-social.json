@@ -1,0 +1,9 @@
+{
+  "name": "AppStruct Social",
+  "url": "https://blog.appstruct.ai/blog/social-media-mcp-server",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Read connected channels, posts and analytics, and create or update unscheduled drafts for review; MCP never schedules or publishes. Requires an AppStruct account, applicable Social plan access and a scoped Bearer key.",
+  "endpoint": "https://api.appstruct.ai/v1/social/mcp",
+  "registry": "io.github.VladimirTambovtsev/appstruct-social"
+}
