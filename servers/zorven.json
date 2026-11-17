@@ -1,0 +1,7 @@
+{
+  "name": "Zorven",
+  "url": "https://github.com/tkodcumpeg4/zorven",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Self-hostable AGPL-3.0 tunnel and private networking platform in Go (`zorven mcp`). · [Website](https://zorven.app)"
+}
