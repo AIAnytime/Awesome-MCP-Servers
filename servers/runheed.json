@@ -1,0 +1,9 @@
+{
+  "name": "Runheed",
+  "url": "https://github.com/getrunheed/runheed-plugin",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Error tracking your coding agent can read: search production errors, read stack traces and breadcrumbs, and resolve them with the fixing commit. Paid, OAuth sign-in or API key. Endpoint: `https://runheed.com/api/mcp` · [Website](https://runheed.com/mcp-server)",
+  "endpoint": "https://runheed.com/api/mcp",
+  "registry": "com.runheed/runheed"
+}
