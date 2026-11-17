@@ -151,6 +151,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[xmcp](https://xmcp.dev)** `http` — Read-only search and page retrieval over the official documentation for the xmcp TypeScript MCP framework, with no account or API key. Endpoint: `https://xmcp.dev/mcp` · [Setup](https://xmcp.dev/docs/guides/xmcp-mcp-server) · [Source](https://github.com/basementstudio/xmcp/tree/main/apps/website)
 - **[Zambo](https://github.com/zambodotdev/zambo-mcp)** `http` — 120 native tools across 17 products: strategy, code audit, lead generation, onchain scoring, credit discovery, prompt defense. Endpoint: `https://zambo.dev/api/mcp`, zero auth, no signup. [Website](https://zambo.dev)
 - **[Zerouter MCP](https://github.com/ZerouterAI/zerouter-mcp)** `stdio` — AI API gateway MCP for Claude, GPT, Gemini, Grok and Kimi through one OpenAI-compatible API key: chat, compare models side by side, and look up API pricing; pricing and model list work without a key. Install: [MCPB bundle](https://github.com/ZerouterAI/zerouter-mcp/releases/tag/v0.1.0) · [Website](https://www.zerouter.ai)
+- **[Zorven](https://github.com/tkodcumpeg4/zorven)** `stdio` — Self-hostable AGPL-3.0 tunnel and private networking platform in Go (\zorven mcp\). · [Website](https://zorven.app)
 
 ### Search & discovery
 
