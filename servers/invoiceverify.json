@@ -1,0 +1,9 @@
+{
+  "name": "InvoiceVerify",
+  "url": "https://peppol-invoice-compass.lovable.app/docs/mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "EU e-invoices: validate, generate and convert UBL, CII, XRechnung and Factur-X (OAuth sign-in, 100 free calls a month); Belgian Peppol receivability, Peppol Directory, Factur-X and SI-UBL checks need no account. Endpoint: `https://peppol-invoice-compass.lovable.app/mcp` · [Docs](https://peppol-invoice-compass.lovable.app/docs/mcp)",
+  "endpoint": "https://peppol-invoice-compass.lovable.app/mcp",
+  "registry": "app.lovable.peppol-invoice-compass/invoiceverify"
+}
