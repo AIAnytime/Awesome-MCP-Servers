@@ -1,0 +1,9 @@
+{
+  "name": "Inbox eSIM",
+  "url": "https://inboxesim.com/mcp-docs",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Data-only travel eSIMs for about 200 places: search plans, compare prices across 100+ brands and get a checkout link; QR by email, no app or account. No API key. Endpoint: `https://inboxesim.com/mcp/claude` · [Docs](https://inboxesim.com/mcp-docs)",
+  "endpoint": "https://inboxesim.com/mcp/claude",
+  "registry": "com.inboxesim/esim"
+}
