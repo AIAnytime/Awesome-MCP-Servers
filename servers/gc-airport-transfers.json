@@ -1,0 +1,9 @@
+{
+  "name": "GC Airport Transfers",
+  "url": "https://gc-airporttransfers.com.au/ai-agent-gateway/",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Private airport and cruise transfers in Queensland (Gold Coast, Brisbane, Byron Bay): live fixed-price quotes, availability checks and pending booking requests that the operator confirms; payment by emailed link, never through the agent. OAuth 2.1 sign-in (PKCE, dynamic client registration). Endpoint: `https://gc-airporttransfers.com/wp-json/atb-gateway/v1/mcp` · [Docs](https://gc-airporttransfers.com.au/ai-agent-gateway/) · Registry: `com.gc-airporttransfers/booking`",
+  "endpoint": "https://gc-airporttransfers.com/wp-json/atb-gateway/v1/mcp",
+  "registry": "com.gc-airporttransfers/booking"
+}
