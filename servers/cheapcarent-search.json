@@ -1,0 +1,9 @@
+{
+  "name": "CheapCarRent Search",
+  "url": "https://github.com/aleksandrjefimov4-crypto/cheapcarent-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Car rental search at 15,000 pickup points in 46 countries, 19 languages. No API key, read-only. Endpoint: `https://cheapcarent.com/mcp` · [Docs](https://cheapcarent.com/developers)",
+  "endpoint": "https://cheapcarent.com/mcp",
+  "registry": "com.cheapcarent/search"
+}
