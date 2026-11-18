@@ -1,0 +1,7 @@
+{
+  "name": "hash-lite",
+  "url": "https://github.com/tidybytetools/hash-lite",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Hashes text or local files with SHA-256, SHA-1, MD5, and optional SHA-512, and returns hex and Base64. Free, runs on your computer, no API key. Install: `pip install git+https://github.com/tidybytetools/hash-lite` · MCP: `uvx --from git+https://github.com/tidybytetools/hash-lite hash-lite mcp`"
+}
