@@ -1,0 +1,8 @@
+{
+    "name": "API-Supp",
+    "url": "https://github.com/yehudashtein/wa-bridge-mcp",
+    "category": "productivity",
+    "transport": "http",
+    "description": "Hosted WhatsApp MCP: paste one link, scan a QR, and connect a number to Claude or ChatGPT. Endpoint: `https://app.api-supp.com/api/mcp`",
+    "endpoint": "https://app.api-supp.com/api/mcp"
+}
