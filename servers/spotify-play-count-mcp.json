@@ -1,0 +1,9 @@
+{
+  "name": "Spotify Play Count MCP",
+  "url": "https://github.com/GeminiGeorge22/spotify-play-count-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Spotify play counts for every track on a track, album, artist or playlist link, plus artist monthly listeners, followers, world rank and top cities; no Spotify login; Apify OAuth or API token. Endpoint: `https://mcp.apify.com?tools=publicrecords/spotify-play-count-scraper` · [Docs](https://apify.com/publicrecords/spotify-play-count-scraper)",
+  "endpoint": "https://mcp.apify.com?tools=publicrecords/spotify-play-count-scraper",
+  "registry": "io.github.GeminiGeorge22/spotify-play-count-mcp"
+}
