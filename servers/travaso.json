@@ -1,0 +1,8 @@
+{
+  "name": "Travaso Hotel Booking",
+  "url": "https://elitetravelsales.com/hotel-booking-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Search hotel quotes from trip details and create traveler-approved hosted card checkout links; read payment and supplier confirmation status. Requires a free partner API key.",
+  "endpoint": "https://elitetravelsales.com/api/backend/mcp"
+}
