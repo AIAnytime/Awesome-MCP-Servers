@@ -1,0 +1,9 @@
+{
+  "name": "Panes",
+  "url": "https://usepanes.com/docs/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Windows computers for AI agents: Office, desktop apps, browser tasks and testing, with commands, screenshots, mouse/keyboard, files and a private viewer. Connect over Streamable HTTP or [local stdio](https://usepanes.com/docs/mcp); discovery/signup are public, account tools require a Panes API key, and compute is prepaid.",
+  "endpoint": "https://api.usepanes.com/mcp/agent",
+  "registry": "io.github.logancsack/panes"
+}
