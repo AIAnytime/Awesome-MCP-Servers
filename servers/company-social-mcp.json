@@ -1,0 +1,9 @@
+{
+  "name": "Company Social MCP",
+  "url": "https://github.com/GeminiGeorge22/company-social-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Company website or name to LinkedIn, X, YouTube, Instagram and Facebook profile links, each with a confidence score and the evidence behind it; companies only, lookups for people are refused; Apify OAuth or API token. Endpoint: `https://mcp.apify.com?tools=publicrecords/company-social-profile-finder` · [Docs](https://apify.com/publicrecords/company-social-profile-finder)",
+  "endpoint": "https://mcp.apify.com?tools=publicrecords/company-social-profile-finder",
+  "registry": "io.github.GeminiGeorge22/company-social-mcp"
+}
