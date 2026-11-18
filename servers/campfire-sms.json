@@ -3,6 +3,6 @@
   "url": "https://github.com/campfiresms/campfire-mcp",
   "category": "productivity",
   "transport": "http",
-  "description": "Two-way SMS bridge for coding agents (Claude Code, Codex, Cursor, Grok Build): the agent texts you when it finishes or is blocked and reads your SMS replies. Requires a per-installation bearer credential from your account; 40 free messages, then paid. Install: `npx -y @campfiresms/setup` · [Docs](https://campfiresms.com/install.html)",
+  "description": "Two-way SMS bridge for coding agents (Claude Code, Codex, Cursor, Grok Build): the agent texts you when it finishes or is blocked and reads your SMS replies. Requires a per-installation bearer credential from your account; free demo, then paid. Install: `npx -y @campfiresms/setup` · [Docs](https://campfiresms.com/install.html)",
   "endpoint": "https://api.campfiresms.com/mcp"
 }
