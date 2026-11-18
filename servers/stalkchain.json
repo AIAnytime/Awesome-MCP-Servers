@@ -1,0 +1,9 @@
+{
+  "name": "StalkChain",
+  "url": "https://github.com/StalkC/stalkchain-plugin",
+  "category": "finance",
+  "transport": "http",
+  "description": "Crypto research with tracked-trader wallets and PnL, token holders, buy/sell flow and on-chain safety checks across multiple chains; requires OAuth sign-in and credits for data calls. [Setup](https://stalkchain.com/mcp).",
+  "endpoint": "https://data.stalkchain.com/mcp/directory",
+  "registry": "com.stalkchain/data"
+}
