@@ -1,0 +1,9 @@
+{
+  "name": "Just Publish",
+  "url": "https://github.com/just-done/just-publish-mcp",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Publish and update the website you built with AI at a live public URL. Sign-in required. Endpoint: `https://mcp.justpublish.ai/`",
+  "endpoint": "https://mcp.justpublish.ai/",
+  "registry": "ai.justpublish/just-publish"
+}
