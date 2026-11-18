@@ -1,0 +1,7 @@
+{
+  "name": "QuelLLM MCP",
+  "url": "https://github.com/MGM-FALCON/quelllm-mcp",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Explore local LLM models and estimate memory and hardware costs. Website: https://quelllm.fr/"
+}
