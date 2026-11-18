@@ -1,0 +1,9 @@
+{
+  "name": "PinnFeed",
+  "url": "https://pinnfeed.io/docs/mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Hosted MCP for live and prematch Pinnacle odds, no-vig fair prices, drops and closing lines. API key required; free plan available (30s delay). Endpoint: `https://pinnfeed.io/mcp` \u00b7 Registry: `io.github.pinnfeed/odds`",
+  "endpoint": "https://pinnfeed.io/mcp",
+  "registry": "io.github.pinnfeed/odds"
+}
