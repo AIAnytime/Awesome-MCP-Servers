@@ -1,0 +1,7 @@
+{
+  "name": "TinyRex MCP",
+  "url": "https://github.com/emirmrkaljevic/tinyrex-mcp",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Two tools (`list_actors`, `run_actor`) over 27 public Apify Actors: official company registers (France, Norway, Finland, UK Companies House), GLEIF LEI, SEC EDGAR, the US NPI registry, EU/US/UK/Dutch tenders, remote job boards and Shopify/WooCommerce product data. `list_actors` needs no token; runs bill to your own `APIFY_TOKEN`. Install: `uvx --from git+https://github.com/emirmrkaljevic/tinyrex-mcp.git tinyrex-mcp`"
+}
