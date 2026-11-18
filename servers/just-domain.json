@@ -1,0 +1,9 @@
+{
+  "name": "Just Domain",
+  "url": "https://github.com/just-done/just-domain-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Check a domain name, both prices and whether it can transfer in. You register it on justdomain.ai. Endpoint: `https://mcp.justdomain.ai/`",
+  "endpoint": "https://mcp.justdomain.ai/",
+  "registry": "ai.justdomain/just-domain"
+}
