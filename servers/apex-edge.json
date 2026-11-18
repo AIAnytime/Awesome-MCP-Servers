@@ -1,0 +1,8 @@
+{
+  "name": "apex-edge",
+  "url": "https://github.com/NonSynthetic/apex-edge-tools",
+  "category": "finance",
+  "transport": "http",
+  "description": "x402 machine-payable utility API for agents: corpus search over a 380-doc engineering corpus, audit checklists, and utility tools priced in USDC on Base/Solana (HTTP 402). Endpoint: `https://api.nonsynthetic.net/mcp`",
+  "endpoint": "https://api.nonsynthetic.net/mcp"
+}
