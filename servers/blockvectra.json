@@ -3,6 +3,6 @@
   "url": "https://github.com/blockvectra/mcp",
   "category": "finance",
   "transport": "http",
-  "description": "Multi-chain EVM JSON-RPC, indexed Data API, documentation, pricing and status for developers and AI agents. Documentation, chain, pricing and status tools need no API key; Data API tools require one. Endpoint: `https://docs.blockvectra.com/mcp` · [Docs](https://docs.blockvectra.com/en/)",
+  "description": "Multi-chain EVM JSON-RPC, indexed data, documentation, pricing and status. Docs and discovery need no key; indexed data requires a user key, while RPC access follows each chain's public policy. Endpoint: `https://docs.blockvectra.com/mcp` · [Setup](https://docs.blockvectra.com/en/guides/mcp-server/) · [Python docs example](https://github.com/blockvectra/agent-quickstart/releases/tag/python-mcp-docs-2026.11.06)",
   "endpoint": "https://docs.blockvectra.com/mcp"
 }
