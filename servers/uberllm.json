@@ -1,0 +1,9 @@
+{
+  "name": "UberLLM",
+  "url": "https://uberllm.dev/docs/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate and edit images, start and follow video and music jobs, list models with current prices, quote a request before running it, and check the balance through one UberLLM API key (required, prepaid). Endpoint: `https://api.uberllm.dev/mcp`",
+  "endpoint": "https://api.uberllm.dev/mcp",
+  "registry": "dev.uberllm/mcp"
+}
