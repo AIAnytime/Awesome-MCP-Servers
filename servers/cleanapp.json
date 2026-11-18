@@ -1,0 +1,9 @@
+{
+  "name": "CleanApp",
+  "url": "https://www.cleanapp.io/agents",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Search public reports, submit approved physical or digital observations, and track analysis decisions and recorded actions; related observations retain their own evidence and attribution. No account or API key; publication and notices depend on approved handling and eligibility checks.",
+  "endpoint": "https://live.cleanapp.io/openai/mcp",
+  "registry": "io.github.cleanappio/cleanapp"
+}
