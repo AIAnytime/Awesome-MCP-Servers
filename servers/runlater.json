@@ -1,0 +1,9 @@
+{
+  "name": "RunLater",
+  "url": "https://github.com/runlater-app/runlater-plugin",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Schedule HTTP requests from an agent: once at an exact time or on a cron schedule, with retries and a log of every run. Paid plans with a 14-day trial, OAuth sign-in or API key. Endpoint: `https://runlater.app/api/mcp` · [Website](https://runlater.app) · Registry: `app.runlater/runlater`",
+  "endpoint": "https://runlater.app/api/mcp",
+  "registry": "app.runlater/runlater"
+}
