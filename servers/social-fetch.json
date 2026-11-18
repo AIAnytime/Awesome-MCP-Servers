@@ -1,0 +1,8 @@
+{
+  "name": "Social Fetch",
+  "url": "https://github.com/social-freak-ltd/socialfetch-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Live public social data from TikTok, Instagram, YouTube, X, Reddit, LinkedIn and more: profiles, posts, comments, transcripts and search. OAuth sign in, 100 free credits. Endpoint: `https://api.socialfetch.dev/mcp` · [Docs](https://www.socialfetch.dev/docs/integrations/mcp)",
+  "endpoint": "https://api.socialfetch.dev/mcp"
+}
