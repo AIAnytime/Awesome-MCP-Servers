@@ -1,0 +1,8 @@
+{
+  "name": "Poptin",
+  "url": "https://github.com/Poptin-LTD/Poptin-MCP",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Create email campaigns, analyze popup and form performance, and build audience segments; requires a Poptin account and OAuth sign-in. Sending or scheduling campaigns requires confirmation.",
+  "endpoint": "https://mcp.popt.in/mcp"
+}
