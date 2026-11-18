@@ -1,0 +1,9 @@
+{
+  "name": "leadli.me",
+  "url": "https://leadli.me/en/guides/mcp-server",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Telegram subscriber reports and Meta/TikTok ad attribution for channels and bots over Streamable HTTP. Requires an organization access key in `Authorization: Bearer`; available tools depend on key permissions and plan.",
+  "endpoint": "https://api.leadli.me/api/v1/mcp",
+  "registry": "me.leadli/mcp"
+}
