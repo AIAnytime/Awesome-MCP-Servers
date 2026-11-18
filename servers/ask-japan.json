@@ -1,0 +1,9 @@
+{
+  "name": "Ask Japan",
+  "url": "https://github.com/ihouse-corp/ask-japan-mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Japanese company, invoice and postcode data, plus human services in Japan. Human services are paid.",
+  "endpoint": "https://askjapan.senpinai.com/mcp",
+  "registry": "com.senpinai/ask-japan"
+}
