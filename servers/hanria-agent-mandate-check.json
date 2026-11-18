@@ -1,0 +1,9 @@
+{
+  "name": "HANRIA Agent Mandate Check",
+  "url": "https://hanria.ai/llms.txt",
+  "category": "security",
+  "transport": "http",
+  "description": "Free, advisory check of a proposed agent action against an operator's written mandate; returns permit, deny or escalate with the governing clause. No account or API key. Docs: [llms.txt](https://hanria.ai/llms.txt)",
+  "endpoint": "https://check.hanria.ai/v1/mcp",
+  "registry": "ai.hanria/agent-mandate-check"
+}
