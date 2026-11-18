@@ -1,0 +1,9 @@
+{
+  "name": "MARU Japan Hands",
+  "url": "https://github.com/ihouse-corp/maru-japan-hands",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Human services in Japan for AI agents: Japanese phone calls, reservations, shopping and on-site checks. Human services are paid.",
+  "endpoint": "https://maru.senpinai.com/mcp",
+  "registry": "io.github.ihouse-corp/maru-japan-hands"
+}
