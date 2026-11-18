@@ -1,0 +1,9 @@
+{
+  "name": "Firecrawl",
+  "url": "https://github.com/firecrawl/firecrawl-mcp-server",
+  "category": "search",
+  "transport": "http",
+  "description": "Web search, page scraping to Markdown or JSON, PDF and document parsing, site crawl and map, and browser interaction for AI agents. Without an API key the hosted endpoint offers search, scrape and parse on a rate-limited free tier; the other tools need an API key or OAuth. Endpoint: `https://mcp.firecrawl.dev/v2/mcp` · Install: `npx -y firecrawl-mcp` · [Docs](https://docs.firecrawl.dev/mcp-server) · Registry: `io.github.firecrawl/firecrawl-mcp-server`",
+  "endpoint": "https://mcp.firecrawl.dev/v2/mcp",
+  "registry": "io.github.firecrawl/firecrawl-mcp-server"
+}
