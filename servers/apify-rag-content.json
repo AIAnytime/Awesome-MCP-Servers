@@ -1,0 +1,9 @@
+{
+  "name": "Apify Content for RAG",
+  "url": "https://github.com/AHMEDFOUAAD/apify-mcp-data-presets/tree/main/bundles/content-for-rag",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Preset for Apify's hosted MCP server exposing RSS items, published podcast transcripts and PDF text through paid Apify Actors (first 25 results per Actor/run free); OAuth or API token required.",
+  "endpoint": "https://mcp.apify.com/?tools=ahmed.fouaad82/rss-feed-reader,ahmed.fouaad82/podcast-published-transcripts,ahmed.fouaad82/public-pdf-text",
+  "registry": "io.github.AHMEDFOUAAD/apify-rag-content"
+}
