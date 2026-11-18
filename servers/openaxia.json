@@ -1,0 +1,8 @@
+{
+  "name": "OpenAxia",
+  "url": "https://openaxia.com/agent",
+  "category": "search",
+  "transport": "http",
+  "description": "Read-only search and comparison of blind, shutter, awning and door motor specifications, with source-linked certification records; anonymous access is rate-limited to 60 requests/hour. Endpoint: `https://openaxia.com/api/mcp`",
+  "endpoint": "https://openaxia.com/api/mcp"
+}
