@@ -1,0 +1,9 @@
+{
+  "name": "Frank AI Researcher",
+  "url": "https://www.hifrank.ai/docs/frank-mcp-connector",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Official remote MCP server for Frank AI Researcher: draft AI-moderated voice interview studies with your own customers, publish them after approval, and read the transcripts. MCP is on every plan, including Free. Endpoint: `https://api.hifrank.ai/mcp`",
+  "endpoint": "https://api.hifrank.ai/mcp",
+  "registry": "ai.hifrank/frank"
+}
