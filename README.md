@@ -272,6 +272,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[ThreadShelf](https://github.com/ChrystianSchutz/ThreadShelf)** `stdio` — Local archive with semantic and exact search over exported ChatGPT, Claude, Google AI Studio, OpenRouter, LM Studio and Grok chats; tools list collections, search and read full threads. Install: `npx -y threadshelf mcp`
 - **[Whisper Memos](https://whispermemos.com/mcp)** `http` — Official server for the Whisper Memos iPhone and Apple Watch voice memo app: list and read memo transcripts and summaries, list labels, view account details, and delete memos; it cannot create or edit memos. OAuth 2.1, approved in the iOS app. Endpoint: `https://whispermemos.com/mcp` · [Config](https://github.com/whispermemos/whisper-memos-plugin) · Registry: `com.whispermemos/whisper-memos`
 - **[Wondel.ai Skills MCP](https://github.com/mjaskolski/wondel-skills-mcp)** `http` — Read-only access to 50 book-based agent skills and 12 guided journeys: recommends a framework for a task and serves its SKILL.md in-session. No account or auth. Endpoint: `https://skills.wondel.ai/mcp` · Registry: `io.github.mjaskolski/wondel-skills-mcp`
+- **[Kaal Corpus](https://github.com/wulfkaal/wulfkaal.github.io)** `stdio` - Read-only research claims with source quotations, citations and document hashes. Python [MCP bundle](https://github.com/wulfkaal/wulfkaal.github.io/releases/download/mcpb-v1.1.0/kaal-corpus.mcpb) · Registry: `io.github.wulfkaal/corpus`
 
 ### Media & generation
 
