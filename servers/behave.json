@@ -1,0 +1,8 @@
+{
+  "name": "behave",
+  "url": "https://github.com/emirmrkaljevic/behave",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Record how a CLI behaves (flags, stdin, files, exit codes) as golden tests and diff a rewrite. Local Go CLI and MCP server. Install: `go install github.com/emirmrkaljevic/behave/cmd/behave@latest`",
+  "registry": "io.github.emirmrkaljevic/behave"
+}
