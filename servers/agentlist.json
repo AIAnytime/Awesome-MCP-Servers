@@ -1,0 +1,9 @@
+{
+  "name": "Agentlist",
+  "url": "https://www.agentlist.io/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search AI agents and MCP servers by name or task and read profiles with source links, without an account or API key.",
+  "endpoint": "https://mcp.agentlist.io",
+  "registry": "io.github.arach/agentlist"
+}
