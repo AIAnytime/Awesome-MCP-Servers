@@ -1,0 +1,7 @@
+{
+  "name": "Signbee",
+  "url": "https://github.com/signbee/mcp",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "Send Markdown or PDF documents for two-party e-signing with SHA-256 cryptographic audit certificates and email OTP verification. Install: `npx -y signbee-mcp` · [Docs](https://signb.ee)"
+}
