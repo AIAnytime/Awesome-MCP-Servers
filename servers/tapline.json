@@ -1,0 +1,9 @@
+{
+  "name": "Tapline",
+  "url": "https://github.com/TaplineData/tapline-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Structured JSON from YouTube, Airbnb, TikTok, Instagram, Facebook, LinkedIn, Zillow and Google Maps through four read-only tools; OAuth 2.1 sign-in or API key, 100 free credits. Endpoint: `https://api.tapline.sh/mcp` · [Docs](https://tapline.sh/docs/mcp)",
+  "endpoint": "https://api.tapline.sh/mcp",
+  "registry": "sh.tapline/tapline"
+}
