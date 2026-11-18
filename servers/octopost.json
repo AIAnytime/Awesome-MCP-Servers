@@ -1,0 +1,9 @@
+{
+  "name": "Octopost",
+  "url": "https://github.com/octopost-ink/octopost-plugin",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human approval queue. Paid, OAuth sign-in or API key. Endpoint: `https://octopost.ink/mcp` · [Website](https://octopost.ink)",
+  "endpoint": "https://octopost.ink/mcp",
+  "registry": "ink.octopost/octopost"
+}
