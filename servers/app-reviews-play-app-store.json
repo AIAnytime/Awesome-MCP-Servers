@@ -1,0 +1,8 @@
+{
+  "name": "App Reviews: Google Play + Apple App Store",
+  "url": "https://apify.com/dheerajitbhu/google-play-reviews",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Public Google Play and Apple App Store reviews by app ID or store URL, filtered by country, language (Play), star rating and date, in one row shape (score, title, text, app version, developer reply, helpful votes, date); no login, a bad app ID returns an error row. Tools from two Apify Actors, Apify OAuth or API token, pay per review. Endpoint: `https://mcp.apify.com/?tools=dheerajitbhu/google-play-reviews,dheerajitbhu/apple-app-store-reviews` · [App Store Actor](https://apify.com/dheerajitbhu/apple-app-store-reviews)",
+  "endpoint": "https://mcp.apify.com/?tools=dheerajitbhu/google-play-reviews,dheerajitbhu/apple-app-store-reviews"
+}
