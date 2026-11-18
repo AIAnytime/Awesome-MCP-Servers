@@ -1,0 +1,9 @@
+{
+  "name": "SightRadar Face Recognition API MCP",
+  "url": "https://github.com/sightradar-hq/sightradar-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Official MCP server for the SightRadar face recognition API: index photos, find every photo of a person from one selfie, compare and detect faces, and run batches. Endpoint: `https://mcp.sightradar.com/mcp` (OAuth sign-in or an API key; usage billed in prepaid credits) · Install: `npx -y sightradar-mcp` · [Docs](https://sightradar.com/mcp)",
+  "endpoint": "https://mcp.sightradar.com/mcp",
+  "registry": "io.github.sightradar-hq/sightradar-mcp"
+}
