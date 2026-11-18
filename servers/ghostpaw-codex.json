@@ -1,0 +1,8 @@
+{
+  "name": "GhostPaw Codex",
+  "url": "https://github.com/GhostPawJS/codex",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Local SQLite memory for AI agents that retains sources, certainty and revision history. Install: `npx -y @ghostpaw/codex mcp` (Node.js 24+).",
+  "registry": "io.github.GhostPawJS/codex"
+}
