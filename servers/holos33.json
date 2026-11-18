@@ -1,0 +1,9 @@
+{
+  "name": "Holos33",
+  "url": "https://github.com/aiagentcycle/holos33-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Read-only search over sourced, current public information about Holos33; no account or API key. Endpoint: `https://mcp.holos33.com/mcp`",
+  "endpoint": "https://mcp.holos33.com/mcp",
+  "registry": "com.holos33/holos33"
+}
