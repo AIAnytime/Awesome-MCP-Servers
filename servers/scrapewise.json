@@ -1,0 +1,9 @@
+{
+  "name": "Scrapewise",
+  "url": "https://github.com/BEBOTECH-OU/scrapewise-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Remote MCP server that scrapes, cleans and matches product and price data from any website, with Google search, Amazon, idealo and local business tools. OAuth sign-in or API key; free trial of 5 requests. Endpoint: `https://mcp.scrapewise.ai/mcp`",
+  "endpoint": "https://mcp.scrapewise.ai/mcp",
+  "registry": "ai.scrapewise/scrapewise"
+}
