@@ -1,0 +1,9 @@
+{
+  "name": "EmailFig",
+  "url": "https://github.com/EmailFig/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Check campaign and automation results, look up and update contacts, and draft campaigns you review and send in EmailFig; OAuth sign-in, free up to 4,000 contacts.",
+  "endpoint": "https://emailfig.com/mcp",
+  "registry": "com.emailfig/emailfig"
+}
