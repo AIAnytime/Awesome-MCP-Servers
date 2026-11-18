@@ -1,0 +1,8 @@
+{
+  "name": "Tidy Byte Tools API",
+  "url": "https://tidybytetools.tidybytetools.workers.dev",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Hosted MCP and HTTPS API with 19 text and data tools (repair JSON, Base64, hash, chunk Markdown, and more). Free daily allowance, instant free keys, no account required for the first 50 calls per IP per UTC day. Paid billing is not live yet. Endpoint: `https://tidybytetools.tidybytetools.workers.dev/mcp`",
+  "endpoint": "https://tidybytetools.tidybytetools.workers.dev/mcp"
+}
