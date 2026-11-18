@@ -1,0 +1,7 @@
+{
+  "name": "OpenSMM Protocol",
+  "url": "https://github.com/opensmm-protocol/mcp-server",
+  "category": "marketing",
+  "transport": "stdio",
+  "description": "Order social media growth services (followers, views, reactions) from AI agents: open, provider-neutral protocol with a reference gateway for catalog search, quotes, idempotent orders, provider-node registration and x402 payments. Install: `git clone https://github.com/opensmm-protocol/mcp-server && cd mcp-server && npm ci && npm run gateway` · [Docs](https://opensmm.dev/llms.txt)"
+}
