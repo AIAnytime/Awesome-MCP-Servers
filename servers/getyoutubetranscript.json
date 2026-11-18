@@ -1,0 +1,9 @@
+{
+  "name": "GetYouTubeTranscript",
+  "url": "https://github.com/tubeagentkit/youtube-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Get YouTube transcripts with timestamps, search YouTube, and browse channels and playlists. Endpoint: `https://getyoutubetranscript.com/api/mcp` (API key as a Bearer header, or OAuth; free account with 100 credits (one-time), paid plans from $5/month) · [Docs](https://getyoutubetranscript.com/docs)",
+  "endpoint": "https://getyoutubetranscript.com/api/mcp",
+  "registry": "com.getyoutubetranscript/youtube-transcript-and-youtube-search"
+}
