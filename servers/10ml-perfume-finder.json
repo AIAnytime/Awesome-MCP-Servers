@@ -1,0 +1,9 @@
+{
+  "name": "10ML Perfume Finder",
+  "url": "https://github.com/10ml-com/perfume-finder-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Free perfume knowledge for AI assistants: notes, accords and families for 6,000+ perfumes, similar scents and decant prices. Remote, read-only, no account or API key. Endpoint: `https://mcp.10ml.com/mcp` · [Docs](https://10ml.com/perfume-api) · Registry: `com.10ml/perfume-finder`",
+  "endpoint": "https://mcp.10ml.com/mcp",
+  "registry": "com.10ml/perfume-finder"
+}
