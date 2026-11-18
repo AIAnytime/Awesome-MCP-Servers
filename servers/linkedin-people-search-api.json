@@ -1,0 +1,8 @@
+{
+  "name": "LinkedIn People Search API",
+  "url": "https://apify.com/johnvc/linkedin-people-search-api",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Search LinkedIn people by name, job title, company, school or location and get public profile data as JSON: profile URL, headline, employer, work history and education. No LinkedIn login or cookie. Apify API token required, pay per result. Endpoint: `https://mcp.apify.com?tools=johnvc/linkedin-people-search-api`",
+  "endpoint": "https://mcp.apify.com?tools=johnvc/linkedin-people-search-api"
+}
