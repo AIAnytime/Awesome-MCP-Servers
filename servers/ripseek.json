@@ -1,0 +1,9 @@
+{
+  "name": "RipSeek",
+  "url": "https://ripseek.2cstudio.app/blog/ripseek-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Live odds, expected value and chase cards for Collector Crypt graded trading-card packs on Solana, plus recent pulls and budget estimates. Hosted, read-only, no sign-in. · [Website](https://ripseek.2cstudio.app/)",
+  "endpoint": "https://ripseek.2cstudio.app/mcp",
+  "registry": "io.github.2cstudiodev-web/ripseek"
+}
