@@ -1,0 +1,8 @@
+{
+  "name": "Pakish.NET Hosting",
+  "url": "https://pakish.net/for-agents",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Compare shared hosting plans and renewal terms without an account, and prepare nonbinding hosting inquiries and quotes with customer consent.",
+  "endpoint": "https://pakish.net/api/agent-commerce/mcp"
+}
