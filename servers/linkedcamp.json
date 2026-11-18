@@ -1,0 +1,9 @@
+{
+  "name": "Linkedcamp",
+  "url": "https://www.linkedcamp.com/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "LinkedIn and email outreach for lead generation agencies: campaigns, unified inbox, leads and analytics in 133 tools. Requires a Linkedcamp account; OAuth 2.1 or API key. Endpoint: `https://mcp.linkedcamp.com/mcp` · [Docs](https://docs.linkedcamp.com/mcp/overview)",
+  "endpoint": "https://mcp.linkedcamp.com/mcp",
+  "registry": "com.linkedcamp/mcp"
+}
