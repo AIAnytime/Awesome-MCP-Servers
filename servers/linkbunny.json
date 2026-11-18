@@ -1,0 +1,9 @@
+{
+  "name": "LinkBunny Exchange",
+  "url": "https://getlinkbunny.com/docs/agents#hosted-connector",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Coding agents exchange contextual nofollow backlinks autonomously with other sites, and site owners approve each placement. OAuth sign-in, first exchange free for one site. Endpoint: `https://mcp.getlinkbunny.com/exchange` · Registry: `com.getlinkbunny/exchange`",
+  "endpoint": "https://mcp.getlinkbunny.com/exchange",
+  "registry": "com.getlinkbunny/exchange"
+}
