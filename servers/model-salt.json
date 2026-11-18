@@ -1,0 +1,9 @@
+{
+  "name": "Model Salt",
+  "url": "https://github.com/modelsalt/model-salt",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Adds outside randomness to creative requests, so one prompt gives a different answer each time it runs. No sign-in or API key. Endpoint: `https://modelsalt.com/mcp` · [Website](https://modelsalt.com)",
+  "endpoint": "https://modelsalt.com/mcp",
+  "registry": "com.modelsalt/model-salt"
+}
