@@ -1,0 +1,9 @@
+{
+  "name": "WebExtract",
+  "url": "https://github.com/nyx464664816-stack/webextract",
+  "category": "search",
+  "transport": "http",
+  "description": "Hosted MCP that turns a public web page into clean Markdown (`page_markdown`) or fixed-schema JSON with article metadata, product name/price/availability and tables (`extract_url`). 20 free calls/day per caller IP with no signup or key; after that a prepaid Stripe-credit Bearer key, and the REST API also takes x402 USDC on Base, Polygon, Arbitrum, Optimism, Avalanche, World Chain and Monad. Endpoint: `https://api.webextract.dev/mcp` · [Benchmark](https://webextract.dev/benchmark)",
+  "endpoint": "https://api.webextract.dev/mcp",
+  "registry": "dev.webextract/extract"
+}
