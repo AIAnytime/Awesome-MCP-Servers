@@ -1,0 +1,8 @@
+{
+  "name": "No Stairs Please",
+  "url": "https://nostairsplease.com",
+  "category": "search",
+  "transport": "http",
+  "description": "Search 4,300+ under-400-capacity North American live music venues, room capacities, booking contacts, and tour routing; free public access, no account or API key. Endpoint: `https://nostairsplease.com/mcp`",
+  "endpoint": "https://nostairsplease.com/mcp"
+}
