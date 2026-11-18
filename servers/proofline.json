@@ -1,0 +1,8 @@
+{
+  "name": "Proofline",
+  "url": "https://github.com/prooflinedev/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Read Proofline review status, findings and review guidance, and request or rerun reviews. Requires a Proofline account and OAuth; [setup docs](https://proofline.sh/docs/coding-agents/).",
+  "endpoint": "https://proofline.sh/mcp"
+}
