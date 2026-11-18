@@ -199,6 +199,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Knowledge, memory & context
 
+- **[10ML Perfume Finder](https://github.com/10ml-com/perfume-finder-mcp)** `http` — Free perfume knowledge for AI assistants: notes, accords and families for 6,000+ perfumes, similar scents and decant prices. Remote, read-only, no account or API key. Endpoint: `https://mcp.10ml.com/mcp` · [Docs](https://10ml.com/perfume-api) · Registry: `com.10ml/perfume-finder`
 - **[AccInt](https://github.com/maxbaluev/accreted-intelligence)** `stdio` — Local-first, SQLite-backed memory shared across Claude Code, OpenCode, Codex, and Cursor; feeds verified outcomes back into future retrieval. Public integration glue around a private engine. · [Website](https://accint.xyz/)
 - **[Agentage Memory](https://memory.agentage.io)** `http` — One shared Markdown memory for Claude, Cursor, and ChatGPT that you own and can export: six tools to search, read, write, edit, list, and delete. OAuth 2.1 with dynamic client registration. Endpoint: `https://memory.agentage.io/mcp` · Registry: `io.agentage/memory`
 - **[AIAgentCycle](https://github.com/aiagentcycle/aiagentcycle-mcp)** `http` — Read-only access to current AIAgentCycle services, pricing, 190 integrations, case studies, knowledge base and contact details; no account or API key. Endpoint: `https://mcp.aiagentcycle.com/mcp`
