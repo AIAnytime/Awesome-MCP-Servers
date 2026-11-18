@@ -1,0 +1,8 @@
+{
+  "name": "mcpserverlist-mcp",
+  "url": "https://github.com/sudomichael/mcpserverlist-mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Check if your MCP server is ready for MCP directories, then get it submitted. Endpoint: `https://mcpserverlist.io/mcp`",
+  "endpoint": "https://mcpserverlist.io/mcp"
+}
