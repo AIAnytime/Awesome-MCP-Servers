@@ -1,0 +1,9 @@
+{
+  "name": "ToolsPad",
+  "url": "https://toolspad.com/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Hosted business workspace for CRM contacts, notes, tasks, forms, appointments and whiteboards through Streamable HTTP. Browser OAuth authorizes one workspace with read-only or read-and-write access; connections can be revoked in Settings.",
+  "endpoint": "https://app.toolspad.com/mcp",
+  "registry": "com.toolspad/workspace"
+}

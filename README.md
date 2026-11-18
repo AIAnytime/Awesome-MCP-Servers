@@ -465,6 +465,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[Process Street](https://github.com/process-street/process-street-mcp)** `http` — Connect agents to Process Street workflows, tasks, runs, data sets, and operational records, with an interactive authorization flow. [Docs](https://www.process.st/help/docs/mcp-server/)
 - **[Scope by Ouroboros Apps](https://github.com/LAHutchins91/scope-mcp)** `http` — Freelance scope of work: approved scope, rates, deadlines, and change orders, so an assistant cannot promise work or discounts that were not approved. OAuth sign-in. Endpoint: `https://scope-continuity2.vercel.app/mcp` · [Docs](https://ouroborosapps.com/docs/scope) · [Ouroboros Apps](https://ouroborosapps.com)
 - **[TextKit](https://jointextkit.com/docs/mcp)** `http` — Send and receive SMS, verify phone numbers, buy US and Canada numbers, and manage contacts, segments, broadcasts and automations. OAuth sign-in or an API key as a Bearer token; free sandbox keys at sign-up. Endpoint: `https://mcp.jointextkit.com` · [Website](https://jointextkit.com) · Registry: `com.jointextkit/textkit`
+- **[ToolsPad](https://toolspad.com/mcp)** `http` — Hosted business workspace for CRM contacts, notes, tasks, forms, appointments and whiteboards through Streamable HTTP. Browser OAuth authorizes one workspace with read-only or read-and-write access; connections can be revoked in Settings.
 
 <!-- directory:end -->
 
