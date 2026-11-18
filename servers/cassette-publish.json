@@ -1,0 +1,9 @@
+{
+  "name": "Cassette Publish",
+  "url": "https://cassette.gg/agents/guide.md",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Publish and manage browser games on Cassette from a coding agent, using OAuth with human approval. Endpoint: `https://cassette.gg/mcp/publish`",
+  "endpoint": "https://cassette.gg/mcp/publish",
+  "registry": "gg.cassette/publish"
+}
