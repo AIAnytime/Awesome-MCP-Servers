@@ -1,0 +1,8 @@
+{
+  "name": "doc2md-lite",
+  "url": "https://github.com/tidybytetools/doc2md-lite",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Turns local PDFs and saved HTML pages into clean Markdown with real tables. Free, runs on your computer, no API key. Install: `pip install doc2md-lite` \u00b7 MCP: `uvx doc2md-lite mcp`",
+  "registry": "io.github.tidybytetools/doc2md-lite"
+}
