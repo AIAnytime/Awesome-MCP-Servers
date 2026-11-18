@@ -1,6 +1,6 @@
 {
   "name": "depot.fitness",
-  "url": "https://depot.fitness/connect",
+  "url": "https://depot.fitness",
   "category": "productivity",
   "transport": "http",
   "description": "Search 101 written-out strength-training programs and 539 exercises, read training guides, and save programs or read recent workouts once signed in; OAuth with a free depot.fitness account. Endpoint: `https://nihheurtdimdezbhrdba.supabase.co/functions/v1/mcp`",
