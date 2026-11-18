@@ -1,0 +1,8 @@
+{
+  "name": "SellerForge",
+  "url": "https://github.com/SellerForgeAI/sellerforge-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Hosted read-only access to an Amazon seller's own Seller Central and Amazon Ads data: account health, FBA inventory, reimbursements, Plan of Action cases, keyword ranks, listing audits and campaigns; OAuth sign-in to a SellerForge account, 7-day trial with no card. Endpoint: `https://www.sellerforge.ai/api/mcp` · Registry: `ai.sellerforge/sellerforge`",
+  "endpoint": "https://www.sellerforge.ai/api/mcp"
+}
