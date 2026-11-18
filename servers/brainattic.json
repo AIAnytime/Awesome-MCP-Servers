@@ -1,0 +1,9 @@
+{
+  "name": "Brainattic",
+  "url": "https://brainattic.ai/docs/connect",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "EU-hosted knowledge base for AI agents with hybrid semantic and keyword search, versioned documents, and permission-controlled reading and editing. Brainattic account and OAuth 2.1 sign-in required (PKCE and DCR); no API key. Endpoint: `https://app.brainattic.ai/api/mcp` · Registry: `ai.brainattic/knowledge-base`",
+  "endpoint": "https://app.brainattic.ai/api/mcp",
+  "registry": "ai.brainattic/knowledge-base"
+}
