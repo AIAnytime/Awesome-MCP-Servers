@@ -1,0 +1,8 @@
+{
+  "name": "md-chunk-lite",
+  "url": "https://github.com/tidybytetools/md-chunk-lite",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Splits Markdown into heading-aware chunks with path and line numbers for RAG pipelines. Free, runs on your computer, no API key. Install: `pip install md-chunk-lite` \u00b7 MCP: `uvx md-chunk-lite mcp`",
+  "registry": "io.github.tidybytetools/md-chunk-lite"
+}
