@@ -296,6 +296,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[NPMScan](https://github.com/salemalem/npmscan-mcp-plugin)** `http` — Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and transitive dependency lookups for coding agents. Endpoint: `https://npmscan.com/api/mcp`
 - **[Skycloak MCP](https://github.com/sky-cloak/skycloak-mcp)** `http` — Managed Keycloak identity MCP server for AI agents (OIDC/OAuth realms, users, clients, SSO). Endpoint: `https://mcp.skycloak.io` · [Docs](https://skycloak.io/mcp) · Registry: `io.skycloak/skycloak-mcp`
 - **[Sunglasses](https://github.com/sunglasses-dev/sunglasses)** `stdio` — Scans text and files locally for prompt injection, credential leaks and data exfiltration; runs as a CLI, a Python API or an MCP server. Install: `pip install sunglasses` · Run: `python -m sunglasses.mcp` · [Website](https://sunglasses.dev)
+- **[usb-rea](https://github.com/emirmrkaljevic/usb-rea)** `stdio` — CLI and MCP server that infers a USB device protocol from a labelled vendor-app capture and writes a pyusb driver. Install: `pip install usb-rea`.
 - **[Vulnerability Exposure](https://github.com/MRFrazer25/Vulnerability-Exposure-MCP)** `stdio` — Checks public IPs, domains, CVE IDs and software versions for confirmed vulnerabilities (NVD version ranges, CISA KEV, EPSS, distro backports, Shodan); every API key is optional. Install: `uvx vulnerability-exposure-mcp`
 
 ### Finance & markets
