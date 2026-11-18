@@ -1,0 +1,8 @@
+{
+  "name": "link-check-lite",
+  "url": "https://github.com/tidybytetools/link-check-lite",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Checks a list of links for HTTP status codes, redirects, and broken ones. Free, runs on your computer, no API key. Install: `pip install link-check-lite` \u00b7 MCP: `uvx link-check-lite mcp`",
+  "registry": "io.github.tidybytetools/link-check-lite"
+}
