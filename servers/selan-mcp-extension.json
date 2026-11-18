@@ -1,0 +1,8 @@
+{
+  "name": "Selan MCP Extension",
+  "url": "https://selan.ai/docs/browser-extension",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Lets Claude Code, Claude Desktop, Codex, Cursor or any MCP client open and use tabs in your own Chrome (126+) where you are already signed in, only in its own tab group and only on sites you allow; free, no account. Endpoint: `https://mcp.selan.ai/extension/mcp`",
+  "endpoint": "https://mcp.selan.ai/extension/mcp"
+}
