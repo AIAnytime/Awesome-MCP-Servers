@@ -1,0 +1,9 @@
+{
+  "name": "RoboDebut",
+  "url": "https://robodebut.com/llms.txt",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Submit a website or startup to the RoboDebut directory for manual review, then check its status with a private receipt; no account or API key, and a submission needs the RoboDebut badge on the homepage and a contact email that stays private. Endpoint: `https://robodebut.com/api/mcp` · [Website](https://robodebut.com)",
+  "endpoint": "https://robodebut.com/api/mcp",
+  "registry": "com.robodebut/submissions"
+}
