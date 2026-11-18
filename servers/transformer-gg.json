@@ -1,0 +1,9 @@
+{
+  "name": "Transformer.gg",
+  "url": "https://github.com/NBV-AppFactory/transformer-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Influencer marketplace on X for agents: find creators, see the value of one sponsored post on their account, send offers and pay for confirmed posts. OAuth or API key; free to join, 20% fee on paid offers. Endpoint: `https://transformer.gg/mcp` · [Docs](https://transformer.gg/docs)",
+  "endpoint": "https://transformer.gg/mcp",
+  "registry": "gg.transformer/transformer"
+}
