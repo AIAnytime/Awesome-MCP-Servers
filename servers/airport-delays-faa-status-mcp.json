@@ -1,0 +1,9 @@
+{
+  "name": "Airport Delays FAA Status MCP",
+  "url": "https://github.com/theluckystrike/airport-delays-faa-status-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Live FAA airport status for US airports: ground stops, ground delay programs with average and maximum delay, arrival and departure delays, closures and deicing, plus a multi-airport trip check. Read-only, no API key. Endpoint: `https://airport-delays-faa-status-mcp.lipmichal.workers.dev/mcp`",
+  "endpoint": "https://airport-delays-faa-status-mcp.lipmichal.workers.dev/mcp",
+  "registry": "io.github.theluckystrike/airport-delays-faa-status-mcp"
+}
