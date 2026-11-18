@@ -1,0 +1,8 @@
+{
+  "name": "json-shaper-lite",
+  "url": "https://github.com/tidybytetools/json-shaper-lite",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Turns key:value notes, CSV/TSV, and Markdown tables into typed JSON for local agent workflows. Free, runs on your computer, no API key. Install: `pip install json-shaper-lite` \u00b7 MCP: `uvx json-shaper-lite mcp`",
+  "registry": "io.github.tidybytetools/json-shaper-lite"
+}
