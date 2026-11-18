@@ -1,0 +1,9 @@
+{
+  "name": "PlugMCP directory MCP",
+  "url": "https://github.com/plugmcp-ai/plugmcp-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search a directory of 79,021+ MCP servers and agent skills, compare options, and get the install config for your client. Read-only, no account or API key required (an optional key raises rate limits). Endpoint: `https://plugmcp.ai/mcp-server` \u00b7 Install: `npx -y plugmcp-mcp` \u00b7 [Docs](https://plugmcp.ai/directory-mcp) \u00b7 Registry: `ai.plugmcp/directory`",
+  "endpoint": "https://plugmcp.ai/mcp-server",
+  "registry": "ai.plugmcp/directory"
+}
