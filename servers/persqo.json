@@ -1,0 +1,8 @@
+{
+  "name": "Persqo",
+  "url": "https://github.com/YaakovTzedek/persqo-mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Start AI persona usability tests on a live or preview website, wait for results, read prioritized findings and pull fix prompts; requires a Persqo API key. [Website](https://persqo.com)",
+  "endpoint": "https://persqo.com/api/mcp"
+}
