@@ -1,0 +1,7 @@
+{
+  "name": "Kilobat CLI",
+  "url": "https://github.com/seifip/kilobat-cli",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Local macOS network diagnostics with proxy and VPN checks; some tools can change settings. GPL-3.0-only CLI; separate proprietary desktop app. Requires macOS 14+ and Xcode 16+ to build with Homebrew. Install: `brew install seifip/kilobat/kilobat` · Run: `kilobat mcp`"
+}
