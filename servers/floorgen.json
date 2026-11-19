@@ -1,0 +1,8 @@
+{
+  "name": "FloorGen",
+  "url": "https://floorgen.app/docs/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Draw, edit, check and render 2D/3D floor plans: walls, rooms, doors, windows, furniture and stairs, with building-code checks and PDF, DXF and glTF export; changes show live in the FloorGen editor. OAuth sign-in with a free FloorGen account. Endpoint: `https://floorgen.app/mcp` · [Website](https://floorgen.app)",
+  "endpoint": "https://floorgen.app/mcp"
+}
