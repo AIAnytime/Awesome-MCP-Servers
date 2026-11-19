@@ -1,0 +1,9 @@
+{
+  "name": "Learn AI with Yaakov Tzedek",
+  "url": "https://github.com/YaakovTzedek/tzedek-ai-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Search and read practical AI guides, AI courses, learning paths and AI news from tzedek.me, in English and Hebrew; free, no auth, read-only. Endpoint: `https://tzedek.me/mcp` · [Docs](https://tzedek.me/en/mcp)",
+  "endpoint": "https://tzedek.me/mcp",
+  "registry": "io.github.YaakovTzedek/tzedek-ai-mcp"
+}
