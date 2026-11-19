@@ -1,0 +1,9 @@
+{
+  "name": "Converter Studio",
+  "url": "https://converter.studio/developers",
+  "category": "media",
+  "transport": "http",
+  "description": "Convert video, audio, images, PDFs, documents, e-books, subtitles, data and archives across 67 formats from a link or a file; results come back as download links kept for 6 hours. Endpoint: `https://converter.studio/api/mcp` (API key as Bearer token; free accounts get 13 credits a day) · [Docs](https://converter.studio/developers) · Registry: `studio.converter/converter-studio`",
+  "endpoint": "https://converter.studio/api/mcp",
+  "registry": "studio.converter/converter-studio"
+}
