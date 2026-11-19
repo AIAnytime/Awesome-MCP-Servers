@@ -1,0 +1,9 @@
+{
+  "name": "DocStar",
+  "url": "https://github.com/swayammaheshwari/docstar-mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "DocStar turns your product's API into published docs that your users' AI assistants can read and call. Reading docs needs no account; changes need OAuth sign-in. · [Website](https://docstar.io)",
+  "endpoint": "https://mcp.docstar.io/mcp",
+  "registry": "io.github.swayammaheshwari/docstar-mcp"
+}
