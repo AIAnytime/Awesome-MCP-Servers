@@ -1,0 +1,9 @@
+{
+  "name": "Shopify App Store Search",
+  "url": "https://apify.com/dheerajitbhu/shopify-app-store",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Public Shopify App Store listings by keyword, category or app handle: rating, review count, pricing label, developer, categories and Built for Shopify flag in typed rows, no login. Tool from one Apify Actor, Apify OAuth or API token, pay per app row. Endpoint: `https://mcp.apify.com/?tools=dheerajitbhu/shopify-app-store`",
+  "endpoint": "https://mcp.apify.com/?tools=dheerajitbhu/shopify-app-store",
+  "registry": "io.github.dheerajitbhu/shopify-app-store"
+}
