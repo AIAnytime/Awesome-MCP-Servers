@@ -3,7 +3,7 @@
   "url": "https://github.com/benjaminb10/viewlify-mcp",
   "category": "marketing",
   "transport": "http",
-  "description": "TikTok videos that beat their creator's usual views, plus the videos, hashtags and sounds rising by niche, from public TikTok data. Read only; 3 tools answer without a key, a free account API key unlocks full search. Endpoint: `https://viewlify.app/api/mcp` · [Docs](https://viewlify.app/tiktok-data-api)",
+  "description": "TikTok videos that beat their creator's usual views, plus the videos, hashtags and sounds rising by niche, from public TikTok data. Read only; 3 tools answer without a key, a free account API key unlocks full search.",
   "endpoint": "https://viewlify.app/api/mcp",
   "registry": "io.github.benjaminb10/viewlify"
 }
