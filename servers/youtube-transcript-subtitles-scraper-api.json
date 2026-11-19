@@ -1,0 +1,8 @@
+{
+  "name": "YouTube Transcript & Subtitles Scraper API",
+  "url": "https://apify.com/johnvc/YoutubeTranscripts",
+  "category": "media",
+  "transport": "http",
+  "description": "Transcripts, subtitles and captions for YouTube videos and Shorts as JSON, in bulk from any URL format. Apify API token required, pay per video. Endpoint: `https://mcp.apify.com?tools=johnvc/YoutubeTranscripts`",
+  "endpoint": "https://mcp.apify.com?tools=johnvc/YoutubeTranscripts"
+}
