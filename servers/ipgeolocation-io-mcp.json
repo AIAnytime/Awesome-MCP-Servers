@@ -1,0 +1,8 @@
+{
+  "name": "IPGeolocation.io MCP Server",
+  "url": "https://github.com/IPGeolocation/ipgeolocation-io-mcp",
+  "category": "cloud-data",
+  "transport": "stdio",
+  "description": "Look up IP geolocation, company details, ASN and network data, IP security (VPN, proxy, Tor, bot, hosting and spam detection), and abuse contacts. The 17 local tools also cover time zones, astronomy, currency data and user-agent parsing. Install: `npx -y ipgeolocation-io-mcp@latest` · [Setup and API key](https://ipgeolocation.io/integrations/ipgeolocation-io-mcp)",
+  "registry": "io.github.IPGeolocation/ipgeolocation-io-mcp"
+}
