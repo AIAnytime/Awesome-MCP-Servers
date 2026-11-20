@@ -1,0 +1,9 @@
+{
+  "name": "DankMachine",
+  "url": "https://github.com/HalberdLLC/dank-meme-sounds",
+  "category": "media",
+  "transport": "http",
+  "description": "Meme soundboard for AI agents: 38k meme sound effects. Find a reaction sound for a moment, search by name, mood or use case, see trending, or play locally with `npx -y dank-meme-sounds`. Endpoint: `https://dankmachine.com/mcp` (no auth, no API key) · [Docs](https://dankmachine.com/developers/)",
+  "endpoint": "https://dankmachine.com/mcp",
+  "registry": "com.dankmachine/dank-meme-sounds"
+}
