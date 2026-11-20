@@ -1,0 +1,9 @@
+{
+  "name": "Ginta",
+  "url": "https://ginta.app/website-builder-mcp/",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Build, publish and edit small-business websites from Claude or ChatGPT, with contact forms, bookings, an online shop and a blog; sites go live on a ginta.page subdomain, custom domains on paid plans. Hosted, OAuth 2.1 sign-in, free plan. Endpoint: `https://ginta.app/mcp` · [Docs](https://ginta.app/docs/)",
+  "endpoint": "https://ginta.app/mcp",
+  "registry": "app.ginta/ginta"
+}
