@@ -1,0 +1,8 @@
+{
+  "name": "InfraRabbit",
+  "url": "https://infrarabbit.com/api",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Free, keyless, read-only dated list prices for GPU, VPS and LLM API plans, with price history and indices. Source: [InfraRabbit/mcp](https://github.com/InfraRabbit/mcp)",
+  "endpoint": "https://infrarabbit.com/mcp"
+}
