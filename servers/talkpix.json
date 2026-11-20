@@ -1,0 +1,9 @@
+{
+  "name": "TalkPix",
+  "url": "https://github.com/TalkPix-AI/talkpix-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate lip-synced talking-photo videos from a portrait and script, or short product ads from a product photo. OAuth 2.1 sign-in and prepaid credits, with a credit quote before rendering · [ChatGPT setup](https://www.talkpix.ai/chatgpt) · [Claude setup](https://www.talkpix.ai/claude).",
+  "endpoint": "https://www.talkpix.ai/api/mcp",
+  "registry": "io.github.talkpixai/talkpix"
+}
