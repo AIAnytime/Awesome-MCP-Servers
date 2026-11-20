@@ -1,0 +1,9 @@
+{
+  "name": "MSG91",
+  "url": "https://github.com/walkover-mcp/msg91",
+  "category": "productivity",
+  "transport": "http",
+  "description": "MSG91 cloud communication platform: search the MSG91 docs and API reference and call MSG91 APIs for SMS, WhatsApp, email, voice and OTP; OAuth sign-in. · [Website](https://msg91.com)",
+  "endpoint": "https://mcp.msg91.com/mcp",
+  "registry": "com.msg91.mcp/mcp"
+}
