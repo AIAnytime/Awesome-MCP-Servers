@@ -1,0 +1,9 @@
+{
+  "name": "OpenShorts.io MCP",
+  "url": "https://github.com/xspring1982/openshorts-oss",
+  "category": "media",
+  "transport": "http",
+  "description": "Hosted video clipper for captioned vertical shorts, with job and usage status; API key required, free and paid plans. [Docs](https://openshorts.io/api).",
+  "endpoint": "https://openshorts.io/api/mcp",
+  "registry": "io.openshorts/openshorts"
+}
