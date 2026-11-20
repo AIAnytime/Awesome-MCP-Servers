@@ -1,5 +1,5 @@
 {
-  "name": "Kling AI MCP (Global)",
+  "name": "Kling AI Global MCP Plugin",
   "url": "https://github.com/klingai-tech/claude-plugin",
   "category": "media",
   "transport": "http",
