@@ -1,0 +1,9 @@
+{
+  "name": "QuestionPunk",
+  "url": "https://www.questionpunk.com/features/mcp-server",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Create and publish surveys and AI-moderated interviews, then read responses, reports and cross-tabs. Connect to `https://app.questionpunk.com/api/v1` with OAuth.",
+  "endpoint": "https://app.questionpunk.com/api/v1",
+  "registry": "io.github.questionpunk/questionpunk"
+}
