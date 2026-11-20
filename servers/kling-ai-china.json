@@ -1,9 +1,9 @@
 {
-  "name": "Kling AI MCP (China)",
+  "name": "Kling AI (China) Plugin",
   "url": "https://github.com/klingai-dev/openclaw-plugin",
   "category": "media",
   "transport": "http",
-  "description": "Official China image/video generation, reference workflows and task tracking via OAuth with account credits, separate from Global accounts/credits/task IDs. Streamable HTTP; install: `claude mcp add --transport http kling-ai-cn https://klingai.com/mcp/plugin` (matching regional account required; integration/docs repository, not hosted-server source).",
+  "description": "Official China-region hosted MCP for Kling image/video generation, reference workflows and task tracking via OAuth; generation uses China account credits, separate from Global. Connect: `https://klingai.com/mcp/plugin` · Claude: `claude mcp add --transport http kling-ai-cn https://klingai.com/mcp/plugin` · [Plugin bundle](https://www.npmjs.com/package/@klingai/plugin-cn) · [CLI](https://www.npmjs.com/package/@klingai/cli-cn) · [Official guide](https://kling.ai/app/mcp/guide).",
   "endpoint": "https://klingai.com/mcp/plugin",
   "registry": "io.github.klingai-dev/kling-ai-cn"
 }
