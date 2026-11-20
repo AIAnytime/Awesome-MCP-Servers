@@ -1,0 +1,9 @@
+{
+  "name": "GenesisCore Astrology",
+  "url": "https://github.com/AETHER-CORE1219/genesis-astro-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Free Western (tropical) and Vedic (sidereal, Lahiri) astrology calculations: signs, Moon nakshatra, ascendant, retrograde and ingress dates. No API key. Endpoint: `https://genesis-astro-guide-r2owtywexa-an.a.run.app/mcp`",
+  "endpoint": "https://genesis-astro-guide-r2owtywexa-an.a.run.app/mcp",
+  "registry": "io.github.AETHER-CORE1219/genesis-astro"
+}
