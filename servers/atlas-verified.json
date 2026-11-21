@@ -1,0 +1,9 @@
+{
+  "name": "Atlas Verified",
+  "url": "https://atlasverified.ai/",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Verify suppliers and certifications, review trade documents, and track shipments across global trade and logistics with an Atlas account and OAuth sign-in.",
+  "endpoint": "https://api.atlasverified.ai/mcp",
+  "registry": "ai.atlasverified/atlas-mcp"
+}
