@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoVisit Tools MCP server: status, tools and setup</title>
+<meta name="description" content="GoVisit Tools MCP server. Answered an MCP handshake without credentials and listed 22 tools. Read-only travel discovery across destinations, places, categories and collections with 22 tools; no...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/govisit-tools/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="GoVisit Tools MCP server: status, tools and setup">
+<meta property="og:description" content="GoVisit Tools MCP server. Answered an MCP handshake without credentials and listed 22 tools. Read-only travel discovery across destinations, places, categories and collections with 22 tools; no...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/govisit-tools/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GoVisit Tools MCP server: status, tools and setup">
+<meta name="twitter:description" content="GoVisit Tools MCP server. Answered an MCP handshake without credentials and listed 22 tools. Read-only travel discovery across destinations, places, categories and collections with 22 tools; no...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "GoVisit Tools", "description": "Read-only travel discovery across destinations, places, categories and collections with 22 tools; no account or API key. Endpoint: https://govisit.ai/mcp · Registry: ai.govisit/tools", "url": "https://mcp.aianytime.net/s/govisit-tools/", "sameAs": "https://govisit.ai/en/docs/developers/mcp/overview", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Commerce, travel & logistics)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "1.0.0", "featureList": ["get_category_overview", "get_category_section", "get_collection_overview", "get_collection_section", "get_destination_overview", "get_destination_section", "get_documentation_page", "get_page_faq", "get_place_overview", "get_place_section", "get_place_visit_facts", "get_statistics", "list_category_places", "list_collection_places", "list_destination_activities", "list_destination_categories", "list_destination_highlights", "list_destination_places", "list_related_places", "search_destinations", "search_documentation", "search_places"], "dateModified": "2026-11-21T11:04:47Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Commerce, travel & logistics", "item": "https://mcp.aianytime.net/c/commerce-travel/"}, {"@type": "ListItem", "position": 3, "name": "GoVisit Tools", "item": "https://mcp.aianytime.net/s/govisit-tools/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a></p>
+<h1>GoVisit Tools</h1>
+<p class="lede">Read-only travel discovery across destinations, places, categories and collections with 22 tools; no account or API key. Endpoint: <code>https://govisit.ai/mcp</code> · Registry: <code>ai.govisit/tools</code></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 22 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://govisit.ai/en/docs/developers/mcp/overview" rel="nofollow noopener">https://govisit.ai/en/docs/developers/mcp/overview</a></dd><dt>Endpoint</dt><dd><code>https://govisit.ai/mcp</code></dd><dt>MCP Registry</dt><dd><code>ai.govisit/tools</code></dd><dt>Reports itself as</dt><dd>ai.govisit/tools 1.0.0</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>22</dd><dt>Context cost</dt><dd>about 5,466 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>no change seen since first check</dd><dt>Handshake time</dt><dd>193 ms</dd><dt>Last checked</dt><dd>2026-11-21 11:04:47 UTC</dd><dt>Listed since</dt><dd>2026-11-18</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 193 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>22 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-21T11:04:47Z">2026-11-21 11:04:47 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">4 daily checks so far; median response 222 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http govisit-tools https://govisit.ai/mcp</code><button class="copy" data-copy="claude mcp add --transport http govisit-tools https://govisit.ai/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://govisit.ai/mcp</code><button class="copy" data-copy="https://govisit.ai/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://govisit.ai/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://govisit.ai/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=govisit-tools&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9nb3Zpc2l0LmFpL21jcCJ9">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22govisit-tools%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//govisit.ai/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;govisit-tools&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;govisit-tools&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;serverUrl&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;serverUrl&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://govisit.ai/mcp</code><button class="copy" data-copy="https://govisit.ai/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;govisit-tools&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://govisit.ai/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">22</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-21. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/govisit-tools.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="get_category_overview identify the place category shown on a destination&#x27;s category page. read its label, category code, destination identity, and any published count or parent category."><summary><code>get_category_overview</code><span class="hint read">read-only</span><span>Identify the place category shown on a destination&#x27;s category page. Read its label, category code, …</span></summary><p class="desc">Identify the place category shown on a destination&#x27;s category page. Read its label, category code, destination identity, and any published count or parent category.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_category_overview&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_category_section read the overview or places section of a destination category page. choose places to inspect the inventory preview for that category. lists contain up to 20 items."><summary><code>get_category_section</code><span class="hint read">read-only</span><span>Read the overview or places section of a destination category page. Choose places to inspect the inventory …</span></summary><p class="desc">Read the overview or places section of a destination category page. Choose places to inspect the inventory preview for that category. Lists contain up to 20 items.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>section</code></td><td>string</td><td>required</td><td>Published section of the selected page to read. One of: overview, places</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_category_section&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;,
+      &quot;section&quot;: &quot;overview&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_collection_overview identify a named destination collection and learn what it brings together. read its title, description, slug, and any published count."><summary><code>get_collection_overview</code><span class="hint read">read-only</span><span>Identify a named destination collection and learn what it brings together. Read its title, description, slug, …</span></summary><p class="desc">Identify a named destination collection and learn what it brings together. Read its title, description, slug, and any published count.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_collection_overview&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_collection_section inspect part of a named collection. select overview for the introduction, or places for the entries shown on the collection page. lists contain up to 20 items."><summary><code>get_collection_section</code><span class="hint read">read-only</span><span>Inspect part of a named collection. Select overview for the introduction, or places for the entries shown on …</span></summary><p class="desc">Inspect part of a named collection. Select overview for the introduction, or places for the entries shown on the collection page. Lists contain up to 20 items.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>section</code></td><td>string</td><td>required</td><td>Published section of the selected page to read. One of: overview, places</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_collection_section&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;,
+      &quot;section&quot;: &quot;overview&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_destination_overview return the published overview for this govisit destination. the result includes the long destination description, nullable seo meta description, and any legacy overview fields, limited to the page&#x27;s public overview fields and includes freshness metadata from the page snapshot."><summary><code>get_destination_overview</code><span class="hint read">read-only</span><span>Return the published overview for this GoVisit destination. The result includes the long destination …</span></summary><p class="desc">Return the published overview for this GoVisit destination. The result includes the long destination description, nullable SEO meta description, and any legacy overview fields, limited to the page&#x27;s public overview fields and includes freshness metadata from the page snapshot.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_destination_overview&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_destination_section read one part of a destination page, such as its overview, highlights, or updates. the experiences section returns every published experience card in the page language across all audiences. other lists contain up to 20 items."><summary><code>get_destination_section</code><span class="hint read">read-only</span><span>Read one part of a destination page, such as its overview, highlights, or updates. The experiences section …</span></summary><p class="desc">Read one part of a destination page, such as its overview, highlights, or updates. The experiences section returns every published experience card in the page language across all audiences. Other lists contain up to 20 items.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>section</code></td><td>string</td><td>required</td><td>Published section of the selected page to read. One of: overview, experiences, highlights, categories, places, collections, activities, updates</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_destination_section&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;,
+      &quot;section&quot;: &quot;overview&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_documentation_page read the current page&#x27;s published title, headings and structured content, or one section selected by its heading anchor. returns the canonical url and explicit truncation information. reads only the current rendered page; does not fetch other articles."><summary><code>get_documentation_page</code><span class="hint read">read-only</span><span>Read the current page&#x27;s published title, headings and structured content, or one section selected by its …</span></summary><p class="desc">Read the current page&#x27;s published title, headings and structured content, or one section selected by its heading anchor. Returns the canonical URL and explicit truncation information. Reads only the current rendered page; does not fetch other articles.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>section</code></td><td>string</td><td>optional</td><td>Optional heading anchor identifying one published section.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_documentation_page&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_page_faq return at most 20 faqs extracted from the current rendered page. an optional query filters the published question and answer text. returns canonical references, count and truncation information. an empty list means no faq matched the requested filter in this bounded page projection; it does not establish that the subject has no answers."><summary><code>get_page_faq</code><span class="hint read">read-only</span><span>Return at most 20 FAQs extracted from the current rendered page. An optional query filters the published …</span></summary><p class="desc">Return at most 20 FAQs extracted from the current rendered page. An optional query filters the published question and answer text. Returns canonical references, count and truncation information. An empty list means no FAQ matched the requested filter in this bounded page projection; it does not establish that the subject has no answers.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>query</code></td><td>string</td><td>optional</td><td>Optional text to match against published questions and answers.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_page_faq&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_place_overview return the published overview for this govisit place, including its published classifications with scheme, recipient, validity and available evidence, and its operating status: operatingstatus.code is operational, temporarily_closed or permanently_closed, and null when the status is unknown. operating status says whether the place still operates, not whether it is open right now. the result exclud"><summary><code>get_place_overview</code><span class="hint read">read-only</span><span>Return the published overview for this GoVisit place, including its published classifications with scheme, …</span></summary><p class="desc">Return the published overview for this GoVisit place, including its published classifications with scheme, recipient, validity and available evidence, and its operating status: operatingStatus.code is operational, temporarily_closed or permanently_closed, and null when the status is unknown. Operating status says whether the place still operates, not whether it is open right now. The result excludes place spatial details, which are available from the Location section, and includes freshness metadata from the page snapshot. Owner, chain and operator are organization names, each null when unknown; operator identifies the company managing the facility, distinct from profile management.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_place_overview&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_place_section return one published section for this govisit place, including location spatial details. arrays are limited to at most 20 items and text values are bounded; the result includes page freshness metadata. the overview section includes owner, chain and operator organization names, each null when unknown; operator identifies the company managing the facility, distinct from profile management."><summary><code>get_place_section</code><span class="hint read">read-only</span><span>Return one published section for this GoVisit place, including Location spatial details. Arrays are limited …</span></summary><p class="desc">Return one published section for this GoVisit place, including Location spatial details. Arrays are limited to at most 20 items and text values are bounded; the result includes page freshness metadata. The overview section includes owner, chain and operator organization names, each null when unknown; operator identifies the company managing the facility, distinct from profile management.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>section</code></td><td>string</td><td>required</td><td>Published section of the selected page to read. One of: overview, location, attributes, collections, audiences, experiences, opening_hours, faq …</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_place_section&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;,
+      &quot;section&quot;: &quot;overview&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_place_visit_facts read compact page-published visit facts for this govisit place, including operating status, location, contact details, opening hours, accessibility, experiences and freshness. read operatingstatus before openinghours. a closed status takes precedence over regular hours. owner, chain and operator are organization names, each null when unknown. the operator manages the facility."><summary><code>get_place_visit_facts</code><span class="hint read">read-only</span><span>Read compact page-published visit facts for this GoVisit place, including operating status, location, contact …</span></summary><p class="desc">Read compact page-published visit facts for this GoVisit place, including operating status, location, contact details, opening hours, accessibility, experiences and freshness. Read operatingStatus before openingHours. A closed status takes precedence over regular hours. Owner, chain and operator are organization names, each null when unknown. The operator manages the facility.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_place_visit_facts&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_statistics return exact governed catalog coverage counts and per-metric observation metadata from this cached public page. scope is physical world on landing pages, or the parent destination on destination, category and collection pages. a measured zero is zero; missing or invalid metrics are unknown. coverage is recalculated daily and may be slightly inaccurate within the day. counts are not live availabili"><summary><code>get_statistics</code><span class="hint read">read-only</span><span>Return exact governed catalog coverage counts and per-metric observation metadata from this cached public …</span></summary><p class="desc">Return exact governed catalog coverage counts and per-metric observation metadata from this cached public page. Scope is physical World on landing pages, or the parent Destination on Destination, category and collection pages. A measured zero is zero; missing or invalid metrics are unknown. Coverage is recalculated daily and may be slightly inaccurate within the day. Counts are not live availability, bounded search/list totals, or rounded homepage headlines.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Statistic family. Coverage is the only supported family today. One of: coverage</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_statistics&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_category_places filter the venue cards shown for one category within a destination, such as culture. provide the category page path. returns up to 20 cards from that inventory preview."><summary><code>list_category_places</code><span class="hint read">read-only</span><span>Filter the venue cards shown for one category within a destination, such as Culture. Provide the category …</span></summary><p class="desc">Filter the venue cards shown for one category within a destination, such as Culture. Provide the category page path. Returns up to 20 cards from that inventory preview.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Optional published place name or partial name.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Optional published category code.</td></tr><tr><td><code>audience</code></td><td>string</td><td>optional</td><td>Optional published audience label or code.</td></tr><tr><td><code>accessibility</code></td><td>string</td><td>optional</td><td>Optional published accessibility label or code.</td></tr><tr><td><code>neighborhood</code></td><td>string</td><td>optional</td><td>Optional published neighborhood.</td></tr><tr><td><code>administrativeArea</code></td><td>string</td><td>optional</td><td>Optional published administrative area.</td></tr><tr><td><code>activityType</code></td><td>string</td><td>optional</td><td>Optional published activity type.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_category_places&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_collection_places find entries in a named destination collection using its collection page path. optional filters narrow the existing selection by published card details. returns up to 20 matches."><summary><code>list_collection_places</code><span class="hint read">read-only</span><span>Find entries in a named destination collection using its collection page path. Optional filters narrow the …</span></summary><p class="desc">Find entries in a named destination collection using its collection page path. Optional filters narrow the existing selection by published card details. Returns up to 20 matches.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Optional published place name or partial name.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Optional published category code.</td></tr><tr><td><code>audience</code></td><td>string</td><td>optional</td><td>Optional published audience label or code.</td></tr><tr><td><code>accessibility</code></td><td>string</td><td>optional</td><td>Optional published accessibility label or code.</td></tr><tr><td><code>neighborhood</code></td><td>string</td><td>optional</td><td>Optional published neighborhood.</td></tr><tr><td><code>administrativeArea</code></td><td>string</td><td>optional</td><td>Optional published administrative area.</td></tr><tr><td><code>activityType</code></td><td>string</td><td>optional</td><td>Optional published activity type.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_collection_places&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_destination_activities discover activities featured on the destination page, such as walking tours. returns up to 20 cards from its activity section."><summary><code>list_destination_activities</code><span class="hint read">read-only</span><span>Discover activities featured on the destination page, such as walking tours. Returns up to 20 cards from its …</span></summary><p class="desc">Discover activities featured on the destination page, such as walking tours. Returns up to 20 cards from its activity section.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_destination_activities&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_destination_categories see how a destination groups its places. returns up to 20 category labels and codes with available counts and parent categories from the destination page."><summary><code>list_destination_categories</code><span class="hint read">read-only</span><span>See how a destination groups its places. Returns up to 20 category labels and codes with available counts and …</span></summary><p class="desc">See how a destination groups its places. Returns up to 20 category labels and codes with available counts and parent categories from the destination page.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_destination_categories&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_destination_highlights return at most 20 compact published highlight place cards from this destination page. the result is a page-local subset, includes canonical links, and includes freshness metadata."><summary><code>list_destination_highlights</code><span class="hint read">read-only</span><span>Return at most 20 compact published highlight place cards from this destination page. The result is a …</span></summary><p class="desc">Return at most 20 compact published highlight place cards from this destination page. The result is a page-local subset, includes canonical links, and includes freshness metadata.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_destination_highlights&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_destination_places browse the place cards displayed on a destination&#x27;s main page. apply optional filters to that preview and get up to 20 matches. coverage depends on which cards the page shows."><summary><code>list_destination_places</code><span class="hint read">read-only</span><span>Browse the place cards displayed on a destination&#x27;s main page. Apply optional filters to that preview and get …</span></summary><p class="desc">Browse the place cards displayed on a destination&#x27;s main page. Apply optional filters to that preview and get up to 20 matches. Coverage depends on which cards the page shows.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Optional published place name or partial name.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Optional published category code.</td></tr><tr><td><code>audience</code></td><td>string</td><td>optional</td><td>Optional published audience label or code.</td></tr><tr><td><code>accessibility</code></td><td>string</td><td>optional</td><td>Optional published accessibility label or code.</td></tr><tr><td><code>neighborhood</code></td><td>string</td><td>optional</td><td>Optional published neighborhood.</td></tr><tr><td><code>administrativeArea</code></td><td>string</td><td>optional</td><td>Optional published administrative area.</td></tr><tr><td><code>activityType</code></td><td>string</td><td>optional</td><td>Optional published activity type.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_destination_places&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="list_related_places find nearby suggestions shown on a single place profile. use the path of the reference place and filter its nearby cards by published details. returns up to 20 matches."><summary><code>list_related_places</code><span class="hint read">read-only</span><span>Find nearby suggestions shown on a single place profile. Use the path of the reference place and filter its …</span></summary><p class="desc">Find nearby suggestions shown on a single place profile. Use the path of the reference place and filter its nearby cards by published details. Returns up to 20 matches.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Optional published place name or partial name.</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Optional published category code.</td></tr><tr><td><code>audience</code></td><td>string</td><td>optional</td><td>Optional published audience label or code.</td></tr><tr><td><code>accessibility</code></td><td>string</td><td>optional</td><td>Optional published accessibility label or code.</td></tr><tr><td><code>neighborhood</code></td><td>string</td><td>optional</td><td>Optional published neighborhood.</td></tr><tr><td><code>administrativeArea</code></td><td>string</td><td>optional</td><td>Optional published administrative area.</td></tr><tr><td><code>activityType</code></td><td>string</td><td>optional</td><td>Optional published activity type.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_related_places&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_destinations search published destinations by name or traveler intent. mode defaults to auto: exact name matches avoid embedding; otherwise name and intent results are combined. explicit name never embeds; intent always searches by meaning. returns stable destination codes, public urls, match method, scope and index release. optional within and types filter canonical geography before ranking; they require a ge"><summary><code>search_destinations</code><span class="hint read">read-only</span><span>Search published destinations by name or traveler intent. mode defaults to auto: exact name matches avoid …</span></summary><p class="desc">Search published destinations by name or traveler intent. mode defaults to auto: exact name matches avoid embedding; otherwise name and intent results are combined. Explicit name never embeds; intent always searches by meaning. Returns stable destination codes, public URLs, match method, scope and index release. Optional within and types filter canonical geography before ranking; they require a geography-enabled release. Whole-Division containment takes precedence over a default hierarchy parent for cross-border destinations; unknown scope is never assumed. Types are published classifications, not population or city tiers.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>Place or destination name, or the traveler&#x27;s intent.</td></tr><tr><td><code>mode</code></td><td>string</td><td>optional</td><td>Name lookup, intent retrieval, or name-first auto discovery. One of: auto, name, intent</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr><tr><td><code>language</code></td><td>string</td><td>optional</td><td>Requested response language; defaults to the page language. One of: en, cs</td></tr><tr><td><code>within</code></td><td>string</td><td>optional</td><td>Canonical destination code to explore within; all is reserved for an explicit unrestricted place search, never a containing-destination filter.</td></tr><tr><td><code>types</code></td><td>enum[]</td><td>optional</td><td>Match any of these published classifications; not a size/tier filter.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_destinations&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_documentation search the published documentation links currently rendered on this govisit page and return bounded canonical links and titles."><summary><code>search_documentation</code><span class="hint read">read-only</span><span>Search the published documentation links currently rendered on this GoVisit page and return bounded canonical …</span></summary><p class="desc">Search the published documentation links currently rendered on this GoVisit page and return bounded canonical links and titles.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>pagePath</code></td><td>string</td><td>required</td><td>Canonical GoVisit page path supplying this tool&#x27;s published context; no origin, query or fragment.</td></tr><tr><td><code>query</code></td><td>string</td><td>optional</td><td>Optional documentation title or path text to match.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of results to return.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_documentation&quot;,
+    &quot;arguments&quot;: {
+      &quot;pagePath&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="search_places for faster searches, pass a known country or destination code. unscoped name lookups search all covered countries. search published places by name or traveler intent. mode defaults to auto: exact names avoid embedding, otherwise combine name and intent candidates without duplicate ids. explicit name never embeds. a destination page supplies its scope; country, destination and near intersect and ne"><summary><code>search_places</code><span class="hint read">read-only</span><span>For faster searches, pass a known country or destination code. Unscoped name lookups search all covered …</span></summary><p class="desc">For faster searches, pass a known country or destination code. Unscoped name lookups search all covered countries. Search published places by name or traveler intent. mode defaults to auto: exact names avoid embedding, otherwise combine name and intent candidates without duplicate IDs. Explicit name never embeds. A destination page supplies its scope; country, destination and near intersect and never widen. Scoped names and proximity require a geography-enabled index release; older releases report unavailable constraints. At most 200 candidate records are examined before returning up to 20 items, with counts/truncation; a missing result is not proof of invisibility everywhere. Distance is geographic meters, not walking time. Scores and profile quality are retrieval signals, not proof of amenities or suitability. Intent uses one query embedding.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>Place or destination name, or the traveler&#x27;s intent.</td></tr><tr><td><code>mode</code></td><td>string</td><td>optional</td><td>Name lookup, intent retrieval, or name-first auto discovery. One of: auto, name, intent</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Maximum number of places to return. Defaults to 10. Name mode allows up to 10. Other modes allow up to 20.</td></tr><tr><td><code>language</code></td><td>string</td><td>optional</td><td>Requested response language; defaults to the page language. One of: en, cs</td></tr><tr><td><code>destination</code></td><td>string</td><td>optional</td><td>Stable destination code or all. Defaults to the current destination, otherwise all.</td></tr><tr><td><code>country</code></td><td>string</td><td>optional</td><td>Two-letter ISO country code. Supply it when the country is known to narrow the search. Intersects destination and proximity where the public geography projection is available.</td></tr><tr><td><code>near</code></td><td>object</td><td>optional</td><td>Proximity filter with a radius in meters. Supply either a GoVisit place ID or explicit coordinates as the reference.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_places&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details></div>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/govisit-tools.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/govisit-tools.svg)](https://mcp.aianytime.net/s/govisit-tools/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/govisit-tools.svg)](https://mcp.aianytime.net/s/govisit-tools/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/govisit-tools.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Commerce, travel &amp; logistics</h2>
+<ul class="chips"><li><a href="../hotlikeshop/">HOTLIKESHOP</a></li><li><a href="../inbox-esim/">Inbox eSIM</a></li><li><a href="../latino-events/">Latino Events (events.lat)</a></li><li><a href="../maqami-travel/">MAQAMI Travel</a></li><li><a href="../maru-japan-hands/">MARU Japan Hands</a></li><li><a href="../mubboo-flights-search/">Mubboo Flights Search</a></li><li><a href="../../c/commerce-travel/">All of Commerce, travel &amp; logistics</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>

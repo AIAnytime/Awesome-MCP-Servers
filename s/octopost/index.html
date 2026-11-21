@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Octopost MCP server: status, tools and setup</title>
+<meta name="description" content="Octopost MCP server. Answered an MCP handshake without credentials and listed 32 tools. Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/octopost/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="Octopost MCP server: status, tools and setup">
+<meta property="og:description" content="Octopost MCP server. Answered an MCP handshake without credentials and listed 32 tools. Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/octopost/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Octopost MCP server: status, tools and setup">
+<meta name="twitter:description" content="Octopost MCP server. Answered an MCP handshake without credentials and listed 32 tools. Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "Octopost", "description": "Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human approval queue. Paid, OAuth sign-in or API key. Endpoint: https://octopost.ink/mcp · Website", "url": "https://mcp.aianytime.net/s/octopost/", "sameAs": "https://github.com/octopost-ink/octopost-plugin", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Marketing, content & social)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "1.0.0", "featureList": ["add_feed", "approve_queued_post", "cancel_scheduled", "create_connect_link", "create_post", "create_upload", "delete_post", "get_analytics", "get_guide", "get_post", "get_queue_status", "get_usage", "list_accounts", "list_feeds", "list_posts", "list_presets", "list_youtube_comments", "preview_post", "publish_draft", "queue_post", "reject_queued_post", "remove_feed", "reorder_queue", "reply_to_youtube_comment", "reschedule_post", "resubmit_post", "retry_failed", "schedule_post", "set_evergreen", "split_thread", "update_post", "update_queue_settings"], "dateModified": "2026-11-21T11:04:54Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Marketing, content & social", "item": "https://mcp.aianytime.net/c/marketing/"}, {"@type": "ListItem", "position": 3, "name": "Octopost", "item": "https://mcp.aianytime.net/s/octopost/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/marketing/">Marketing, content &amp; social</a></p>
+<h1>Octopost</h1>
+<p class="lede">Remote MCP server for posting to X, Bluesky, Mastodon and LinkedIn: threads, scheduling, a queue and a human approval queue. Paid, OAuth sign-in or API key. Endpoint: <code>https://octopost.ink/mcp</code> · <a href="https://octopost.ink" rel="nofollow noopener">Website</a></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 32 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/marketing/">Marketing, content &amp; social</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://github.com/octopost-ink/octopost-plugin" rel="nofollow noopener">https://github.com/octopost-ink/octopost-plugin</a></dd><dt>Endpoint</dt><dd><code>https://octopost.ink/mcp</code></dd><dt>MCP Registry</dt><dd><code>ink.octopost/octopost</code></dd><dt>Reports itself as</dt><dd>Octopost 1.0.0</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>32</dd><dt>Context cost</dt><dd>about 17,905 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>2026-11-20</dd><dt>Handshake time</dt><dd>69 ms</dd><dt>Repository</dt><dd>0 stars · last push 2026-11-18 · MIT</dd><dt>Last checked</dt><dd>2026-11-21 11:04:54 UTC</dd><dt>Listed since</dt><dd>2026-11-18</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 69 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>32 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-21T11:04:54Z">2026-11-21 11:04:54 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">4 daily checks so far; median response 166 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http octopost https://octopost.ink/mcp</code><button class="copy" data-copy="claude mcp add --transport http octopost https://octopost.ink/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://octopost.ink/mcp</code><button class="copy" data-copy="https://octopost.ink/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://octopost.ink/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://octopost.ink/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=octopost&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9vY3RvcG9zdC5pbmsvbWNwIn0%3D">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22octopost%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//octopost.ink/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;octopost&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;octopost&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;serverUrl&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;serverUrl&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://octopost.ink/mcp</code><button class="copy" data-copy="https://octopost.ink/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;octopost&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://octopost.ink/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">32</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-21. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/octopost.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="add_feed turn an rss or atom feed (a blog, a newsletter, a changelog) into posts. octopost reads the feed right away (a site address works too if the page links its feed) and then checks it every 30 minutes by default. each new item becomes a post from the template.
+
+the first check posts only the feed&#x27;s latest item, so adding a feed never floods the account. by default (mode &quot;hold&quot;) every new item waits f"><summary><code>add_feed</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Turn an RSS or Atom feed (a blog, a newsletter, a changelog) into posts. Octopost reads the feed right away …</span></summary><p class="desc">Turn an RSS or Atom feed (a blog, a newsletter, a changelog) into posts. Octopost reads the feed right away (a site address works too if the page links its feed) and then checks it every 30 minutes by default. Each new item becomes a post from the template.
+
+The first check posts only the feed&#x27;s latest item, so adding a feed never floods the account. By default (mode &quot;hold&quot;) every new item waits for a person to approve it: Octopost emails the owner Approve / Reject / Edit links, so tell the user to check their email. With mode &quot;queue&quot; new items join the posting queue and publish in queue slots. A feed makes at most 10 posts a day; the same text to the same network within 7 days is skipped; a blocked term holds the post. Posts are shortened to fit each network (the excerpt first, then the title; the link is kept whole).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>url</code></td><td>string</td><td>required</td><td>The feed URL (or the site address, if its page links a feed).</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Networks each new item is posted to. Call list_accounts first.</td></tr><tr><td><code>template</code></td><td>string</td><td>optional</td><td>Optional. Post text with {title}, {url} and {excerpt} (a plain-text summary of the item). Default &quot;{title} {url}&quot;.</td></tr><tr><td><code>mode</code></td><td>string</td><td>optional</td><td>Optional. &quot;hold&quot; (default): each new item waits for a person to approve it. &quot;queue&quot;: new items join the posting queue. One of: hold, queue</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Optional. A name for the feed. Default: the feed&#x27;s own title.</td></tr><tr><td><code>check_every_minutes</code></td><td>number</td><td>optional</td><td>Optional. How often to check, 15 to 1440 minutes. Default 30.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;add_feed&quot;,
+    &quot;arguments&quot;: {
+      &quot;url&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="approve_queued_post approve a post that is waiting for approval. approval is meant for a person: by default this tool refuses, and the post has to be approved from the email octopost sent or the dashboard. it only works when the account owner turned on &quot;let agents approve posts made by a different agent&quot; in settings, and never for a post your own key or connection made. only call it when the user explicitly asked you"><summary><code>approve_queued_post</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Approve a post that is waiting for approval. Approval is meant for a person: by default this tool refuses, …</span></summary><p class="desc">Approve a post that is waiting for approval. Approval is meant for a person: by default this tool refuses, and the post has to be approved from the email Octopost sent or the dashboard. It only works when the account owner turned on &quot;Let agents approve posts made by a different agent&quot; in Settings, and never for a post your own key or connection made. Only call it when the user explicitly asked you to approve that specific post. If it refuses, tell the user the post is waiting for them and to check their email. Once approved, a queue post publishes in its queue slot and a scheduled post at its time.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to approve.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;approve_queued_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="cancel_scheduled cancel a scheduled post, converting it to a draft. the post is kept in octopost but will not be published at the scheduled time.
+
+give it a new time later with reschedule_post. to publish it right away instead, call publish_draft."><summary><code>cancel_scheduled</code><span class="hint write">can modify</span><span>Cancel a scheduled post, converting it to a draft. The post is kept in Octopost but will NOT be published at …</span></summary><p class="desc">Cancel a scheduled post, converting it to a draft. The post is kept in Octopost but will NOT be published at the scheduled time.
+
+Give it a new time later with reschedule_post. To publish it right away instead, call publish_draft.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) of the scheduled post to cancel.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;cancel_scheduled&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_connect_link make a link that lets someone else (a client, a teammate) connect their own social account to this octopost account with no octopost login. give them the url; each account they connect shows up in list_accounts. works 7 days by default, for up to 5 accounts. the url is shown once."><summary><code>create_connect_link</code><span class="hint write">can modify</span><span>Make a link that lets someone else (a client, a teammate) connect their own social account to THIS Octopost …</span></summary><p class="desc">Make a link that lets someone else (a client, a teammate) connect their own social account to THIS Octopost account with no Octopost login. Give them the url; each account they connect shows up in list_accounts. Works 7 days by default, for up to 5 accounts. The url is shown once.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>label</code></td><td>string</td><td>optional</td><td>Who it is for, shown on the link page.</td></tr><tr><td><code>networks</code></td><td>string[]</td><td>optional</td><td>Only these networks. Omit for any.</td></tr><tr><td><code>expires_in_days</code></td><td>number</td><td>optional</td><td>1 to 30 (default 7).</td></tr><tr><td><code>max_accounts</code></td><td>number</td><td>optional</td><td>1 to 25 (default 5).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_connect_link&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="create_post create and publish a post to one or more social media platforms immediately.
+
+octopost handles formatting, auth and uploads. which networks work today is in the server instructions (and get_guide topic &quot;platforms&quot;).
+
+platform content limits (checked before anything is published: if the text or any segment is too long for one of the networks, the call fails with the count and nothing goes out):
+- t"><summary><code>create_post</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Create and publish a post to one or more social media platforms immediately. Octopost handles formatting, …</span></summary><p class="desc">Create and publish a post to one or more social media platforms immediately.
+
+Octopost handles formatting, auth and uploads. Which networks work today is in the server instructions (and get_guide topic &quot;platforms&quot;).
+
+PLATFORM CONTENT LIMITS (checked before anything is published: if the text or any segment is too long for one of the networks, the call fails with the count and nothing goes out):
+- Twitter/X: 280 chars (URLs count as 23 chars). Can&#x27;t mix video with images.
+- Bluesky: 300 graphemes. Octopost auto-generates link facets. Up to 4 images or one MP4 video (3 min max), not both.
+- LinkedIn: 3,000 chars.
+- Threads: 500 chars.
+- Mastodon: ~500 chars (varies by server; checked when publishing).
+
+TIPS:
+- If a platform fails, the post still succeeds on other platforms — check the response for per-platform results.
+- A slow publish (Threads with media can take minutes) answers after ~20 s with status &quot;publishing&quot; and carries on: check it with get_post. Pass an idempotency_key; if a call times out with no postId, retry with the same key (you get the original post, never a second).
+- Use cross_link_enabled + primary_platform to post to one platform first, then share the link on others.
+- Polls are supported on Twitter (2-4 options, 5 min to 7 day duration) and Mastodon.
+
+APPROVAL: if the account requires approval for every post (an owner setting), create_post saves the post as pending_approval instead of publishing and the result says so. Tell the user to approve it from the …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>required</td><td>The post text. Keep under 280 chars if posting to Twitter.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Which platforms to post to. Call list_accounts first to see what&#x27;s connected.</td></tr><tr><td><code>media_urls</code></td><td>string | object[]</td><td>optional</td><td>Optional images (up to 4 for most platforms) or one video. Must be publicly reachable. Each item is a URL string or {url, alt} with alt text (recommended for images). For a file on your machine, call create_upload first.</td></tr><tr><td><code>video_url</code></td><td>string</td><td>optional</td><td>Optional video URL. Can&#x27;t be combined with images on Twitter.</td></tr><tr><td><code>poll</code></td><td>object</td><td>optional</td><td>Create a poll. Only works on Twitter and Mastodon.</td></tr><tr><td><code>mastodon_visibility</code></td><td>string</td><td>optional</td><td>Mastodon post visibility. &quot;public&quot; = visible to all, &quot;unlisted&quot; = not on public timelines, &quot;private&quot; = followers only, &quot;direct&quot; = mentioned users only. Default: public. One of: public, unlisted, private, direct</td></tr><tr><td><code>content_warning</code></td><td>string</td><td>optional</td><td>Mastodon spoiler text / content warning. Post content will be hidden behind this text. Important in Mastodon culture for sensitive topics.</td></tr><tr><td><code>tiktok</code></td><td>object</td><td>optional</td><td>Required for TikTok. Ask the user; no defaults.</td></tr><tr><td><code>cross_link_enabled</code></td><td>boolean</td><td>optional</td><td>Enable cross-link publishing. Posts to primary_platform first, then shares the link to other platforms using the cross_link_template.</td></tr><tr><td><code>primary_platform</code></td><td>string</td><td>optional</td><td>Which platform to post to first when cross_link_enabled is true. The post URL from this platform is shared to the others. One of: twitter, threads, bluesky, linkedin, mastodon, instagram, facebook, pinterest …</td></tr><tr><td><code>cross_link_template</code></td><td>string</td><td>optional</td><td>Template for cross-link posts on secondary platforms. Variables: {platform} (primary platform name), {link} (post URL). Default: &quot;New post on {platform}: {link}&quot;.</td></tr><tr><td><code>segments</code></td><td>object[]</td><td>optional</td><td>Optional thread reply segments (up to 24). Each becomes a reply in a chain on X/Threads/Bluesky/Mastodon; on LinkedIn the first post goes out with `content` and each segment is added as a comment on it. The whole thread publishes atomically. Canonical use …</td></tr><tr><td><code>first_comment</code></td><td>string</td><td>optional</td><td>Optional. Posted as the first reply right after the post (after the last segment of a thread): a reply on X, Bluesky, Mastodon and Threads, a comment on LinkedIn. Good for the link or the hashtags. Same length limits as the post (LinkedIn comments: 1,250). …</td></tr><tr><td><code>accounts</code></td><td>object</td><td>optional</td><td>Optional. Which connected account to post as when a platform has more than one, e.g. {&quot;twitter&quot;: &quot;@handle&quot;}. Values: the handle, or the id from list_accounts. Leave out to use the platform&#x27;s default account (marked default in list_accounts).</td></tr><tr><td><code>idempotency_key</code></td><td>string</td><td>optional</td><td>Optional. A unique string (e.g. a UUID) for this post. Retry a timed-out call with the same key and Octopost returns the original post instead of posting again.</td></tr><tr><td><code>variants</code></td><td>object</td><td>optional</td><td>Optional. A different version of the post for some networks, keyed by network, e.g. {&quot;linkedin&quot;: {&quot;content&quot;: &quot;A longer take for LinkedIn&quot;}, &quot;twitter&quot;: {&quot;content&quot;: &quot;Short version&quot;, &quot;segments&quot;: [{&quot;content&quot;: &quot;https://example.com&quot;}]}}. Each network listed gets …</td></tr><tr><td><code>allow_duplicate</code></td><td>boolean</td><td>optional</td><td>Optional. Octopost refuses the same text to the same network within 7 days (the error names the earlier post). Set true only when posting it again is intended.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;content&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="create_upload attach a file from your machine (screenshot, photo, video): this returns a one-time upload_url, good for 15 minutes and one file. send the raw bytes to it, e.g. curl -t ./shot.png &quot;&lt;upload_url&gt;&quot; (put; no auth header needed). the response has media_url: pass it in media_urls (as the url, or {url, alt} with alt text) on create_post / schedule_post / queue_post / update_post.
+
+accepts jpeg, png, gif,"><summary><code>create_upload</code><span class="hint write">can modify</span><span>Attach a file from your machine (screenshot, photo, video): this returns a one-time upload_url, good for 15 …</span></summary><p class="desc">Attach a file from your machine (screenshot, photo, video): this returns a one-time upload_url, good for 15 minutes and one file. Send the raw bytes to it, e.g. curl -T ./shot.png &quot;&lt;upload_url&gt;&quot; (PUT; no auth header needed). The response has media_url: pass it in media_urls (as the URL, or {url, alt} with alt text) on create_post / schedule_post / queue_post / update_post.
+
+Accepts JPEG, PNG, GIF, WebP, MP4, MOV, WebM (checked from the file&#x27;s bytes). Size limit depends on the plan (max_bytes in the response). Files already on a public URL don&#x27;t need this: pass the URL directly.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>filename</code></td><td>string</td><td>optional</td><td>Optional. The local file name, used in the example command.</td></tr><tr><td><code>size</code></td><td>number</td><td>optional</td><td>Optional. File size in bytes; checked against the plan limit up front.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;create_upload&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="delete_post delete a post from octopost. for published posts, also attempts to delete from each platform via their apis.
+
+platform deletion support:
+- twitter: full api deletion supported.
+- bluesky: full api deletion supported (deleterecord).
+- linkedin: full api deletion supported.
+- mastodon: full api deletion supported.
+- threads: api deletion not supported — returns the post url so the user can delete ma"><summary><code>delete_post</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span class="hint world">external access</span><span>Delete a post from Octopost. For published posts, also attempts to delete from each platform via their APIs. …</span></summary><p class="desc">Delete a post from Octopost. For published posts, also attempts to delete from each platform via their APIs.
+
+Platform deletion support:
+- Twitter: Full API deletion supported.
+- Bluesky: Full API deletion supported (deleteRecord).
+- LinkedIn: Full API deletion supported.
+- Mastodon: Full API deletion supported.
+- Threads: API deletion not supported — returns the post URL so the user can delete manually.
+
+The post is ALWAYS removed from Octopost&#x27;s database regardless of platform deletion results.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to delete.</td></tr><tr><td><code>delete_from_platforms</code></td><td>boolean</td><td>optional</td><td>Whether to also delete from platforms (for published posts). Default: true. Set to false to only remove from Octopost.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;delete_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_analytics how published posts did: likes, reposts, replies, quotes and (on x) views.
+
+two modes:
+- with post_id: that post&#x27;s numbers per network, plus snapshots taken about 1 hour, 24 hours and 7 days after it went live.
+- without post_id: a summary of posts published between from and to (default: the last 30 days): totals per network and the top posts by engagement (likes + reposts + replies + quotes).
+
+wh"><summary><code>get_analytics</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>How published posts did: likes, reposts, replies, quotes and (on X) views. Two modes: - With post_id: that …</span></summary><p class="desc">How published posts did: likes, reposts, replies, quotes and (on X) views.
+
+Two modes:
+- With post_id: that post&#x27;s numbers per network, plus snapshots taken about 1 hour, 24 hours and 7 days after it went live.
+- Without post_id: a summary of posts published between from and to (default: the last 30 days): totals per network and the top posts by engagement (likes + reposts + replies + quotes).
+
+Which networks report what: X gives likes, reposts, replies, quotes, bookmarks and views. Bluesky gives likes, reposts, replies and quotes. Mastodon gives likes (favourites), reposts (boosts) and replies. Threads and LinkedIn are not available yet. Octopost reads the numbers on its own for 30 days after a post goes live, so they can be a few hours old; each network&#x27;s result says when it was read. Pass refresh: true to read fresh numbers first (allowed once every 10 minutes).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>optional</td><td>Optional. One post&#x27;s numbers. Leave out for a summary.</td></tr><tr><td><code>from</code></td><td>string</td><td>optional</td><td>Optional. Summary start, an ISO date like 2026-11-01. Default: 30 days ago.</td></tr><tr><td><code>to</code></td><td>string</td><td>optional</td><td>Optional. Summary end, an ISO date. Default: now.</td></tr><tr><td><code>platform</code></td><td>string</td><td>optional</td><td>Optional. Only count this network in the summary. One of: twitter, bluesky, mastodon</td></tr><tr><td><code>top</code></td><td>number</td><td>optional</td><td>Optional. How many top posts to list (0 to 50, default 5).</td></tr><tr><td><code>refresh</code></td><td>boolean</td><td>optional</td><td>Optional. Read fresh numbers from the networks before answering (once every 10 minutes).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_analytics&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_guide get a comprehensive guide on using octopost effectively. returns platform limits, best practices, content tips, and feature documentation. call this if you need help with:
+- what platforms are supported and their limits
+- how to format content for cross-platform posting
+- media/image/video requirements per platform
+- scheduling and content calendar tips
+- how threads work on supported platforms"><summary><code>get_guide</code><span class="hint read">read-only</span><span>Get a comprehensive guide on using Octopost effectively. Returns platform limits, best practices, content …</span></summary><p class="desc">Get a comprehensive guide on using Octopost effectively. Returns platform limits, best practices, content tips, and feature documentation. Call this if you need help with:
+- What platforms are supported and their limits
+- How to format content for cross-platform posting
+- Media/image/video requirements per platform
+- Scheduling and content calendar tips
+- How threads work on supported platforms</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>topic</code></td><td>string</td><td>optional</td><td>Specific topic to get help on. Omit for the full guide. One of: overview, platforms, media, scheduling, threads, best-practices, queue</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_guide&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_post get everything about one post: status, full text, approval state and reviewer feedback, thread segments, per-network variants, media (with alt text), queue status and position, which account posts on each network, per-network results with links, and the last error. use it to check whether a post went out everywhere."><summary><code>get_post</code><span class="hint read">read-only</span><span>Get everything about one post: status, full text, approval state and reviewer feedback, thread segments, …</span></summary><p class="desc">Get everything about one post: status, full text, approval state and reviewer feedback, thread segments, per-network variants, media (with alt text), queue status and position, which account posts on each network, per-network results with links, and the last error. Use it to check whether a post went out everywhere.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_queue_status see your queue: how many posts are ready, how many need approval, when the next one publishes, and your queue settings."><summary><code>get_queue_status</code><span class="hint read">read-only</span><span>See your queue: how many posts are ready, how many need approval, when the next one publishes, and your queue …</span></summary><p class="desc">See your queue: how many posts are ready, how many need approval, when the next one publishes, and your queue settings.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_queue_status&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_usage how much of the plan is used: x post units this month (used, limit, remaining, when it resets; a post with a link costs 13 units, a plain post 1), and connected accounts vs the plan&#x27;s limit. a null limit means unlimited. check it before a batch of x posts so you don&#x27;t hit the cap part way."><summary><code>get_usage</code><span class="hint read">read-only</span><span>How much of the plan is used: X post units this month (used, limit, remaining, when it resets; a post with a …</span></summary><p class="desc">How much of the plan is used: X post units this month (used, limit, remaining, when it resets; a post with a link costs 13 units, a plain post 1), and connected accounts vs the plan&#x27;s limit. A null limit means unlimited. Check it before a batch of X posts so you don&#x27;t hit the cap part way.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_usage&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_accounts list all connected social media accounts. always call this before create_post to see which platforms the user has connected.
+
+returns each account&#x27;s platform, handle, id, and whether it is the platform&#x27;s default (used when a post names no account). a platform can have several accounts: pass &quot;accounts&quot; to create_post / queue_post / schedule_post to pick one. only connected platforms can be posted t"><summary><code>list_accounts</code><span class="hint read">read-only</span><span>List all connected social media accounts. ALWAYS call this before create_post to see which platforms the user …</span></summary><p class="desc">List all connected social media accounts. ALWAYS call this before create_post to see which platforms the user has connected.
+
+Returns each account&#x27;s platform, handle, id, and whether it is the platform&#x27;s default (used when a post names no account). A platform can have several accounts: pass &quot;accounts&quot; to create_post / queue_post / schedule_post to pick one. Only connected platforms can be posted to. Not every network is live yet: check the network status in the server instructions before promising a post.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_accounts&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_feeds list the rss/atom feeds this account turns into posts: each feed&#x27;s networks, template, mode (&quot;hold&quot; = every new item waits for a person to approve it, &quot;queue&quot; = new items join the posting queue), how often it is checked, when it was last checked, any error, and how many items it has seen and posted."><summary><code>list_feeds</code><span class="hint read">read-only</span><span>List the RSS/Atom feeds this account turns into posts: each feed&#x27;s networks, template, mode (&quot;hold&quot; = every …</span></summary><p class="desc">List the RSS/Atom feeds this account turns into posts: each feed&#x27;s networks, template, mode (&quot;hold&quot; = every new item waits for a person to approve it, &quot;queue&quot; = new items join the posting queue), how often it is checked, when it was last checked, any error, and how many items it has seen and posted.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_feeds&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_posts list posts, newest first: content preview, platforms, status, scheduled time and each network&#x27;s link. filter with status. results are paged: when next_cursor is set, call again with cursor = next_cursor for the next page. call get_post for one post&#x27;s full details."><summary><code>list_posts</code><span class="hint read">read-only</span><span>List posts, newest first: content preview, platforms, status, scheduled time and each network&#x27;s link. Filter …</span></summary><p class="desc">List posts, newest first: content preview, platforms, status, scheduled time and each network&#x27;s link. Filter with status. Results are paged: when next_cursor is set, call again with cursor = next_cursor for the next page. Call get_post for one post&#x27;s full details.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>status</code></td><td>string</td><td>optional</td><td>Filter by status. &quot;queued&quot; = in the active queue, &quot;pending&quot; = waiting for human approval, &quot;partial&quot; = live on some networks only. Omit for all posts. One of: published, scheduled, draft, queued, pending, partial, failed, retrying …</td></tr><tr><td><code>limit</code></td><td>number</td><td>optional</td><td>Posts per page (default 10, max 50).</td></tr><tr><td><code>cursor</code></td><td>string</td><td>optional</td><td>next_cursor from the previous list_posts call, to get the next page. Keep the same status filter.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_posts&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_presets list publishing presets: saved platform combinations (system presets plus the user&#x27;s own) with their cross-link settings. the create tools take platforms, not a preset name, so pass a preset&#x27;s `platforms` (and cross-link fields) to create_post / schedule_post / queue_post. platforms octopost doesn&#x27;t support are left out of the list, and presets with none left are skipped."><summary><code>list_presets</code><span class="hint read">read-only</span><span>List publishing presets: saved platform combinations (system presets plus the user&#x27;s own) with their …</span></summary><p class="desc">List publishing presets: saved platform combinations (system presets plus the user&#x27;s own) with their cross-link settings. The create tools take platforms, not a preset name, so pass a preset&#x27;s `platforms` (and cross-link fields) to create_post / schedule_post / queue_post. Platforms Octopost doesn&#x27;t support are left out of the list, and presets with none left are skipped.</p><p class="note">Takes no parameters.</p><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_presets&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="list_youtube_comments read the comments on a youtube video: each top-level comment with its author, text, likes, date, reply count and up to 5 replies, and by_you on comments the connected channel wrote. this only works for an account with a youtube channel connected (list_accounts). pass next_page_token back as page_token for more."><summary><code>list_youtube_comments</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Read the comments on a YouTube video: each top-level comment with its author, text, likes, date, reply count …</span></summary><p class="desc">Read the comments on a YouTube video: each top-level comment with its author, text, likes, date, reply count and up to 5 replies, and by_you on comments the connected channel wrote. This only works for an account with a YouTube channel connected (list_accounts). Pass next_page_token back as page_token for more.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>video</code></td><td>string</td><td>required</td><td>The video id or a link to the video.</td></tr><tr><td><code>order</code></td><td>string</td><td>optional</td><td>Optional. &quot;time&quot; (default, newest first) or &quot;relevance&quot;. One of: time, relevance</td></tr><tr><td><code>max_results</code></td><td>number</td><td>optional</td><td>Optional. Comments per page, 1 to 100 (default 20).</td></tr><tr><td><code>page_token</code></td><td>string</td><td>optional</td><td>Optional. next_page_token from the previous call.</td></tr><tr><td><code>search</code></td><td>string</td><td>optional</td><td>Optional. Only comments containing this text.</td></tr><tr><td><code>account</code></td><td>string</td><td>optional</td><td>Optional. Which connected YouTube channel to read as (handle or id from list_accounts). Default: the default channel.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;list_youtube_comments&quot;,
+    &quot;arguments&quot;: {
+      &quot;video&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="preview_post dry run: what would happen if you sent this post, without saving or posting anything. returns ok (would it go out), problems (fix these first) and warnings, character counts per network and part the way each network counts (x: links 23, emoji/cjk 2; bluesky: graphemes), x units it would use vs what&#x27;s left this month, media checks per network (counts, video, missing alt text), which connected accou"><summary><code>preview_post</code><span class="hint read">read-only</span><span>Dry run: what would happen if you sent this post, without saving or posting anything. Returns ok (would it go …</span></summary><p class="desc">Dry run: what would happen if you sent this post, without saving or posting anything. Returns ok (would it go out), problems (fix these first) and warnings, character counts per network and part the way each network counts (X: links 23, emoji/CJK 2; Bluesky: graphemes), X units it would use vs what&#x27;s left this month, media checks per network (counts, video, missing alt text), which connected account each network would post as, and guardrails (this connection&#x27;s daily limit, same text posted recently, blocked terms that would hold it for approval).
+
+Takes the same arguments as create_post. Call it before a create_post / schedule_post / queue_post you&#x27;re unsure about.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>required</td><td>The post text.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Networks it would go to.</td></tr><tr><td><code>media_urls</code></td><td>string | object[]</td><td>optional</td><td>Media it would carry: URLs or {url, alt}. See create_post.</td></tr><tr><td><code>video_url</code></td><td>string</td><td>optional</td><td>Optional video URL.</td></tr><tr><td><code>segments</code></td><td>object[]</td><td>optional</td><td>Thread reply segments, as on create_post.</td></tr><tr><td><code>poll</code></td><td>object</td><td>optional</td><td>Poll, as on create_post.</td></tr><tr><td><code>first_comment</code></td><td>string</td><td>optional</td><td>First comment, as on create_post. Its character counts per network are checked too.</td></tr><tr><td><code>accounts</code></td><td>object</td><td>optional</td><td>Optional. Which account per network when a platform has several, e.g. {&quot;twitter&quot;: &quot;@handle&quot;}. See create_post.</td></tr><tr><td><code>variants</code></td><td>object</td><td>optional</td><td>Optional. A different version per network, e.g. {&quot;linkedin&quot;: {&quot;content&quot;: &quot;...&quot;}}; what it leaves out comes from the main post. See create_post.</td></tr><tr><td><code>allow_duplicate</code></td><td>boolean</td><td>optional</td><td>Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;preview_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;content&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="publish_draft publish a post that&#x27;s already saved in octopost right now: a draft, a scheduled post (it goes out now instead of at its time) or a queued post (it skips the queue). uses the post&#x27;s own text, networks, media and thread segments. returns per-network results like create_post (or status &quot;publishing&quot; if slow; see get_post).
+
+posts waiting for human approval (pending) can&#x27;t be published this way; a pers"><summary><code>publish_draft</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Publish a post that&#x27;s already saved in Octopost right now: a draft, a scheduled post (it goes out now instead …</span></summary><p class="desc">Publish a post that&#x27;s already saved in Octopost right now: a draft, a scheduled post (it goes out now instead of at its time) or a queued post (it skips the queue). Uses the post&#x27;s own text, networks, media and thread segments. Returns per-network results like create_post (or status &quot;publishing&quot; if slow; see get_post).
+
+Posts waiting for human approval (pending) can&#x27;t be published this way; a person approves them first. For a post that already went out and failed on some networks, use retry_failed.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID), from list_posts or the call that saved it.</td></tr><tr><td><code>allow_duplicate</code></td><td>boolean</td><td>optional</td><td>Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;publish_draft&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="queue_post add a post to your publishing queue. it will be published automatically during your active hours. posts require platforms to be specified.
+
+human approval: set needs_approval=true when a person should review the post first (anything the user hasn&#x27;t seen word for word). the post is held as &quot;pending&quot; and nothing is published until a person approves it. octopost emails the account owner and any appro"><summary><code>queue_post</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Add a post to your publishing queue. It will be published automatically during your active hours. Posts …</span></summary><p class="desc">Add a post to your publishing queue. It will be published automatically during your active hours. Posts require platforms to be specified.
+
+HUMAN APPROVAL: set needs_approval=true when a person should review the post first (anything the user hasn&#x27;t seen word for word). The post is held as &quot;pending&quot; and nothing is published until a person approves it. Octopost emails the account owner and any approvers one-tap Approve / Reject / Edit / Ask for changes links (batched, within about 5 minutes) and shows it in the dashboard. If they ask for changes, see resubmit_post. After queueing, tell the user: &quot;It&#x27;s waiting for your approval; check your email.&quot; You can&#x27;t approve your own posts. The account owner can also set auto-approve rules, in which case the result says the post was auto-approved.
+
+The queue publishes posts in FIFO order (oldest first) at regular intervals during active hours (default: every 4 hours, 9am-8pm). Great for evergreen content and maintaining a regular posting cadence.
+
+Same platform limits and same options as create_post, which documents them in full.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>required</td><td>The post text.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Which platforms to post to. Call list_accounts first to see what&#x27;s connected.</td></tr><tr><td><code>needs_approval</code></td><td>boolean</td><td>optional</td><td>If true, the post is held as &quot;pending&quot; until a person approves it from the emailed link or the dashboard. Default: false (some accounts require approval for every post anyway).</td></tr><tr><td><code>media_urls</code></td><td>string | object[]</td><td>optional</td><td>Optional images or one video: URLs or {url, alt}. See create_post.</td></tr><tr><td><code>video_url</code></td><td>string</td><td>optional</td><td>Optional video URL.</td></tr><tr><td><code>poll</code></td><td>object</td><td>optional</td><td>Poll, 2-4 options (Twitter and Mastodon only). See create_post.</td></tr><tr><td><code>mastodon_visibility</code></td><td>string</td><td>optional</td><td>Mastodon visibility. Default: public. One of: public, unlisted, private, direct</td></tr><tr><td><code>content_warning</code></td><td>string</td><td>optional</td><td>Mastodon content warning.</td></tr><tr><td><code>cross_link_enabled</code></td><td>boolean</td><td>optional</td><td>Post to primary_platform first, then share its link on the others. See create_post.</td></tr><tr><td><code>primary_platform</code></td><td>string</td><td>optional</td><td>Which platform goes first when cross-linking. One of: twitter, threads, bluesky, linkedin, mastodon, instagram, facebook, pinterest …</td></tr><tr><td><code>cross_link_template</code></td><td>string</td><td>optional</td><td>Cross-link text, with {platform} and {link}. See create_post.</td></tr><tr><td><code>segments</code></td><td>object[]</td><td>optional</td><td>Optional thread replies (up to 24). See create_post.</td></tr><tr><td><code>first_comment</code></td><td>string</td><td>optional</td><td>Optional. Posted as the first reply right after the post. See create_post.</td></tr><tr><td><code>tiktok</code></td><td>object</td><td>optional</td><td>For TikTok. See create_post.</td></tr><tr><td><code>accounts</code></td><td>object</td><td>optional</td><td>Optional. Which account per network when a platform has several, e.g. {&quot;twitter&quot;: &quot;@handle&quot;}. See create_post.</td></tr><tr><td><code>idempotency_key</code></td><td>string</td><td>optional</td><td>Optional. Unique string for this post: a retry with the same key returns the original post. See create_post.</td></tr><tr><td><code>variants</code></td><td>object</td><td>optional</td><td>Optional. A different version per network, e.g. {&quot;linkedin&quot;: {&quot;content&quot;: &quot;...&quot;}}; what it leaves out comes from the main post. See create_post.</td></tr><tr><td><code>allow_duplicate</code></td><td>boolean</td><td>optional</td><td>Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;queue_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;content&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="reject_queued_post take a queued post out of the queue and turn it back into a draft, with an optional note saying why (shown with the post). nothing is published or deleted; edit it with update_post and queue it again, or delete it with delete_post. a post waiting for approval (pending) is for a person to approve or reject, so this refuses it; to withdraw a post you made, delete it."><summary><code>reject_queued_post</code><span class="hint write">can modify</span><span>Take a queued post out of the queue and turn it back into a draft, with an optional note saying why (shown …</span></summary><p class="desc">Take a queued post out of the queue and turn it back into a draft, with an optional note saying why (shown with the post). Nothing is published or deleted; edit it with update_post and queue it again, or delete it with delete_post. A post waiting for approval (pending) is for a person to approve or reject, so this refuses it; to withdraw a post you made, delete it.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to take out of the queue.</td></tr><tr><td><code>note</code></td><td>string</td><td>optional</td><td>Optional. Why it was rejected (up to 500 characters).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;reject_queued_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="remove_feed stop turning a feed into posts and forget which items it has seen. posts the feed already made (published, queued or waiting for approval) are kept; delete those separately with delete_post if needed. get the feed id from list_feeds."><summary><code>remove_feed</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span>Stop turning a feed into posts and forget which items it has seen. Posts the feed already made (published, …</span></summary><p class="desc">Stop turning a feed into posts and forget which items it has seen. Posts the feed already made (published, queued or waiting for approval) are kept; delete those separately with delete_post if needed. Get the feed id from list_feeds.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>feed_id</code></td><td>string</td><td>required</td><td>The feed id from list_feeds.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;remove_feed&quot;,
+    &quot;arguments&quot;: {
+      &quot;feed_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="reorder_queue set the order queued posts publish in. the posts you list go first, in that order; queued posts you leave out keep their current order after them. pending-approval posts can be listed too: their place applies once approved. call list_posts with status &quot;queued&quot; to see the queue."><summary><code>reorder_queue</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Set the order queued posts publish in. The posts you list go first, in that order; queued posts you leave out …</span></summary><p class="desc">Set the order queued posts publish in. The posts you list go first, in that order; queued posts you leave out keep their current order after them. Pending-approval posts can be listed too: their place applies once approved. Call list_posts with status &quot;queued&quot; to see the queue.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_ids</code></td><td>string[]</td><td>required</td><td>Post IDs in the order they should publish (first = next).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;reorder_queue&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_ids&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="reply_to_youtube_comment post a public reply to a youtube comment as the connected channel; it goes live right away. get comment_id from list_youtube_comments. this only works for an account with a youtube channel connected (list_accounts). show the user the reply before posting it. refused when the account holds agent posts for approval or the text has a blocked term."><summary><code>reply_to_youtube_comment</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Post a public reply to a YouTube comment as the connected channel; it goes live right away. Get comment_id …</span></summary><p class="desc">Post a public reply to a YouTube comment as the connected channel; it goes live right away. Get comment_id from list_youtube_comments. This only works for an account with a YouTube channel connected (list_accounts). Show the user the reply before posting it. Refused when the account holds agent posts for approval or the text has a blocked term.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>comment_id</code></td><td>string</td><td>required</td><td>The comment_id from list_youtube_comments.</td></tr><tr><td><code>text</code></td><td>string</td><td>required</td><td>The reply, up to 10,000 characters.</td></tr><tr><td><code>account</code></td><td>string</td><td>optional</td><td>Optional. Which connected YouTube channel replies (handle or id from list_accounts).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;reply_to_youtube_comment&quot;,
+    &quot;arguments&quot;: {
+      &quot;comment_id&quot;: &quot;...&quot;,
+      &quot;text&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="reschedule_post change the scheduled time of a post. the new time must be in the future. works on both scheduled posts and drafts (effectively scheduling a draft).
+
+the post will be published at the new time by octopost&#x27;s scheduler (checks every 60 seconds)."><summary><code>reschedule_post</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Change the scheduled time of a post. The new time must be in the future. Works on both scheduled posts and …</span></summary><p class="desc">Change the scheduled time of a post. The new time must be in the future. Works on both scheduled posts and drafts (effectively scheduling a draft).
+
+The post will be published at the new time by Octopost&#x27;s scheduler (checks every 60 seconds).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to reschedule.</td></tr><tr><td><code>scheduled_for</code></td><td>string</td><td>required</td><td>New time, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;reschedule_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;,
+      &quot;scheduled_for&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="resubmit_post after a reviewer clicked &quot;ask for changes&quot; (get_post: approval.state &quot;changes_requested&quot;, approval.feedback says what to fix), revise the post with update_post, then call this to send it back for approval. it returns to its earlier time if still ahead, else the next queue slot after approval."><summary><code>resubmit_post</code><span class="hint write">can modify</span><span>After a reviewer clicked &quot;Ask for changes&quot; (get_post: approval.state &quot;changes_requested&quot;, approval.feedback …</span></summary><p class="desc">After a reviewer clicked &quot;Ask for changes&quot; (get_post: approval.state &quot;changes_requested&quot;, approval.feedback says what to fix), revise the post with update_post, then call this to send it back for approval. It returns to its earlier time if still ahead, else the next queue slot after approval.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID).</td></tr><tr><td><code>reply</code></td><td>string</td><td>optional</td><td>Optional. What you changed, shown to the reviewer.</td></tr><tr><td><code>scheduled_for</code></td><td>string</td><td>optional</td><td>Optional. New time, ISO 8601 with offset.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;resubmit_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="retry_failed retry publishing to platforms that failed on a previous post. only retries platforms that had errors — already-successful platforms are not re-published.
+
+call get_post first to see which platforms failed and why. you can retry all failed platforms or specify specific ones.
+
+common failure reasons: expired tokens (user needs to re-connect), rate limits (wait and retry), network errors (usually tra"><summary><code>retry_failed</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Retry publishing to platforms that failed on a previous post. Only retries platforms that had errors — …</span></summary><p class="desc">Retry publishing to platforms that failed on a previous post. Only retries platforms that had errors — already-successful platforms are not re-published.
+
+Call get_post first to see which platforms failed and why. You can retry all failed platforms or specify specific ones.
+
+Common failure reasons: expired tokens (user needs to re-connect), rate limits (wait and retry), network errors (usually transient).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to retry.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>optional</td><td>Specific platforms to retry. Omit to retry ALL failed platforms.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;retry_failed&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="schedule_post schedule a post for future publishing. the octopost scheduler will publish it at the specified time automatically.
+
+the post is saved as a draft until the scheduled time, then published to all specified platforms.
+
+same platform limits and same options as create_post, which documents them in full. options are saved with the post and applied when it publishes.
+
+set needs_approval=true to hold it fo"><summary><code>schedule_post</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Schedule a post for future publishing. The Octopost scheduler will publish it at the specified time …</span></summary><p class="desc">Schedule a post for future publishing. The Octopost scheduler will publish it at the specified time automatically.
+
+The post is saved as a draft until the scheduled time, then published to all specified platforms.
+
+Same platform limits and same options as create_post, which documents them in full. Options are saved with the post and applied when it publishes.
+
+Set needs_approval=true to hold it for a person to approve first (same flow as queue_post).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>required</td><td>The post text</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Which platforms to post to</td></tr><tr><td><code>scheduled_for</code></td><td>string</td><td>required</td><td>When to publish, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future.</td></tr><tr><td><code>needs_approval</code></td><td>boolean</td><td>optional</td><td>If true, the post is held until a person approves it (Octopost emails them a one-tap link). Approved before scheduled_for: it publishes then; approved later: it publishes right away. Default: false.</td></tr><tr><td><code>media_urls</code></td><td>string | object[]</td><td>optional</td><td>Optional images or one video: URLs or {url, alt}. See create_post.</td></tr><tr><td><code>video_url</code></td><td>string</td><td>optional</td><td>Optional video URL.</td></tr><tr><td><code>poll</code></td><td>object</td><td>optional</td><td>Poll, 2-4 options (Twitter and Mastodon only). See create_post.</td></tr><tr><td><code>mastodon_visibility</code></td><td>string</td><td>optional</td><td>Mastodon visibility. Default: public. One of: public, unlisted, private, direct</td></tr><tr><td><code>content_warning</code></td><td>string</td><td>optional</td><td>Mastodon content warning.</td></tr><tr><td><code>cross_link_enabled</code></td><td>boolean</td><td>optional</td><td>Post to primary_platform first, then share its link on the others. See create_post.</td></tr><tr><td><code>primary_platform</code></td><td>string</td><td>optional</td><td>Which platform goes first when cross-linking. One of: twitter, threads, bluesky, linkedin, mastodon, instagram, facebook, pinterest …</td></tr><tr><td><code>cross_link_template</code></td><td>string</td><td>optional</td><td>Cross-link text, with {platform} and {link}. See create_post.</td></tr><tr><td><code>segments</code></td><td>object[]</td><td>optional</td><td>Optional thread replies (up to 24). See create_post.</td></tr><tr><td><code>first_comment</code></td><td>string</td><td>optional</td><td>Optional. Posted as the first reply right after the post. See create_post.</td></tr><tr><td><code>tiktok</code></td><td>object</td><td>optional</td><td>For TikTok. See create_post.</td></tr><tr><td><code>accounts</code></td><td>object</td><td>optional</td><td>Optional. Which account per network when a platform has several, e.g. {&quot;twitter&quot;: &quot;@handle&quot;}. See create_post.</td></tr><tr><td><code>idempotency_key</code></td><td>string</td><td>optional</td><td>Optional. Unique string for this post: a retry with the same key returns the original post. See create_post.</td></tr><tr><td><code>variants</code></td><td>object</td><td>optional</td><td>Optional. A different version per network, e.g. {&quot;linkedin&quot;: {&quot;content&quot;: &quot;...&quot;}}; what it leaves out comes from the main post. See create_post.</td></tr><tr><td><code>allow_duplicate</code></td><td>boolean</td><td>optional</td><td>Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;schedule_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;content&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: [],
+      &quot;scheduled_for&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="set_evergreen mark a post evergreen (or not). when the posting queue runs empty, octopost posts an evergreen post again in the empty queue slot, picking the one that has rested longest. the same post goes out at most once every 30 days, and never while the same text is on (or going to) the same network within those 30 days, so x&#x27;s rule against repeating a recent post is respected. a draft or scheduled post can "><summary><code>set_evergreen</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Mark a post evergreen (or not). When the posting queue runs empty, Octopost posts an evergreen post again in …</span></summary><p class="desc">Mark a post evergreen (or not). When the posting queue runs empty, Octopost posts an evergreen post again in the empty queue slot, picking the one that has rested longest. The same post goes out at most once every 30 days, and never while the same text is on (or going to) the same network within those 30 days, so X&#x27;s rule against repeating a recent post is respected. A draft or scheduled post can be marked now and becomes eligible once it has been published. Only works while the queue is on (update_queue_settings).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID).</td></tr><tr><td><code>evergreen</code></td><td>boolean</td><td>required</td><td>true to mark it evergreen, false to stop re-posting it.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;set_evergreen&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;,
+      &quot;evergreen&quot;: false
+    }
+  }
+}</code></pre></details><details class="tool" data-text="split_thread split long text into thread parts that fit every network you name, breaking at paragraphs, then sentences, then words. counts the way each network does (x: links are 23, emoji 2; bluesky: graphemes). nothing is saved or posted. pass the result straight to create_post / schedule_post / queue_post as content + segments."><summary><code>split_thread</code><span class="hint read">read-only</span><span>Split long text into thread parts that fit every network you name, breaking at paragraphs, then sentences, …</span></summary><p class="desc">Split long text into thread parts that fit every network you name, breaking at paragraphs, then sentences, then words. Counts the way each network does (X: links are 23, emoji 2; Bluesky: graphemes). Nothing is saved or posted. Pass the result straight to create_post / schedule_post / queue_post as content + segments.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>text</code></td><td>string</td><td>required</td><td>The full text to split.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>required</td><td>Networks the thread will go to. Every part fits all of them.</td></tr><tr><td><code>numbering</code></td><td>boolean</td><td>optional</td><td>Add &quot; 1/N&quot; to the end of each part. Default false.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;split_thread&quot;,
+    &quot;arguments&quot;: {
+      &quot;text&quot;: &quot;...&quot;,
+      &quot;platforms&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="update_post update a post&#x27;s content, platforms, scheduled time, attached media, or thread reply segments. only works on unpublished posts (drafts, scheduled, queued, and pending).
+
+any field you omit is preserved as-is. pass `media_urls: []` to clear all attached media; pass new media_urls or video_url to replace it. for already-published posts, you&#x27;ll need to delete and re-create."><summary><code>update_post</code><span class="hint write">can modify</span><span class="hint danger">destructive</span><span class="hint world">external access</span><span>Update a post&#x27;s content, platforms, scheduled time, attached media, or thread reply segments. Only works on …</span></summary><p class="desc">Update a post&#x27;s content, platforms, scheduled time, attached media, or thread reply segments. Only works on unpublished posts (drafts, scheduled, queued, and pending).
+
+Any field you omit is preserved as-is. Pass `media_urls: []` to clear all attached media; pass new media_urls or video_url to replace it. For already-published posts, you&#x27;ll need to delete and re-create.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>post_id</code></td><td>string</td><td>required</td><td>The post ID (UUID) to update.</td></tr><tr><td><code>content</code></td><td>string</td><td>optional</td><td>New post text. Omit to keep existing content.</td></tr><tr><td><code>platforms</code></td><td>string[]</td><td>optional</td><td>New platform list. Omit to keep existing platforms.</td></tr><tr><td><code>scheduled_for</code></td><td>string</td><td>optional</td><td>New scheduled time, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future. Omit to keep the existing schedule.</td></tr><tr><td><code>media_urls</code></td><td>string | object[]</td><td>optional</td><td>New media for the main post (URL strings or {url, alt}; see create_post). Replaces existing media. Pass an empty array [] to remove all media. Omit to keep existing media unchanged.</td></tr><tr><td><code>video_url</code></td><td>string</td><td>optional</td><td>New video URL to attach to the main post. Replaces existing media. Omit to keep existing media unchanged.</td></tr><tr><td><code>segments</code></td><td>object[]</td><td>optional</td><td>New thread reply segments (up to 24; see create_post). Pass an empty array to remove existing thread replies and revert to a single post. Omit to keep existing segments.</td></tr><tr><td><code>variants</code></td><td>object</td><td>optional</td><td>A different version per network; format on create_post. Here an object replaces every variant; pass null or {} to remove them. Omit to keep them (a network you drop from platforms loses its variant).</td></tr><tr><td><code>first_comment</code></td><td>string</td><td>optional</td><td>New first comment (posted as a reply right after the post; see create_post). Pass an empty string to remove it. Omit to keep the existing one.</td></tr><tr><td><code>tiktok</code></td><td>object</td><td>optional</td><td>For TikTok. See create_post.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_post&quot;,
+    &quot;arguments&quot;: {
+      &quot;post_id&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="update_queue_settings change your queue settings: how often to post, active hours, timezone, or pause/resume the queue.
+
+defaults: publish every 4 hours, active 9am-8pm, timezone america/new_york. the queue only publishes during active hours. the exact minute within each interval is randomized so posts look natural."><summary><code>update_queue_settings</code><span class="hint write">can modify</span><span class="hint world">external access</span><span>Change your queue settings: how often to post, active hours, timezone, or pause/resume the queue. Defaults: …</span></summary><p class="desc">Change your queue settings: how often to post, active hours, timezone, or pause/resume the queue.
+
+Defaults: publish every 4 hours, active 9am-8pm, timezone America/New_York. The queue only publishes during active hours. The exact minute within each interval is randomized so posts look natural.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>enabled</code></td><td>boolean</td><td>optional</td><td>Enable or disable (pause) the queue.</td></tr><tr><td><code>interval_hours</code></td><td>number</td><td>optional</td><td>Hours between each queued post (e.g. 4 = one post every 4 hours).</td></tr><tr><td><code>start_hour</code></td><td>number</td><td>optional</td><td>Start of active hours (0-23). Posts only publish after this hour.</td></tr><tr><td><code>end_hour</code></td><td>number</td><td>optional</td><td>End of active hours (0-23). Posts stop publishing at this hour.</td></tr><tr><td><code>timezone</code></td><td>string</td><td>optional</td><td>IANA timezone string (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;update_queue_settings&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details></div>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/octopost.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/octopost.svg)](https://mcp.aianytime.net/s/octopost/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/octopost.svg)](https://mcp.aianytime.net/s/octopost/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/octopost.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Marketing, content &amp; social</h2>
+<ul class="chips"><li><a href="../opensmm-protocol/">OpenSMM Protocol</a></li><li><a href="../peekpanda/">PeekPanda</a></li><li><a href="../poachsearch-brand-check/">PoachSearch Brand Check</a></li><li><a href="../poptin/">Poptin</a></li><li><a href="../postify/">Postify</a></li><li><a href="../postwire/">PostWire</a></li><li><a href="../../c/marketing/">All of Marketing, content &amp; social</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>
