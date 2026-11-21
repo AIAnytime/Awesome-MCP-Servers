@@ -1,0 +1,9 @@
+{
+  "name": "ReachSocial",
+  "url": "https://reachsocial.dev/docs/api",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Retrieve public social profiles, posts, feeds and highlights across Instagram, X, TikTok, YouTube, Facebook and Reddit. OAuth or API key; 100 successful calls free once.",
+  "endpoint": "https://reachsocial.dev/mcp/",
+  "registry": "dev.reachsocial/social-data"
+}
