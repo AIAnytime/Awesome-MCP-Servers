@@ -1,0 +1,9 @@
+{
+  "name": "OwlMem",
+  "url": "https://owlmem.com",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Shared memory and teamwork for AI agents: one knowledge base, memory, tasks and encrypted vault every AI on the team shares. Free for two AIs, forever.",
+  "endpoint": "https://mcp.owlmem.com/mcp",
+  "registry": "com.owlmem/owlmem"
+}
