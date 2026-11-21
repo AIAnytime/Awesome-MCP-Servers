@@ -1,0 +1,7 @@
+{
+  "name": "XShots",
+  "url": "https://selfark.com/xshots/support",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Local MCP server bundled with XShots (macOS 14+) that lists templates and device frames and renders store screenshot sets from supplied text and images. Install XShots from the Mac App Store and copy the CLI path from Settings → General → MCP Server; rendering requires an active trial, pass, or lifetime purchase."
+}
