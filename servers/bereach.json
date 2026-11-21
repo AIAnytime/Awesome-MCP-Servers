@@ -1,0 +1,9 @@
+{
+  "name": "BeReach",
+  "url": "https://github.com/bereach-ai/bereach-claude-plugin",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Describe your ideal customer in one sentence and BeReach finds the people and companies that match, reads profiles and post engagers, spots buying signals, finds work emails and drafts first messages. OAuth sign-in, no API key.",
+  "endpoint": "https://mcp.bereach.ai/mcp",
+  "registry": "io.github.benjaminb10/bereach"
+}
