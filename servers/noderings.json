@@ -1,0 +1,16 @@
+{
+  "name": "NodeRings",
+  "url": "https://docs.noderings.com/docs/client-guides/mcp",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Discover, deploy and manage compute from independent hosting providers through one API. Sign-in required (OAuth). Endpoint: `https://mcp.noderings.com/mcp`",
+  "endpoint": "https://mcp.noderings.com/mcp"
+}
+
+
+
+
+
+
+
+
