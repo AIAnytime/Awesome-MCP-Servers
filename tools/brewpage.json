@@ -1,0 +1,1185 @@
+{
+ "server": "BrewPage",
+ "checked": "2026-11-21",
+ "tools": [
+  {
+   "name": "account",
+   "title": "Check or manage a BrewPage connection",
+   "description": "Check connection status, view masked tokens or change account publishing access. Use status with requireAccount=true to request a connection.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "action": {
+      "type": "string",
+      "enum": [
+       "status",
+       "tokens",
+       "bind_token",
+       "mint_token",
+       "rename_token",
+       "revoke_token",
+       "revoke_others",
+       "claim",
+       "unclaim"
+      ]
+     },
+     "requireAccount": {
+      "type": "boolean"
+     },
+     "ownerToken": {
+      "description": "Private profile proof.",
+      "type": "string"
+     },
+     "token": {
+      "description": "Owner token to add using existing admin proof",
+      "type": "string"
+     },
+     "tokenId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "keep": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "format": "uuid"
+      }
+     },
+     "label": {
+      "type": "string"
+     },
+     "scope": {
+      "type": "string",
+      "enum": [
+       "publish",
+       "admin"
+      ]
+     },
+     "expiresIn": {
+      "type": "string",
+      "enum": [
+       "30d",
+       "90d",
+       "1y",
+       "never"
+      ]
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "namespace": {
+      "type": "string"
+     },
+     "id": {
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_page_data",
+   "title": "Delete page data entries",
+   "description": "Permanently delete entries or uploaded files from one list. Select docIds, fileIds, a timestamp range or all=true.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "namespace": {
+      "description": "Namespace from the publication receipt",
+      "type": "string"
+     },
+     "id": {
+      "description": "ID from the publication receipt",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site"
+      ]
+     },
+     "collection": {
+      "type": "string",
+      "description": "List name"
+     },
+     "docIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "description": "ID from read_page_data"
+      }
+     },
+     "fileIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "description": "ID from read_page_data"
+      }
+     },
+     "after": {
+      "description": "Exclusive lower timestamp bound",
+      "type": "string"
+     },
+     "before": {
+      "description": "Exclusive upper timestamp bound",
+      "type": "string"
+     },
+     "all": {
+      "description": "Explicit true deletes all entries and files",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "collection"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "delete_publication",
+   "title": "Delete a BrewPage publication or KV key",
+   "description": "Permanently delete the exact publication. For KV, specify key to delete that key only. Deleting the last key also removes the store. Omitting key deletes the entire store.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "description": "Publication kind returned by publish or list",
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "namespace": {
+      "type": "string"
+     },
+     "id": {
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "key": {
+      "description": "KV key. Excludes hosting.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "domains",
+   "title": "Manage custom domains",
+   "description": "List, add, attach, check, detach or remove custom domains. Attach requires a hostname and an HTML page or site target. Set the returned DNS records at the provider, then check once and read status with get. Detach keeps the hostname registered.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "action": {
+      "type": "string",
+      "enum": [
+       "list",
+       "get",
+       "add",
+       "attach",
+       "check",
+       "detach",
+       "remove"
+      ]
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site"
+      ]
+     },
+     "namespace": {
+      "description": "Namespace from the publication receipt",
+      "type": "string"
+     },
+     "id": {
+      "description": "ID from the publication receipt",
+      "type": "string"
+     },
+     "hostname": {
+      "description": "Bare hostname, e.g. schedule.example.org. Required to add, attach or detach",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_guide",
+   "title": "Read a BrewPage guide",
+   "description": "Get a short workflow for publishing, Page data, templates, custom domains or account connection. Use limits or stats for current platform data.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "topic": {
+      "type": "string",
+      "enum": [
+       "page-data",
+       "templates",
+       "custom-domain",
+       "publishing",
+       "limits",
+       "stats",
+       "account"
+      ]
+     },
+     "q": {
+      "description": "A few words about the desired template",
+      "type": "string"
+     },
+     "tz": {
+      "description": "IANA time zone for stats",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private profile proof.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "topic"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_publications",
+   "title": "List BrewPage publications",
+   "description": "List publications you own by cursor, or search the public gallery by page. Results can include author-written titles.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "scope": {
+      "description": "Default mine. Gallery is public",
+      "type": "string",
+      "enum": [
+       "mine",
+       "gallery"
+      ]
+     },
+     "kind": {
+      "description": "Mine only. Publication kind",
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "status": {
+      "description": "Mine only",
+      "type": "string",
+      "enum": [
+       "public",
+       "hidden",
+       "private",
+       "password",
+       "unavailable"
+      ]
+     },
+     "q": {
+      "type": "string"
+     },
+     "expiring": {
+      "description": "Mine only. Expiring within seven days",
+      "type": "boolean"
+     },
+     "cursor": {
+      "description": "Mine only. nextCursor from the previous result",
+      "type": "string"
+     },
+     "limit": {
+      "description": "Mine only",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 24
+     },
+     "page": {
+      "description": "Gallery only",
+      "type": "integer",
+      "minimum": 1
+     },
+     "size": {
+      "description": "Gallery only",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "sort": {
+      "description": "Gallery only",
+      "type": "string",
+      "enum": [
+       "date",
+       "views"
+      ]
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "notifications",
+   "title": "Manage BrewPage notifications",
+   "description": "List your profile notices and publication activity, mark items read, or change profile and page notification settings.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "action": {
+      "type": "string",
+      "enum": [
+       "list",
+       "unread_count",
+       "mark_read",
+       "get_settings",
+       "set_settings",
+       "get_page_switch",
+       "set_page_switch"
+      ]
+     },
+     "ownerToken": {
+      "description": "Private profile proof.",
+      "type": "string"
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "notices",
+       "activity"
+      ]
+     },
+     "unread": {
+      "type": "boolean"
+     },
+     "cursor": {
+      "type": "string"
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50
+     },
+     "ids": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "exclusiveMinimum": 0
+      }
+     },
+     "all": {
+      "type": "boolean",
+      "const": true
+     },
+     "settings": {
+      "type": "object",
+      "properties": {
+       "enabled": {
+        "type": "boolean"
+       },
+       "channel": {
+        "type": "string",
+        "enum": [
+         "site",
+         "site_email"
+        ]
+       },
+       "groups": {
+        "type": "object",
+        "properties": {
+         "pages": {
+          "type": "boolean"
+         },
+         "entries": {
+          "type": "boolean"
+         }
+        },
+        "additionalProperties": false
+       }
+      },
+      "additionalProperties": false
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site"
+      ]
+     },
+     "namespace": {
+      "type": "string"
+     },
+     "id": {
+      "type": "string"
+     },
+     "entries": {
+      "description": "true or false overrides the page switch; null restores the default",
+      "type": [
+       "boolean",
+       "null"
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "publication_settings",
+   "title": "Change publication settings",
+   "description": "Change listing, badge, title, password, storage, hosting or Page data on an owned publication. Use a disruptive action alone. Ask before making a publication private: its public address stops working.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "namespace": {
+      "description": "Namespace from the publication receipt",
+      "type": "string"
+     },
+     "id": {
+      "description": "ID from the publication receipt",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "action": {
+      "description": "Use alone. Making private is one-way, replaces the public address and detaches its custom domain",
+      "type": "string",
+      "enum": [
+       "make_private",
+       "rotate_link",
+       "reset_manage_link",
+       "revoke_reader_access"
+      ]
+     },
+     "listed": {
+      "description": "List or unlist an eligible public publication",
+      "type": "boolean"
+     },
+     "badgeHidden": {
+      "description": "Hide or show the BrewPage badge",
+      "type": "boolean"
+     },
+     "title": {
+      "description": "One-line title; empty restores the content title",
+      "type": "string"
+     },
+     "password": {
+      "description": "Reader password; null removes it",
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "extend": {
+      "description": "Set true to extend storage to the profile limit",
+      "type": "boolean",
+      "const": true
+     },
+     "deliveryMode": {
+      "type": "string",
+      "enum": [
+       "path",
+       "subdomain"
+      ]
+     },
+     "expectedVersion": {
+      "description": "Hosting version, with deliveryMode only",
+      "type": "integer",
+      "minimum": 1
+     },
+     "state": {
+      "description": "{} enables Page data, named rules merge, null disables and keeps entries",
+      "anyOf": [
+       {
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "publish",
+   "title": "Publish on BrewPage",
+   "description": "Shared public namespace: public:true (or namespace:\"public\"); ordinary link-only: omit both. HTML: content; kind=site: files; kind=file: url; kind=json: json; kind=kv: key,value. Site: {\"kind\":\"site\",\"public\":true,\"files\":[{\"path\":\"index.html\",\"content\":\"<h1>Hi</h1>\"}]}. A public input URL does not request listing. New HTML titles go in <title>; preserve supplied HTML. For visitor input read get_guide topic page-data first; publish HTML and state together. Use domain for an owned hostname.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "$defs": {
+     "__schema0": {
+      "type": [
+       "object",
+       "array",
+       "string",
+       "number",
+       "boolean",
+       "null"
+      ]
+     },
+     "__schema1": {
+      "type": [
+       "string",
+       "number",
+       "boolean",
+       "null",
+       "array",
+       "object"
+      ]
+     }
+    },
+    "properties": {
+     "kind": {
+      "description": "Default html",
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "content": {
+      "description": "HTML, Markdown or code.",
+      "type": "string"
+     },
+     "format": {
+      "description": "HTML only. html, markdown or a code language",
+      "type": "string"
+     },
+     "verbatim": {
+      "description": "Preserve inline source by default. False allows paste repair.",
+      "type": "boolean"
+     },
+     "filename": {
+      "description": "Original filename.",
+      "type": "string"
+     },
+     "files": {
+      "description": "Full site bundle.",
+      "minItems": 1,
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "path": {
+         "type": "string"
+        },
+        "content": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "path",
+        "content"
+       ]
+      }
+     },
+     "entry": {
+      "description": "Site entry path, default index.html",
+      "type": "string"
+     },
+     "url": {
+      "description": "Public HTTP(S) URL fetched directly by the tool. No local download needed.",
+      "type": "string"
+     },
+     "json": {
+      "description": "Pass objects/arrays directly: {\"x\":1}. Strings are stored as strings.",
+      "$ref": "#/$defs/__schema0"
+     },
+     "key": {
+      "description": "KV key. Excludes hosting.",
+      "type": "string"
+     },
+     "value": {
+      "description": "String value for kind=kv",
+      "type": "string"
+     },
+     "tags": {
+      "description": "Tags. Updates accept tags only on HTML and sites",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "state": {
+      "description": "Page data configuration for HTML-format pages and sites. {} enables, null disables on update",
+      "anyOf": [
+       {
+        "type": "object",
+        "additionalProperties": {
+         "$ref": "#/$defs/__schema1"
+        }
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": {
+      "description": "HTML create only, at most 200 Unicode code points. Checks the existing static document head title before publishing, not stored metadata or script changes. Omit when no check is needed.",
+      "type": "string"
+     },
+     "public": {
+      "description": "True selects the shared public namespace. Conflicting namespace refuses. Omit for existing defaults; false disallows namespace=public.",
+      "type": "boolean"
+     },
+     "namespace": {
+      "description": "Use public for the shared public namespace, or a custom namespace. Omit for existing defaults.",
+      "type": "string"
+     },
+     "password": {
+      "description": "New reader password. Omit for no password. Send only the exact password requested, never a placeholder.",
+      "type": "string"
+     },
+     "ttlDays": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0
+       },
+       {
+        "type": "string"
+       }
+      ]
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "requireAccount": {
+      "description": "Require account ownership.",
+      "type": "boolean"
+     },
+     "deliveryMode": {
+      "type": "string",
+      "enum": [
+       "path",
+       "subdomain"
+      ]
+     },
+     "domain": {
+      "description": "Hostname on HTML-format pages or sites, with the required owning profile",
+      "type": "string"
+     },
+     "template": {
+      "description": "Template slug for an HTML copy",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "read_page_data",
+   "title": "Read page data",
+   "description": "Read saved visitor data on an owned HTML page or site. Leave out collection for settings and usage. Use collection for entries, include=files for uploads, countBy for totals, or format=csv or fileId for a protected download.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "namespace": {
+      "description": "Namespace from the publication receipt",
+      "type": "string"
+     },
+     "id": {
+      "description": "ID from the publication receipt",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site"
+      ]
+     },
+     "collection": {
+      "type": "string",
+      "description": "List name"
+     },
+     "order": {
+      "type": "string",
+      "enum": [
+       "-createdAt",
+       "createdAt",
+       "-updatedAt",
+       "updatedAt",
+       "-index",
+       "index"
+      ]
+     },
+     "limit": {
+      "description": "Entries or files per page; default 20",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "cursor": {
+      "description": "next from the previous page",
+      "type": "string"
+     },
+     "countBy": {
+      "description": "Declared choices field to count",
+      "type": "string"
+     },
+     "include": {
+      "type": "string",
+      "enum": [
+       "docs",
+       "files"
+      ]
+     },
+     "format": {
+      "type": "string",
+      "const": "csv"
+     },
+     "fileId": {
+      "type": "string",
+      "description": "ID from read_page_data"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "read_publication",
+   "title": "Read a BrewPage publication",
+   "description": "Read content, owner source, owner settings or statistics for a publication. Site content returns its manifest or named path. File content returns a download reference. KV without key lists keys. Continue long content with the returned offset.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "description": "Publication kind returned by publish or list",
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "namespace": {
+      "type": "string"
+     },
+     "id": {
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "view": {
+      "description": "Default content. HTML source, settings and stats are owner reads",
+      "type": "string",
+      "enum": [
+       "content",
+       "source",
+       "settings",
+       "stats"
+      ]
+     },
+     "key": {
+      "description": "KV key. Excludes hosting.",
+      "type": "string"
+     },
+     "path": {
+      "description": "Relative site file path. Omit for the owner manifest",
+      "type": "string"
+     },
+     "password": {
+      "description": "Reader password when content is protected",
+      "type": "string"
+     },
+     "offset": {
+      "description": "Next character offset from a previous read",
+      "type": "integer",
+      "minimum": 0
+     },
+     "range": {
+      "description": "Stats only. Days, default 30",
+      "anyOf": [
+       {
+        "type": "number",
+        "const": 7
+       },
+       {
+        "type": "number",
+        "const": 30
+       },
+       {
+        "type": "number",
+        "const": 90
+       }
+      ]
+     },
+     "tz": {
+      "description": "Stats only. IANA time zone, default UTC",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "update_publication",
+   "title": "Replace BrewPage publication content",
+   "description": "Replace an existing publication using its kind and target or private manageUrl. A site update fully replaces its file bundle. File updates fetch a public HTTP(S) URL. KV writes one key. A missing publication is never created.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "$defs": {
+     "__schema0": {
+      "type": [
+       "object",
+       "array",
+       "string",
+       "number",
+       "boolean",
+       "null"
+      ]
+     },
+     "__schema1": {
+      "type": [
+       "string",
+       "number",
+       "boolean",
+       "null",
+       "array",
+       "object"
+      ]
+     }
+    },
+    "properties": {
+     "kind": {
+      "description": "Publication kind returned by publish or list",
+      "type": "string",
+      "enum": [
+       "html",
+       "site",
+       "file",
+       "json",
+       "kv"
+      ]
+     },
+     "namespace": {
+      "type": "string"
+     },
+     "id": {
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "content": {
+      "description": "HTML, Markdown or code.",
+      "type": "string"
+     },
+     "format": {
+      "description": "Omit to keep the saved format. Send html when replacing with HTML.",
+      "type": "string"
+     },
+     "verbatim": {
+      "description": "Preserve inline source by default. False allows paste repair.",
+      "type": "boolean"
+     },
+     "filename": {
+      "description": "Original filename.",
+      "type": "string"
+     },
+     "files": {
+      "description": "Full site bundle.",
+      "minItems": 1,
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "path": {
+         "type": "string"
+        },
+        "content": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "path",
+        "content"
+       ]
+      }
+     },
+     "entry": {
+      "description": "Required for sites. Keep the existing entryFile unless changing it.",
+      "type": "string"
+     },
+     "url": {
+      "description": "Public HTTP(S) URL fetched directly by the tool. No local download needed.",
+      "type": "string"
+     },
+     "json": {
+      "description": "Pass objects/arrays directly: {\"x\":1}. Strings are stored as strings.",
+      "$ref": "#/$defs/__schema0"
+     },
+     "key": {
+      "description": "KV key. Excludes hosting.",
+      "type": "string"
+     },
+     "value": {
+      "description": "String value for kind=kv",
+      "type": "string"
+     },
+     "tags": {
+      "description": "Tags. Updates accept tags only on HTML and sites",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "state": {
+      "description": "Page data configuration for HTML-format pages and sites. {} enables, null disables on update",
+      "anyOf": [
+       {
+        "type": "object",
+        "additionalProperties": {
+         "$ref": "#/$defs/__schema1"
+        }
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "write_page_data",
+   "title": "Write author entries",
+   "description": "Save up to 20 author entries in one Page data list. Use the last read version to replace only that version.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "$defs": {
+     "__schema0": {
+      "type": [
+       "string",
+       "number",
+       "boolean",
+       "null",
+       "array",
+       "object"
+      ]
+     }
+    },
+    "properties": {
+     "namespace": {
+      "description": "Namespace from the publication receipt",
+      "type": "string"
+     },
+     "id": {
+      "description": "ID from the publication receipt",
+      "type": "string"
+     },
+     "ownerToken": {
+      "description": "Private owner proof.",
+      "type": "string"
+     },
+     "manageUrl": {
+      "description": "Private link as target and proof.",
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "html",
+       "site"
+      ]
+     },
+     "collection": {
+      "type": "string",
+      "description": "List name"
+     },
+     "docs": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "key": {
+         "type": "string",
+         "description": "Author entry key"
+        },
+        "value": {
+         "$ref": "#/$defs/__schema0"
+        },
+        "version": {
+         "description": "Last read version; sent as If-Match",
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 999999999
+        }
+       },
+       "required": [
+        "key",
+        "value"
+       ]
+      }
+     }
+    },
+    "required": [
+     "collection",
+     "docs"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

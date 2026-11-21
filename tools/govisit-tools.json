@@ -1,0 +1,1040 @@
+{
+ "server": "GoVisit Tools",
+ "checked": "2026-11-21",
+ "tools": [
+  {
+   "name": "get_category_overview",
+   "title": "Get category overview",
+   "description": "Identify the place category shown on a destination's category page. Read its label, category code, destination identity, and any published count or parent category.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_category_section",
+   "title": "Get category section",
+   "description": "Read the overview or places section of a destination category page. Choose places to inspect the inventory preview for that category. Lists contain up to 20 items.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "overview",
+       "places"
+      ],
+      "description": "Published section of the selected page to read."
+     }
+    },
+    "required": [
+     "pagePath",
+     "section"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_collection_overview",
+   "title": "Get collection overview",
+   "description": "Identify a named destination collection and learn what it brings together. Read its title, description, slug, and any published count.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_collection_section",
+   "title": "Get collection section",
+   "description": "Inspect part of a named collection. Select overview for the introduction, or places for the entries shown on the collection page. Lists contain up to 20 items.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "overview",
+       "places"
+      ],
+      "description": "Published section of the selected page to read."
+     }
+    },
+    "required": [
+     "pagePath",
+     "section"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_destination_overview",
+   "title": "Get destination overview",
+   "description": "Return the published overview for this GoVisit destination. The result includes the long destination description, nullable SEO meta description, and any legacy overview fields, limited to the page's public overview fields and includes freshness metadata from the page snapshot.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_destination_section",
+   "title": "Get destination section",
+   "description": "Read one part of a destination page, such as its overview, highlights, or updates. The experiences section returns every published experience card in the page language across all audiences. Other lists contain up to 20 items.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "overview",
+       "experiences",
+       "highlights",
+       "categories",
+       "places",
+       "collections",
+       "activities",
+       "updates"
+      ],
+      "description": "Published section of the selected page to read."
+     }
+    },
+    "required": [
+     "pagePath",
+     "section"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_documentation_page",
+   "title": "Read documentation page",
+   "description": "Read the current page's published title, headings and structured content, or one section selected by its heading anchor. Returns the canonical URL and explicit truncation information. Reads only the current rendered page; does not fetch other articles.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/docs/developers/overview"
+      ]
+     },
+     "section": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Optional heading anchor identifying one published section."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_page_faq",
+   "title": "Read published page FAQs",
+   "description": "Return at most 20 FAQs extracted from the current rendered page. An optional query filters the published question and answer text. Returns canonical references, count and truncation information. An empty list means no FAQ matched the requested filter in this bounded page projection; it does not establish that the subject has no answers.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/docs/developers/overview"
+      ]
+     },
+     "query": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Optional text to match against published questions and answers."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_place_overview",
+   "title": "Get place overview",
+   "description": "Return the published overview for this GoVisit place, including its published classifications with scheme, recipient, validity and available evidence, and its operating status: operatingStatus.code is operational, temporarily_closed or permanently_closed, and null when the status is unknown. Operating status says whether the place still operates, not whether it is open right now. The result excludes place spatial details, which are available from the Location section, and includes freshness metadata from the page snapshot. Owner, chain and operator are organization names, each null when unknown; operator identifies the company managing the facility, distinct from profile management.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/places/b3ba0f4f-7a0a-48b5-b3ee-83df43e47527"
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_place_section",
+   "title": "Get place section",
+   "description": "Return one published section for this GoVisit place, including Location spatial details. Arrays are limited to at most 20 items and text values are bounded; the result includes page freshness metadata. The overview section includes owner, chain and operator organization names, each null when unknown; operator identifies the company managing the facility, distinct from profile management.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/places/b3ba0f4f-7a0a-48b5-b3ee-83df43e47527"
+      ]
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "overview",
+       "location",
+       "attributes",
+       "collections",
+       "audiences",
+       "experiences",
+       "opening_hours",
+       "faq",
+       "media",
+       "accessibility",
+       "updates",
+       "nearby"
+      ],
+      "description": "Published section of the selected page to read."
+     }
+    },
+    "required": [
+     "pagePath",
+     "section"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_place_visit_facts",
+   "title": "Get place visit facts",
+   "description": "Read compact page-published visit facts for this GoVisit place, including operating status, location, contact details, opening hours, accessibility, experiences and freshness. Read operatingStatus before openingHours. A closed status takes precedence over regular hours. Owner, chain and operator are organization names, each null when unknown. The operator manages the facility.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/places/b3ba0f4f-7a0a-48b5-b3ee-83df43e47527"
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_statistics",
+   "title": "Get statistics",
+   "description": "Return exact governed catalog coverage counts and per-metric observation metadata from this cached public page. Scope is physical World on landing pages, or the parent Destination on Destination, category and collection pages. A measured zero is zero; missing or invalid metrics are unknown. Coverage is recalculated daily and may be slightly inaccurate within the day. Counts are not live availability, bounded search/list totals, or rounded homepage headlines.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en"
+      ]
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "coverage"
+      ],
+      "default": "coverage",
+      "description": "Statistic family. Coverage is the only supported family today."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_category_places",
+   "title": "List category places",
+   "description": "Filter the venue cards shown for one category within a destination, such as Culture. Provide the category page path. Returns up to 20 cards from that inventory preview.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     },
+     "name": {
+      "type": "string",
+      "description": "Optional published place name or partial name."
+     },
+     "category": {
+      "type": "string",
+      "description": "Optional published category code."
+     },
+     "audience": {
+      "type": "string",
+      "description": "Optional published audience label or code."
+     },
+     "accessibility": {
+      "type": "string",
+      "description": "Optional published accessibility label or code."
+     },
+     "neighborhood": {
+      "type": "string",
+      "description": "Optional published neighborhood."
+     },
+     "administrativeArea": {
+      "type": "string",
+      "description": "Optional published administrative area."
+     },
+     "activityType": {
+      "type": "string",
+      "description": "Optional published activity type."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_collection_places",
+   "title": "List collection places",
+   "description": "Find entries in a named destination collection using its collection page path. Optional filters narrow the existing selection by published card details. Returns up to 20 matches.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment."
+     },
+     "name": {
+      "type": "string",
+      "description": "Optional published place name or partial name."
+     },
+     "category": {
+      "type": "string",
+      "description": "Optional published category code."
+     },
+     "audience": {
+      "type": "string",
+      "description": "Optional published audience label or code."
+     },
+     "accessibility": {
+      "type": "string",
+      "description": "Optional published accessibility label or code."
+     },
+     "neighborhood": {
+      "type": "string",
+      "description": "Optional published neighborhood."
+     },
+     "administrativeArea": {
+      "type": "string",
+      "description": "Optional published administrative area."
+     },
+     "activityType": {
+      "type": "string",
+      "description": "Optional published activity type."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_destination_activities",
+   "title": "Get destination activities",
+   "description": "Discover activities featured on the destination page, such as walking tours. Returns up to 20 cards from its activity section.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_destination_categories",
+   "title": "Get destination categories",
+   "description": "See how a destination groups its places. Returns up to 20 category labels and codes with available counts and parent categories from the destination page.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_destination_highlights",
+   "title": "Get destination highlights",
+   "description": "Return at most 20 compact published highlight place cards from this destination page. The result is a page-local subset, includes canonical links, and includes freshness metadata.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_destination_places",
+   "title": "List destination places",
+   "description": "Browse the place cards displayed on a destination's main page. Apply optional filters to that preview and get up to 20 matches. Coverage depends on which cards the page shows.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/destinations/cz/prague/"
+      ]
+     },
+     "name": {
+      "type": "string",
+      "description": "Optional published place name or partial name."
+     },
+     "category": {
+      "type": "string",
+      "description": "Optional published category code."
+     },
+     "audience": {
+      "type": "string",
+      "description": "Optional published audience label or code."
+     },
+     "accessibility": {
+      "type": "string",
+      "description": "Optional published accessibility label or code."
+     },
+     "neighborhood": {
+      "type": "string",
+      "description": "Optional published neighborhood."
+     },
+     "administrativeArea": {
+      "type": "string",
+      "description": "Optional published administrative area."
+     },
+     "activityType": {
+      "type": "string",
+      "description": "Optional published activity type."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_related_places",
+   "title": "Get related places",
+   "description": "Find nearby suggestions shown on a single place profile. Use the path of the reference place and filter its nearby cards by published details. Returns up to 20 matches.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/places/b3ba0f4f-7a0a-48b5-b3ee-83df43e47527"
+      ]
+     },
+     "name": {
+      "type": "string",
+      "description": "Optional published place name or partial name."
+     },
+     "category": {
+      "type": "string",
+      "description": "Optional published category code."
+     },
+     "audience": {
+      "type": "string",
+      "description": "Optional published audience label or code."
+     },
+     "accessibility": {
+      "type": "string",
+      "description": "Optional published accessibility label or code."
+     },
+     "neighborhood": {
+      "type": "string",
+      "description": "Optional published neighborhood."
+     },
+     "administrativeArea": {
+      "type": "string",
+      "description": "Optional published administrative area."
+     },
+     "activityType": {
+      "type": "string",
+      "description": "Optional published activity type."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_destinations",
+   "title": "Search destinations",
+   "description": "Search published destinations by name or traveler intent. mode defaults to auto: exact name matches avoid embedding; otherwise name and intent results are combined. Explicit name never embeds; intent always searches by meaning. Returns stable destination codes, public URLs, match method, scope and index release. Optional within and types filter canonical geography before ranking; they require a geography-enabled release. Whole-Division containment takes precedence over a default hierarchy parent for cross-border destinations; unknown scope is never assumed. Types are published classifications, not population or city tiers.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120,
+      "description": "Place or destination name, or the traveler's intent."
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "name",
+       "intent"
+      ],
+      "default": "auto",
+      "description": "Name lookup, intent retrieval, or name-first auto discovery."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "default": 10,
+      "description": "Maximum number of results to return."
+     },
+     "language": {
+      "type": "string",
+      "enum": [
+       "en",
+       "cs"
+      ],
+      "description": "Requested response language; defaults to the page language."
+     },
+     "within": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_]*$",
+      "not": {
+       "pattern": "^[aA][lL][lL]$"
+      },
+      "description": "Canonical destination code to explore within; all is reserved for an explicit unrestricted place search, never a containing-destination filter."
+     },
+     "types": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+       "enum": [
+        "country",
+        "region",
+        "district",
+        "city",
+        "highlight"
+       ]
+      },
+      "description": "Match any of these published classifications; not a size/tier filter."
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+     {
+      "if": {
+       "properties": {
+        "mode": {
+         "const": "intent"
+        }
+       },
+       "required": [
+        "mode"
+       ]
+      },
+      "then": {
+       "properties": {
+        "query": {
+         "minLength": 3
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "mode": {
+         "const": "name"
+        }
+       },
+       "required": [
+        "mode"
+       ]
+      },
+      "then": {
+       "properties": {
+        "query": {
+         "maxLength": 120
+        }
+       }
+      }
+     }
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_documentation",
+   "title": "Search documentation",
+   "description": "Search the published documentation links currently rendered on this GoVisit page and return bounded canonical links and titles.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pagePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Canonical GoVisit page path supplying this tool's published context; no origin, query or fragment.",
+      "examples": [
+       "/en/docs"
+      ]
+     },
+     "query": {
+      "type": "string",
+      "description": "Optional documentation title or path text to match."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Maximum number of results to return."
+     }
+    },
+    "additionalProperties": false,
+    "required": [
+     "pagePath"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_places",
+   "title": "Search places",
+   "description": "For faster searches, pass a known country or destination code. Unscoped name lookups search all covered countries. Search published places by name or traveler intent. mode defaults to auto: exact names avoid embedding, otherwise combine name and intent candidates without duplicate IDs. Explicit name never embeds. A destination page supplies its scope; country, destination and near intersect and never widen. Scoped names and proximity require a geography-enabled index release; older releases report unavailable constraints. At most 200 candidate records are examined before returning up to 20 items, with counts/truncation; a missing result is not proof of invisibility everywhere. Distance is geographic meters, not walking time. Scores and profile quality are retrieval signals, not proof of amenities or suitability. Intent uses one query embedding.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 200,
+      "description": "Place or destination name, or the traveler's intent."
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "name",
+       "intent"
+      ],
+      "default": "auto",
+      "description": "Name lookup, intent retrieval, or name-first auto discovery."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "default": 10,
+      "description": "Maximum number of places to return. Defaults to 10. Name mode allows up to 10. Other modes allow up to 20."
+     },
+     "language": {
+      "type": "string",
+      "enum": [
+       "en",
+       "cs"
+      ],
+      "description": "Requested response language; defaults to the page language."
+     },
+     "destination": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_]*$",
+      "description": "Stable destination code or all. Defaults to the current destination, otherwise all."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "Two-letter ISO country code. Supply it when the country is known to narrow the search. Intersects destination and proximity where the public geography projection is available."
+     },
+     "near": {
+      "type": "object",
+      "properties": {
+       "placeId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "description": "Reference GERS Place resolved from the same public release."
+       },
+       "coordinates": {
+        "type": "object",
+        "properties": {
+         "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "Reference latitude in decimal degrees."
+         },
+         "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "Reference longitude in decimal degrees."
+         }
+        },
+        "required": [
+         "latitude",
+         "longitude"
+        ],
+        "additionalProperties": false,
+        "description": "Reference point in latitude and longitude."
+       },
+       "radiusMeters": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100000,
+        "description": "Maximum straight-line distance from the reference point, in meters."
+       }
+      },
+      "required": [
+       "radiusMeters"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+       {
+        "required": [
+         "placeId"
+        ],
+        "not": {
+         "required": [
+          "coordinates"
+         ]
+        }
+       },
+       {
+        "required": [
+         "coordinates"
+        ],
+        "not": {
+         "required": [
+          "placeId"
+         ]
+        }
+       }
+      ],
+      "description": "Proximity filter with a radius in meters. Supply either a GoVisit place ID or explicit coordinates as the reference."
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+     {
+      "if": {
+       "properties": {
+        "mode": {
+         "const": "intent"
+        }
+       },
+       "required": [
+        "mode"
+       ]
+      },
+      "then": {
+       "properties": {
+        "query": {
+         "minLength": 3
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "mode": {
+         "const": "name"
+        }
+       },
+       "required": [
+        "mode"
+       ]
+      },
+      "then": {
+       "properties": {
+        "query": {
+         "maxLength": 120
+        },
+        "limit": {
+         "maximum": 10
+        }
+       }
+      }
+     }
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

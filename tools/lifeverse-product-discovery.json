@@ -1,0 +1,135 @@
+{
+ "server": "LifeVerse Product Discovery",
+ "checked": "2026-11-21",
+ "tools": [
+  {
+   "name": "lifeverse_get_product",
+   "title": "获取一个 LifeVerse 公开产品",
+   "description": "已知产品公开 slug 时，读取其能力、适用人群、使用边界和直接体验入口。将 experienceUrl 作为用户进入产品的链接；本工具不会代用户操作产品。",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "产品公开 slug。"
+     }
+    },
+    "required": [
+     "slug"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "lifeverse_list_products",
+   "title": "列出 LifeVerse 可公开体验的产品",
+   "description": "列出 LifeVerse 已公开且可立即体验的产品，返回每项用途、使用边界与可点击的体验入口。只读取目录，不运行产品；产品可能有各自登录和收费条件。",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "category": {
+      "description": "可选的产品分类筛选。",
+      "type": "string",
+      "enum": [
+       "游戏",
+       "互动体验",
+       "效率工具",
+       "创新应用"
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "lifeverse_recommend_products",
+   "title": "根据需求推荐 LifeVerse 产品",
+   "description": "当用户描述问题、目标或想体验的场景时，推荐最匹配的 LifeVerse 公开产品并返回直接体验入口。可用中文或英文描述人生选择、商业报价、情侣争议、邮件营销、机会发现、穿搭美甲、股票复盘或人生模拟游戏；解释匹配原因并展示 experienceUrl。仅推荐产品，不在 MCP 内执行任务。",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "need": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "用户的自然语言需求、问题或想体验的场景。"
+     },
+     "category": {
+      "description": "可选的产品分类约束。",
+      "type": "string",
+      "enum": [
+       "游戏",
+       "互动体验",
+       "效率工具",
+       "创新应用"
+      ]
+     },
+     "limit": {
+      "default": 3,
+      "description": "最多推荐多少项，范围 1 至 5。",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+     }
+    },
+    "required": [
+     "need"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "lifeverse_search_products",
+   "title": "搜索 LifeVerse 可公开体验的产品",
+   "description": "按中英文名称、分类、用途与能力搜索 LifeVerse 已公开产品，返回匹配项和直接体验入口。适合已有关键词的查找；自然语言需求优先使用 lifeverse_recommend_products。",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "自然语言关键词，例如：客户报价、人生选择、短线盯盘。"
+     },
+     "limit": {
+      "default": 5,
+      "description": "最多返回多少项，范围 1 至 10。",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}
