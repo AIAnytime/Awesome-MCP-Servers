@@ -1,0 +1,8 @@
+{
+  "name": "You.com",
+  "url": "https://github.com/youdotcom-oss/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Web search via the hosted You.com MCP. Works with no API key on the free profile (about 100 searches a day). Endpoint: `https://api.you.com/mcp?profile=free` · [Docs](https://you.com/docs/agents/mcp-server)",
+  "endpoint": "https://api.you.com/mcp?profile=free"
+}
