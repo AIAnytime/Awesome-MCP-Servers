@@ -1,0 +1,9 @@
+{
+  "name": "I2v.ai",
+  "url": "https://github.com/i2v-ai/i2v-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate images and videos across 12 image and 16 video models, with model discovery and per-job USD cost quoting · [Docs](https://i2v.ai/docs/mcp)",
+  "endpoint": "https://i2v.ai/api/mcp",
+  "registry": "io.github.i2v-ai/mcp"
+}
