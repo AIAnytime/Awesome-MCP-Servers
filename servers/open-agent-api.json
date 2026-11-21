@@ -1,0 +1,8 @@
+{
+  "name": "Open Agent API",
+  "url": "https://github.com/jiangxingfan1-coder/Open-Agent-API",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "List agents, run scoped tasks, and read artifacts from a self-hosted Open Agent API gateway; [local MCP bundle](https://github.com/jiangxingfan1-coder/Open-Agent-API/releases/tag/mcp-open-agent-api-v0.0.64).",
+  "registry": "io.github.jiangxingfan1-coder/open-agent-api-mcp"
+}
