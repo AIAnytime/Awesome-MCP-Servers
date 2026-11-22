@@ -1,0 +1,8 @@
+{
+  "name": "ClaimIDX",
+  "url": "https://github.com/claimidx/claimidx",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Index of recurring software failures and replay-tested fixes that coding agents query before retrying; stored locally, with sharing to the public commons only when confirmed per claim (`CLAIMIDX_COMMONS=0` disables it). Install: `pip install \"claimidx[server]\"`; launch: `claimidx-mcp` · Registry: `io.github.claimidx/claimidx`",
+  "registry": "io.github.claimidx/claimidx"
+}
