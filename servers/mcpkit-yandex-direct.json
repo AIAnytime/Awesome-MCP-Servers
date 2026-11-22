@@ -1,0 +1,8 @@
+{
+  "name": "MCPKit Yandex Direct",
+  "url": "https://github.com/MCPKit-RU/yandex-direct-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Hosted MCP server for connecting AI assistants to Yandex Direct through MCPKit OAuth. It exposes documented reporting and campaign operations, based on permissions granted to the connected Yandex account. Endpoint: `https://mcpkit.ru/mcp-yandex-direct/mcp` · [Docs](https://mcpkit.ru/instructions/yandex-direct/chatgpt)",
+  "endpoint": "https://mcpkit.ru/mcp-yandex-direct/mcp"
+}
