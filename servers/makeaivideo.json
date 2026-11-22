@@ -1,0 +1,9 @@
+{
+  "name": "MakeAIVideo",
+  "url": "https://github.com/makeaivideo-ai/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Create short-form AI videos (script, AI voiceover, AI or stock scenes, captions, music) and post them to TikTok, Instagram or YouTube. Endpoint: `https://mcp.makeaivideo.ai` (OAuth or API key) · Local: `npx -y @makeaivideo/mcp`",
+  "endpoint": "https://mcp.makeaivideo.ai",
+  "registry": "ai.makeaivideo/video-generator"
+}
