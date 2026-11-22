@@ -1,0 +1,9 @@
+{
+  "name": "Appy Smart Links",
+  "url": "https://appy.to/docs/mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Create and manage device-aware campaign links and read click analytics; Enterprise adds mobile SDK attribution reports for installs, in-app events and revenue. Tool calls require an Appy Business or Enterprise secret API key.",
+  "endpoint": "https://mcp.appy.to",
+  "registry": "to.appy/smart-links"
+}
