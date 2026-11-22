@@ -1,0 +1,1 @@
+{"name":"easi.run","url":"https://github.com/julianosig/easi.run","category":"developer-tools","transport":"stdio","description":"Self-hosted Chrome sessions for agents via MCP, with live viewing and replay; requires a Linux host and rootful Docker."}
