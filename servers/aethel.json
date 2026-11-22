@@ -1,0 +1,9 @@
+{
+  "name": "Aethel",
+  "url": "https://aethel.pro/mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Read-only answers on what companies' own pages say about their AI interviews (who runs them, whether they are recorded or can be retaken, how long they take), each with its source page and the day it was read; no sign-in, no account. Endpoint: `https://us-central1-aethel-pro.cloudfunctions.net/mcp` · Registry: `pro.aethel/company-interviews`",
+  "endpoint": "https://us-central1-aethel-pro.cloudfunctions.net/mcp",
+  "registry": "pro.aethel/company-interviews"
+}
