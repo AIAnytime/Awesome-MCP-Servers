@@ -1,0 +1,9 @@
+{
+  "name": "JustFill PDF Forms",
+  "url": "https://github.com/mrmaciej1/justfill-mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Detect, visually preview, and fill fields in flat, scanned, or AcroForm PDF forms with reusable templates. Endpoint: `https://justfill.app/api/mcp` · Install: `uvx justfill-mcp` · [Docs](https://justfill.app/mcp)",
+  "endpoint": "https://justfill.app/api/mcp",
+  "registry": "io.github.mrmaciej1/justfill-pdf-forms"
+}
