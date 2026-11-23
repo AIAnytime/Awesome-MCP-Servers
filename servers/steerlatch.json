@@ -1,0 +1,8 @@
+{
+  "name": "SteerLatch",
+  "url": "https://www.steerlatch.com/en/docs/",
+  "category": "productivity",
+  "transport": "http",
+  "description": "OAuth-protected remote MCP access to authorized Mac and Windows computers. Manage files, desktop and terminal with STOP and revocation.",
+  "endpoint": "https://app.steerlatch.com/mcp"
+}
