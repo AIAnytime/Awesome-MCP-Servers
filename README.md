@@ -633,6 +633,7 @@ Once merged, your server gets its own page and a status badge you can embed:
 
 ## 📚 Resources
 
+- [fitv-mcp](https://github.com/hanshs474/fitv-mcp) - Hosted remote MCP server (`https://freeimagetovideo.ai/api/mcp`) for [Free Image to Video](https://freeimagetovideo.ai/) AI image-to-video generation with synchronized sound and no watermark.
 - [Model Context Protocol — documentation](https://modelcontextprotocol.io)
 - [MCP specification](https://modelcontextprotocol.io/specification)
 - [Official MCP registry](https://registry.modelcontextprotocol.io)
