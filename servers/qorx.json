@@ -1,0 +1,7 @@
+{
+  "name": "Qorx",
+  "url": "https://github.com/bbrainfuckk/qorx",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Local Rust MCP server that searches a source repository and returns focused excerpts with file paths and line numbers. Install: `cargo install --git https://github.com/bbrainfuckk/qorx --tag v1.0.7 --locked qorx` · [Configure `qorx mcp`](https://github.com/bbrainfuckk/qorx#connect-an-mcp-client)."
+}
