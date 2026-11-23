@@ -4,5 +4,6 @@
   "category": "productivity",
   "transport": "http",
   "description": "OAuth-protected remote MCP access to authorized Mac and Windows computers. Manage files, desktop and terminal with STOP and revocation.",
-  "endpoint": "https://app.steerlatch.com/mcp"
+  "endpoint": "https://app.steerlatch.com/mcp",
+  "registry": "com.steerlatch/steerlatch"
 }
