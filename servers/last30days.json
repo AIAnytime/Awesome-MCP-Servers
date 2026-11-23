@@ -1,0 +1,7 @@
+{
+  "name": "last30days",
+  "url": "https://github.com/mvanhorn/last30days-skill",
+  "category": "search",
+  "transport": "stdio",
+  "description": "Local MCP server and agent skill that researches a topic across Reddit, X, YouTube, TikTok, Hacker News, Polymarket, and the web from the last 30 days and ranks results by real engagement; Reddit, Hacker News, Polymarket and GitHub need no API key. Install: `.mcpb` bundle for Claude Desktop (needs python3) · [Releases](https://github.com/mvanhorn/last30days-skill/releases/latest)"
+}
