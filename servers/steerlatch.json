@@ -3,7 +3,7 @@
   "url": "https://www.steerlatch.com/en/docs/",
   "category": "productivity",
   "transport": "http",
-  "description": "OAuth-protected remote MCP access to authorized Mac and Windows computers. Manage files, desktop and terminal with STOP and revocation.",
+  "description": "OAuth MCP for authorized Mac and Windows computers: owner phone/browser control while AI works, and SteerLatch Context Hub memory and messages across sessions. Trial: 3 months, 3 PCs, 5,000 calls/month, no card.",
   "endpoint": "https://app.steerlatch.com/mcp",
   "registry": "com.steerlatch/steerlatch"
 }
