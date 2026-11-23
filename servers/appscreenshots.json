@@ -1,0 +1,9 @@
+{
+  "name": "AppScreenshots MCP",
+  "url": "https://github.com/horace68/appscreenshots-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Create and edit App Store and Google Play screenshot projects using templates and authorized assets, then review and export them in the browser editor. Uses OAuth and works with free and paid AppScreenshots plans. [Docs](https://appscreenshots.net/docs/mcp)",
+  "endpoint": "https://appscreenshots.net/api/mcp",
+  "registry": "io.github.horace68/appscreenshots"
+}
