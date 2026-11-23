@@ -1,0 +1,7 @@
+{
+    "name": "WA MCP",
+    "url": "https://github.com/tsahospital-beep/wa-mcp",
+    "category": "productivity",
+    "transport": "stdio",
+    "description": "Search messages and voice transcripts from a linked WhatsApp account through a local bridge, with sending off by default."
+}

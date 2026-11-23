@@ -596,6 +596,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[Taskhold](https://github.com/gettaskhold/taskhold-plugin)** `http` — A task list you share with your coding agents: next task, steps, live progress, blocked questions you answer from a web board. Paid, OAuth sign-in or API key. Endpoint: `https://taskhold.com/api/mcp` · [Website](https://taskhold.com) · Registry: `com.taskhold/taskhold`
 - **[TextKit](https://jointextkit.com/docs/mcp)** `http` — Send and receive SMS, verify phone numbers, buy US and Canada numbers, and manage contacts, segments, broadcasts and automations. OAuth sign-in or an API key as a Bearer token; free sandbox keys at sign-up. Endpoint: `https://mcp.jointextkit.com` · [Website](https://jointextkit.com) · Registry: `com.jointextkit/textkit`
 - **[ToolsPad](https://toolspad.com/mcp)** `http` — Hosted business workspace for CRM contacts, notes, tasks, forms, appointments and whiteboards through Streamable HTTP. Browser OAuth authorizes one workspace with read-only or read-and-write access; connections can be revoked in Settings.
+- **[WA MCP](https://github.com/tsahospital-beep/wa-mcp)** `stdio` — Search messages and voice transcripts from a linked WhatsApp account through a local bridge, with sending off by default.
 
 <!-- directory:end -->
 
