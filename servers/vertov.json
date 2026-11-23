@@ -1,0 +1,9 @@
+{
+  "name": "Vertov",
+  "url": "https://vertov.app/docs/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Search screen recordings, read timestamped transcripts and briefs, and upload recordings to get share links. Sign in with Vertov OAuth.",
+  "endpoint": "https://vertov.app/mcp",
+  "registry": "io.github.ankurmans/vertov"
+}
