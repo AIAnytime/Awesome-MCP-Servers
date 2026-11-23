@@ -1,0 +1,9 @@
+{
+  "name": "Brainy 48",
+  "url": "https://48.brainy.ae/developers",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Fixed-price business automation catalogue for the UAE and Spain, plus a free 48-hour team diagnosis: list automations with prices, estimate the diagnosis and get a WhatsApp request link. Read-only, no API key.",
+  "endpoint": "https://48.brainy.ae/mcp",
+  "registry": "ae.brainy/brainy-48"
+}
