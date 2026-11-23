@@ -1,0 +1,9 @@
+{
+  "name": "CGC Airport Transfers",
+  "url": "https://cgctransfers.com.au/ai-agent-gateway/",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Private airport transfers on the Gold Coast, Brisbane, Byron Bay and Northern NSW: live fixed-price quotes with a pre-filled booking link, availability checks and business info; the customer confirms and pays on cgctransfers.com.au, never through the agent. No sign-in needed for quotes. Endpoint: `https://cgctransfers.com.au/wp-json/cgc-gateway/v1/mcp` · [Docs](https://cgctransfers.com.au/ai-agent-gateway/) · Registry: `au.com.cgctransfers/booking`",
+  "endpoint": "https://cgctransfers.com.au/wp-json/cgc-gateway/v1/mcp",
+  "registry": "au.com.cgctransfers/booking"
+}
