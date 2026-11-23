@@ -1,0 +1,9 @@
+{
+  "name": "HumanCalls",
+  "url": "https://github.com/Hire-Overseas/humancalls-mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "A trained human caller phones a US or Canadian business for your agent and returns typed answers, a summary, the recording and a transcript. $1 per connected minute, 10 free minutes, OAuth sign-in. Endpoint: `https://humancalls.ai/mcp` · [Website](https://humancalls.ai)",
+  "endpoint": "https://humancalls.ai/mcp",
+  "registry": "io.github.Hire-Overseas/humancalls-mcp"
+}
