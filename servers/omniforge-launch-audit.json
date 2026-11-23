@@ -1,0 +1,9 @@
+{
+  "name": "OmniForge Launch Audit",
+  "url": "https://github.com/zColdWater/mcp-launch-audit",
+  "category": "security",
+  "transport": "http",
+  "description": "Pre-deploy web security, Supabase RLS, SPF/DKIM/DMARC email DNS, llms.txt, and 78-TLD RDAP launch auditor with no account or API key. Endpoint: `https://omnipulse-x402.appwrite.network/mcp` · Registry: `io.github.zColdWater/mcp-launch-audit`",
+  "endpoint": "https://omnipulse-x402.appwrite.network/mcp",
+  "registry": "io.github.zColdWater/mcp-launch-audit"
+}
