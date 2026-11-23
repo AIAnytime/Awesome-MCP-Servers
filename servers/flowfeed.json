@@ -1,0 +1,9 @@
+{
+  "name": "FlowFeed MCP",
+  "url": "https://github.com/loyt1/flowfeed-mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Real-time macro, forex and crypto news plus the economic calendar and central bank releases for AI agents, each with its source link. OAuth, paid plan ($9/month). Endpoint: `https://mcp.flowfeed.cc/mcp` · Registry: `cc.flowfeed/mcp`",
+  "endpoint": "https://mcp.flowfeed.cc/mcp",
+  "registry": "cc.flowfeed/mcp"
+}
