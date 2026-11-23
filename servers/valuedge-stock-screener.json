@@ -1,0 +1,8 @@
+{
+  "name": "Stock Screener by ValuEdge",
+  "url": "https://valuedge.app/connect/stock-screener-mcp",
+  "category": "finance",
+  "transport": "http",
+  "description": "Read-only stock screening by valuation, growth, quality and dividends, with OAuth sign-in to run screens.",
+  "endpoint": "https://valuedge.app/mcp/screener"
+}
