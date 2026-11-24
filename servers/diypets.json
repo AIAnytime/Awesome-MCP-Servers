@@ -1,0 +1,7 @@
+{
+  "name": "DIYPets",
+  "url": "https://github.com/smresponsibilities/diypets",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Desktop mascot engine exposing MCP tools for agent reactions, speech bubbles, and spawning pixel herds. Run: diypets mcp or cargo install diypets \u00b7 [Docs](https://shivammahajan.com/diypets/)"
+}
