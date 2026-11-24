@@ -1,0 +1,9 @@
+{
+  "name": "Qonvert Marketing AI",
+  "url": "https://qonvert.ai/connect",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Check supplied Google Ads URLs for missing UTM fields without signing in, and use Qonvert Connect to access authorized project marketing sources with OAuth and source consent.",
+  "endpoint": "https://mcp.qonvert.ai/mcp",
+  "registry": "ai.qonvert/qonvert"
+}
