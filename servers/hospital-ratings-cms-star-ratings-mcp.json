@@ -1,0 +1,9 @@
+{
+  "name": "Hospital Ratings CMS Star Ratings MCP",
+  "url": "https://github.com/theluckystrike/hospital-ratings-cms-star-ratings-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "CMS overall hospital star ratings, patient survey (HCAHPS) stars, ER wait times and quality measures for US hospitals from Medicare Care Compare. Read-only, no API key. Endpoint: `https://hospital-ratings-cms-star-ratings-mcp.lipmichal.workers.dev/mcp`",
+  "endpoint": "https://hospital-ratings-cms-star-ratings-mcp.lipmichal.workers.dev/mcp",
+  "registry": "io.github.theluckystrike/hospital-ratings-cms-star-ratings-mcp"
+}
