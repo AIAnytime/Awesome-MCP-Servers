@@ -1,0 +1,8 @@
+{
+  "name": "Kite",
+  "url": "https://github.com/kitedotnew/kite-agent-plugins",
+  "category": "media",
+  "transport": "http",
+  "description": "Create Kite design files and draw editable frames, text, components and auto layout that a team edits in the same file. Free plan; OAuth sign-in, no API key. Endpoint: `https://kite.new/api/mcp`",
+  "endpoint": "https://kite.new/api/mcp"
+}
