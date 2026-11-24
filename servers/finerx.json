@@ -1,0 +1,9 @@
+{
+  "name": "FineRx",
+  "url": "https://github.com/andrewfinerx/finerx-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Observed US prescription prices by pharmacy chain with the date each was seen, the free FineRx discount card, and US equivalents of foreign-brand medicines, in 12 languages; an independent comparison service, not insurance or medical advice, that may earn a commission when the card is used. No key or account for the hosted endpoint; read-only except one tool that emails the card after the user agrees. Endpoint: `https://www.finerxfinder.com/mcp` · Install (stdio, free key): `uvx finerx-mcp` · [Docs](https://www.finerxfinder.com/en/connect)",
+  "endpoint": "https://www.finerxfinder.com/mcp",
+  "registry": "com.finerxfinder/finerx"
+}
