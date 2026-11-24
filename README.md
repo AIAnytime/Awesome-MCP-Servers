@@ -95,6 +95,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Agents, IDEs & developer tools
 
+- **[A1 Gallery](https://www.a1.gallery/mcp)** `http` — Design references from a hand-picked gallery of real live websites: sections, full pages, fonts, font pairings and the colours, type sizes and spacing measured off each page. OAuth, free A1 account (30 calls a week). Endpoint: `https://www.a1.gallery/api/mcp`
 - **[Agent Coach](https://upskill.coach/docs/mcp)** `http` — Free coach and security-scanned library of skills, MCP servers, repos and prompts for AI agents: set one goal, get matched items, check in daily; no account or API key to start. Endpoint: `https://upskill.coach/mcp`
 - **[Agent QA](https://github.com/vostride/agent-qa)** `stdio` — Author, validate, run, and inspect natural-language web and mobile regression tests, with persistent test memory. Install: `npx -y agent-qa mcp`
 - **[AgentFEM MCP](https://github.com/haoming-luo/agentfem-mcp)** `stdio` — Create, validate, run and inspect finite-element projects through seven local tools; requires an installed AgentFEM scientific runtime and a project directory. Adapter: `pip install agentfem-mcp` · [Setup](https://github.com/haoming-luo/agentfem-mcp#bring-it-to-life)
