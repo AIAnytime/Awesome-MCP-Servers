@@ -1,0 +1,7 @@
+{
+  "name": "Linger MCP",
+  "url": "https://withlinger.com/resources/mcp-design-reference-library/",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Read-only by default: find and inspect saved design references, image previews, notes, and source links in a local library. Bundled with the Linger app for Apple Silicon Macs (trial, then a one-time purchase)."
+}
