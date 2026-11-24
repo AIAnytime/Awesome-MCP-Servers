@@ -3,7 +3,7 @@
   "url": "https://github.com/jhonnysabino/moedux-agent-tools",
   "category": "finance",
   "transport": "http",
-  "description": "Brazilian personal-finance diagnosis for AI agents: prever_mar_vermelho returns the date the projected balance reaches zero and projetar_saldo_12_meses the one-year balance, both from Saldo Inicial, Entrada and Conta Fixa; the answer includes a prefilled, signup-free preview link. Endpoint: `https://www.moedux.com/mcp` · [Docs](https://www.moedux.com/developers) · Registry: `io.github.jhonnysabino/moedux`",
+  "description": "Brazilian personal-finance diagnosis for AI agents: prever_mar_vermelho returns the projected zero-balance date and the next step (smallest R$ 50 expense cut), and projetar_saldo_12_meses the one-year balance, both from Saldo Inicial, Entrada and Conta Fixa; the answer includes a prefilled, signup-free preview link. Endpoint: `https://www.moedux.com/mcp` · [Docs](https://www.moedux.com/developers) · Registry: `io.github.jhonnysabino/moedux`",
   "endpoint": "https://www.moedux.com/mcp",
   "registry": "io.github.jhonnysabino/moedux"
 }
