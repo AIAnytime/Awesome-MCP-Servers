@@ -1,0 +1,9 @@
+{
+  "name": "Cueston",
+  "url": "https://github.com/andreycretsu/cueston-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Build, preview and publish in-app product tours, tooltips, banners, onboarding checklists, surveys and announcements on a SaaS app, and read their analytics; OAuth sign-in with a Cueston account (free plan available). Endpoint: `https://app.cueston.com/api/mcp` · Local: `npx -y cueston mcp` · [Docs](https://cueston.com/docs/mcp)",
+  "endpoint": "https://app.cueston.com/api/mcp",
+  "registry": "com.cueston/cueston"
+}
