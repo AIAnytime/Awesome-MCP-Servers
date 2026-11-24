@@ -1,0 +1,9 @@
+{
+  "name": "A1 Gallery",
+  "url": "https://www.a1.gallery/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Design references from a hand-picked gallery of real live websites: sections, full pages, fonts, font pairings and the colours, type sizes and spacing measured off each page. OAuth, free A1 account (30 calls a week). Endpoint: `https://www.a1.gallery/api/mcp`",
+  "endpoint": "https://www.a1.gallery/api/mcp",
+  "registry": "gallery.a1/a1-gallery"
+}
