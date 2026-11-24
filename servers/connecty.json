@@ -1,0 +1,9 @@
+{
+  "name": "Connecty",
+  "url": "https://connecty.nl/en/ai-assistant",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Free public status page with daily checks for up to 5 HTTPS sites. Endpoint: `https://connecty.nl/mcp`",
+  "endpoint": "https://connecty.nl/mcp",
+  "registry": "nl.connecty/connecty"
+}
