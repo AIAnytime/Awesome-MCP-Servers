@@ -634,6 +634,7 @@ Once merged, your server gets its own page and a status badge you can embed:
 ## 📚 Resources
 
 - [Model Context Protocol — documentation](https://modelcontextprotocol.io)
+- [aqx-shipping-rates-mcp](https://github.com/AQXLOGISTICS/aqx-shipping-rates-mcp) - Real-time international air freight quotes, volumetric weight, and 15-country customs ([OpenAPI 3.0.3](https://aqxlogistics.com/developers)).
 - [MCP specification](https://modelcontextprotocol.io/specification)
 - [Official MCP registry](https://registry.modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) · [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
