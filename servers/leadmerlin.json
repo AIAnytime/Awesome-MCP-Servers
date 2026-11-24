@@ -1,0 +1,9 @@
+{
+  "name": "LeadMerlin",
+  "url": "https://github.com/HalberdLLC/leadmerlin-mcp",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Local business leads: search Google Maps businesses by niche and city, each enriched with owner name, emails checked against the mail server, phone line type and website tech. API key; 100 free leads on signup, no card; `check_website_tech` is free without a key. Endpoint: `https://api.leadmerlin.com/mcp` · Local bridge: `npx -y github:HalberdLLC/leadmerlin-mcp` · [Docs](https://leadmerlin.com/for-agents/) · Registry: `com.leadmerlin/leadmerlin`",
+  "endpoint": "https://api.leadmerlin.com/mcp",
+  "registry": "com.leadmerlin/leadmerlin"
+}
