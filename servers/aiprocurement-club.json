@@ -1,0 +1,9 @@
+{
+  "name": "AIProcurement.club Procurement Agents",
+  "url": "https://aiprocurement.club/agent-services/for-agents",
+  "category": "productivity",
+  "transport": "http",
+  "description": "47 procurement tools cover supplier comparison, bid scoring, negotiation, and document evidence packs. Tool discovery is public and protected calls use a scoped bearer key.",
+  "endpoint": "https://mcp.aiprocurement.club/mcp",
+  "registry": "club.aiprocurement/procurement-agents"
+}
