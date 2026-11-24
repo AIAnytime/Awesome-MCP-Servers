@@ -1,0 +1,9 @@
+{
+  "name": "Skool Community Scraper",
+  "url": "https://github.com/GeminiGeorge22/publicrecords-mcp/tree/main/servers/skool-community-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Search Skool communities by keyword. Members, price, rating and estimated monthly revenue for each, plus daily growth tracking. Endpoint: `https://mcp.apify.com?tools=publicrecords/skool-community-growth-tracker` \u00b7 [Docs](https://apify.com/publicrecords/skool-community-growth-tracker)",
+  "endpoint": "https://mcp.apify.com?tools=publicrecords/skool-community-growth-tracker",
+  "registry": "io.github.GeminiGeorge22/skool-community-mcp"
+}
