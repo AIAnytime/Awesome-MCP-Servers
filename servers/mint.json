@@ -1,0 +1,8 @@
+{
+  "name": "Mint",
+  "url": "https://mint.gg/mcp-config-generator",
+  "category": "media",
+  "transport": "http",
+  "description": "Generate, revise and approve 3D models and 3D worlds, upload reference images, and read assets, statuses and credits. Endpoint: `https://mcp.mint.gg/mcp` (OAuth sign-in with a Mint account)",
+  "endpoint": "https://mcp.mint.gg/mcp"
+}
