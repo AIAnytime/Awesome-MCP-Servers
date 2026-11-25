@@ -1,7 +1,8 @@
 {
-  "name": "FlashData Google Search and YouTube Data",
-  "url": "https://github.com/rocosen/flashdata-mcp",
+  "name": "FlashData — Google Search & YouTube Data/Download API",
+  "url": "https://github.com/flashdatadev/flashdata-mcp",
   "category": "search",
-  "transport": "stdio",
-  "description": "Google Search, News, Images, Shopping, Videos and Places; YouTube search, extended search, metadata, existing transcripts/captions, channels, suggestions, license labels and asynchronous media downloads to customer storage; API key and paid Credits required. Install: `npx -y @flashdata-dev/mcp` · [Docs](https://flashdata.dev/docs)"
+  "transport": "http",
+  "description": "Managed Google Search (Web, News, Images, Shopping, Videos, Places), YouTube Data (search, metadata, timestamped transcripts/captions, channels), and cloud YouTube video/audio downloads (S3, GCS, Azure, R2) in one hosted Streamable HTTP MCP server (22 tools). Start with a free trial (no credit card required); pay-as-you-go from $0.40/1k Search, $0.20/1k YouTube Data, $0.04/GB Download. Endpoint: `https://data.flashdata.dev/mcp` · Install: `npx -y @flashdata-dev/mcp` · [Docs](https://flashdata.dev/docs)",
+  "endpoint": "https://data.flashdata.dev/mcp"
 }
