@@ -1,0 +1,9 @@
+{
+  "name": "Clema",
+  "url": "https://github.com/wilsonbright/clema-mcp",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "Hosted remote MCP for U.S. higher-ed institutional research: work the IR data request queue and run read-only SQL on public IPEDS and College Scorecard data. OAuth sign-in, paid Clema plan with free trial. Endpoint: `https://mcp.clema.ai/mcp` · [Docs](https://clema.ai/docs/mcp)",
+  "endpoint": "https://mcp.clema.ai/mcp",
+  "registry": "ai.clema/mcp"
+}
