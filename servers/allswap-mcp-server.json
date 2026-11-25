@@ -1,0 +1,8 @@
+{
+  "name": "AllSwap MCP Server",
+  "url": "https://github.com/allswapio/mcp-server",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "Read-only server with three tools: filters AllSwap's public asset catalog, returns AllSwap's official channels and company registration details, and builds block-explorer links for transaction hashes. No API key. Install: `npx -y @allswapio/mcp-server` · [Docs](https://allswap.io/docs/mcp)",
+  "registry": "io.github.allswapio/mcp-server"
+}
