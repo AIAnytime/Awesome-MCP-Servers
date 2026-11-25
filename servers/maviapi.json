@@ -1,0 +1,9 @@
+{
+  "name": "maviapi",
+  "url": "https://github.com/kuzenlabs/maviapi-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "The unofficial API for any website, as MCP tools: search ready site APIs, read their endpoints and call them for live structured JSON, or have a new one built. Data only, never acts on the target sites; free plan. Keyless demo (read tools): `https://mcp.maviapi.com/demo` · Full server: `https://mcp.maviapi.com/mcp` (OAuth 2.1 or Bearer key) · Local: `npx -y @maviapi/mcp` · [Docs](https://maviapi.com/docs#mcp) · Registry: `io.github.kuzenlabs/maviapi-mcp`",
+  "endpoint": "https://mcp.maviapi.com/demo",
+  "registry": "io.github.kuzenlabs/maviapi-mcp"
+}
