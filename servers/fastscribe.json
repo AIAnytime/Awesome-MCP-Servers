@@ -1,0 +1,9 @@
+{
+  "name": "FastScribe",
+  "url": "https://fastscribe.org/help/mcp-server",
+  "category": "media",
+  "transport": "http",
+  "description": "Transcribe supported public video links and retrieve transcripts as text or timed SRT subtitles with a FastScribe access token.",
+  "endpoint": "https://fastscribe.org/api/mcp",
+  "registry": "org.fastscribe/fastscribe"
+}
