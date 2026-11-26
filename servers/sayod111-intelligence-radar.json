@@ -1,0 +1,8 @@
+{
+  "name": "SAYOD 111 Intelligence Radar",
+  "url": "https://github.com/sayod111/sayod111-mcp-server",
+  "category": "finance",
+  "transport": "http",
+  "description": "Look up public company filings, government contract expirations and investment adviser data. Endpoint: `https://mcp.sayod111.com/mcp`",
+  "endpoint": "https://mcp.sayod111.com/mcp"
+}
