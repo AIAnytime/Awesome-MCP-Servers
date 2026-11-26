@@ -1,0 +1,8 @@
+{
+  "name": "ultrafast",
+  "url": "https://github.com/ultrafastmov/ultrafast",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Make and edit videos as JSON scenes rendered on the local GPU (Metal or Vulkan) with no browser: type, footage, 3D and shaders, frames and contact sheets to look at, a review for clipped or unreadable text, and H.264, HEVC or ProRes export, with no account or API key. Install: `curl -fsSL https://ultrafast.mov/install.sh | sh`, then run `uf mcp` · [Docs](https://github.com/ultrafastmov/ultrafast/blob/main/docs/MCP.md) · Registry: `io.github.ultrafastmov/ultrafast`",
+  "registry": "io.github.ultrafastmov/ultrafast"
+}
