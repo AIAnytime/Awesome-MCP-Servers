@@ -1,0 +1,8 @@
+{
+  "name": "maverickbuilds.app",
+  "url": "https://github.com/Mavericka-SARL/maverick-builds-app",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Reads and updates planning grids, records, dashboards and workflows in maverickbuilds.app models as the signed-in user, with charts and reports. Free Playground account with OAuth sign-in; the platform is also self-hostable.",
+  "endpoint": "https://app.maverickbuilds.app/mcp"
+}
