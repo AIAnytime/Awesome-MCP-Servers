@@ -330,6 +330,7 @@ A listing is not a security review. Read a server's source and permissions befor
 - **[Sunglasses](https://github.com/sunglasses-dev/sunglasses)** `stdio` — Scans text and files locally for prompt injection, credential leaks and data exfiltration; runs as a CLI, a Python API or an MCP server. Install: `pip install sunglasses` · Run: `python -m sunglasses.mcp` · [Website](https://sunglasses.dev)
 - **[usb-rea](https://github.com/emirmrkaljevic/usb-rea)** `stdio` — CLI and MCP server that infers a USB device protocol from a labelled vendor-app capture and writes a pyusb driver. Install: `pip install usb-rea`.
 - **[Vulnerability Exposure](https://github.com/MRFrazer25/Vulnerability-Exposure-MCP)** `stdio` — Checks public IPs, domains, CVE IDs and software versions for confirmed vulnerabilities (NVD version ranges, CISA KEV, EPSS, distro backports, Shodan); every API key is optional. Install: `uvx vulnerability-exposure-mcp`
+- **[Caelo](https://github.com/arthi-arumugam-git/caelo)** `stdio` — Free, local, MIT security scanner for AI-built apps. Finds exposed API keys, Supabase service-role keys, browser-bundled secrets, open Firebase rules, missing Supabase RLS, and committed .env files. Exposes a roast_project tool, no account or API key. Install: `npx -y caelo --mcp`
 
 ### Finance & markets
 
