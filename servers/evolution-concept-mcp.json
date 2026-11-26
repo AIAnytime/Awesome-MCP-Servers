@@ -1,0 +1,7 @@
+{
+  "name": "Evolution Concept MCP",
+  "url": "https://github.com/wladlenvk-crypto/evolution-concept-mcp",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "RAG over the book \"Concept of Development\" by Vladlen V.K. (RU+EN): full-text search, citations and grounded answers about the philosophy of development, evolution and dialectics. Install: Defaulting to user installation because normal site-packages is not writeable \u00b7 [Docs](https://github.com/wladlenvk-crypto/evolution-concept-mcp)"
+}
