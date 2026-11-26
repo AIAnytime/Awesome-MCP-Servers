@@ -1,0 +1,9 @@
+{
+  "name": "Sandboxer",
+  "url": "https://sandboxer.com/docs/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Creates and drives Ubuntu microVM cloud sandboxes for agents: run commands, read and write files, put a port on an HTTPS URL, stop with memory saved and reuse snapshots. Needs a paid Sandboxer account (OAuth sign-in or API key); local stdio: `npx sandboxer-mcp`. Endpoint: `https://sandboxer.com/mcp`",
+  "endpoint": "https://sandboxer.com/mcp",
+  "registry": "com.sandboxer/mcp"
+}
