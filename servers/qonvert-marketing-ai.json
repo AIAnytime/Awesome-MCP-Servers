@@ -3,7 +3,7 @@
   "url": "https://qonvert.ai/connect",
   "category": "marketing",
   "transport": "http",
-  "description": "Check supplied Google Ads and Yandex Direct URLs for missing UTM fields without signing in, and use Qonvert Connect to access project marketing sources with OAuth and source consent.",
+  "description": "Check Google Ads and Yandex Direct optimization readiness after signing in and authorizing your project. A guest tool checks supplied URLs for missing UTM fields.",
   "endpoint": "https://mcp.qonvert.ai/mcp",
   "registry": "ai.qonvert/qonvert"
 }
