@@ -1,0 +1,8 @@
+{
+  "name": "MacroDial",
+  "url": "https://macrodial.org/ai-resources",
+  "category": "finance",
+  "transport": "http",
+  "description": "Free, anonymous read-only MCP for daily U.S. macroeconomic conditions, historical comparisons, and source-linked factor explanations.",
+  "endpoint": "https://macrodial.org/mcp"
+}
