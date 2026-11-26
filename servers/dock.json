@@ -1,0 +1,9 @@
+{
+  "name": "Dock",
+  "url": "https://dock.space/agents",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Dock (dock.space) is an AI presentation editor for PowerPoint, Keynote and PDF: an agent builds a deck from a Dock template or an uploaded .pptx or .key file, edits it with 200+ presentation actions, renders slides to check its work, sends edits as a proposal a person accepts in Dock, and exports PPTX or PDF. OAuth sign-in or a personal access token; MCP on every plan, Free included. Endpoint: `https://app.dock.space/v1/mcp` · [Docs](https://dock.space/agents)",
+  "endpoint": "https://app.dock.space/v1/mcp",
+  "registry": "space.dock/mcp"
+}
