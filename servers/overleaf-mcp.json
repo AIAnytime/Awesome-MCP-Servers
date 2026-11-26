@@ -1,0 +1,7 @@
+{
+  "name": "Overleaf MCP",
+  "url": "https://github.com/yangzichao/mcp-server-overleaf",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "Read, edit, and compile shared Overleaf LaTeX projects, with conflict checks before publishing."
+}
