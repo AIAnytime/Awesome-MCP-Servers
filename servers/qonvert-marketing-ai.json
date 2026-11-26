@@ -1,0 +1,9 @@
+{
+  "name": "Qonvert Marketing AI",
+  "url": "https://qonvert.ai/connect",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Check Google Ads and Yandex Direct optimization readiness after signing in and authorizing your project. A guest tool checks supplied URLs for missing UTM fields.",
+  "endpoint": "https://mcp.qonvert.ai/mcp",
+  "registry": "ai.qonvert/qonvert"
+}
