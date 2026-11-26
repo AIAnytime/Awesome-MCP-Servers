@@ -1,0 +1,8 @@
+{
+  "name": "Autotroph Data & Compliance MCP",
+  "url": "https://github.com/char5742/autotroph-mcp-catalog",
+  "category": "finance",
+  "transport": "http",
+  "description": "Schema-verified SEC EDGAR XBRL financials, EU TED tenders, USAspending/SAM.gov federal contracts, USPTO global patents, and US Federal Register rules with deterministic integrity proofs. Apify API token ($5/mo free tier), pay per record. Endpoint: `https://mcp.apify.com?tools=autotroph/sec-edgar-xbrl-normalizer,autotroph/ted-eu-eforms-normalizer,autotroph/us-federal-procurement-normalizer,autotroph/uspto-patent-intelligence-normalizer,autotroph/us-federal-register-normalizer`",
+  "endpoint": "https://mcp.apify.com?tools=autotroph/sec-edgar-xbrl-normalizer,autotroph/ted-eu-eforms-normalizer,autotroph/us-federal-procurement-normalizer,autotroph/uspto-patent-intelligence-normalizer,autotroph/us-federal-register-normalizer"
+}
