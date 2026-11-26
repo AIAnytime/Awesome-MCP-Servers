@@ -1,0 +1,7 @@
+{
+  "name": "Apidly Cloud",
+  "url": "https://github.com/idimetrix/apidly-tools",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Price, launch and manage GPU servers on Apidly Cloud from an AI assistant. Read-only by default, optional writes with an hourly price cap. Install: `npm install -g --allow-remote=root https://apidly.com/downloads/apidly-mcp-0.1.26.tgz` · [Docs](https://apidly.com/docs/mcp)"
+}
