@@ -1,0 +1,8 @@
+{
+  "name": "Edgrapi",
+  "url": "https://github.com/paperandbeyond23-gif/edgrapi-skills",
+  "category": "finance",
+  "transport": "http",
+  "description": "Read-only US government and SEC data as JSON: SAM.gov contract opportunities, USAspending awards, Grants.gov grants, House STOCK Act trades and SEC EDGAR insider trades, 8-K events, 13F holdings, 13D/G stakes and XBRL fundamentals. OAuth or API key (free tier). Endpoint: `https://api.edgrapi.com/mcp` · [Website](https://edgrapi.com)",
+  "endpoint": "https://api.edgrapi.com/mcp"
+}
