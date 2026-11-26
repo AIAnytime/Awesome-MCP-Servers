@@ -1,0 +1,7 @@
+{
+  "name": "AlphaSift",
+  "url": "https://github.com/ZhuLinsen/alphasift",
+  "category": "finance",
+  "transport": "stdio",
+  "description": "Local-first quantitative equity screener, red-flag filter, and purged walk-forward pattern validator across 7 markets; read-only stdio MCP server with 14 tools and 4 resources. Install: `pip install alphasift`; launch: `alphasift mcp` · [Live Dashboard](https://alphasift.zhulinsen.tech/)"
+}
