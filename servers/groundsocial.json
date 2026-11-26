@@ -1,0 +1,9 @@
+{
+  "name": "Groundsocial",
+  "url": "https://github.com/shivanshmehendiratta/groundsocial-mcp",
+  "category": "search",
+  "transport": "http",
+  "description": "Read-only public data from 77 platforms, including Reddit threads and comments, X posts, TikTok, Instagram and YouTube videos with transcripts, LinkedIn pages and Google results, each in the platform's own JSON. OAuth 2.1 or a Bearer API key; 100 free credits, no card. Endpoint: `https://api.groundsocial.dev/mcp` · [Docs](https://groundsocial.dev/docs/mcp) · Registry: `io.github.shivanshmehendiratta/groundsocial`",
+  "endpoint": "https://api.groundsocial.dev/mcp",
+  "registry": "io.github.shivanshmehendiratta/groundsocial"
+}
