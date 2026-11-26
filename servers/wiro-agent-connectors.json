@@ -1,0 +1,8 @@
+{
+  "name": "Wiro Agent Connectors",
+  "url": "https://github.com/wiroai/Wiro-Agent-Connectors",
+  "category": "marketing",
+  "transport": "stdio",
+  "description": "MCP connectors for 45 services with no official MCP server, such as Gmail, Google Ads, Meta Ads, Shopify, YouTube and Notion; each one runs as its own stdio server with your own API key or OAuth token. Install: `npx -y @wiro-ai/wiro-agent-connectors <connector>` (`--list` prints them all) · [Docs](https://github.com/wiroai/Wiro-Agent-Connectors#readme)",
+  "registry": "ai.wiro/agent-connectors"
+}
