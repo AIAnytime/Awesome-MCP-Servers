@@ -1,0 +1,7 @@
+{
+  "name": "Unmei Tarot",
+  "url": "https://github.com/TJLDC/unmei-tarot-integrations",
+  "category": "knowledge-memory",
+  "transport": "stdio",
+  "description": "Look up upright and reversed meanings for all 78 tarot cards in Japanese or English, or draw one or three distinct cards locally without an API key. [Card meanings](https://www.unmei-tarot.com/en/tarot-card-meanings) · [Release](https://github.com/TJLDC/unmei-tarot-integrations/releases/tag/v0.1.0)"
+}
