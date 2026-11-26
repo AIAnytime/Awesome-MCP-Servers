@@ -1,0 +1,9 @@
+{
+  "name": "Valmera",
+  "url": "https://github.com/ABO3SKRALMASAOODI/valmera-mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Edit uploaded video with cuts, captions, reframing, preview and MP4 export. OAuth or a bearer token requires a Valmera account with MCP editing access.",
+  "endpoint": "https://valmera.io/mcp/server",
+  "registry": "io.valmera/video-editor"
+}
