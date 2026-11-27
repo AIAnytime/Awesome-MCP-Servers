@@ -1,0 +1,8 @@
+{
+  "name": "Buddy.Works",
+  "url": "https://buddy.works/docs/ai-agents/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Over 90 tools to run and watch pipelines, read build logs, and manage repositories, deployment targets, sandboxes, package registries and domains in a Buddy workspace; OAuth or a personal access token, paid plans after a 14-day trial. Endpoint: `https://mcp.buddy.works/mcp` (EU: `https://mcp.eu.buddy.works/mcp`, Asia: `https://mcp.asia.buddy.works/mcp`)",
+  "endpoint": "https://mcp.buddy.works/mcp"
+}
