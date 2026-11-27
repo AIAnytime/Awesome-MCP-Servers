@@ -1,0 +1,8 @@
+{
+  "name": "Pandex",
+  "url": "https://github.com/pandex-io/pandex-mcp",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Official legislation and case law for AI agents (EU, UK, DE, FR, ES, NL, AT, CH and more), straight from the official sources: every past version of each law with its dates, citations linked to the exact passage. Works without a key on the free tier; a free key gives more calls. Endpoint: `https://api.pandex.io/mcp` · [Docs](https://www.pandex.io/docs)",
+  "endpoint": "https://api.pandex.io/mcp"
+}
