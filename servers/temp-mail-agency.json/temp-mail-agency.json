@@ -1,0 +1,8 @@
+{
+  "name": "Temp Mail Agency",
+  "url": "https://temp-mail.agency/mcp-server.html",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Free hosted MCP server and REST API for temporary email: create disposable inboxes, read messages and extract verification codes; free API key via Google sign-in, 100 emails/day shared across MCP and API. Endpoint: `https://temp-mail.agency/mcp` - Docs: https://temp-mail.agency/api-access.html",
+  "endpoint": "https://temp-mail.agency/mcp"
+}
