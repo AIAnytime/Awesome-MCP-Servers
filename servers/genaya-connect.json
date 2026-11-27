@@ -1,0 +1,9 @@
+{
+  "name": "Genaya Connect",
+  "url": "https://developer.genaya.com/mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Hosted MCP server for Genaya, an operations app for service businesses: ask about appointments, clients, invoices, calls and tasks, and prepare changes that run only after the member confirms them. OAuth 2.1 sign-in; paid plans with a 14-day free trial. Endpoint: `https://api.genaya.com/mcp` · [Website](https://www.genaya.com)",
+  "endpoint": "https://api.genaya.com/mcp",
+  "registry": "io.github.genaya-app/genaya"
+}
