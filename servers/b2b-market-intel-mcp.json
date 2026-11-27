@@ -1,0 +1,8 @@
+{
+  "name": "B2B Market Intel MCP",
+  "url": "https://github.com/truonggiang0111/b2b-market-intel-mcp",
+  "category": "search",
+  "transport": "stdio",
+  "description": "Zero-key MCP STDIO server with 3 instant tools (Google News CBMi URL decoder, UK Gov Contracts Finder buyer emails, ClinicalTrials.gov biotech sponsors) plus 5 optional Apify batch tools for app 1-star churn and hiring signals. Install: `npx -y github:truonggiang0111/b2b-market-intel-mcp` · [Docs](https://truonggiang0111.github.io/mcp/)",
+  "registry": "io.github.truonggiang0111/b2b-market-intel-mcp"
+}
