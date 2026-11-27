@@ -1,0 +1,8 @@
+{
+  "name": "Liliphant",
+  "url": "https://github.com/walkover-mcp/liliphant",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Joins your meetings and remembers the work across all of them: ask what was decided, who promised what, or what's still blocked, with the exact quote, speaker and meeting. Endpoint: `https://mcp.liliphant.com/mcp` · [Website](https://liliphant.com/)",
+  "endpoint": "https://mcp.liliphant.com/mcp"
+}
