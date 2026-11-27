@@ -1,0 +1,9 @@
+{
+  "name": "Hailtrades",
+  "url": "https://github.com/Hailtrades/hailtrades-mcp",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Find emergency residential plumbers and electricians in Toronto and the GTA: hours, 24/7 flags, call-out fees, licences and contacts. Read-only search, no account or API key. Endpoint: `https://hailtrades.com/mcp`",
+  "endpoint": "https://hailtrades.com/mcp",
+  "registry": "com.hailtrades/mcp"
+}
