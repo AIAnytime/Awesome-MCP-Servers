@@ -1,0 +1,7 @@
+{
+  "name": "booksy-mcp",
+  "url": "https://github.com/PiotrZapolski/booksy-mcp",
+  "category": "productivity",
+  "transport": "stdio",
+  "description": "MCP server for Booksy Biz (salon and barbershop software). Reads calendar, staff schedules, clients, payments and reports through your own logged-in Chrome tab: no API key, no hosted service, the session never leaves your machine. Install from source, not on npm yet."
+}
