@@ -1,0 +1,9 @@
+{
+  "name": "Freepost",
+  "url": "https://freepost.io/developers",
+  "category": "marketing",
+  "transport": "http",
+  "description": "Draft a version of each post for Xiaohongshu, Douyin, X, Instagram and more (20 platforms to connect), review it, then schedule and publish from your own signed-in accounts; publishing is live on Xiaohongshu, Instagram and X. OAuth sign-in; Free plan, paid plans from ¥39/month.",
+  "endpoint": "https://freepost.io/api/mcp",
+  "registry": "io.freepost/mcp"
+}
