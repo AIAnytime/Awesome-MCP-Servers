@@ -1,0 +1,9 @@
+{
+  "name": "ValorBrain",
+  "url": "https://github.com/ValorBrain/valorbrain-cli",
+  "category": "knowledge-memory",
+  "transport": "http",
+  "description": "Shared memory for a team of AI agents: agents store, search and correct dated facts and decisions, and pass work to each other through handoffs the whole team reads. OAuth 2.1 or a Bearer MCP token (`vbm_`). Endpoint: `https://mcpbrain.valor.digital/mcp` · [Docs](https://docs.valorbrain.com.br/docs/mcp)",
+  "endpoint": "https://mcpbrain.valor.digital/mcp",
+  "registry": "io.github.ValorBrain/valorbrain"
+}
