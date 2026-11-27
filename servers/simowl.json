@@ -1,0 +1,8 @@
+{
+  "name": "SimOwl",
+  "url": "https://simowl.com/ai-assistants",
+  "category": "commerce-travel",
+  "transport": "http",
+  "description": "Prepaid travel eSIM plans for 148 countries and 10 regions: find plans, check if a phone supports eSIM and estimate trip data. Read-only, no API key. Endpoint: `https://simowl.com/mcp` · [Docs](https://simowl.com/ai-assistants)",
+  "endpoint": "https://simowl.com/mcp"
+}
