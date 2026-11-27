@@ -1,0 +1,9 @@
+{
+  "name": "YouTubeTranscriptAPI",
+  "url": "https://youtubetranscriptapi.com/docs/mcp",
+  "category": "media",
+  "transport": "http",
+  "description": "Read YouTube video transcripts with or without timestamps, search YouTube or a single channel, and list channel and playlist videos; read-only tools. Endpoint: `https://youtubetranscriptapi.com/mcp` (OAuth, or an API key as a Bearer header; free credits to start) · Registry: `com.youtubetranscriptapi/youtube`",
+  "endpoint": "https://youtubetranscriptapi.com/mcp",
+  "registry": "com.youtubetranscriptapi/youtube"
+}
