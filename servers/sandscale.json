@@ -1,0 +1,9 @@
+{
+  "name": "Sandscale",
+  "url": "https://sandscale.dev/sandboxes/mcp",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Creates a Firecracker microVM sandbox per task, runs commands in it and moves files in and out, with every call recorded in an audit log. OAuth 2.1 sign-in with a Sandscale account · [Docs](https://sandscale.dev/sandboxes/mcp)",
+  "endpoint": "https://mcp.sandscale.dev/mcp",
+  "registry": "dev.sandscale/sandscale"
+}
