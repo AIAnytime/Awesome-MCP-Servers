@@ -1,0 +1,8 @@
+{
+  "name": "Outscraper",
+  "url": "https://github.com/outscraper/outscraper-mcp-server",
+  "category": "search",
+  "transport": "http",
+  "description": "Business catalog search, Google Maps scraping and reviews, and business data enrichment through a hosted MCP endpoint with OAuth required for tool calls. A Node bridge supports local or self-hosted use; local command: `npx -y outscraper-mcp` (API key required) · [Setup](https://mcp.outscraper.com/).",
+  "endpoint": "https://api.outscraper.com/mcp"
+}
