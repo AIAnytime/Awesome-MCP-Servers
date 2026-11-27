@@ -1,0 +1,8 @@
+{
+  "name": "Tempboxy",
+  "url": "https://tempboxy.com/mcp-server",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Free hosted MCP server and API for temporary email with automatic OTP and magic-link extraction: create disposable inboxes, read messages and get verification codes; 100 calls/day via Google sign-in. Endpoint: `https://tempboxy.com/mcp` - Docs: https://tempboxy.com/mcp-server",
+  "endpoint": "https://tempboxy.com/mcp"
+}
