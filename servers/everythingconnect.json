@@ -1,0 +1,7 @@
+{
+  "name": "EverythingConnect Deconstructor",
+  "url": "https://github.com/jiangxingfan1-coder/EverythingConnect",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Local MCP server for inspecting application metadata and drafting ConnectIR definitions; requires local setup and approved read roots."
+}
