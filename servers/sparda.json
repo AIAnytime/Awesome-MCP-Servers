@@ -1,0 +1,7 @@
+{
+  "name": "SPARDA",
+  "url": "https://github.com/zakariagharzouli/sparda",
+  "category": "developer-tools",
+  "transport": "stdio",
+  "description": "Behavioural verification engine for backends: compiles declared routes, mutations, guards, effects and constraints into a deterministic graph, then evaluates verification obligations on it. Runs offline, with a CLI and an MCP runtime."
+}
