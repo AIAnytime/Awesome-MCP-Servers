@@ -1,0 +1,8 @@
+{
+  "name": "realism-gate",
+  "url": "https://github.com/KhomDev/realism-gate",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Local stdio MCP and CLI that statically checks Foundry, Solana, and Move (Sui/Aptos) exploit PoC tests and binds claims to evidence. Offline; never runs the PoC. Install: `cargo install realism-gate`.",
+  "registry": "io.github.KhomDev/rgate"
+}
