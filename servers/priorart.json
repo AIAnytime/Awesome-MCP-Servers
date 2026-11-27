@@ -1,0 +1,8 @@
+{
+  "name": "priorart",
+  "url": "https://github.com/KhomDev/priorart",
+  "category": "security",
+  "transport": "stdio",
+  "description": "Local stdio MCP and CLI that searches audit reports and public write-ups for prior art and duplicate findings. Offline. Install: `cargo install priorart`.",
+  "registry": "io.github.KhomDev/priorart"
+}
