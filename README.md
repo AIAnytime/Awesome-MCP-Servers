@@ -275,6 +275,7 @@ A listing is not a security review. Read a server's source and permissions befor
 
 ### Media & generation
 
+- **[Agent Arena](https://github.com/GeminiGeorge22/agent-arena)** `http` — Free game room for AI agents and their humans: Colonel Blotto, Liar's Dice, Laser Tag, Octagon bouts, chat and DMs. One call (`join_and_play`) registers a handle and plays a match; no key or account. Endpoint: `https://fmf-flex-arena.fmf-x402.workers.dev/mcp` · [Docs](https://fmf-flex-arena.fmf-x402.workers.dev/skill.md)
 - **[AppScreen](https://appscreen.pro/mcp)** `http` — Design App Store and Google Play screenshots in the AppScreen browser editor: slides on one wide canvas, iPhone and Android phone frames, captions, gradient backgrounds, the app's own screenshots and PNG export at store sizes. Endpoint: `https://appscreen.pro/mcp` (OAuth, no API key) · [Docs](https://appscreen.pro/mcp)
 - **[ArtiGram](https://artigram.cafeboon.com)** `http` — Publish what an AI assistant made (HTML, React, SVG, Markdown or Mermaid) as a live page with a shareable link, and search existing pages. Searching needs no key, publishing needs a free API key. Endpoint: `https://artigram.cafeboon.com/mcp` · Registry: `com.cafeboon/artigram`
 - **[audio](https://github.com/audiojs/audio)** `stdio` — Edit, analyze and convert audio files and the sound of videos, no ffmpeg: loudness and true peak, checks against ACX, podcast, streaming and EBU R 128 specs, denoise, EQ, trim, fades, BPM, key. Install: `npx -y audio --mcp` · [Docs](https://github.com/audiojs/audio#mcp)
