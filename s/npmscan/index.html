@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NPMScan MCP server: status, tools and setup</title>
+<meta name="description" content="NPMScan MCP server. Answered an MCP handshake without credentials and listed 23 tools. Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and...">
+<meta name="keywords" content="MCP servers, Model Context Protocol, MCP directory, remote MCP servers, MCP server list, awesome mcp servers, AI agents, Claude, Cursor, AI Anytime">
+<meta name="author" content="AI Anytime">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://mcp.aianytime.net/s/npmscan/">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" title="Directory data" href="../../api/servers.json">
+<link rel="alternate" type="text/plain" title="llms.txt" href="../../llms.txt">
+<meta property="og:site_name" content="Awesome MCP Servers by AI Anytime">
+<meta property="og:title" content="NPMScan MCP server: status, tools and setup">
+<meta property="og:description" content="NPMScan MCP server. Answered an MCP handshake without credentials and listed 23 tools. Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcp.aianytime.net/s/npmscan/">
+<meta property="og:image" content="https://mcp.aianytime.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awesome MCP Servers by AI Anytime: MCP servers we actually connect to, every night.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NPMScan MCP server: status, tools and setup">
+<meta name="twitter:description" content="NPMScan MCP server. Answered an MCP handshake without credentials and listed 23 tools. Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and...">
+<meta name="twitter:image" content="https://mcp.aianytime.net/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://aianytime.net/#organization", "name": "AI Anytime", "url": "https://aianytime.net", "sameAs": ["https://www.youtube.com/@AIAnytime", "https://github.com/AIAnytime", "https://academy.aianytime.net"]}, {"@type": "SoftwareApplication", "name": "NPMScan", "description": "Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and transitive dependency lookups for coding agents. Endpoint: https://npmscan.com/api/mcp", "url": "https://mcp.aianytime.net/s/npmscan/", "sameAs": "https://github.com/salemalem/npmscan-mcp-plugin", "applicationCategory": "DeveloperApplication", "applicationSubCategory": "MCP server (Security)", "operatingSystem": "Any", "isPartOf": {"@id": "https://mcp.aianytime.net/#website"}, "softwareVersion": "3.1.3", "featureList": ["analyze_install_script", "analyze_transitive_dependencies", "audit_github_repository", "batch_query_vulnerabilities", "check_license_compliance", "check_maintainer_blast_radius", "check_maintainer_changes", "check_package_provenance", "compare_packages", "diff_dependencies", "enrich_npm_audit", "generate_sbom", "get_cve", "get_latest_advisories", "get_maintainer_profile", "get_package", "get_package_version", "get_remediation_playbook", "prioritize_remediation", "query_vulnerabilities", "search_packages", "simulate_dependency_upgrade", "suggest_alternative"], "dateModified": "2026-11-28T11:48:14Z"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Directory", "item": "https://mcp.aianytime.net/"}, {"@type": "ListItem", "position": 2, "name": "Security", "item": "https://mcp.aianytime.net/c/security/"}, {"@type": "ListItem", "position": 3, "name": "NPMScan", "item": "https://mcp.aianytime.net/s/npmscan/"}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{--bg:#f6f4ee;--card:#fffdf8;--ink:#121118;--mute:#625f6d;--line:#dedad0;--accent:#5b3df5;--accent-soft:#ebe6ff;
+--lime:#d4f75e;--night:#0d0c12;--night-2:#17151f;--night-line:#2b2935;
+--live:#1a7f37;--auth:#5b3df5;--down:#c0262d;--off:#8a8794;--code:#efece3}
+/* Dark: follows the system unless the visitor picked a theme with the header button. */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}}
+:root[data-theme=dark]{--bg:#0d0c12;--card:#17151f;--ink:#f6f4ee;--mute:#a9a6b5;--line:#2b2935;
+--accent:#a594ff;--accent-soft:#241d4d;--live:#d4f75e;--auth:#a594ff;--down:#ff8a80;--off:#7d7a89;--code:#211f2b}
+.icon .sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .icon .sun{display:block}:root:not([data-theme=light]) .icon .moon{display:none}}
+:root[data-theme=dark] .icon .sun{display:block}:root[data-theme=dark] .icon .moon{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+a{color:var(--accent)}
+code{font:.86em "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.brand span{color:var(--mute);font-weight:500}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-size:.93rem}
+nav a:first-child{margin-left:0;color:var(--accent);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav{display:flex;align-items:center;flex-wrap:wrap;row-gap:8px}
+.icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-left:10px;padding:0;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px}
+nav a+.icon{margin-left:18px}
+.icon:hover{color:var(--accent);border-color:var(--accent)}
+.icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:44px 0 18px}
+h1{font:400 clamp(2.3rem,6vw,3.6rem)/1.05 "Instrument Serif",ui-serif,Georgia,serif;letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--mute);max-width:64ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mute);font-size:.86rem}
+.note{color:var(--mute);font-size:.86rem;margin:6px 0 0}
+.controls{position:sticky;top:0;z-index:2;background:var(--bg);padding:12px 0;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input,.controls select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.controls input{flex:1 1 240px}
+.controls select{flex:0 1 auto;max-width:100%}
+#count{color:var(--mute);font-size:.88rem;margin:12px 0}
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0;font-size:1.05rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:6px 0 0;color:var(--mute);font-size:.94rem;overflow-wrap:anywhere}
+.tag{font:500 .7rem "Geist Mono",ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px}
+.pill{font-size:.76rem;font-weight:600;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:currentColor}
+.live{color:var(--live)}.auth{color:var(--auth)}.down{color:var(--down)}.unprobed{color:var(--off)}
+.unprobed.pill::before{background:none;border:1.5px solid currentColor}
+.facts{margin:8px 0 0;font-size:.84rem;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cmd{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.cmd code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow-x:auto;overflow-wrap:normal}
+button.copy{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:0 12px}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.controls input:focus,.controls select:focus{outline:2px solid var(--accent);outline-offset:1px}
+section{padding:34px 0 0}
+h2{font-size:1.35rem;letter-spacing:-.02em;margin:0 0 10px}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:0;list-style:none;margin:14px 0 0}
+.learn li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.93rem;color:var(--mute)}
+.learn a{font-weight:600}
+.fineprint{margin-top:44px;color:var(--mute);font-size:.86rem}
+footer{margin-top:22px;background:var(--night);color:#b9b6c6;font-size:.92rem;border-top:1px solid var(--night-line)}
+footer .wrap{padding-top:36px;padding-bottom:36px}
+footer a{color:#f6f4ee}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;align-items:start}
+.foot h2{font:400 1.7rem/1.1 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:0 0 8px;letter-spacing:0}
+.foot p{margin:0 0 12px;max-width:46ch}
+.foot .links a{margin-right:16px;white-space:nowrap}
+.academy{background:var(--night-2);border:1px solid var(--night-line);border-radius:16px;padding:20px 22px}
+.academy .eyebrow{font:500 .72rem "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.academy h3{font:400 1.5rem/1.15 "Instrument Serif",ui-serif,Georgia,serif;color:#f6f4ee;margin:6px 0 8px}
+.academy a.cta{display:inline-block;background:var(--lime);color:#121118;font-weight:600;text-decoration:none;border-radius:999px;padding:9px 18px;margin-top:4px}
+.academy a.cta:hover{filter:brightness(1.06)}
+.crumbs{margin:26px 0 8px;font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:16px 0}
+dt{color:var(--mute)}dd{margin:0;overflow-wrap:anywhere}
+.days{display:flex;gap:3px;margin-top:6px}
+.days i{width:12px;height:22px;border-radius:3px;background:var(--off)}
+.days .u{background:var(--live)}.days .a{background:var(--auth)}.days .d{background:var(--down)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+pre code{background:none;padding:0;overflow-wrap:normal}
+.tools{columns:220px;padding-left:18px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips a{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.chips a span{color:var(--mute)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin:8px 0 0;color:var(--mute)}
+[hidden]{display:none!important}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.checks th{font-weight:500}
+table.checks td:last-child{min-width:150px}
+table.params{min-width:560px}
+thead th{color:var(--mute);font-weight:500;font-size:.8rem;white-space:nowrap}
+.state{font-size:.78rem;font-weight:600;white-space:nowrap}
+.state::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:currentColor}
+.state.verified{color:var(--live)}.state.failed{color:var(--down)}.state.untested{color:var(--off)}
+.state.untested::before{background:none;border:1.5px solid currentColor}
+h3{font-size:1.02rem;margin:22px 0 6px}
+.count{font:500 .8rem "Geist Mono",ui-monospace,monospace;color:var(--mute);margin-left:4px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tablist button{font:inherit;font-size:.88rem;cursor:pointer;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.tablist button.on{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.tabs.js .panel{display:none}.tabs.js .panel.on{display:block}.tabs.js .panel h3{display:none}
+.tabs:not(.js) .tablist{display:none}
+.panel{margin-top:6px}
+.snippet{position:relative}.snippet .copy{position:absolute;top:8px;right:8px;height:28px}
+.snippet pre{margin:8px 0;padding-right:76px}
+.btn{display:inline-block;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;border-radius:999px;padding:7px 16px;font-size:.9rem}
+.tips{padding-left:18px;color:var(--mute);font-size:.92rem}.tips li{margin:4px 0}
+#toolq{font:inherit;width:100%;max-width:360px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:6px}
+.tool summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.tool summary span:last-child{color:var(--mute);font-size:.88rem;flex:1 1 260px;min-width:0}
+.tool .desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem;margin:10px 0}
+.tool pre{margin:6px 0 4px}
+.hint{font:500 .68rem "Geist Mono",ui-monospace,monospace;border-radius:5px;padding:1px 6px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.hint.read{color:var(--live);border-color:currentColor}.hint.danger{color:var(--down);border-color:currentColor}
+ul.plain{padding-left:18px;font-size:.92rem;color:var(--mute)}
+.status td,.status th{white-space:nowrap}.status .days i{width:5px;height:16px;border-radius:2px}.status .days{gap:2px;margin:0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../../">Awesome MCP Servers <span>by AI Anytime</span></a>
+<nav><a href="https://academy.aianytime.net">Academy</a><a href="../../#directory">Directory</a><a href="../../status/">Status</a><a href="../../#learn">Learn</a><a href="../../#agents">For agents</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a>
+<button id="refresh" class="icon" type="button" title="Reload for the latest check results" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
+<button id="theme" class="icon" type="button" title="Switch between light and dark" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>
+</div></header>
+<main class="wrap">
+
+<p class="crumbs"><a href="../../#directory">Directory</a> / <a href="../../c/security/">Security</a></p>
+<h1>NPMScan</h1>
+<p class="lede">Audits npm packages for malware and AI-specific payloads, with vulnerability, maintainer, license and transitive dependency lookups for coding agents. Endpoint: <code>https://npmscan.com/api/mcp</code></p>
+<p style="margin-top:18px"><span class="pill live">Live</span> &nbsp;Answered an MCP handshake without credentials and listed 23 tools.</p>
+<dl><dt>Category</dt><dd><a href="../../c/security/">Security</a></dd><dt>Transport</dt><dd><code>http</code></dd><dt>Source</dt><dd><a href="https://github.com/salemalem/npmscan-mcp-plugin" rel="nofollow noopener">https://github.com/salemalem/npmscan-mcp-plugin</a></dd><dt>Endpoint</dt><dd><code>https://npmscan.com/api/mcp</code></dd><dt>MCP Registry</dt><dd><code>io.github.salemalem/npmscan</code></dd><dt>Reports itself as</dt><dd>npmscan 3.1.3</dd><dt>Protocol</dt><dd>2025-06-18</dd><dt>Tools</dt><dd>23</dd><dt>Context cost</dt><dd>about 13,483 tokens for the tool definitions (estimated at four characters per token)</dd><dt>Tool definitions last changed</dt><dd>no change seen since first check</dd><dt>Handshake time</dt><dd>131 ms</dd><dt>Repository</dt><dd>164 stars · last push 2026-11-27 · MIT</dd><dt>Last checked</dt><dd>2026-11-28 11:48:14 UTC</dd><dt>Listed since</dt><dd>2026-11-18</dd></dl>
+<h2 id="health">Health and compatibility</h2><div class="scroll"><table class="checks"><tbody><tr><th scope='row'>Endpoint reachable</th><td><span class="state verified">Verified</span></td><td>Responded in 131 ms</td></tr><tr><th scope='row'>MCP handshake (initialize)</th><td><span class="state verified">Verified</span></td><td>Completed without credentials</td></tr><tr><th scope='row'>Tool discovery (tools/list)</th><td><span class="state verified">Verified</span></td><td>23 tools listed</td></tr><tr><th scope='row'>Authentication</th><td><span class="state verified">Verified</span></td><td>None needed to connect</td></tr><tr><th scope='row'>Protocol version</th><td><span class="state verified">Verified</span></td><td>2025-06-18</td></tr><tr><th scope='row'>Transport</th><td><span class="state verified">Verified</span></td><td>Streamable HTTP</td></tr><tr><th scope='row'>Capabilities declared</th><td><span class="state verified">Verified</span></td><td>tools</td></tr></tbody></table></div><p class="note">Last checked <time datetime="2026-11-28T11:48:14Z">2026-11-28 11:48:14 UTC</time>. Verified means the check saw it happen; it says nothing about whether the server is safe.</p><h3>Recent history</h3><p class="note">100% of the last 11 daily checks reachable; median response 131 ms. Green answered, violet asked for auth, red did not answer.</p><div class="days"><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i><i class='u'></i></div>
+<h2 id="setup">Set up in your client</h2><div class="tabs"><div class="tablist" role="tablist"><button type="button" role="tab" data-tab="claude-code" class=on>Claude Code</button><button type="button" role="tab" data-tab="claude-desktop">Claude Desktop</button><button type="button" role="tab" data-tab="cursor">Cursor</button><button type="button" role="tab" data-tab="vscode">VS Code</button><button type="button" role="tab" data-tab="windsurf">Windsurf</button><button type="button" role="tab" data-tab="other">Other clients</button></div><div class="panel" data-panel="claude-code"><h3>Claude Code</h3><p>Run this in a terminal:</p><div class="cmd"><code>claude mcp add --transport http npmscan https://npmscan.com/api/mcp</code><button class="copy" data-copy="claude mcp add --transport http npmscan https://npmscan.com/api/mcp">Copy</button></div></div><div class="panel" data-panel="claude-desktop"><h3>Claude Desktop</h3><p>Open <b>Settings → Connectors → Add custom connector</b> and paste this URL:</p><div class="cmd"><code>https://npmscan.com/api/mcp</code><button class="copy" data-copy="https://npmscan.com/api/mcp">Copy</button></div><p>Or bridge it through <code>mcp-remote</code> in <code>claude_desktop_config.json</code> (needs Node.js):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://npmscan.com/api/mcp&quot;
+      ]
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;-y&quot;,
+        &quot;mcp-remote&quot;,
+        &quot;https://npmscan.com/api/mcp&quot;
+      ]
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="cursor"><h3>Cursor</h3><p><a class="btn" href="cursor://anysphere.cursor-deeplink/mcp/install?name=npmscan&amp;config=eyJ1cmwiOiAiaHR0cHM6Ly9ucG1zY2FuLmNvbS9hcGkvbWNwIn0%3D">Add to Cursor</a></p><p>Or add it to <code>~/.cursor/mcp.json</code> (or <code>.cursor/mcp.json</code> in a project):</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="vscode"><h3>VS Code</h3><p><a class="btn" href="vscode:mcp/install?%7B%22name%22%3A%20%22npmscan%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//npmscan.com/api/mcp%22%7D">Add to VS Code</a></p><p>Or add it to <code>.vscode/mcp.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;servers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;servers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}</code></pre></div><p>Or from a terminal:</p><div class="cmd"><code>code --add-mcp &#x27;{&quot;name&quot;: &quot;npmscan&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;}&#x27;</code><button class="copy" data-copy="code --add-mcp &#x27;{&quot;name&quot;: &quot;npmscan&quot;, &quot;type&quot;: &quot;http&quot;, &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;}&#x27;">Copy</button></div></div><div class="panel" data-panel="windsurf"><h3>Windsurf</h3><p>Add it to <code>~/.codeium/windsurf/mcp_config.json</code>:</p><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;serverUrl&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;serverUrl&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div><div class="panel" data-panel="other"><h3>Other clients</h3><p>Most clients accept this shape. The endpoint is:</p><div class="cmd"><code>https://npmscan.com/api/mcp</code><button class="copy" data-copy="https://npmscan.com/api/mcp">Copy</button></div><div class="snippet"><button class="copy" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;npmscan&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://npmscan.com/api/mcp&quot;
+    }
+  }
+}</code></pre></div></div></div><h3>If it does not connect</h3><ul class="tips"><li>Restart the client after editing a config file, and keep keys out of files you commit.</li><li>If the tools do not appear, open the client's MCP log: a 401 means the credentials were not accepted, and a timeout means the server did not answer.</li></ul>
+<h2 id="tools">Tools <span class="count">23</span></h2><p class="note">Names, descriptions and input schemas exactly as the server returned them on 2026-11-28. This is the server author's own text. Nothing is run from this page. Labels such as read-only are declared by the server and are not verified. <a href="../../api/tools/npmscan.json">Raw JSON</a></p><input id="toolq" type="search" placeholder="Filter tools" aria-label="Filter tools"><div id="toollist"><details class="tool" data-text="analyze_install_script statically scans a package&#x27;s preinstall/install/postinstall/prepare lifecycle scripts and the file(s) they reference — fetched directly from the published tarball, not just the command string in package.json — against npmscan&#x27;s documented red-flags rubric (/docs/red-flags): child_process use, network calls, access to sensitive paths/env (.ssh, .aws, .npmrc, *token/*key), obfuscation, remote binari"><summary><code>analyze_install_script</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Statically scans a package&#x27;s preinstall/install/postinstall/prepare lifecycle scripts AND the file(s) they …</span></summary><p class="desc">Statically scans a package&#x27;s preinstall/install/postinstall/prepare lifecycle scripts AND the file(s) they reference — fetched directly from the published tarball, not just the command string in package.json — against npmscan&#x27;s documented red-flags rubric (/docs/red-flags): child_process use, network calls, access to sensitive paths/env (.ssh, .aws, .npmrc, *TOKEN/*KEY), obfuscation, remote binaries hosted off trusted CDNs, writes to HOME, Discord/Telegram/Pastebin exfil endpoints, eval on decoded strings, chmod+exec of downloaded binaries, and CI-metadata telemetry — plus a possibleTyposquatOf name check. Returns a weighted totalScore and riskTier (&#x27;none&#x27;/&#x27;low&#x27;/&#x27;moderate&#x27;/&#x27;high&#x27;/&#x27;critical&#x27;). This is a heuristic static scan, not proof of malice or a guarantee of safety: it doesn&#x27;t execute any code, can&#x27;t see behavior gated on runtime conditions, and does NOT check maintainer/ownership history (a separate red-flags signal this tool doesn&#x27;t cover). Use get_package/get_package_version first for the raw script listing; use this when you need to know what an install script actually does, not just that one exists.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name, e.g. &quot;lodash&quot; or &quot;@scope/name&quot;</td></tr><tr><td><code>version</code></td><td>string</td><td>optional</td><td>Exact version to analyze; omit to use the latest published version</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;analyze_install_script&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="analyze_transitive_dependencies walk one or more root packages&#x27; dependency trees (e.g. a package.json &quot;dependencies&quot; section) up to `maxdepth` levels (default 2, max 3) and check every resolved package@version against osv.dev, so vulnerabilities several levels down still surface. read `summary` first; `vulnerablepaths` answers &quot;which of my dependencies pulled this in&quot;; `nodes` has the full graph. npm aliases are followed (`actua"><summary><code>analyze_transitive_dependencies</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Walk one or more root packages&#x27; dependency trees (e.g. a package.json &quot;dependencies&quot; section) up to …</span></summary><p class="desc">Walk one or more root packages&#x27; dependency trees (e.g. a package.json &quot;dependencies&quot; section) up to `maxDepth` levels (default 2, max 3) and check every resolved package@version against OSV.dev, so vulnerabilities several levels down still surface. Read `summary` first; `vulnerablePaths` answers &quot;which of my dependencies pulled this in&quot;; `nodes` has the full graph. npm aliases are followed (`actualName`).
+
+Before calling a result clean:
+- A node with `resolutionError` (unsatisfiable range, 404, or a git/file/workspace/URL specifier) has `isVulnerable: null` — it was never scanned, not clean.
+- Only &quot;dependencies&quot; are followed (not dev/peer/optional). Each range is resolved independently to its max-satisfying version, so this shows which vulnerable versions are reachable, not npm&#x27;s exact hoisted install.
+- The walk has a node budget: check `truncated`/`truncationNote`.
+
+Use batch_query_vulnerabilities instead when you already have a flat list of exact versions (faster, no graph walk).</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packages</code></td><td>object[]</td><td>required</td><td>1-15 direct/root packages to expand from, e.g. a package.json&#x27;s &quot;dependencies&quot;. version accepts an exact version or a semver range like &quot;^4.17.21&quot;; omitted = latest.</td></tr><tr><td><code>maxDepth</code></td><td>integer</td><td>optional</td><td>How many levels of transitive dependencies to expand beyond the given root packages (0 = only check the roots themselves). Default 2, capped at 3 to bound registry calls and stay within the request timeout.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;analyze_transitive_dependencies&quot;,
+    &quot;arguments&quot;: {
+      &quot;packages&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="audit_github_repository audit a github repository&#x27;s npm dependencies from its url — no pasted files needed. fetches package.json plus the first lockfile found (pnpm-lock.yaml, then package-lock.json, then yarn.lock) from the default branch (or `ref`), and detects monorepos (package.json workspaces, pnpm-workspace.yaml), merging member dependencies (up to 50 members).
+
+what it checks:
+- every lockfile entry (up to 3,000; "><summary><code>audit_github_repository</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Audit a GitHub repository&#x27;s npm dependencies from its URL — no pasted files needed. Fetches package.json plus …</span></summary><p class="desc">Audit a GitHub repository&#x27;s npm dependencies from its URL — no pasted files needed. Fetches package.json plus the first lockfile found (pnpm-lock.yaml, then package-lock.json, then yarn.lock) from the default branch (or `ref`), and detects monorepos (package.json workspaces, pnpm-workspace.yaml), merging member dependencies (up to 50 members).
+
+What it checks:
+- Every lockfile entry (up to 3,000; the repo&#x27;s own workspace/link entries skipped) against OSV.dev, so `vulnerablePackageCount` covers the whole dependency set.
+- Up to 100 packages, vulnerable ones first, also get a license verdict (same default policy as check_license_compliance, or pass `policy`) and an install-script signal; up to 10 with lifecycle scripts get the deep tarball scan (`installScriptScanScope`).
+- Up to 5 high-risk packages (critical/high vulnerability, possible typosquat, deprecated) get the maintainer-change and provenance checks; others are named in `ownershipCheckNote`.
+
+Read `coverage` and the summary before calling a repo clean: a summary starting `PARTIAL AUDIT` (`coverage.complete: false`) means not every package got every check. `findings` has full detail only for packages with something to report; the other detailed packages are listed compactly in `cleanFindings`. Vulnerable packages past the 100-package detail cap are in `overflowVulnerablePackages`. peerDependencies are skipped unless `includePeerDependencies: true`. This is the most expensive tool here — do not call it in a loop across …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>url</code></td><td>string</td><td>required</td><td>GitHub repository URL, e.g. &quot;https://github.com/owner/repo&quot;.</td></tr><tr><td><code>ref</code></td><td>string</td><td>optional</td><td>Branch, tag, or commit SHA to audit. Omit to use the repository&#x27;s default branch.</td></tr><tr><td><code>includeDevDependencies</code></td><td>boolean</td><td>optional</td><td>Include package.json devDependencies in the audit. Default false. Ignored when a lockfile is used instead (its own format decides direct-dependency scope), and yarn.lock can never distinguish dev from production dependencies regardless of this flag.</td></tr><tr><td><code>includePeerDependencies</code></td><td>boolean</td><td>optional</td><td>Include package.json peerDependencies (root and, for a monorepo, each workspace member) in the audit. Default false — a peer is often intentionally left unresolved by the consumer. See warnings for which peers were excluded.</td></tr><tr><td><code>policy</code></td><td>object</td><td>optional</td><td>License allow/deny policy, same shape as check_license_compliance. Omit for the default policy (only copyleft/network-copyleft/proprietary are violations).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;audit_github_repository&quot;,
+    &quot;arguments&quot;: {
+      &quot;url&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="batch_query_vulnerabilities check a whole npm dependency inventory against osv.dev in one call: pass `packages: [{name, version?}]`, or raw package.json / package-lock / yarn.lock / pnpm-lock / cyclonedx / spdx content via `content`. large inventories are chunked automatically. each finding has severity, summary, cve aliases, fixedversion and ismalware, so no per-package follow-up is needed.
+
+before calling anything clean, r"><summary><code>batch_query_vulnerabilities</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Check a whole npm dependency inventory against OSV.dev in one call: pass `packages: [{name, version?}]`, or …</span></summary><p class="desc">Check a whole npm dependency inventory against OSV.dev in one call: pass `packages: [{name, version?}]`, or raw package.json / package-lock / yarn.lock / pnpm-lock / CycloneDX / SPDX content via `content`. Large inventories are chunked automatically. Each finding has severity, summary, CVE aliases, fixedVersion and isMalware, so no per-package follow-up is needed.
+
+Before calling anything clean, read:
+- `unresolvedPackages`/`nonexistentVersions` (and each result&#x27;s `registryStatus`): a name or version not on npm shows vulnerabilityCount 0 just like a clean package. A version npm removed can still have real OSV findings (often malware).
+- A `packages` entry with no version is checked against every historical version; confirm against the version actually in use before calling it vulnerable.
+- `signals` (deprecated, hasInstallScripts, popularity/maintenance tiers, possibleTyposquatOf): 0 vulnerabilities can still be deprecated, abandoned or a typosquat. `signals` is null for git/file/workspace/URL entries, which are not scanned.
+- `source` (lockfile input): `nonRegistryHost` means the tarball comes from an unexpected host; `identityMismatch` means it is a different package/version than declared (`resolvedName`/`resolvedVersion`) and the counts describe the declared one. Treat both as lockfile tampering.
+- Use `uniqueVulnerabilityCount` for distinct issues; raw counts can list one CVE twice.
+- package.json input: `projectLifecycleScripts`/`projectLifecycleScriptRisk` are the …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packages</code></td><td>object[]</td><td>optional</td><td>Explicit package list (1-1000 items). Use this OR `content`, not both.</td></tr><tr><td><code>content</code></td><td>string</td><td>optional</td><td>Raw dependency inventory content: package.json, package-lock.json, yarn.lock, pnpm-lock.yaml, CycloneDX JSON, or SPDX JSON. Use this OR `packages`, not both.</td></tr><tr><td><code>includeDevDependencies</code></td><td>boolean</td><td>optional</td><td>Ignored when using `packages`; only applies when `content` is a manifest/lockfile format that distinguishes dev dependencies.</td></tr><tr><td><code>includePeerDependencies</code></td><td>boolean</td><td>optional</td><td>Ignored when using `packages`; only applies when `content` is a package.json. peerDependencies are excluded from scanning by default (see ignoredPeerDependencyNames) since a peer is often intentionally left unresolved by the consumer — set this to also check …</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;batch_query_vulnerabilities&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="check_license_compliance given a list of packages (name + optional exact version or semver range — e.g. straight from a package.json &quot;dependencies&quot; object) and an optional allow/deny license policy, resolves each package&#x27;s declared spdx license and reports a compliance verdict per package. classifies every license into one of permissive/weak-copyleft/copyleft/network-copyleft/proprietary/public-domain/unknown, and underst"><summary><code>check_license_compliance</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given a list of packages (name + optional exact version or semver range — e.g. straight from a package.json …</span></summary><p class="desc">Given a list of packages (name + optional exact version or semver range — e.g. straight from a package.json &quot;dependencies&quot; object) and an optional allow/deny license policy, resolves each package&#x27;s declared SPDX license and reports a compliance verdict per package. Classifies every license into one of permissive/weak-copyleft/copyleft/network-copyleft/proprietary/public-domain/unknown, and understands simple SPDX expressions: &quot;(MIT OR GPL-3.0)&quot; is compliant if EITHER side is permitted (a consumer may legally pick the clean alternative), &quot;MIT AND Apache-2.0&quot; requires both sides to pass, and &quot;X WITH exception&quot; is judged on X. A mixed/nested expression like &quot;(MIT OR ISC) AND Apache-2.0&quot; is reported as needsReview rather than guessed at. `policy.deny` entries always win over `policy.allow` (so a name can appear in both without a silent contradiction); with `policy.allow` set, anything not matching it is a violation (unproven is treated as non-compliant); with neither given, the default policy flags only copyleft/network-copyleft/proprietary (e.g. GPL/AGPL/UNLICENSED) — weak-copyleft (LGPL/MPL/EPL) and unrecognized license strings are surfaced but not auto-flagged. Policy entries accept an exact SPDX id, a family prefix (&quot;GPL&quot; catches GPL-2.0/GPL-3.0-only/etc.), or a category name. This reads only the registry-declared `license` field — it does not fetch or parse LICENSE file contents from the source repository.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packages</code></td><td>object[]</td><td>required</td><td>1-100 packages to check. version accepts an exact version or a semver range like &quot;^4.17.21&quot;; omitted = latest.</td></tr><tr><td><code>policy</code></td><td>object</td><td>optional</td><td>Omit entirely to use the default policy: only copyleft/network-copyleft/proprietary are violations.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_license_compliance&quot;,
+    &quot;arguments&quot;: {
+      &quot;packages&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="check_maintainer_blast_radius given an npm username, lists the packages npm&#x27;s maintainer:&lt;username&gt; search index returns for that account and looks for a tight cluster of packages whose latest version was published within a short rolling window of each other — the shape of a compromised-account supply-chain attack, where a stolen credential is used on every package the account can publish to within hours (e.g. the september 20"><summary><code>check_maintainer_blast_radius</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given an npm username, lists the packages npm&#x27;s maintainer:&lt;username&gt; search index returns for that account …</span></summary><p class="desc">Given an npm username, lists the packages npm&#x27;s maintainer:&lt;username&gt; search index returns for that account and looks for a tight cluster of packages whose latest version was published within a short rolling window of each other — the shape of a compromised-account supply-chain attack, where a stolen credential is used on every package the account can publish to within hours (e.g. the September 2025 chalk/debug compromise, ~18 packages in ~2 hours). A large total package count is not itself a red flag; only a tight publish-time cluster is scored, weighted by its package count and combined weekly downloads/dependentsCount. Clusters mostly within one npm scope (a monorepo release) are dampened, and multiple clusters combine with diminishing returns. isCurrentMaintainer shows whether the account still maintains each package. avatarUrl is a proxied Gravatar image (null if no email is on record). Natural follow-up to check_maintainer_changes: call this with a newly added maintainer&#x27;s username to see whether the same account touched other packages around the same time. Limitations: npm&#x27;s search index can lag or omit packages; results are capped at 250 packages ranked by relevance, not recency (see resultsTruncated/totalPackagesFound); lastPublished reflects only each package&#x27;s latest version. npmscanUrl is the account&#x27;s npmscan profile; npmProfileUrl is its npmjs.com page.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>maintainerUsername</code></td><td>string</td><td>required</td><td>Exact npm username, e.g. &quot;sindresorhus&quot; — as shown at npmjs.com/~username. Not an email address, not a package name or scope.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>How many packages to list (default 50, max 250), most-downloaded first. Totals still cover every package found.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_maintainer_blast_radius&quot;,
+    &quot;arguments&quot;: {
+      &quot;maintainerUsername&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="check_maintainer_changes reconstruct who has controlled an npm package and when, straight from the packument (each version records the maintainer list at publish time and who ran `npm publish`). use it for the &#x27;who controls this package, and did that change recently&#x27; question; use get_package/check_package_provenance for general health and publish integrity.
+
+flags:
+1. a maintainer added recently who then published soon a"><summary><code>check_maintainer_changes</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Reconstruct who has controlled an npm package and when, straight from the packument (each version records the …</span></summary><p class="desc">Reconstruct who has controlled an npm package and when, straight from the packument (each version records the maintainer list at publish time and who ran `npm publish`). Use it for the &#x27;who controls this package, and did that change recently&#x27; question; use get_package/check_package_provenance for general health and publish integrity.
+
+Flags:
+1. a maintainer added recently who then published soon after, on a package with real prior history — the takeover shape behind ua-parser-js, event-stream and the 2025 chalk/debug (&#x27;qix&#x27;) compromise
+2. the whole maintainer list replaced at once
+3. a long-standing maintainer quietly dropped
+4. a maintainer change on npm AFTER the latest release — more urgent: access changed hands but nothing has shipped yet
+
+It also checks the declared GitHub repository: transferred or renamed (`repository.ownerLogin`/`ownerAvatarUrl` show the CURRENT owner), unreachable, or a latest release that landed long after any real push activity. If it flags a newly added or fully replaced maintainer, follow up with check_maintainer_blast_radius on that username to see whether the same account touched other packages at the same time. Findings are signals to verify, not proof of compromise.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name, e.g. &quot;lodash&quot; or &quot;@scope/name&quot;</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_maintainer_changes&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="check_package_provenance checks whether a package version was published with npm&#x27;s own sigstore-backed publish provenance (`npm publish --provenance`), and cross-checks that provenance against reality rather than just reporting its presence. three checks: (1) parses the slsa build attestation (declared source repo, commit, builder identity, github actions run url) and flags a builder that isn&#x27;t github-hosted, or an attest"><summary><code>check_package_provenance</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Checks whether a package version was published with npm&#x27;s own Sigstore-backed publish provenance (`npm …</span></summary><p class="desc">Checks whether a package version was published with npm&#x27;s own Sigstore-backed publish provenance (`npm publish --provenance`), and cross-checks that provenance against reality rather than just reporting its presence. Three checks: (1) parses the SLSA build attestation (declared source repo, commit, builder identity, GitHub Actions run URL) and flags a builder that isn&#x27;t GitHub-hosted, or an attested source repo that doesn&#x27;t match package.json&#x27;s own `repository` field; (2) when this version LACKS provenance, checks whether most peer packages (same npm scope, or same maintainer for an unscoped name) DO have it — a package that&#x27;s the odd one out in an org that otherwise always publishes from CI is a real anomaly, not proof of malice; (3) fetches package.json from the source repository at the exact attested commit (or a best-effort matching git tag when no provenance/commit is available) and diffs its install-lifecycle scripts (preinstall/install/postinstall/prepare) and dependency names against what&#x27;s actually in the published tarball — this is the single highest-signal check here, since a script or dependency that exists on npm but was never committed is exactly the pattern of a stolen-npm-token publish that bypasses CI (the event-stream/ua-parser-js incident shape). This is a heuristic, structural check: it does NOT cryptographically re-verify the Sigstore bundle (Fulcio cert chain, Rekor inclusion proof) — it trusts that npm&#x27;s registry already refused to accept a publish …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name, e.g. &quot;lodash&quot; or &quot;@scope/name&quot;</td></tr><tr><td><code>version</code></td><td>string</td><td>optional</td><td>Exact version to check; omit to use the latest published version</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;check_package_provenance&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="compare_packages compare 2-5 candidate packages for the same job (e.g. &quot;axios vs got vs node-fetch&quot;) side by side and get a deterministic pick. more than 5 names is rejected, never truncated; duplicate names are rejected. use search_packages first if you have no shortlist.
+
+per candidate: downloads and trend, popularity/maintenance tiers, github stars, typescript support, license, deprecation, latest-version vulne"><summary><code>compare_packages</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Compare 2-5 candidate packages for the same job (e.g. &quot;axios vs got vs node-fetch&quot;) side by side and get a …</span></summary><p class="desc">Compare 2-5 candidate packages for the same job (e.g. &quot;axios vs got vs node-fetch&quot;) side by side and get a deterministic pick. More than 5 names is rejected, never truncated; duplicate names are rejected. Use search_packages first if you have no shortlist.
+
+Per candidate: downloads and trend, popularity/maintenance tiers, GitHub stars, TypeScript support, license, deprecation, latest-version vulnerabilities, a tarball-free installScriptRisk (scores preinstall/install/postinstall; a prepare-only package scores 0 since prepare never runs on install — use analyze_install_script for the deep scan), and installSize (own size plus a transitive rollup up to depth 2 / 60 nodes; `truncated`/`sizeUnknownCount` mark a partial sum).
+
+`differentiators` names who stands out on each dimension. `recommendation.pick` comes from a weighted score (popularity, maintenance, deprecation, vulnerabilities, typosquat flag, install-script risk, TypeScript, stars; size is reported, not scored) — never a deprecated or typosquat-flagged candidate — with a `rationale` and a `confidence` from how close the top two scored.
+
+Before trusting the result: `vulnerabilityCheckFailed: true` means the safe/not-safe answer is unknown, not clean; a name that cannot be resolved stays in `candidates` with `found: false` and `resolutionError`.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packages</code></td><td>string[]</td><td>required</td><td>2-5 exact npm package names to compare, e.g. [&quot;axios&quot;, &quot;got&quot;, &quot;node-fetch&quot;]. More than 5 is rejected with an error, not truncated.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;compare_packages&quot;,
+    &quot;arguments&quot;: {
+      &quot;packages&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="diff_dependencies compare two snapshots of a package.json, package-lock.json (v1-v3), yarn.lock (classic or berry) or pnpm-lock.yaml (e.g. before/after a pr; formats can differ) and report added, removed and changed packages. lockfiles cover the full resolved graph, so transitive-only changes are caught; npm aliases are followed (`actualname`). up to 100 added/changed packages are checked in detail. ideal for a ci "><summary><code>diff_dependencies</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Compare two snapshots of a package.json, package-lock.json (v1-v3), yarn.lock (classic or Berry) or …</span></summary><p class="desc">Compare two snapshots of a package.json, package-lock.json (v1-v3), yarn.lock (classic or Berry) or pnpm-lock.yaml (e.g. before/after a PR; formats can differ) and report added, removed and changed packages. Lockfiles cover the full resolved graph, so transitive-only changes are caught; npm aliases are followed (`actualName`). Up to 100 added/changed packages are checked in detail. Ideal for a CI gate.
+
+Per added/changed package:
+- `installScriptIntroduced`: a preinstall/install/postinstall script the old version lacked — the shape of a compromised-maintainer release. `prepare` never runs on a registry install, so it is excluded; `installScriptKeysIntroduced` lists every new key, prepare included.
+- `sourceIntegrityChanged`: the same version now resolves to a different tarball URL or hash, or a bump moved to another host (ordinary bumps are not flagged). A same-version swap is `changeType: &quot;source-swap&quot;`.
+- `identityMismatch`: the tarball is a different package or version than declared; `tarballName`/`tarballVersion` say what really installs, and the vulnerability fields describe that.
+- `vulnerabilityDelta` (introduced/fixed/still-vulnerable/still-clean) plus the findings, each with isMalware.
+
+Project-level: `projectLifecycleChanges` diffs the project&#x27;s own root install scripts (package.json only; a PR that only adds a root postinstall changes no dependency), and `overridesChanges` diffs overrides/resolutions/pnpm.overrides, from package.json or between two pnpm-lock.yaml …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>before</code></td><td>string</td><td>required</td><td>Raw file content of the &quot;before&quot; snapshot — a package.json, package-lock.json (npm v1-v3), yarn.lock (classic v1 or Berry), or pnpm-lock.yaml. Format is auto-detected; before/after may be different formats.</td></tr><tr><td><code>after</code></td><td>string</td><td>required</td><td>Raw file content of the &quot;after&quot; snapshot — a package.json, package-lock.json (npm v1-v3), yarn.lock (classic v1 or Berry), or pnpm-lock.yaml. Format is auto-detected; before/after may be different formats.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;diff_dependencies&quot;,
+    &quot;arguments&quot;: {
+      &quot;before&quot;: &quot;...&quot;,
+      &quot;after&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="enrich_npm_audit given the raw output of `npm audit --json` (npm 7+&#x27;s `{vulnerabilities: {...}}` format, or legacy npm 6&#x27;s `{advisories: {...}}`), parses it directly — no need to re-paste package.json/lockfile content — and runs it through the same remove-now/patch-now/patch-soon/scheduled/monitor ranking prioritize_remediation exposes for hand-built finding lists (an advisory that is malware — a mal-* id, or a gh"><summary><code>enrich_npm_audit</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given the raw output of `npm audit --json` (npm 7+&#x27;s `{vulnerabilities: {...}}` format, or legacy npm 6&#x27;s …</span></summary><p class="desc">Given the raw output of `npm audit --json` (npm 7+&#x27;s `{vulnerabilities: {...}}` format, or legacy npm 6&#x27;s `{advisories: {...}}`), parses it directly — no need to re-paste package.json/lockfile content — and runs it through the same remove-now/patch-now/patch-soon/scheduled/monitor ranking prioritize_remediation exposes for hand-built finding lists (an advisory that is malware — a MAL-* id, or a GHSA whose OSV record carries CWE-506 / a MAL-* alias — is auto-detected and forces remove-now). npm audit&#x27;s JSON almost never includes a CVE id (only a GHSA advisory URL), so this resolves each GHSA to its CVE alias via OSV.dev when one exists (ghsaResolvedToCveCount reports how many) before doing the same CISA KEV + FIRST.org EPSS + severity scoring — skipping this step would silently degrade most findings to severity-only ranking despite prioritize_remediation being built around CVE-keyed KEV/EPSS data. Also carries through npm-audit-specific context prioritize_remediation itself has no field for: isDirect (direct vs. transitive dependency) and fixAvailable/fixTarget (npm&#x27;s own computed fix — note fixTarget can name a different package than the vulnerable one, e.g. bumping a parent to pull in a patched transitive dependency). A package with more than one distinct advisory in the source report only has its first advisory used for ranking; a warning names the package so query_vulnerabilities can be called on it directly for the rest. `yarn audit --json` and `pnpm audit --json` use …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>content</code></td><td>string</td><td>required</td><td>Raw stdout of `npm audit --json` — either npm 7+ format ({&quot;auditReportVersion&quot;: 2, &quot;vulnerabilities&quot;: {...}}) or legacy npm 6 format ({&quot;advisories&quot;: {...}}).</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;enrich_npm_audit&quot;,
+    &quot;arguments&quot;: {
+      &quot;content&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="generate_sbom given the same inputs batch_query_vulnerabilities accepts — either a flat {packages:[...]} list, or raw package.json / lockfile / cyclonedx json / spdx json content via `content` — emits a spec-valid cyclonedx 1.6 or spdx 2.3 json document (pick with `format`, default &#x27;cyclonedx&#x27;) with npmscan&#x27;s own osv.dev vulnerability findings and registry license data embedded in each spec&#x27;s native fields: cyc"><summary><code>generate_sbom</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given the same inputs batch_query_vulnerabilities accepts — either a flat {packages:[...]} list, or raw …</span></summary><p class="desc">Given the same inputs batch_query_vulnerabilities accepts — either a flat {packages:[...]} list, or raw package.json / lockfile / CycloneDX JSON / SPDX JSON content via `content` — emits a spec-valid CycloneDX 1.6 or SPDX 2.3 JSON document (pick with `format`, default &#x27;cyclonedx&#x27;) with npmscan&#x27;s own OSV.dev vulnerability findings and registry license data embedded in each spec&#x27;s native fields: CycloneDX gets a top-level `vulnerabilities[]` array (VEX `analysis.state: &#x27;in_triage&#x27;` — an unreviewed automated finding, not a claim of exploitability) and per-component `licenses[]`; SPDX (which has no vulnerabilities array in 2.3) gets one `externalRefs` SECURITY/advisory entry per finding and `licenseDeclared`/`licenseConcluded`. Only a flat package inventory is known here, so the CycloneDX `dependencies[]` transitive graph and any SPDX package hierarchy are intentionally omitted rather than fabricated. Set `includeVulnerabilities`/`includeLicenses` to false to skip either enrichment pass (faster, no registry/OSV calls for that pass); pass `policy` (same shape as check_license_compliance) to also get per-package compliance context; `componentName`/`componentVersion` name the SBOM&#x27;s own root component/document if known. When `content` is a package.json, `peerDependencies` are excluded by default (a peer is often intentionally left unresolved by the consumer) — pass `includePeerDependencies: true` to include them as SBOM components too, since an SBOM meant to be complete shouldn&#x27;t …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packages</code></td><td>object[]</td><td>optional</td><td>Explicit package list (1-1000 items, capped to 100 when includeLicenses is on). Use this OR `content`, not both.</td></tr><tr><td><code>content</code></td><td>string</td><td>optional</td><td>Raw dependency inventory content: package.json, package-lock.json, yarn.lock, pnpm-lock.yaml, CycloneDX JSON, or SPDX JSON. Use this OR `packages`, not both.</td></tr><tr><td><code>format</code></td><td>string</td><td>optional</td><td>SBOM format to emit. Default &#x27;cyclonedx&#x27;. One of: cyclonedx, spdx</td></tr><tr><td><code>includeDevDependencies</code></td><td>boolean</td><td>optional</td><td>Ignored when using `packages`; only applies when `content` is a manifest/lockfile format that distinguishes dev dependencies.</td></tr><tr><td><code>includePeerDependencies</code></td><td>boolean</td><td>optional</td><td>Ignored when using `packages`; only applies when `content` is a package.json. peerDependencies are excluded by default — set this to also include them as SBOM components.</td></tr><tr><td><code>includeVulnerabilities</code></td><td>boolean</td><td>optional</td><td>Query OSV.dev and embed findings natively. Default true.</td></tr><tr><td><code>includeLicenses</code></td><td>boolean</td><td>optional</td><td>Resolve registry license data and embed it natively. Default true.</td></tr><tr><td><code>policy</code></td><td>object</td><td>optional</td><td>License allow/deny policy, same shape as check_license_compliance. Omit for the default policy.</td></tr><tr><td><code>componentName</code></td><td>string</td><td>optional</td><td>Name of the SBOM&#x27;s own root component/document, if known.</td></tr><tr><td><code>componentVersion</code></td><td>string</td><td>optional</td><td></td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;generate_sbom&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_cve look up authoritative nist nvd data for one exact cve id (e.g. &quot;cve-2026-2950&quot;), or browse/search nvd by keyword, cvss severity, cwe, or a publication-date range. every result is enriched with cisa kev status (`kev`, non-null only if this cve is a confirmed, actively-exploited-in-the-wild vulnerability — treat that as an urgent-patch signal regardless of cvss score) and first.org epss (`epss`, the"><summary><code>get_cve</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Look up authoritative NIST NVD data for one exact CVE ID (e.g. &quot;CVE-2026-2950&quot;), or browse/search NVD by …</span></summary><p class="desc">Look up authoritative NIST NVD data for one exact CVE ID (e.g. &quot;CVE-2026-2950&quot;), or browse/search NVD by keyword, CVSS severity, CWE, or a publication-date range. Every result is enriched with CISA KEV status (`kev`, non-null only if this CVE is a confirmed, actively-exploited-in-the-wild vulnerability — treat that as an urgent-patch signal regardless of CVSS score) and FIRST.org EPSS (`epss`, the probability of exploitation in the next 30 days — a better prioritization signal than CVSS severity alone, which measures impact, not likelihood). If the KEV or EPSS lookup itself fails (network/timeout/upstream outage), `kev`/`epss` come back `null` only because those fields have to be nullable — `kevCheckFailed`/`epssCheckFailed` (true in that case) is the real signal, and means &quot;unknown&quot;, not &quot;confirmed absent/unscored&quot;. For a search, a failed EPSS batch call sets `epssCheckFailed` on every result in that response, since one call scores every id together; `kevCheckFailed` is tracked per-CVE since each is looked up independently. For a single cveId lookup, if NVD has no record yet or hasn&#x27;t scored it, this falls back to the raw MITRE CVE record automatically (`source: &quot;mitre&quot;` on the result) rather than returning nothing. NVD is NOT npm-scoped — unlike query_vulnerabilities/get_latest_advisories, search results can include CVEs for any ecosystem, so pass keywordSearch (e.g. the package name) to narrow it. Prefer this for the authoritative CVSS score/vector/KEV/EPSS data on a CVE …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>cveId</code></td><td>string</td><td>optional</td><td>Exact CVE ID for a single lookup, e.g. &quot;CVE-2026-2950&quot;. When given, search filters below are ignored and should be omitted.</td></tr><tr><td><code>keywordSearch</code></td><td>string</td><td>optional</td><td>Free-text search, e.g. a package or product name</td></tr><tr><td><code>severity</code></td><td>string</td><td>optional</td><td>Filter by CVSS v3 base severity One of: CRITICAL, HIGH, MEDIUM, LOW</td></tr><tr><td><code>cweId</code></td><td>string</td><td>optional</td><td>Filter by weakness type, e.g. &quot;CWE-79&quot;</td></tr><tr><td><code>publishedSince</code></td><td>string</td><td>optional</td><td>Publication date range start (YYYY-MM-DD). Must be given together with publishedUntil.</td></tr><tr><td><code>publishedUntil</code></td><td>any</td><td>optional</td><td>Publication date range end (YYYY-MM-DD). Must be given together with publishedSince; range is capped at 120 days.</td></tr><tr><td><code>resultsPerPage</code></td><td>integer</td><td>optional</td><td>Max results for a search (default 10, capped at 50)</td></tr><tr><td><code>startIndex</code></td><td>integer</td><td>optional</td><td>Pagination offset for a search</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_cve&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_latest_advisories browse recently published npm security advisories and known-malicious-package findings. three disjoint sources, selected via type: &quot;reviewed&quot; (default) is github&#x27;s curated, mostly cve-backed advisories; &quot;malware&quot; is github&#x27;s own known-malicious-package advisories; &quot;osv&quot; is osv.dev&#x27;s openssf malicious-packages feed, a separate dataset whose entries use mal-/osv ids rather than ghsa ids. none of &quot;ma"><summary><code>get_latest_advisories</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Browse recently published npm security advisories and known-malicious-package findings. Three disjoint …</span></summary><p class="desc">Browse recently published npm security advisories and known-malicious-package findings. Three disjoint sources, selected via type: &quot;reviewed&quot; (default) is GitHub&#x27;s curated, mostly CVE-backed advisories; &quot;malware&quot; is GitHub&#x27;s own known-malicious-package advisories; &quot;osv&quot; is OSV.dev&#x27;s OpenSSF malicious-packages feed, a separate dataset whose entries use MAL-/OSV ids rather than GHSA ids. None of &quot;malware&quot;/&quot;osv&quot; carry a CVE or meaningful CWE beyond &quot;embedded malicious code&quot;. Filter by severity, vulnerability category (XSS, SQL/NoSQL Injection, SSRF, Access Control, Code Injection, etc. — reviewed only), an affected package name, or (reviewed/malware only) look up one exact advisory by GHSA or CVE ID. Advisories GitHub has withdrawn (most often &quot;Duplicate Advisory: ...&quot; records merged into a canonical GHSA) are excluded from browse results, so a page can hold fewer than 30 entries; an exact ghsaId/cveId lookup still returns a withdrawn advisory, with withdrawnAt set — treat it as retracted, not as a live finding. Paginated with an opaque cursor: pass a previous response&#x27;s nextCursor back in as cursor to fetch the next page.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>type</code></td><td>string</td><td>optional</td><td>Advisory source: &quot;reviewed&quot; (curated CVE-style, default), &quot;malware&quot; (GitHub-curated known-malicious packages), or &quot;osv&quot; (OSV.dev/OpenSSF malicious-packages feed) One of: reviewed, malware, osv</td></tr><tr><td><code>severity</code></td><td>string</td><td>optional</td><td>Filter by severity (default all; not applicable to &quot;malware&quot;/&quot;osv&quot;) One of: critical, high, medium, low, all</td></tr><tr><td><code>category</code></td><td>string</td><td>optional</td><td>Filter by vulnerability category (reviewed only). One of: access-control, dos, xss, ssrf, auth, code-injection, info-exposure, path-traversal, input-validation, prototype-pollution, command-injection, sqli, crypto, race-condition, open-redirect, csrf, … One of: access-control, dos, xss, ssrf, auth, code-injection, info-exposure, path-traversal …</td></tr><tr><td><code>affects</code></td><td>string</td><td>optional</td><td>Filter to advisories affecting this npm package name</td></tr><tr><td><code>ghsaId</code></td><td>string</td><td>optional</td><td>Look up one exact advisory by its GHSA ID (e.g. &quot;GHSA-xxxx-xxxx-xxxx&quot;) — reviewed/malware only</td></tr><tr><td><code>cveId</code></td><td>string</td><td>optional</td><td>Look up one exact advisory by its CVE ID (e.g. &quot;CVE-2024-12345&quot;) — reviewed/malware only</td></tr><tr><td><code>direction</code></td><td>string</td><td>optional</td><td>Sort by published date, newest or oldest first (default desc) One of: asc, desc</td></tr><tr><td><code>cursor</code></td><td>string</td><td>optional</td><td>Opaque pagination cursor from a previous response&#x27;s nextCursor, to fetch the next page</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_latest_advisories&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="get_maintainer_profile given an npm username, returns every package npm&#x27;s own maintainer:&lt;username&gt; search index currently returns for that account (registry.npmjs.org&#x27;s /-/v1/search — the public registry api has no dedicated &#x27;list packages by maintainer&#x27; endpoint otherwise), plus precomputed aggregates: currentlymaintainscount (still listed as maintainer right now vs. already-revoked), totalweeklydownloads and totaldep"><summary><code>get_maintainer_profile</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given an npm username, returns every package npm&#x27;s own maintainer:&lt;username&gt; search index currently returns …</span></summary><p class="desc">Given an npm username, returns every package npm&#x27;s own maintainer:&lt;username&gt; search index currently returns for that account (registry.npmjs.org&#x27;s /-/v1/search — the public registry API has no dedicated &#x27;list packages by maintainer&#x27; endpoint otherwise), plus precomputed aggregates: currentlyMaintainsCount (still listed as maintainer right now vs. already-revoked), totalWeeklyDownloads and totalDependents summed across every returned package, and avatarUrl — a proxied Gravatar image (null if no email is on record). This is a plain info lookup — it does NOT run the publish-cluster / compromised-account detection that check_maintainer_blast_radius does; use that tool instead when the goal is a security read on whether this account&#x27;s recent activity looks like a takeover, not just a profile summary. Natural pairing with check_maintainer_changes: once that tool names a maintainer on a package, call this with that maintainer&#x27;s username to see the rest of what they touch. npmscanUrl is this account&#x27;s profile page on npmscan itself; npmProfileUrl is the account&#x27;s actual page on npmjs.com, included for verification since that&#x27;s the authoritative record of the account.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>maintainerUsername</code></td><td>string</td><td>required</td><td>Exact npm username, e.g. &quot;sindresorhus&quot; — as shown at npmjs.com/~username. Not an email address, not a package name or scope.</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>How many packages to list (default 50, max 250), most-downloaded first. Totals still cover every package found.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_maintainer_profile&quot;,
+    &quot;arguments&quot;: {
+      &quot;maintainerUsername&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_package fetch npm registry metadata for a package: latest version, install scripts (preinstall/postinstall are a key risk signal), maintainers, license, recent version history, weekly downloads, github stars, typescript support, days since last publish, a toppackagesrank (position among npm&#x27;s ~100k most-downloaded packages, from npmscan&#x27;s own periodically-refreshed snapshot — not live), and a downloadtren"><summary><code>get_package</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Fetch npm registry metadata for a package: latest version, install scripts (preinstall/postinstall are a key …</span></summary><p class="desc">Fetch npm registry metadata for a package: latest version, install scripts (preinstall/postinstall are a key risk signal), maintainers, license, recent version history, weekly downloads, GitHub stars, TypeScript support, days since last publish, a topPackagesRank (position among npm&#x27;s ~100k most-downloaded packages, from npmscan&#x27;s own periodically-refreshed snapshot — not live), and a downloadTrend (growing/stable/declining vs. ~3 months ago). Also checks the LATEST version against OSV.dev for known vulnerabilities — isLatestVersionVulnerable/highestSeverity give a direct safe/not-safe answer, and each finding includes severity, a summary, and the fixedVersion to upgrade to (use get_package_version or query_vulnerabilities to check a specific older version instead). If the OSV.dev query itself fails (network/timeout/upstream outage), isLatestVersionVulnerable comes back `false` only because the field has to be a boolean — vulnerabilityCheckFailed:true is the real signal there, and means the safe/not-safe answer is unknown, not confirmed clean. Also returns popularityTier/maintenanceTier (deterministic rule-based labels, not model-generated) and a plain-language maintenanceSummary, plus a possibleTyposquatOf flag if the name is one typo away from a top-5,000 package while itself being obscure — read `deprecated` and maintenanceSummary before recommending a package, since a long gap since the last release can mean either a stable/finished package or a slowing one. Includes a …</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name, e.g. &quot;lodash&quot; or &quot;@scope/name&quot;</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_package&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_package_version fetch registry metadata for one exact version of a package (dependencies, install scripts, tarball) and check that exact version against osv.dev for known vulnerabilities — isvulnerable/highestseverity give a direct answer, and each finding includes severity, a summary, and the fixedversion to upgrade to. use this to check a version pinned in a lockfile rather than the latest release. if the osv.d"><summary><code>get_package_version</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Fetch registry metadata for one exact version of a package (dependencies, install scripts, tarball) AND check …</span></summary><p class="desc">Fetch registry metadata for one exact version of a package (dependencies, install scripts, tarball) AND check that exact version against OSV.dev for known vulnerabilities — isVulnerable/highestSeverity give a direct answer, and each finding includes severity, a summary, and the fixedVersion to upgrade to. Use this to check a version pinned in a lockfile rather than the latest release. If the OSV.dev query itself fails (network/timeout/upstream outage), isVulnerable comes back `false` only because the field has to be a boolean — vulnerabilityCheckFailed:true is the real signal there, and means the answer is unknown, not confirmed clean.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name</td></tr><tr><td><code>version</code></td><td>string</td><td>required</td><td>Exact version string, e.g. &quot;4.17.21&quot;, or a dist-tag such as &quot;latest&quot; (resolved to its exact version before the vulnerability check). Semver ranges like &quot;^4.17.0&quot; are not supported.</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_package_version&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;,
+      &quot;version&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="get_remediation_playbook maps a finding&#x27;s `rule` value from analyze_install_script, check_maintainer_changes, or check_package_provenance to the matching human-authored incident-response playbook (the same content published at /docs/playbooks) and returns its concrete, ordered steps, severity tier, real-incident references, and prevention tips — not just a link. pass the exact `rule` string(s) a prior finding already retu"><summary><code>get_remediation_playbook</code><span class="hint read">read-only</span><span>Maps a finding&#x27;s `rule` value from analyze_install_script, check_maintainer_changes, or …</span></summary><p class="desc">Maps a finding&#x27;s `rule` value from analyze_install_script, check_maintainer_changes, or check_package_provenance to the matching human-authored incident-response playbook (the same content published at /docs/playbooks) and returns its concrete, ordered steps, severity tier, real-incident references, and prevention tips — not just a link. Pass the exact `rule` string(s) a prior finding already returned (batch up to 10 in one call to cover a whole findings array; duplicates resolving to the same playbook are deduplicated) or an `id` to look up a specific playbook by slug directly. Each matched rule also gets its own short situationNote explaining specifically what that rule caught — so a batch of several different rules landing on the same playbook does not read as identical, repeated boilerplate. An unrecognized rule or id is not an error — it comes back with matched:false and a note, since a low-severity or baseline-only finding (e.g. analyze_install_script&#x27;s lifecycle-present) legitimately has no dedicated playbook.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>rules</code></td><td>string[]</td><td>optional</td><td>1-10 exact `rule` values copied from findings already returned by analyze_install_script/check_maintainer_changes/check_package_provenance</td></tr><tr><td><code>id</code></td><td>string</td><td>optional</td><td>A playbook slug to look up directly, e.g. &quot;postinstall-binary&quot; — see /docs/playbooks</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;get_remediation_playbook&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="prioritize_remediation rank vulnerability findings other tools already returned (batch_query_vulnerabilities, query_vulnerabilities, analyze_transitive_dependencies, diff_dependencies...) by what to fix first. pass up to 200 `{packagename, cveid?, severity?, advisoryid?, currentversion?, fixedversion?, findingtype?}`. each gets a tier: remove-now / patch-now / patch-soon / scheduled / monitor.
+
+how the tier is decided:
+"><summary><code>prioritize_remediation</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Rank vulnerability findings other tools already returned (batch_query_vulnerabilities, query_vulnerabilities, …</span></summary><p class="desc">Rank vulnerability findings other tools already returned (batch_query_vulnerabilities, query_vulnerabilities, analyze_transitive_dependencies, diff_dependencies...) by what to fix first. Pass up to 200 `{packageName, cveId?, severity?, advisoryId?, currentVersion?, fixedVersion?, findingType?}`. Each gets a tier: remove-now / patch-now / patch-soon / scheduled / monitor.
+
+How the tier is decided:
+- remove-now: confirmed malware — `findingType: &quot;malware&quot;`, a MAL-* advisoryId, or an advisoryId whose OSV record is a malware advisory (CWE-506 or a MAL-* alias, looked up automatically). Malware is removed, not patched. Advisories that could not be looked up are listed in `malwareCheckFailedAdvisoryIds`.
+- patch-now: on the CISA KEV list (actively exploited), whatever the severity.
+- otherwise a score led by FIRST.org EPSS (30-day exploitation probability), with severity as a secondary signal — or the only signal when there is no EPSS data (no CVE id). An EPSS of 10% or more always ranks at least patch-soon.
+
+The tier is a fix-ORDER across a backlog, not a severity verdict or a merge gate: a CRITICAL CVE with low EPSS can rank monitor. Never describe a monitor/scheduled finding as &quot;low severity&quot;, and judge whether a change that INTRODUCES a vulnerability is acceptable by its severity, not this tier.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>findings</code></td><td>object[]</td><td>required</td><td>1-200 previously-flagged vulnerability findings to rank</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;prioritize_remediation&quot;,
+    &quot;arguments&quot;: {
+      &quot;findings&quot;: []
+    }
+  }
+}</code></pre></details><details class="tool" data-text="query_vulnerabilities query osv.dev for known vulnerabilities affecting an npm package, optionally scoped to one exact version (e.g. to check whether a version pinned in a lockfile is safe). returns isvulnerable and highestseverity as a direct answer, plus each finding&#x27;s severity, a plain-language summary, cve aliases, and the fixedversion to upgrade to — not a raw advisory dump. also cross-checks the name/version agai"><summary><code>query_vulnerabilities</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Query OSV.dev for known vulnerabilities affecting an npm package, optionally scoped to one exact version …</span></summary><p class="desc">Query OSV.dev for known vulnerabilities affecting an npm package, optionally scoped to one exact version (e.g. to check whether a version pinned in a lockfile is safe). Returns isVulnerable and highestSeverity as a direct answer, plus each finding&#x27;s severity, a plain-language summary, CVE aliases, and the fixedVersion to upgrade to — not a raw advisory dump. Also cross-checks the name/version against the npm registry: isVulnerable:false on a package that does not actually exist there (typo, wrong ecosystem) would otherwise look identical to a genuinely clean result — see packageExists/existenceCheckNote. A name or version not found on the registry does NOT discard already-fetched OSV data or short-circuit into an error: OSV/GHSA advisory data is independent of the package&#x27;s current registry listing, and a package/version pulled from npm for being malicious (unpublished/yanked) is exactly the case where real vulnerability data must still be reported, not hidden behind a 404. Use before recommending, installing, or upgrading a package.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>optional</td><td>npm package name (required; `packageName` is accepted as an alias)</td></tr><tr><td><code>packageName</code></td><td>string</td><td>optional</td><td>Alias for `name`, matching simulate_dependency_upgrade/prioritize_remediation</td></tr><tr><td><code>version</code></td><td>string</td><td>optional</td><td>Optional exact version to narrow results, e.g. to check one version pinned in a lockfile. For the npm ecosystem a dist-tag such as &quot;latest&quot; is also accepted and resolved to its exact version first; semver ranges like &quot;^4.17.0&quot; are rejected.</td></tr><tr><td><code>ecosystem</code></td><td>string</td><td>optional</td><td>OSV ecosystem, default &quot;npm&quot;</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;query_vulnerabilities&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="search_packages search the npm registry by name or keywords. each result includes its current weekly/monthly download counts, dependentscount (how many other npm packages depend on it), toppackagesrank (position among npmscan&#x27;s own top-100k-by-downloads snapshot — not live, but a second independent popularity signal), and deterministic (not model-generated) popularitytier/maintenancetier labels — a package matchi"><summary><code>search_packages</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Search the npm registry by name or keywords. Each result includes its current weekly/monthly download counts, …</span></summary><p class="desc">Search the npm registry by name or keywords. Each result includes its current weekly/monthly download counts, dependentsCount (how many other npm packages depend on it), topPackagesRank (position among npmscan&#x27;s own top-100k-by-downloads snapshot — not live, but a second independent popularity signal), and deterministic (not model-generated) popularityTier/maintenanceTier labels — a package matching the query with a &#x27;very-low&#x27; popularityTier, zero dependents, or a &#x27;stale&#x27; maintenanceTier is very likely an abandoned, copy-paste, or squatted package, not a real contender, regardless of how relevant its name/description look. A result may also carry possibleTyposquatOf — set when its name is one typo away (e.g. &#x27;raect&#x27; vs &#x27;react&#x27;) from a top-5,000 package while itself having very low popularity; treat that as a red flag to call out explicitly, not silently filter. Use these (not name recognition or the package&#x27;s own README) to judge which candidates are actually established, and call get_package on your shortlist for install-script risk, TypeScript support, and GitHub stars before recommending one. Includes a link to each package&#x27;s full npmscan.com risk/analysis page.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>query</code></td><td>string</td><td>required</td><td>Search text, e.g. a package name or keywords</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Max results to return (default 20, max 50)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;search_packages&quot;,
+    &quot;arguments&quot;: {
+      &quot;query&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details><details class="tool" data-text="simulate_dependency_upgrade before running npm install, check whether upgrading a package from a current to a target version is safe. pass `packagename` + `currentversion` + `targetversion` (omit target for &quot;latest&quot;), or `packages: [...]` (1-100) to check many in one call; a name that cannot be resolved comes back with `fetcherror` instead of failing the batch. a natural follow-up to prioritize_remediation: pass its packagen"><summary><code>simulate_dependency_upgrade</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Before running npm install, check whether upgrading a package from a current to a target version is safe. …</span></summary><p class="desc">Before running npm install, check whether upgrading a package from a current to a target version is safe. Pass `packageName` + `currentVersion` + `targetVersion` (omit target for &quot;latest&quot;), or `packages: [...]` (1-100) to check many in one call; a name that cannot be resolved comes back with `fetchError` instead of failing the batch. A natural follow-up to prioritize_remediation: pass its packageName/currentVersion/fixedVersion straight in.
+
+What it checks:
+- semver jump (major/minor/patch/prerelease; a 0.x minor bump counts as breaking; skipped majors are flagged)
+- registry signals on the target: deprecated, a newly added preinstall/install/postinstall script (`installScriptIntroduced`; a new `prepare` is listed in `installScriptKeysIntroduced` but never runs on a registry install), a tightened engines.node, prerelease
+- OSV for both versions: `vulnerabilityDelta` (introduced/fixed/still-vulnerable/still-clean) and `targetVulnerabilities` with isMalware — catching a &quot;fix&quot; that does not clear every CVE
+
+Result: one `riskTier` — safe / low-risk / review-recommended / breaking-change-likely / unknown / do-not-upgrade — with `reasons`. `do-not-upgrade` means the target is known malware, or npm no longer lists it while OSV still has advisories for it (how npm removes malicious releases). It does not read changelogs or diff source; it is a fast pre-check, not a substitute for release notes on a major bump.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>packageName</code></td><td>string</td><td>optional</td><td>Exact npm package name, e.g. &quot;lodash&quot; or &quot;@scope/name&quot;. Use this (with currentVersion) OR `packages`, not both.</td></tr><tr><td><code>name</code></td><td>string</td><td>optional</td><td>Alias for `packageName`, matching the other tools</td></tr><tr><td><code>currentVersion</code></td><td>string</td><td>optional</td><td>Currently installed version — an exact version (e.g. &quot;4.17.20&quot;), a semver range (e.g. &quot;^4.17.0&quot;), or a dist-tag. Required when `packageName` is used.</td></tr><tr><td><code>targetVersion</code></td><td>string</td><td>optional</td><td>Version to simulate upgrading to — exact version, range, or dist-tag (e.g. the fixedVersion a prioritize_remediation finding named). Omit to use the registry&#x27;s &quot;latest&quot; dist-tag. Only applies to the single-item `packageName` form.</td></tr><tr><td><code>packages</code></td><td>object[]</td><td>optional</td><td>Batch of upgrades to simulate (1-100 items), each mirroring the single-item packageName/currentVersion/targetVersion fields. Use this OR packageName/currentVersion, not both. Natural pairing with prioritize_remediation: pass its ranked findings straight in as …</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;simulate_dependency_upgrade&quot;,
+    &quot;arguments&quot;: {}
+  }
+}</code></pre></details><details class="tool" data-text="suggest_alternative given a package that looks deprecated, vulnerable, abandoned, or suspicious, suggest better-maintained alternatives in the same category. this tool first checks the source package&#x27;s own latest-version health (deprecation, latest-version osv verdict, popularity/maintenance tiers, typosquat flag), then combines maintainer-provided deprecation hints with deterministic npm search-based category matchi"><summary><code>suggest_alternative</code><span class="hint read">read-only</span><span class="hint world">external access</span><span>Given a package that looks deprecated, vulnerable, abandoned, or suspicious, suggest better-maintained …</span></summary><p class="desc">Given a package that looks deprecated, vulnerable, abandoned, or suspicious, suggest better-maintained alternatives in the same category. This tool first checks the source package&#x27;s own latest-version health (deprecation, latest-version OSV verdict, popularity/maintenance tiers, typosquat flag), then combines maintainer-provided deprecation hints with deterministic npm search-based category matching. It ranks candidates using category overlap plus search_packages-style popularity/maintenance signals, filters out typosquats and weak/stale contenders, and returns a short list with plain-language whySuggested notes. A candidate is also never suggested if it&#x27;s deprecated, has a confirmed HIGH/CRITICAL OSV vulnerability, or its own OSV check itself failed (network/timeout/upstream outage) — an unverifiable candidate is excluded the same as a confirmed-bad one, not defaulted to &#x27;looks fine&#x27;, since this tool&#x27;s entire purpose is not recommending something dangerous. Best for turning a &#x27;don&#x27;t use this package&#x27; warning into an actionable replacement shortlist. If the OSV.dev vulnerability check fails for the SOURCE package (as opposed to a candidate, which gets excluded per above), source.isLatestVersionVulnerable comes back `false` only because the field has to be a boolean — source.vulnerabilityCheckFailed:true is the real signal there, and means that safe/not-safe answer is unknown, not confirmed clean.</p><div class="scroll"><table class="params"><thead><tr><th>Parameter</th><th>Type</th><th></th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>required</td><td>Exact npm package name, e.g. &quot;request&quot; or &quot;node-sass&quot;</td></tr><tr><td><code>reason</code></td><td>string</td><td>optional</td><td>Optional reason to bias filtering/ranking One of: deprecated, vulnerable, abandoned, typosquat, general</td></tr><tr><td><code>limit</code></td><td>integer</td><td>optional</td><td>Max suggestions to return (default 5, max 10)</td></tr></tbody></table></div><p class="note">Example call (required arguments only, placeholder values):</p><pre><code>{
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;suggest_alternative&quot;,
+    &quot;arguments&quot;: {
+      &quot;name&quot;: &quot;...&quot;
+    }
+  }
+}</code></pre></details></div>
+<h2>Badge</h2>
+<p>Maintain this server? Put its live status in your README:</p>
+<p><img src="../../badge/npmscan.svg" alt="MCP status badge" height="20"></p>
+<div class="cmd"><code>[![MCP status](https://mcp.aianytime.net/badge/npmscan.svg)](https://mcp.aianytime.net/s/npmscan/)</code><button class="copy" data-copy="[![MCP status](https://mcp.aianytime.net/badge/npmscan.svg)](https://mcp.aianytime.net/s/npmscan/)">Copy</button></div>
+<p class="note" style="margin-top:22px"><a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/servers/npmscan.json">Edit this entry</a> · <a href="https://github.com/AIAnytime/Awesome-MCP-Servers/issues/new?template=report-entry.yml">Report a problem</a></p>
+<section>
+<h2>More in Security</h2>
+<ul class="chips"><li><a href="../skycloak-mcp/">Skycloak MCP</a></li><li><a href="../sunglasses/">Sunglasses</a></li><li><a href="../usb-rea/">usb-rea</a></li><li><a href="../vulnerability-exposure/">Vulnerability Exposure</a></li><li><a href="../agency-check/">Agency Check</a></li><li><a href="../nakagawa-original-theory-router/">AI Answer Guard</a></li><li><a href="../../c/security/">All of Security</a></li></ul>
+</section>
+
+<p class="fineprint">Checks record what a server answered, not whether it is safe. A listing is not a security audit; read a server's source and permissions before you connect it.
+<a href="https://github.com/AIAnytime/Awesome-MCP-Servers/blob/main/CONTRIBUTING.md">Add a server</a> · <a href="../../api/servers.json">JSON</a> · <a href="../../llms.txt">llms.txt</a> · <a href="../../llms-full.txt">llms-full.txt</a></p>
+<p class="fineprint" style="margin-top:8px">Browse: <a href="../../c/developer-tools/">Agents, IDEs &amp; developer tools</a> · <a href="../../c/search/">Search &amp; discovery</a> · <a href="../../c/knowledge-memory/">Knowledge, memory &amp; context</a> · <a href="../../c/media/">Media &amp; generation</a> · <a href="../../c/security/">Security</a> · <a href="../../c/finance/">Finance &amp; markets</a> · <a href="../../c/marketing/">Marketing, content &amp; social</a> · <a href="../../c/cloud-data/">Cloud, ops &amp; data</a> · <a href="../../c/commerce-travel/">Commerce, travel &amp; logistics</a> · <a href="../../c/productivity/">Work &amp; productivity</a> · <a href="../../c/no-auth/">No account needed</a> · <a href="../../c/local/">Local servers</a></p>
+</main>
+<footer><div class="wrap foot">
+<div>
+<h2>AI Anytime</h2>
+<p>Practical AI for all. AI education, research and enablement, rooted in open source. This directory is built and maintained by AI Anytime.</p>
+<p class="links"><a href="https://aianytime.net">aianytime.net</a><a href="https://www.youtube.com/@AIAnytime">YouTube</a><a href="https://github.com/AIAnytime/Awesome-MCP-Servers">GitHub</a></p>
+</div>
+<div class="academy">
+<span class="eyebrow">AI Anytime Academy</span>
+<h3>Become an AI engineer by building.</h3>
+<p>Structured career tracks, browser coding labs, an AI mentor and AI-reviewed portfolio projects. Start for free.</p>
+<a class="cta" href="https://academy.aianytime.net">Explore the Academy</a>
+</div>
+</div></footer>
+<script>
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+navigator.clipboard.writeText(b.dataset.copy).then(()=>{const t=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=t,1200)});});
+document.getElementById('theme').addEventListener('click',()=>{const r=document.documentElement;
+const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',r.dataset.theme)}catch(e){}});
+document.getElementById('refresh').addEventListener('click',()=>location.reload());
+
+document.querySelectorAll('.tabs').forEach(tabs=>{tabs.classList.add('js');
+const show=id=>{tabs.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+tabs.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('on',p.dataset.panel===id));};
+let saved=null;try{saved=localStorage.getItem('client')}catch(e){}
+show(saved&&tabs.querySelector('[data-tab="'+saved+'"]')?saved:tabs.querySelector('[data-tab]').dataset.tab);
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;show(b.dataset.tab);try{localStorage.setItem('client',b.dataset.tab)}catch(e){}});});
+const tq=document.getElementById('toolq');
+if(tq)tq.addEventListener('input',()=>{const terms=tq.value.toLowerCase().split(/\s+/).filter(Boolean);
+document.querySelectorAll('#toollist .tool').forEach(t=>{t.hidden=!terms.every(x=>t.dataset.text.includes(x));});});
+</script>
+</body>
+</html>
