@@ -3,6 +3,6 @@
   "url": "https://github.com/walkover-mcp/viasocket",
   "category": "developer-tools",
   "transport": "http",
-  "description": "Integration and AI infrastructure for developers: explore ViaSocket's docs and APIs, then build and verify integrations across 2,300+ apps that your users connect through OAuth. Endpoint: `https://connect.viasocket.com/mcp` · [Website](https://viasocket.com/)",
+  "description": "Infrastructure for building apps and AI agents, with integrations, automation and AI capabilities. Endpoint: `https://connect.viasocket.com/mcp` · [Website](https://viasocket.com/)",
   "endpoint": "https://connect.viasocket.com/mcp"
 }
