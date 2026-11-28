@@ -1,0 +1,9 @@
+{
+  "name": "forms.",
+  "url": "https://github.com/benjammartin/formsdot-mcp",
+  "category": "productivity",
+  "transport": "http",
+  "description": "Fills official IRS, USCIS and passport forms as a PDF from chat. Preview free, $4.90 per form after review. No auth. Endpoint: `https://app.formsdot.com/mcp`",
+  "endpoint": "https://app.formsdot.com/mcp",
+  "registry": "io.github.benjammartin/forms"
+}
