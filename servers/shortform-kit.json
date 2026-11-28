@@ -1,9 +1,0 @@
-{
-  "name": "Shortform Kit",
-  "url": "https://github.com/shortformkit/shortformkit-mcp",
-  "category": "media",
-  "transport": "http",
-  "description": "Transcribes public Instagram Reels, TikToks and YouTube videos (also without captions), reads their metadata and captions, and returns sourced creator data such as upload specs and loudness targets; free, no account or API key. Endpoint: `https://shortformkit.com/mcp` · [Docs](https://shortformkit.com/mcp-server/)",
-  "endpoint": "https://shortformkit.com/mcp",
-  "registry": "io.github.diegobruegger-prog/shortformkit"
-}
