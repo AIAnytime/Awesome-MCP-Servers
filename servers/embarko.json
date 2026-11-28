@@ -3,7 +3,7 @@
   "url": "https://github.com/walkover-mcp/embarko",
   "category": "cloud-data",
   "transport": "http",
-  "description": "Deploy and host AI-built apps and websites, and get a live URL without any DevOps setup. OAuth sign-in, no API key. · [Website](https://embarko.ai) · [Docs](https://embarko.ai/docs/quickstart)",
+  "description": "A shared workspace to publish, use and improve anything built with AI. OAuth sign-in, no API key. · [Website](https://embarko.ai) · [Docs](https://embarko.ai/docs/quickstart)",
   "endpoint": "https://mcp.embarko.ai/mcp",
   "registry": "io.github.swayammaheshwari/embarko-mcp"
 }
