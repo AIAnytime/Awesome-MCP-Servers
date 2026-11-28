@@ -1,0 +1,9 @@
+{
+  "name": "FMF Tools",
+  "url": "https://tools.fmf-x402.workers.dev",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Search a daily-retested catalog of MCP servers and x402/MPP paid APIs, plus FMF's own pay-per-call checks on Base (USDC via x402, no account or API key). Paid calls return a 402 with a funding link; some routes include one free trial call per network (IPv4 address or IPv6 /64), for life. Endpoint: `https://tools.fmf-x402.workers.dev/mcp` · [Install](https://tools.fmf-x402.workers.dev/mcp-install)",
+  "endpoint": "https://tools.fmf-x402.workers.dev/mcp",
+  "registry": "io.github.GeminiGeorge22/fmf-tools-directory"
+}
