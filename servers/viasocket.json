@@ -1,0 +1,8 @@
+{
+  "name": "ViaSocket",
+  "url": "https://github.com/walkover-mcp/viasocket",
+  "category": "developer-tools",
+  "transport": "http",
+  "description": "Infrastructure for building apps and AI agents, with integrations, automation and AI capabilities. Endpoint: `https://connect.viasocket.com/mcp` · [Website](https://viasocket.com/)",
+  "endpoint": "https://connect.viasocket.com/mcp"
+}
