@@ -1,0 +1,7 @@
+{
+  "name": "ViralForge",
+  "url": "https://github.com/fendouai/ViralForge",
+  "category": "media",
+  "transport": "stdio",
+  "description": "Local short-video structure analysis and editable project export via MCP; clone the repository, install documented dependencies, and run node /absolute/path/ViralForge/mcp/server.mjs."
+}
