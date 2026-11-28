@@ -1,0 +1,9 @@
+{
+  "name": "Embarko",
+  "url": "https://github.com/walkover-mcp/embarko",
+  "category": "cloud-data",
+  "transport": "http",
+  "description": "A shared workspace to publish, use and improve anything built with AI. OAuth sign-in, no API key. · [Website](https://embarko.ai) · [Docs](https://embarko.ai/docs/quickstart)",
+  "endpoint": "https://mcp.embarko.ai/mcp",
+  "registry": "io.github.swayammaheshwari/embarko-mcp"
+}
