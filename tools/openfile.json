@@ -1,0 +1,1759 @@
+{
+ "server": "OpenFile",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "add_specimen",
+   "title": "Add specimen",
+   "description": "Adds or replaces the image showing the mark in use, until the attorney has filed. Sends a filing that needed changes back for review.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Filing id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     },
+     "content_base64": {
+      "type": "string",
+      "description": "The image, base64 encoded. 3 MB at most."
+     },
+     "content_type": {
+      "type": "string",
+      "enum": [
+       "image/png",
+       "image/jpeg",
+       "image/webp"
+      ],
+      "description": "The image type."
+     },
+     "name": {
+      "type": "string",
+      "description": "The file name.",
+      "maxLength": 200
+     }
+    },
+    "required": [
+     "id",
+     "token",
+     "content_base64",
+     "content_type"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "check_site",
+   "title": "Check site",
+   "description": "From a website or app store link: the brand, its legal owner, and which USPTO marks are theirs or someone else's.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "site": {
+      "type": "string",
+      "description": "A website, or an App Store or Google Play link.",
+      "maxLength": 300
+     },
+     "brand": {
+      "type": "string",
+      "description": "Use this brand instead of the one read from the site.",
+      "maxLength": 200
+     },
+     "owner": {
+      "type": "string",
+      "description": "Use this owner instead of the one read from the site.",
+      "maxLength": 200
+     }
+    },
+    "required": [
+     "site"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "create_application",
+   "title": "Create application",
+   "description": "Saves a draft trademark application and returns review_url for the owner, who checks it and signs. Nothing goes to the attorney or the USPTO until they do. Every field is optional; issues lists what's left. The response holds the token that later calls need.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mark": {
+      "type": "string",
+      "description": "The name, slogan or wording to protect, exactly as the person wants it.",
+      "maxLength": 120
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "name",
+       "slogan",
+       "logo"
+      ],
+      "description": "What the mark is. A logo is filed as words first."
+     },
+     "description": {
+      "type": "string",
+      "description": "What's sold under the mark, in the person's words.",
+      "maxLength": 2000
+     },
+     "website": {
+      "type": "string",
+      "description": "The brand's website.",
+      "maxLength": 300
+     },
+     "classes": {
+      "type": "array",
+      "description": "The classes to file in, 1 to 10.",
+      "items": {
+       "type": "object",
+       "required": [
+        "number",
+        "wording"
+       ],
+       "properties": {
+        "number": {
+         "type": "integer",
+         "description": "Nice class number, 1 to 45.",
+         "minimum": 1,
+         "maximum": 45
+        },
+        "wording": {
+         "type": "string",
+         "description": "Goods and services wording, with every `[blank]` filled in.",
+         "maxLength": 2000
+        }
+       }
+      }
+     },
+     "owner": {
+      "type": "object",
+      "description": "Who will own the mark. On an update, only the fields you send change.",
+      "properties": {
+       "type": {
+        "type": "string",
+        "enum": [
+         "individual",
+         "llc",
+         "corporation",
+         "partnership"
+        ],
+        "description": "The owner's legal form."
+       },
+       "name": {
+        "type": "string",
+        "description": "The owner's exact legal name.",
+        "maxLength": 200
+       },
+       "citizenship": {
+        "type": "string",
+        "description": "Individual owners: citizenship.",
+        "maxLength": 100
+       },
+       "state_of_organization": {
+        "type": "string",
+        "description": "Company owners: the state it was formed in.",
+        "maxLength": 100
+       },
+       "street": {
+        "type": "string",
+        "description": "Street address where the owner lives or is based. Not a PO box.",
+        "maxLength": 200
+       },
+       "city": {
+        "type": "string",
+        "description": "City.",
+        "maxLength": 100
+       },
+       "state": {
+        "type": "string",
+        "description": "State.",
+        "maxLength": 100
+       },
+       "zip": {
+        "type": "string",
+        "description": "5-digit ZIP code.",
+        "maxLength": 10
+       },
+       "email": {
+        "type": "string",
+        "description": "Where we reach the owner about this application.",
+        "maxLength": 200
+       }
+      }
+     },
+     "basis": {
+      "type": "string",
+      "enum": [
+       "use",
+       "itu"
+      ],
+      "description": "`use`: already selling under the mark. `itu`: planning to, with a real intent."
+     },
+     "first_use": {
+      "type": "string",
+      "description": "With `use`: first used anywhere, as `YYYY-MM` or `YYYY-MM-DD`."
+     },
+     "first_use_in_commerce": {
+      "type": "string",
+      "description": "With `use`: first sold across state lines, as `YYYY-MM` or `YYYY-MM-DD`."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_formation",
+   "title": "Create formation",
+   "description": "Saves a draft company formation and returns review_url for the owner, who checks it and signs the authorization. Nothing is filed or charged until they do. Every field is optional; issues lists what's left. The response holds the token that later calls need.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "entity": {
+      "type": "string",
+      "enum": [
+       "llc",
+       "corp",
+       "scorp",
+       "nonprofit",
+       "lp",
+       "llp"
+      ],
+      "description": "The kind of company."
+     },
+     "state": {
+      "type": "string",
+      "description": "The state to form in, two letters."
+     },
+     "name": {
+      "type": "string",
+      "description": "The company name, without LLC or Inc.",
+      "maxLength": 150
+     },
+     "designator": {
+      "type": "string",
+      "description": "The ending, like `LLC`. `get_state` lists what the state accepts."
+     },
+     "backup_name": {
+      "type": "string",
+      "description": "A second choice, used if the state won't take the first.",
+      "maxLength": 150
+     },
+     "purpose": {
+      "type": "string",
+      "description": "The business purpose. A nonprofit must state a specific one."
+     },
+     "management": {
+      "type": "string",
+      "enum": [
+       "member",
+       "manager"
+      ],
+      "description": "LLCs only: run by its members or by managers."
+     },
+     "shares": {
+      "type": "string",
+      "description": "Corporations only: authorized shares, digits only."
+     },
+     "par_value": {
+      "type": "string",
+      "description": "Corporations only: par value in dollars. Empty for no par."
+     },
+     "package": {
+      "type": "string",
+      "enum": [
+       "basic",
+       "pro",
+       "premium",
+       "complete"
+      ],
+      "description": "The package."
+     },
+     "ein": {
+      "type": "boolean",
+      "description": "Basic only: add the EIN. Pro, Premium and Complete include it."
+     },
+     "agreement": {
+      "type": "boolean",
+      "description": "Basic only: add the operating agreement or bylaws. Pro, Premium and Complete include them."
+     },
+     "expedite": {
+      "type": "boolean",
+      "description": "Pay the state for faster processing, where it offers that."
+     },
+     "members": {
+      "type": "integer",
+      "description": "LLC members, in states that charge per member.",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "county": {
+      "type": "string",
+      "description": "County, where publication depends on it."
+     },
+     "add_ons": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Add-on ids to include. `list_services` shows which can be added. Recurring ones can't: only the owner can start those."
+     },
+     "contact": {
+      "type": "object",
+      "description": "Who to reach about the order.",
+      "properties": {
+       "name": {
+        "type": "string",
+        "description": "Full name."
+       },
+       "email": {
+        "type": "string",
+        "description": "Email address."
+       },
+       "phone": {
+        "type": "string",
+        "description": "Phone number."
+       }
+      }
+     },
+     "principal": {
+      "type": "object",
+      "description": "The company's principal address. The owner can also add it when they review the order.",
+      "properties": {
+       "street": {
+        "type": "string",
+        "description": "Street."
+       },
+       "city": {
+        "type": "string",
+        "description": "City."
+       },
+       "state": {
+        "type": "string",
+        "description": "Two-letter state."
+       },
+       "zip": {
+        "type": "string",
+        "description": "ZIP code."
+       }
+      }
+     },
+     "owners": {
+      "type": "array",
+      "description": "An LLC's members or a corporation's directors. The owner can also add these when they review the order.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "description": "Legal name."
+        },
+        "ownership": {
+         "type": "string",
+         "description": "Percent owned, digits only."
+        },
+        "address": {
+         "type": "object",
+         "description": "A street address.",
+         "properties": {
+          "street": {
+           "type": "string",
+           "description": "Street."
+          },
+          "city": {
+           "type": "string",
+           "description": "City."
+          },
+          "state": {
+           "type": "string",
+           "description": "Two-letter state."
+          },
+          "zip": {
+           "type": "string",
+           "description": "ZIP code."
+          }
+         }
+        }
+       }
+      }
+     },
+     "registered_agent": {
+      "type": "object",
+      "description": "The registered agent the owner named.",
+      "properties": {
+       "name": {
+        "type": "string",
+        "description": "The agent's name."
+       },
+       "address": {
+        "type": "object",
+        "description": "A street address.",
+        "properties": {
+         "street": {
+          "type": "string",
+          "description": "Street."
+         },
+         "city": {
+          "type": "string",
+          "description": "City."
+         },
+         "state": {
+          "type": "string",
+          "description": "Two-letter state."
+         },
+         "zip": {
+          "type": "string",
+          "description": "ZIP code."
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_application",
+   "title": "Get application",
+   "description": "A draft, what's still missing, and the filing once the owner has signed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Application id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_filing",
+   "title": "Get filing",
+   "description": "A signed application's status, the attorney's note if there is one, and its USPTO serial number once filed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Filing id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_filing_type",
+   "title": "Get filing type",
+   "description": "One filing with its explanation, the fields it needs and its fees for a number of classes. availability not_open means it can't be placed yet.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "The filing, like `statement-of-use`."
+     },
+     "classes": {
+      "type": "integer",
+      "description": "Classes to price, 1 to 10."
+     },
+     "package": {
+      "type": "string",
+      "enum": [
+       "standard"
+      ],
+      "description": "Send `standard` if we filed the mark, which includes office-action replies."
+     }
+    },
+    "required": [
+     "slug"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_formation",
+   "title": "Get formation",
+   "description": "A draft formation, what's still missing, and the order once the owner has signed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Formation id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_order",
+   "title": "Get order",
+   "description": "A signed formation's status, what the owner still has to do, and the state file number once formed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Order id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_pricing",
+   "title": "Get pricing",
+   "description": "Formation packages, the trademark package, and USPTO fees.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_state",
+   "title": "Get state",
+   "description": "One state's filing fees, annual report, accepted company name endings and publication rules.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "Two-letter state code, like `WY`."
+     }
+    },
+    "required": [
+     "code"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_classes",
+   "title": "List classes",
+   "description": "The Nice classes small businesses file in most, with ID Manual style wording. Wording from this list avoids the USPTO free-form surcharge.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_filing_types",
+   "title": "List filing types",
+   "description": "Everything that can be filed for a mark, with when it's due, what it costs for one class, and whether it can be started here.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_services",
+   "title": "List services",
+   "description": "Every add-on with its price, whether it can go on a formation, and whether the owner orders it from their dashboard.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_states",
+   "title": "List states",
+   "description": "Every state with its filing fees for an LLC, corporation, limited partnership and LLP. fee_verified false means an estimate.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "plan_task",
+   "title": "Plan task",
+   "description": "The questions behind anything a person does here, with the options for each, the rules, and what only the person can do: form a company, check on an order, add-ons, file a trademark, check a name, check on a filing, office action replies, statements of use, extensions, Section 8 and 15, renewals, assignments, owner updates. task: a key or the person's words; leave it out for the list. Changes nothing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "A task key, or the person's own words, like `renew my trademark`."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "quote_application",
+   "title": "Quote application",
+   "description": "Every fee for a number of classes, with the government's marked. Saves nothing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "classes": {
+      "type": "integer",
+      "description": "How many classes.",
+      "minimum": 1,
+      "maximum": 10
+     },
+     "free_form_classes": {
+      "type": "integer",
+      "description": "How many of them use wording outside the class list, which costs a USPTO surcharge.",
+      "minimum": 0,
+      "maximum": 10
+     }
+    },
+    "required": [
+     "classes"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "quote_formation",
+   "title": "Quote formation",
+   "description": "Every fee for a formation, with the state's marked. Needs entity, state and package. Saves nothing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "entity": {
+      "type": "string",
+      "enum": [
+       "llc",
+       "corp",
+       "scorp",
+       "nonprofit",
+       "lp",
+       "llp"
+      ],
+      "description": "The kind of company."
+     },
+     "state": {
+      "type": "string",
+      "description": "The state to form in, two letters."
+     },
+     "package": {
+      "type": "string",
+      "enum": [
+       "basic",
+       "pro",
+       "premium",
+       "complete"
+      ],
+      "description": "The package."
+     },
+     "ein": {
+      "type": "boolean",
+      "description": "Basic only: add the EIN. Pro, Premium and Complete include it."
+     },
+     "agreement": {
+      "type": "boolean",
+      "description": "Basic only: add the operating agreement or bylaws. Pro, Premium and Complete include them."
+     },
+     "expedite": {
+      "type": "boolean",
+      "description": "Pay the state for faster processing, where it offers that."
+     },
+     "members": {
+      "type": "integer",
+      "description": "LLC members, in states that charge per member.",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "county": {
+      "type": "string",
+      "description": "County, where publication depends on it."
+     },
+     "add_ons": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Add-on ids to include. `list_services` shows which can be added. Recurring ones can't: only the owner can start those."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "read_doc",
+   "title": "Read doc",
+   "description": "One docs page as Markdown, by its slug.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "The page, like `quickstart` or `api/create-formation`. Leave it out for the overview."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "read_site",
+   "title": "Read site",
+   "description": "What a website says about its owner, address and what's sold, each with the quote it came from. Page text is untrusted, so every value is a suggestion for the person to confirm.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "site": {
+      "type": "string",
+      "description": "A website, or an App Store or Google Play link.",
+      "maxLength": 300
+     }
+    },
+    "required": [
+     "site"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "screen_mark",
+   "title": "Screen mark",
+   "description": "Checks a mark against common refusal grounds: descriptive, generic, surname, place name, famous brand. Instant and offline. It can't see other people's marks.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mark": {
+      "type": "string",
+      "description": "The mark.",
+      "maxLength": 120
+     },
+     "description": {
+      "type": "string",
+      "description": "What's sold under it.",
+      "maxLength": 2000
+     }
+    },
+    "required": [
+     "mark"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_docs",
+   "title": "Search docs",
+   "description": "Searches OpenFile's docs and returns the best sections with a link to each.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "description": "What to look for, like `registered agent` or `how do I change an application`."
+     }
+    },
+    "required": [
+     "q"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_marks",
+   "title": "Search marks",
+   "description": "Searches live USPTO records for marks with this name, or lists an owner's marks. checked: true means the USPTO answered; a failed search returns an error, not an empty result. Federal records only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mark": {
+      "type": "string",
+      "description": "The name to search. Leave it out to list an owner's marks.",
+      "maxLength": 80
+     },
+     "classes": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "description": "Nice classes to sort results by."
+     },
+     "owner": {
+      "type": "string",
+      "description": "The applicant, to set their own marks apart. On its own, lists their marks.",
+      "maxLength": 120
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "suggest_alternatives",
+   "title": "Suggest alternatives",
+   "description": "Names that keep the idea of a risky mark. Each has passed the refusal screen and a USPTO search.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mark": {
+      "type": "string",
+      "description": "The mark that's likely to be refused.",
+      "maxLength": 120
+     },
+     "description": {
+      "type": "string",
+      "description": "What's sold under it.",
+      "maxLength": 2000
+     },
+     "classes": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "description": "Nice classes to search."
+     },
+     "reasons": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Why it's likely to be refused."
+     }
+    },
+    "required": [
+     "mark"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "suggest_classes",
+   "title": "Suggest classes",
+   "description": "Classes and goods and services wording from a plain description of the business. Results are suggestions to confirm with the person.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "description": {
+      "type": "string",
+      "description": "What's sold under the brand.",
+      "maxLength": 1200
+     },
+     "mark": {
+      "type": "string",
+      "description": "The mark, if known.",
+      "maxLength": 200
+     }
+    },
+    "required": [
+     "description"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "update_application",
+   "title": "Update application",
+   "description": "Changes the fields you send on a draft. Fails once the owner has signed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Application id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     },
+     "mark": {
+      "type": "string",
+      "description": "The name, slogan or wording to protect, exactly as the person wants it.",
+      "maxLength": 120
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "name",
+       "slogan",
+       "logo"
+      ],
+      "description": "What the mark is. A logo is filed as words first."
+     },
+     "description": {
+      "type": "string",
+      "description": "What's sold under the mark, in the person's words.",
+      "maxLength": 2000
+     },
+     "website": {
+      "type": "string",
+      "description": "The brand's website.",
+      "maxLength": 300
+     },
+     "classes": {
+      "type": "array",
+      "description": "The classes to file in, 1 to 10.",
+      "items": {
+       "type": "object",
+       "required": [
+        "number",
+        "wording"
+       ],
+       "properties": {
+        "number": {
+         "type": "integer",
+         "description": "Nice class number, 1 to 45.",
+         "minimum": 1,
+         "maximum": 45
+        },
+        "wording": {
+         "type": "string",
+         "description": "Goods and services wording, with every `[blank]` filled in.",
+         "maxLength": 2000
+        }
+       }
+      }
+     },
+     "owner": {
+      "type": "object",
+      "description": "Who will own the mark. On an update, only the fields you send change.",
+      "properties": {
+       "type": {
+        "type": "string",
+        "enum": [
+         "individual",
+         "llc",
+         "corporation",
+         "partnership"
+        ],
+        "description": "The owner's legal form."
+       },
+       "name": {
+        "type": "string",
+        "description": "The owner's exact legal name.",
+        "maxLength": 200
+       },
+       "citizenship": {
+        "type": "string",
+        "description": "Individual owners: citizenship.",
+        "maxLength": 100
+       },
+       "state_of_organization": {
+        "type": "string",
+        "description": "Company owners: the state it was formed in.",
+        "maxLength": 100
+       },
+       "street": {
+        "type": "string",
+        "description": "Street address where the owner lives or is based. Not a PO box.",
+        "maxLength": 200
+       },
+       "city": {
+        "type": "string",
+        "description": "City.",
+        "maxLength": 100
+       },
+       "state": {
+        "type": "string",
+        "description": "State.",
+        "maxLength": 100
+       },
+       "zip": {
+        "type": "string",
+        "description": "5-digit ZIP code.",
+        "maxLength": 10
+       },
+       "email": {
+        "type": "string",
+        "description": "Where we reach the owner about this application.",
+        "maxLength": 200
+       }
+      }
+     },
+     "basis": {
+      "type": "string",
+      "enum": [
+       "use",
+       "itu"
+      ],
+      "description": "`use`: already selling under the mark. `itu`: planning to, with a real intent."
+     },
+     "first_use": {
+      "type": "string",
+      "description": "With `use`: first used anywhere, as `YYYY-MM` or `YYYY-MM-DD`."
+     },
+     "first_use_in_commerce": {
+      "type": "string",
+      "description": "With `use`: first sold across state lines, as `YYYY-MM` or `YYYY-MM-DD`."
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "update_formation",
+   "title": "Update formation",
+   "description": "Changes the fields you send on a draft formation. Fails once the owner has signed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Formation id."
+     },
+     "token": {
+      "type": "string",
+      "description": "The secret for this one, from its create response or status link."
+     },
+     "entity": {
+      "type": "string",
+      "enum": [
+       "llc",
+       "corp",
+       "scorp",
+       "nonprofit",
+       "lp",
+       "llp"
+      ],
+      "description": "The kind of company."
+     },
+     "state": {
+      "type": "string",
+      "description": "The state to form in, two letters."
+     },
+     "name": {
+      "type": "string",
+      "description": "The company name, without LLC or Inc.",
+      "maxLength": 150
+     },
+     "designator": {
+      "type": "string",
+      "description": "The ending, like `LLC`. `get_state` lists what the state accepts."
+     },
+     "backup_name": {
+      "type": "string",
+      "description": "A second choice, used if the state won't take the first.",
+      "maxLength": 150
+     },
+     "purpose": {
+      "type": "string",
+      "description": "The business purpose. A nonprofit must state a specific one."
+     },
+     "management": {
+      "type": "string",
+      "enum": [
+       "member",
+       "manager"
+      ],
+      "description": "LLCs only: run by its members or by managers."
+     },
+     "shares": {
+      "type": "string",
+      "description": "Corporations only: authorized shares, digits only."
+     },
+     "par_value": {
+      "type": "string",
+      "description": "Corporations only: par value in dollars. Empty for no par."
+     },
+     "package": {
+      "type": "string",
+      "enum": [
+       "basic",
+       "pro",
+       "premium",
+       "complete"
+      ],
+      "description": "The package."
+     },
+     "ein": {
+      "type": "boolean",
+      "description": "Basic only: add the EIN. Pro, Premium and Complete include it."
+     },
+     "agreement": {
+      "type": "boolean",
+      "description": "Basic only: add the operating agreement or bylaws. Pro, Premium and Complete include them."
+     },
+     "expedite": {
+      "type": "boolean",
+      "description": "Pay the state for faster processing, where it offers that."
+     },
+     "members": {
+      "type": "integer",
+      "description": "LLC members, in states that charge per member.",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "county": {
+      "type": "string",
+      "description": "County, where publication depends on it."
+     },
+     "add_ons": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Add-on ids to include. `list_services` shows which can be added. Recurring ones can't: only the owner can start those."
+     },
+     "contact": {
+      "type": "object",
+      "description": "Who to reach about the order.",
+      "properties": {
+       "name": {
+        "type": "string",
+        "description": "Full name."
+       },
+       "email": {
+        "type": "string",
+        "description": "Email address."
+       },
+       "phone": {
+        "type": "string",
+        "description": "Phone number."
+       }
+      }
+     },
+     "principal": {
+      "type": "object",
+      "description": "The company's principal address. The owner can also add it when they review the order.",
+      "properties": {
+       "street": {
+        "type": "string",
+        "description": "Street."
+       },
+       "city": {
+        "type": "string",
+        "description": "City."
+       },
+       "state": {
+        "type": "string",
+        "description": "Two-letter state."
+       },
+       "zip": {
+        "type": "string",
+        "description": "ZIP code."
+       }
+      }
+     },
+     "owners": {
+      "type": "array",
+      "description": "An LLC's members or a corporation's directors. The owner can also add these when they review the order.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "description": "Legal name."
+        },
+        "ownership": {
+         "type": "string",
+         "description": "Percent owned, digits only."
+        },
+        "address": {
+         "type": "object",
+         "description": "A street address.",
+         "properties": {
+          "street": {
+           "type": "string",
+           "description": "Street."
+          },
+          "city": {
+           "type": "string",
+           "description": "City."
+          },
+          "state": {
+           "type": "string",
+           "description": "Two-letter state."
+          },
+          "zip": {
+           "type": "string",
+           "description": "ZIP code."
+          }
+         }
+        }
+       }
+      }
+     },
+     "registered_agent": {
+      "type": "object",
+      "description": "The registered agent the owner named.",
+      "properties": {
+       "name": {
+        "type": "string",
+        "description": "The agent's name."
+       },
+       "address": {
+        "type": "object",
+        "description": "A street address.",
+        "properties": {
+         "street": {
+          "type": "string",
+          "description": "Street."
+         },
+         "city": {
+          "type": "string",
+          "description": "City."
+         },
+         "state": {
+          "type": "string",
+          "description": "Two-letter state."
+         },
+         "zip": {
+          "type": "string",
+          "description": "ZIP code."
+         }
+        }
+       }
+      }
+     }
+    },
+    "required": [
+     "id",
+     "token"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "uri": "https://joinopenfile.com/docs.md",
+   "name": "OpenFile docs",
+   "description": "Form companies and file trademarks from your own software or an AI agent.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/quickstart.md",
+   "name": "Quickstart",
+   "description": "Check a name and prepare your first trademark application with the API. To form a company, see Form a company.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/mcp.md",
+   "name": "MCP server",
+   "description": "Connect Claude, Cursor or any MCP client to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/formations.md",
+   "name": "Form a company",
+   "description": "How a formation goes from a draft to a signature to the state, and what only the owner can do.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/applications.md",
+   "name": "Prepare an application",
+   "description": "How an application goes from a draft to a signature to the USPTO, and what only the owner can do.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/filing-types.md",
+   "name": "Filing types",
+   "description": "Everything that can be filed for a trademark, and what can be started through the API today.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/authentication.md",
+   "name": "Authentication",
+   "description": "Lookups are public. Each formation, order, application and filing has its own token.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/errors.md",
+   "name": "Errors and limits",
+   "description": "The error shape, its codes and the rate limits.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/changelog.md",
+   "name": "Changelog",
+   "description": "What changed in OpenFile, its API and its MCP server, by day.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/claude.md",
+   "name": "OpenFile with Claude",
+   "description": "Connect Claude to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/claude-code.md",
+   "name": "OpenFile with Claude Code",
+   "description": "Connect Claude Code to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/cursor.md",
+   "name": "OpenFile with Cursor",
+   "description": "Connect Cursor to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/vs-code.md",
+   "name": "OpenFile with VS Code",
+   "description": "Connect VS Code to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/codex.md",
+   "name": "OpenFile with Codex",
+   "description": "Connect Codex to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/windsurf.md",
+   "name": "OpenFile with Windsurf",
+   "description": "Connect Windsurf to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/gemini-cli.md",
+   "name": "OpenFile with Gemini CLI",
+   "description": "Connect Gemini CLI to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/cline.md",
+   "name": "OpenFile with Cline",
+   "description": "Connect Cline to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/zed.md",
+   "name": "OpenFile with Zed",
+   "description": "Connect Zed to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/replit.md",
+   "name": "OpenFile with Replit",
+   "description": "Connect Replit to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/lovable.md",
+   "name": "OpenFile with Lovable",
+   "description": "Connect Lovable to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/bolt.md",
+   "name": "OpenFile with Bolt",
+   "description": "Connect Bolt to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/v0.md",
+   "name": "OpenFile with v0",
+   "description": "Connect v0 to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/devin-desktop.md",
+   "name": "OpenFile with Devin Desktop",
+   "description": "Connect Devin Desktop to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/n8n.md",
+   "name": "OpenFile with n8n",
+   "description": "Connect n8n to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/zapier.md",
+   "name": "OpenFile with Zapier",
+   "description": "Connect Zapier to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/langchain.md",
+   "name": "OpenFile with LangChain",
+   "description": "Connect LangChain to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/vercel-ai-sdk.md",
+   "name": "OpenFile with Vercel AI SDK",
+   "description": "Connect Vercel AI SDK to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/openai-agents-sdk.md",
+   "name": "OpenFile with OpenAI Agents SDK",
+   "description": "Connect OpenAI Agents SDK to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/copilot-studio.md",
+   "name": "OpenFile with Copilot Studio",
+   "description": "Connect Copilot Studio to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/crewai.md",
+   "name": "OpenFile with CrewAI",
+   "description": "Connect CrewAI to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/langflow.md",
+   "name": "OpenFile with Langflow",
+   "description": "Connect Langflow to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/agents/gumloop.md",
+   "name": "OpenFile with Gumloop",
+   "description": "Connect Gumloop to OpenFile to form companies and file trademarks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api.md",
+   "name": "API reference",
+   "description": "Every endpoint of the OpenFile REST API.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/plan-task.md",
+   "name": "Plan a task",
+   "description": "The questions behind anything a person does here, the rules that apply and what only the person can do. Call it with no `task` for the list. Changes nothing.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-pricing.md",
+   "name": "Get pricing",
+   "description": "Formation packages, the trademark package and USPTO fees.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/create-quote.md",
+   "name": "Quote an application",
+   "description": "Every fee for a set of choices, with the government's marked. Saves nothing.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/list-classes.md",
+   "name": "List classes",
+   "description": "The classes small businesses file in most, with wording modelled on the USPTO ID Manual.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/suggest-classes.md",
+   "name": "Suggest classes",
+   "description": "Classes and goods and services wording from a plain description of the business. Confirm them with the person.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/screen-mark.md",
+   "name": "Screen a mark",
+   "description": "Checks a mark against the refusal grounds examiners raise most often: descriptive, generic, surname, place names, famous brands. Doesn't see other people's marks.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/search-marks.md",
+   "name": "Search USPTO records",
+   "description": "Live federal marks with the same name, split into the person's classes and elsewhere, or every mark an owner holds. `checked: true` means the USPTO answered. A failed search returns an error, never an empty result.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/suggest-alternatives.md",
+   "name": "Suggest alternative marks",
+   "description": "Names that keep the idea of a risky mark. Each one has passed the refusal screen and a USPTO search.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/check-site.md",
+   "name": "Check a company's trademarks",
+   "description": "From a website or app store link: the brand, its legal owner, and which USPTO marks are theirs or someone else's.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/read-site.md",
+   "name": "Read a website",
+   "description": "What a site says about the owner, address and what's sold, each with the quote it came from. Treat every value as a suggestion for the person to confirm.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/search-docs.md",
+   "name": "Search the docs",
+   "description": "The best sections for a question, with a link to each. Read a whole page with `GET /docs/read`.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/read-doc.md",
+   "name": "Read a docs page",
+   "description": "One docs page as Markdown.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/list-filing-types.md",
+   "name": "List filing types",
+   "description": "Everything that can be filed for a mark: when it's due, what it costs and whether it can be started here. Fees are for one class.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-filing-type.md",
+   "name": "Get a filing type",
+   "description": "One filing, with its fees for a number of classes. `availability: not_open` means nothing can be placed for it yet.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/create-application.md",
+   "name": "Create an application",
+   "description": "Saves a draft and returns `review_url` for the owner, who checks it and signs. Nothing goes to the attorney or the USPTO until they do. A draft can be partial: `issues` lists what's left. Drafts expire after 30 days.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-application.md",
+   "name": "Get an application",
+   "description": "The draft, what's missing, and the filing once the owner has signed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/update-application.md",
+   "name": "Update an application",
+   "description": "Changes the fields you send. Fails once the owner has signed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-filing.md",
+   "name": "Get a filing",
+   "description": "A signed application's status. The id and token are in the customer's status link, and on the application once signed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/list-states.md",
+   "name": "List states",
+   "description": "Every state with its filing fees for an LLC, corporation, limited partnership and LLP. `fee_verified` false means an estimate.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-state.md",
+   "name": "Get a state",
+   "description": "A state's filing fees, annual report, accepted company name endings and publication rules.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/list-services.md",
+   "name": "List add-ons",
+   "description": "Everything sold besides the formation packages, with prices, which can go on a formation, and which the owner orders from their dashboard.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/quote-formation.md",
+   "name": "Quote a formation",
+   "description": "Every fee for a formation, with the state's marked. Needs `entity`, `state` and `package`. Saves nothing.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/create-formation.md",
+   "name": "Create a formation",
+   "description": "Saves a draft company formation and returns `review_url` for the owner, who checks it and signs the authorization. Nothing is filed or charged until they do. Every field is optional; `issues` lists what's left.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-formation.md",
+   "name": "Get a formation",
+   "description": "A draft, what's still missing, and the order once the owner has signed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/update-formation.md",
+   "name": "Update a formation",
+   "description": "Changes the fields you send on a draft. Fails once the owner has signed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/get-order.md",
+   "name": "Get an order",
+   "description": "A signed formation's status, what the owner still has to do, and the state file number once formed.",
+   "mimeType": "text/markdown"
+  },
+  {
+   "uri": "https://joinopenfile.com/docs/api/add-specimen.md",
+   "name": "Add a specimen",
+   "description": "Adds or replaces the photo or screenshot showing the mark in use, until the attorney has filed. If the attorney asked for a change, this sends the filing back for review.",
+   "mimeType": "text/markdown"
+  }
+ ],
+ "prompts": [
+  {
+   "name": "form_company",
+   "description": "Prepare a company formation with the owner, from picking the state to sending them the link to sign."
+  },
+  {
+   "name": "file_trademark",
+   "description": "Prepare a trademark application with the owner, from checking the name to sending them the link to sign."
+  },
+  {
+   "name": "check_trademark",
+   "description": "Check whether a name is likely to be refused and who already owns it."
+  }
+ ]
+}

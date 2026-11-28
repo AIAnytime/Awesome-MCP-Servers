@@ -1,0 +1,183 @@
+{
+ "server": "Just Domain",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "check_domain_transfer",
+   "title": "Check whether a domain can transfer to Just Domain",
+   "description": "Read-only transfer precheck for ONE domain the user already owns at another registrar: could it move to Just Domain, what is stopping it, what would it cost, and does its DNS survive the move. Nothing is ordered, charged, unlocked, or changed. The answer is built from two public sources only, the registry's own RDAP record and our registrar's price list, so it is safe to call without authentication and it reads nothing about the user's account. Read `blockers` before you say anything: an EMPTY list is the only thing that means the domain is ready to move. Every entry carries a plain `detail` sentence you can show as-is, and a `code` you do not recognise must still be reported through its `detail` rather than dropped. `source.rdap: false` means the registry did not answer, so nothing about the domain was established: say that, and never call it ready. `price` is the TOTAL for one full transfer term, not a per-year rate. A .ai transfer adds and charges TWO years because its registry works in two-year units. Do not divide or multiply the amount by a number of years, and do not label it per year; quote `term_note` beside it. `expected_new_expiry` is a projection (the registry's current expiry plus the term), not a date any registry has confirmed, so present it as expected. Moving a domain IN is self-service: the owner checks it and pays at https://justdomain.ai/transfer, pasting the authorization code there, and a transfer that does not complete is refunded in full. This tool tells the user whether the domain is eligible to move and what one full term would cost; hand over `transfer_url`, which opens that page for this domain in the owner's browser, where the owner confirms and pays. Moving a domain OUT of Just Domain IS self-service, and that means a human owner signed in on justdomain.ai in a browser, switching the transfer lock off and issuing the code from their own account. It does not mean you can do it. This tool does not return, accept, or hint at an authorization (EPP) code, and there is no agent path to unlocking a domain or to having a code issued, here or through any other Just Domain surface. An auth code is a bearer credential for the domain and a chat transcript is not a place to put one. Do not ask the user for a code, do not offer to hold or relay one, and never claim you can unlock or move the domain yourself.",
+   "inputSchema": {
+    "properties": {
+     "domain": {
+      "description": "One fully-qualified domain the user already owns somewhere else, including its TLD (e.g. 'acme.com'). Not a bare label and not a list: this reads a third-party registry per call.",
+      "maxLength": 253,
+      "minLength": 3,
+      "type": "string"
+     }
+    },
+    "required": [
+     "domain"
+    ],
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "check_trademark",
+   "title": "Check a name against trademark registers",
+   "description": "Read-only trademark check for ONE proposed name, answered by Open Trademarks (opentrademarks.org) from the US, EU and Israeli trademark registers. Nothing is filed, reserved, watched or paid for. Optional `goods` (free text, mapped to Nice classes), `classes` (Nice classes 1 to 45) and `registers` (a subset of `us`, `eu`, `il`; all three by default) narrow the check. Read `verdict` first. `exact_live_mark` and `similar_live_marks` name the marks behind them in `conflicts`, each with its register, number and how it matched. `no_live_match` means no live mark matched in the registers that were read: a positive signal, not clearance. `not_checked` means no register in this check has been read yet, so it is NOT a verdict: do not call the name clear or taken on it. `registers` gives each register's read date, and a register with no `loaded_at` was not checked at all. Never tell a user a name is clear unless it was checked during this conversation and every register in the answer was read today or yesterday. Quote `notice` as written: a register search is not legal advice. Use it when the user is choosing or vetting a name for a brand, product or business. It checks trademarks only: for whether a domain is available or what it costs, use `search_domains`; for moving a domain the user already owns at another registrar to Just Domain, use `check_domain_transfer`.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "The proposed name, as the user would use it (e.g. 'Acme' or 'koh-i-noor'). One name per call.",
+      "maxLength": 120,
+      "minLength": 2,
+      "type": "string"
+     },
+     "goods": {
+      "anyOf": [
+       {
+        "maxLength": 500,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional: what the name will be used for, in plain words (e.g. 'accounting software'). Open Trademarks maps it to Nice classes."
+     },
+     "classes": {
+      "anyOf": [
+       {
+        "items": {
+         "maximum": 45,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "maxItems": 45,
+        "minItems": 1,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional: Nice classes to check, each 1 to 45 (e.g. [9, 42])."
+     },
+     "registers": {
+      "anyOf": [
+       {
+        "items": {
+         "enum": [
+          "us",
+          "eu",
+          "il"
+         ],
+         "type": "string"
+        },
+        "maxItems": 3,
+        "minItems": 1,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Which registers to read: a subset of `us`, `eu` and `il`. All three when left out."
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_domains",
+   "title": "Search domain availability",
+   "description": "Use this when the user asks whether a domain name is available or what it costs to register: call it directly with the names, with no account and no confirmation needed. That includes a name for a site the user built, or is building, with ChatGPT Sites. Read-only availability and pricing lookup for domain names, and the first step of buying one from the chat: the call itself creates no order and charges nothing. Preferred input: `domains`, 1 to 200 fully-qualified names (e.g. ['acme.com', 'acme.io']); `results` cover exactly those domains. When every one is taken, `alternatives` lists any of the same labels on other endings that are available to buy here, each with a `checkout_url`; it is often empty. Fallback input: `query`, free text (one or more names, comma- or space-separated); names given without a TLD are expanded to popular TLDs (com/io/ai/co/net). Each result includes whether the domain is available, whether it is a premium name, the registration price and the renewal price. Both prices are totals for one full registration term of that ending, not per-year rates: one year on most endings, but two years on .ai, whose registry mandates a two-year term. Do not divide or multiply a returned price by a number of years. Available non-premium results also carry a `checkout_url`: give it to the user to buy the name, and they confirm and pay on justdomain.ai in their browser. Premium names cannot be registered through Just Domain yet and carry no `checkout_url`.",
+   "inputSchema": {
+    "properties": {
+     "domains": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "maxItems": 200,
+        "minItems": 1,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Fully-qualified domains to check, e.g. ['acme.com', 'acme.io', 'acme.ai']. Each entry must include the TLD. Maximum 200 per request. Preferred over `query`."
+     },
+     "query": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Free-text fallback when exact FQDNs aren't known: one or more names, comma- or space-separated. Names without a TLD are expanded to popular TLDs (com/io/ai/co/net). Ignored when `domains` is provided."
+     }
+    },
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ],
+ "resources": [
+  {
+   "mimeType": "text/html;profile=mcp-app",
+   "name": "Domain search results widget",
+   "uri": "ui://just-domain/search-results-v6.html"
+  },
+  {
+   "description": "Canonical answers to common questions about buying and managing domains with Just Domain: pricing and registration terms, WHOIS privacy, DNS, refunds, support, moving a domain in from another registrar, and an explicit list of what Just Domain does not support yet. Read this before answering any question the tools cannot.",
+   "mimeType": "text/markdown",
+   "name": "Just Domain FAQ",
+   "uri": "domain://faq"
+  }
+ ],
+ "prompts": [
+  {
+   "description": "Check whether a list of domain names is available on Just Domain and present the results, grouped by available / taken.",
+   "name": "jd-check",
+   "title": "Check domain availability"
+  },
+  {
+   "description": "Check what would block moving a domain from its current registrar to Just Domain, what the transfer would cost for its full term, and whether its DNS keeps working through the move.",
+   "name": "jd-transfer-check",
+   "title": "Check whether a domain can transfer"
+  }
+ ]
+}

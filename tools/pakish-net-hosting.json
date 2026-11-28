@@ -1,0 +1,220 @@
+{
+ "server": "Pakish.NET Hosting",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "pakish_create_inquiry",
+   "description": "Persist a hosting inquiry and sales-review handoff only after the person explicitly consents to storage/review. Returns a confidential 24-hour inquiry capability. Does not verify contact, send email or create an order.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "idempotency_key": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+      "description": "Stable UUID for this operation. Reuse on retries; use a new UUID for changed input."
+     },
+     "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 100
+     },
+     "email": {
+      "type": "string",
+      "maxLength": 254,
+      "format": "email",
+      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+     },
+     "website_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+     },
+     "requirements": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 2000
+     },
+     "consent": {
+      "type": "boolean",
+      "const": true
+     },
+     "offer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "description": "Stable offer_id from the current catalog, for example pakish.shared-hosting.naya-josh.1yr."
+     }
+    },
+    "required": [
+     "idempotency_key",
+     "name",
+     "email",
+     "website_count",
+     "requirements",
+     "consent"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "pakish_create_quote",
+   "description": "Persist a current nonbinding quotation using the existing LuraFlow preview for the authorized inquiry. Requires its access token and retry UUID. No order, payment, reservation or checkout handoff; a hold requires staff review.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "inquiry_access_token": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-f0-9-]{36}\\.[\\w-]{43}$",
+      "description": "Confidential inquiry access_token returned by pakish_create_inquiry. Capability for this inquiry only; expires after 24 hours. Never put in URLs or logs."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+      "description": "Stable UUID for this operation. Reuse on retries; use a new UUID for changed input."
+     },
+     "offer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "description": "Stable offer_id from the current catalog, for example pakish.shared-hosting.naya-josh.1yr."
+     }
+    },
+    "required": [
+     "inquiry_access_token",
+     "idempotency_key"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "pakish_get_catalog",
+   "description": "Read three published shared-hosting plans and nine indicative PKR offers, terms and renewal charges. Discovery only; no purchase authority.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "pakish_get_quote",
+   "description": "Read a quotation belonging to this inquiry capability. Expiry and current catalog/mapping revision are checked; another inquiry's quote is inaccessible.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "inquiry_access_token": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-f0-9-]{36}\\.[\\w-]{43}$",
+      "description": "Confidential inquiry access_token returned by pakish_create_inquiry. Capability for this inquiry only; expires after 24 hours. Never put in URLs or logs."
+     },
+     "quote_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+     }
+    },
+    "required": [
+     "inquiry_access_token",
+     "quote_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "pakish_get_reply_history",
+   "description": "Read the authorized inquiry's bounded reply history and automation-paused state. Requires that inquiry's confidential capability; no global search or customer lookup.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "inquiry_access_token": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-f0-9-]{36}\\.[\\w-]{43}$",
+      "description": "Confidential inquiry access_token returned by pakish_create_inquiry. Capability for this inquiry only; expires after 24 hours. Never put in URLs or logs."
+     }
+    },
+    "required": [
+     "inquiry_access_token"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "pakish_reply_to_inquiry",
+   "description": "Persist one bounded English/Roman Urdu/Urdu hosting follow-up and receive clarification or a current nonbinding estimate. Three-reply/takeover controls apply. Human/stop requests pause automation. Never sends email or performs account, billing or provisioning actions.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "inquiry_access_token": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-f0-9-]{36}\\.[\\w-]{43}$",
+      "description": "Confidential inquiry access_token returned by pakish_create_inquiry. Capability for this inquiry only; expires after 24 hours. Never put in URLs or logs."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+      "description": "Stable UUID for this operation. Reuse on retries; use a new UUID for changed input."
+     },
+     "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+     }
+    },
+    "required": [
+     "inquiry_access_token",
+     "idempotency_key",
+     "message"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

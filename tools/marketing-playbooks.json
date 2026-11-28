@@ -1,0 +1,192 @@
+{
+ "server": "Marketing Playbooks",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "consult_authority_and_search_flywheels",
+   "description": "\n    Consult the Authority Link & Organic Search Flywheel frameworks.\n    Covers: Authority link building (v1 & v2), reverse outreach, editorial link magnets, zero-click search strategy, and digital PR.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_authority_and_search_flywheelsArguments"
+   }
+  },
+  {
+   "name": "consult_category_positioning_and_permission_marketing",
+   "description": "\n    Consult the Category Positioning & Permission Marketing frameworks.\n    Covers: remarkable differentiation, the smallest viable market, permission asset accumulation, tribe building, and brand positioning.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_category_positioning_and_permission_marketingArguments"
+   }
+  },
+  {
+   "name": "consult_conversion_funnels_and_lead_magnets",
+   "description": "\n    Consult the Customer Value Journey & Direct-Response Funnel frameworks.\n    Covers: 8-stage customer journey, tripwires, lead magnets, ascension loops, value ladders, and webinar conversion funnels.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_conversion_funnels_and_lead_magnetsArguments"
+   }
+  },
+  {
+   "name": "consult_growth_council_roundtable",
+   "description": "\n    Convenes the full multi-discipline Growth Council for end-to-end strategic review.\n    Retrieves synthesized viewpoints across Acquisition, Funnels, Conversion, Distribution, and Positioning.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_growth_council_roundtableArguments"
+   }
+  },
+  {
+   "name": "consult_heuristic_cro_and_growth_experiments",
+   "description": "\n    Consult the Empirical CRO & High-Tempo Growth frameworks.\n    Covers: Heuristic CRO audits, qualitative/quantitative user research, friction reduction, North Star Metric, PMF surveys, and ICE prioritization.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_heuristic_cro_and_growth_experimentsArguments"
+   }
+  },
+  {
+   "name": "consult_omnichannel_storytelling_and_distribution",
+   "description": "\n    Consult the Content Pyramid & Human Brand Voice frameworks.\n    Covers: Content pyramid (1 pillar -> 64 micro-content pieces), attention economics, human editorial voice, newsletter retention, and storytelling.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_omnichannel_storytelling_and_distributionArguments"
+   }
+  },
+  {
+   "name": "consult_seo_and_content_architecture",
+   "description": "\n    Consult the Technical SEO & Programmatic Scaling frameworks.\n    Covers: Technical SEO architecture, URL taxonomy, content decay audits, programmatic directory design, and search intent clustering.\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "consult_seo_and_content_architectureArguments"
+   }
+  },
+  {
+   "name": "get_playbook",
+   "description": "\n    Retrieve full playbook text matching a specific title keyword within a framework.\n    ",
+   "inputSchema": {
+    "properties": {
+     "framework_id": {
+      "title": "Framework Id",
+      "type": "string"
+     },
+     "title_keyword": {
+      "title": "Title Keyword",
+      "type": "string"
+     }
+    },
+    "required": [
+     "framework_id",
+     "title_keyword"
+    ],
+    "type": "object",
+    "title": "get_playbookArguments"
+   }
+  },
+  {
+   "name": "list_disciplines_and_playbooks",
+   "description": "\n    Lists all 11 growth disciplines, framework IDs, core methodologies, and indexed playbook counts.\n    ",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "title": "list_disciplines_and_playbooksArguments"
+   }
+  },
+  {
+   "name": "search_growth_playbooks",
+   "description": "\n    Search across 19,000+ battle-tested marketing and growth playbooks.\n    \n    Args:\n        query: The marketing problem, goal, or strategic question (e.g., 'how to structure a high-converting pricing page', 'SaaS programmatic SEO strategy')\n        framework_id: Optional filter. Available: seo_architecture, programmatic_seo, skyscraper_authority, audience_flywheel, customer_value_journey, direct_response_funnels, content_pyramid, brand_voice_editorial, heuristic_cro, high_tempo_growth, permission_positioning\n        limit: Number of playbooks to retrieve (default: 5, max: 10)\n    ",
+   "inputSchema": {
+    "properties": {
+     "query": {
+      "title": "Query",
+      "type": "string"
+     },
+     "framework_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Framework Id"
+     },
+     "limit": {
+      "default": 5,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "type": "object",
+    "title": "search_growth_playbooksArguments"
+   }
+  }
+ ],
+ "resources": [],
+ "prompts": []
+}

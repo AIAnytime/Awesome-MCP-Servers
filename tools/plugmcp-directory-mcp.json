@@ -1,0 +1,434 @@
+{
+ "server": "PlugMCP directory MCP",
+ "checked": "2026-11-26",
+ "tools": [
+  {
+   "name": "compare_servers",
+   "title": "Compare MCP servers",
+   "description": "Compare two to five servers side by side by slug: trust signals, auth, hosting, transport, tools count, license.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slugs": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "minItems": 1,
+      "maxItems": 5,
+      "description": "Slugs from search results."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "required": [
+     "slugs"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_install",
+   "title": "Get install config",
+   "description": "The exact config or command to install one server in one client: Cursor, Claude Code, Claude Desktop, VS Code, Windsurf, ChatGPT, Codex, Gemini CLI, Grok Build, Grok Bot, or plain JSON. For Grok Bot the value is the message to send in its chat. Includes the config file path and a one-click deeplink when the client has one.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "Listing slug from search results, for example github-github-mcp-server."
+     },
+     "client": {
+      "type": "string",
+      "enum": [
+       "cursor",
+       "claude-code",
+       "claude-desktop",
+       "vscode",
+       "windsurf",
+       "chatgpt",
+       "codex",
+       "gemini-cli",
+       "grok",
+       "grok-bot",
+       "json"
+      ],
+      "description": "The agent the user installs into. grok is Grok Build (terminal) plus grok.com; grok-bot is Grok Bot, which takes a chat message. json returns a plain mcpServers block for any other client."
+     }
+    },
+    "required": [
+     "slug"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_server",
+   "title": "Get one MCP server",
+   "description": "Details for one server by slug: description, tools, auth, transport, health, packages, and links. include_readme adds the README (trimmed).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "Listing slug from search results, for example github-github-mcp-server."
+     },
+     "include_readme": {
+      "type": "boolean",
+      "description": "Also return the README, trimmed to 8,000 characters."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "required": [
+     "slug"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_skill",
+   "title": "Get one agent skill",
+   "description": "One skill by slug: what it does, where the SKILL.md lives, and the install command for Cursor, Claude Code, Codex and Grok Build, plus the chat message that installs it in Grok Bot. include_body adds the SKILL.md text (trimmed).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "Skill slug from search_skills."
+     },
+     "include_body": {
+      "type": "boolean",
+      "description": "Also return the SKILL.md text, trimmed to 6,000 characters."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "required": [
+     "slug"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_categories",
+   "title": "List categories",
+   "description": "Directory categories with listing counts. Use a slug as the category filter in search_servers.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "recommend_servers",
+   "title": "Recommend MCP servers for a task",
+   "description": "Describe what the user wants to do in plain words. Returns the best three servers, each with why it fits, auth, remote or local, health, and the install snippet for the client.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "What the agent should be able to do, for example query my Postgres database or send email from Gmail."
+     },
+     "client": {
+      "type": "string",
+      "enum": [
+       "cursor",
+       "claude-code",
+       "claude-desktop",
+       "vscode",
+       "windsurf",
+       "chatgpt",
+       "codex",
+       "gemini-cli",
+       "grok",
+       "grok-bot",
+       "json"
+      ],
+      "description": "The agent the user installs into. grok is Grok Build (terminal) plus grok.com; grok-bot is Grok Bot, which takes a chat message. json returns a plain mcpServers block for any other client."
+     },
+     "constraints": {
+      "type": "object",
+      "description": "Optional filters. Leave a filter out to allow every server; set it to true to narrow the results.",
+      "properties": {
+       "remote_only": {
+        "type": "boolean",
+        "description": "Hosted servers only, nothing to install."
+       },
+       "no_auth": {
+        "type": "boolean",
+        "description": "Skip servers that need an API key or a sign-in."
+       },
+       "official_only": {
+        "type": "boolean",
+        "description": "Only servers published by the product they connect to."
+       },
+       "verified_only": {
+        "type": "boolean",
+        "description": "Only servers that passed the live health check."
+       },
+       "voice_ready": {
+        "type": "boolean",
+        "description": "Only servers suited to voice agents."
+       }
+      },
+      "additionalProperties": false
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "How many to return. Default 3."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "required": [
+     "task"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_servers",
+   "title": "Search MCP servers",
+   "description": "Find MCP servers by product name, publisher, or topic. Ranked by relevance (exact name, then publisher, then tags and description); the product's own server comes first when there is one (jira finds Atlassian's), duplicates merged. Returns compact cards with trust signals; call get_install next. When the user describes a job rather than a product, recommend_servers is one call instead of two.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Product, publisher, or topic, for example github, postgres, send email. Empty lists the most used servers."
+     },
+     "category": {
+      "type": "string",
+      "description": "Category slug: developer-tools, design-tools, databases, browser-automation, web-scraping, cloud-infrastructure, devops, productivity, communication, knowledge-memory, search, finance, security, data-science-ml, marketing, e-commerce, content-management, collaboration, analytics-monitoring, voice-agents, telephony, speech, autonomous-agents, project-management, documentation, game-development, mobile-development, social-media. list_categories has counts."
+     },
+     "client": {
+      "type": "string",
+      "enum": [
+       "cursor",
+       "claude-code",
+       "claude-desktop",
+       "vscode",
+       "windsurf",
+       "chatgpt",
+       "codex",
+       "gemini-cli",
+       "grok",
+       "grok-bot",
+       "json"
+      ],
+      "description": "Only servers that work in this client (chatgpt keeps remote servers only). With fields=[install], adds the snippet for it."
+     },
+     "voice_ready": {
+      "type": "boolean",
+      "description": "Only servers suited to voice agents."
+     },
+     "remote_only": {
+      "type": "boolean",
+      "description": "Only hosted servers with a remote URL, no local install."
+     },
+     "official_only": {
+      "type": "boolean",
+      "description": "Only servers published by the product they connect to."
+     },
+     "verified_only": {
+      "type": "boolean",
+      "description": "Only servers that passed the live health check."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results per page. Default 8. Without a key at most 10."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "next_cursor from the previous page."
+     },
+     "fields": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "categories",
+        "sources",
+        "tools_count",
+        "install"
+       ]
+      },
+      "uniqueItems": true,
+      "description": "Extra card fields. install (needs client) and tools_count need a PlugMCP key."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_skills",
+   "title": "Search agent skills",
+   "description": "Find agent skills (SKILL.md packs for Claude Code, Cursor, Codex, Grok Build and Grok Bot) by name, publisher or topic. Call get_skill for the install command.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Topic or name, for example pdf, frontend design, or testing. Empty lists the most starred skills."
+     },
+     "category": {
+      "type": "string",
+      "description": "Category slug."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results per page. Default 8. Without a key at most 10."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "next_cursor from the previous page."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "whats_new",
+   "title": "New MCP servers",
+   "description": "Servers added to the directory recently, best first, plus health changes. Defaults to the last 7 days.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "since": {
+      "type": "string",
+      "description": "ISO date or timestamp, for example 2026-11-01. Default: 7 days ago. At most 90 days back."
+     },
+     "category": {
+      "type": "string",
+      "description": "Category slug from list_categories."
+     },
+     "remote_only": {
+      "type": "boolean",
+      "description": "Only hosted servers with a remote URL."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results per page. Default 8. Without a key at most 10."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "next_cursor from the previous page."
+     },
+     "response_format": {
+      "type": "string",
+      "enum": [
+       "json",
+       "markdown"
+      ],
+      "description": "json (default) or markdown for a human-readable text block. structuredContent is always JSON."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

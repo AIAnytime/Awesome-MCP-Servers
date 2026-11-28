@@ -1,0 +1,1069 @@
+{
+ "server": "Panes",
+ "checked": "2026-11-23",
+ "tools": [
+  {
+   "name": "account",
+   "description": "Balance, prices, counts and limits",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "backup_restore",
+   "description": "Requires a stopped computer with this account's backup copy. Poll the machine until backup.restoring clears; inspect backup.restore_error before starting.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "copy": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "copy"
+      ]
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "catalog",
+   "description": "Public prices, payment methods and template readiness",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "exec",
+   "description": "Choose script or argv. desktop:true is required for native Office. Default is SYSTEM. HTTP 200 is transport success; inspect exit_code, stderr and timed_out. Never blindly repeat after a lost reply.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "script": {
+        "type": "string"
+       },
+       "argv": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "desktop": {
+        "type": "boolean",
+        "default": false
+       },
+       "params": {
+        "type": "object",
+        "additionalProperties": {
+         "type": "string"
+        }
+       },
+       "stdin": {
+        "type": "string"
+       },
+       "timeout_s": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 600
+       }
+      },
+      "oneOf": [
+       {
+        "required": [
+         "script"
+        ],
+        "not": {
+         "required": [
+          "argv"
+         ]
+        }
+       },
+       {
+        "required": [
+         "argv"
+        ],
+        "not": {
+         "required": [
+          "script"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "file_read",
+   "description": "Download a file",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "path": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "path"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "file_write",
+   "description": "Writes atomically and creates parent directories. URL-encode the absolute Windows path. Body is bytes, not JSON.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "path": {
+      "type": "string"
+     },
+     "content_base64": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "path",
+     "content_base64"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "fork",
+   "description": "Protected computers refuse cloning. Partial failures return the snapshot and all copies that started; retain their IDs before retrying.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "count": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 32,
+        "default": 1
+       }
+      }
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "input",
+   "description": "Coordinates are screenshot pixels. Scroll dy is notches, positive down. Body limit 64 KiB. Inspect the screen before repeating uncertain input.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "actions": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "enum": [
+            "move",
+            "click",
+            "double_click",
+            "down",
+            "up",
+            "scroll",
+            "key",
+            "type"
+           ]
+          },
+          "x": {
+           "type": "integer"
+          },
+          "y": {
+           "type": "integer"
+          },
+          "button": {
+           "enum": [
+            "left",
+            "right",
+            "middle"
+           ]
+          },
+          "dy": {
+           "type": "integer"
+          },
+          "keys": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          },
+          "text": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "type"
+         ]
+        }
+       }
+      },
+      "required": [
+       "actions"
+      ]
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "key_create",
+   "description": "Returns key plaintext once. Store it securely.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "body": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
+       }
+      },
+      "required": [
+       "name"
+      ]
+     }
+    },
+    "required": [
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "key_revoke",
+   "description": "Revoke an API key",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "keys",
+   "description": "List API keys",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "machine_create",
+   "description": "Persist a unique Idempotency-Key and exact body before calling. require_office_ready rejects an unverified template before provisioning. Creation needs 15 minutes of resulting aggregate running credit and capacity. prevent_cloning protects the new identity.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "request_key": {
+      "type": "string",
+      "maxLength": 128
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "template": {
+        "type": "string"
+       },
+       "name": {
+        "type": "string",
+        "maxLength": 128
+       },
+       "auto_stop_minutes": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10080,
+        "default": 15
+       },
+       "office_profile": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_-]+$",
+        "description": "Opaque customer ID, private managed-identity pilot only; requires prevent_cloning."
+       },
+       "prevent_cloning": {
+        "type": "boolean"
+       },
+       "require_dedicated": {
+        "type": "boolean"
+       },
+       "require_office_ready": {
+        "type": "boolean"
+       },
+       "max_stopped_hourly_usd": {
+        "type": "number",
+        "minimum": 0
+       }
+      },
+      "required": [
+       "template"
+      ]
+     }
+    },
+    "required": [
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "machine_delete",
+   "description": "Irreversible. Backups are deleted too. Snapshots and forks retain their own state and encryption keys.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "machine_get",
+   "description": "Read a computer",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "machine_health",
+   "description": "Read guest readiness",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "machine_request",
+   "description": "Read-only request-key lookup; never creates another computer.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "key"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "machine_request_stop",
+   "description": "Cancels the request key before locating/stopping a possibly created computer. A cancelled key cannot be reused.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "key"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "machine_start",
+   "description": "Read stop_warning/resume_warning before continuing work. A cold recovery can preserve disk without unsaved memory. New admission requires prepaid runway and physical capacity.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "machine_stop",
+   "description": "Read stop_warning/resume_warning before continuing work. A cold recovery can preserve disk without unsaved memory. Stop ends running charges; optional stopped storage/backups retain their rates.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "machine_update",
+   "description": "Change auto-stop or backup settings",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "auto_stop_minutes": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10080
+       },
+       "backup": {
+        "type": "boolean"
+       }
+      }
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "machines",
+   "description": "List kept computers",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "payment_methods",
+   "description": "Available prepayment methods and amount bounds",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "screenshot",
+   "description": "Read a PNG of the desktop",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "service_health",
+   "description": "Control-plane health",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "signup",
+   "description": "Creates an account or recovers access through an API-readable inbox. Codes expire in 10 minutes, with five attempts. The provider code is never returned. Limit: three requests per address, replenishing one per minute.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "body": {
+      "type": "object",
+      "properties": {
+       "email": {
+        "type": "string",
+        "format": "email"
+       },
+       "key_name": {
+        "type": "string",
+        "maxLength": 60
+       }
+      },
+      "required": [
+       "email"
+      ]
+     }
+    },
+    "required": [
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "signup_verify",
+   "description": "Consumes one email code. Only an active single-organization administrator may recover an account key. The key is shown once; a lost reply requires another email challenge. No free credit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "body": {
+      "type": "object",
+      "properties": {
+       "challenge_id": {
+        "type": "string"
+       },
+       "code": {
+        "type": "string",
+        "pattern": "^[0-9]{6}$"
+       }
+      },
+      "required": [
+       "challenge_id",
+       "code"
+      ]
+     }
+    },
+    "required": [
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "snapshot",
+   "description": "Snapshot memory and disk",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "snapshot_delete",
+   "description": "Erase a snapshot",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "snapshot_start",
+   "description": "Start a copy from a snapshot",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "auto_stop_minutes": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10080
+       }
+      }
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "snapshots",
+   "description": "List snapshots",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "ssh",
+   "description": "This URL transports SSH bytes. End-to-end SSH authentication and host-key verification are still required.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "template_create",
+   "description": "Replaces the source computer. Private templates copy files and signed-in identities; remove credentials before saving. Protected computers refuse this operation.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+       }
+      },
+      "required": [
+       "name"
+      ]
+     }
+    },
+    "required": [
+     "id",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "template_delete",
+   "description": "Erase a private template",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "templates",
+   "description": "List shared and private templates",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "topup_pay",
+   "description": "Use one payment header and keep Authorization for the Panes key. Missing payment returns 402 with WWW-Authenticate (MPP) or PAYMENT-REQUIRED (x402) and payment in the JSON body. Stripe SPT payload is {spt,externalId}; x402 v2 payload includes resource, accepted requirements, signature and EIP-3009 authorization. The exact issued quote must match. A pending or uncertain payment must be polled, never repaid. Checkout returns a browser URL.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "payment_authorization": {
+      "type": "string"
+     },
+     "payment_signature": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "topup_quote",
+   "description": "Reusing a key returns the original quote (HTTP 200); a changed amount/method returns 409. Quote expires in 30 minutes. No charge until authorized. Check /v1/payment-methods before choosing a method.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "request_key": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+     },
+     "body": {
+      "type": "object",
+      "properties": {
+       "amount_cents": {
+        "type": "integer",
+        "minimum": 1000,
+        "maximum": 1000000
+       },
+       "method": {
+        "enum": [
+         "stripe_mpp",
+         "usdc_x402",
+         "checkout"
+        ]
+       }
+      },
+      "required": [
+       "amount_cents",
+       "method"
+      ]
+     }
+    },
+    "required": [
+     "request_key",
+     "body"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  },
+  {
+   "name": "topup_status",
+   "description": "Resumes the stored payment when pending. Paid credit is granted exactly once. Do not submit a new payment after a lost response; poll this URL. pending recommends three seconds between reads.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "usage",
+   "description": "Read spending by computer",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "from": {
+      "type": "string",
+      "format": "date-time"
+     },
+     "to": {
+      "type": "string",
+      "format": "date-time"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true
+   }
+  },
+  {
+   "name": "viewer",
+   "description": "Create a private one-hour viewer URL",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false
+   }
+  }
+ ]
+}

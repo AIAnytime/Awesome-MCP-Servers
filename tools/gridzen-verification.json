@@ -1,0 +1,177 @@
+{
+ "server": "GridZen Verification",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "create_sandbox_verification",
+   "description": "Return a synthetic match/mismatch/not_found/timeout/unsupported fixture. Never provide personal data.",
+   "inputSchema": {
+    "properties": {
+     "country": {
+      "title": "Country",
+      "type": "string"
+     },
+     "capability": {
+      "title": "Capability",
+      "type": "string"
+     },
+     "scenario": {
+      "default": "match",
+      "title": "Scenario",
+      "type": "string"
+     }
+    },
+    "required": [
+     "country",
+     "capability"
+    ],
+    "type": "object",
+    "title": "create_sandbox_verificationArguments",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "explain_result",
+   "description": "Explain a sandbox reason code; missing data and timeout remain inconclusive.",
+   "inputSchema": {
+    "properties": {
+     "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+     }
+    },
+    "required": [
+     "reason_code"
+    ],
+    "type": "object",
+    "title": "explain_resultArguments",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_coverage",
+   "description": "List country research or inspect one ISO-2 country's capability/access evidence; not live coverage.",
+   "inputSchema": {
+    "properties": {
+     "country": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Country"
+     },
+     "capability": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Capability"
+     }
+    },
+    "type": "object",
+    "title": "get_coverageArguments",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_sandbox_verification",
+   "description": "Retrieve a deterministic sim_v1 fixture, not a real transaction.",
+   "inputSchema": {
+    "properties": {
+     "identifier": {
+      "title": "Identifier",
+      "type": "string"
+     }
+    },
+    "required": [
+     "identifier"
+    ],
+    "type": "object",
+    "title": "get_sandbox_verificationArguments",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "plan_verification",
+   "description": "Plan signup_phone, identity_onboarding, payout_account or MX mx_cep_existing_payment (existing SPEI evidence). CEP only discovers the separate authenticated trial; never submit transaction data here. Set stage=production to report missing live routes; legacy event-only calls remain supported.",
+   "inputSchema": {
+    "properties": {
+     "country": {
+      "title": "Country",
+      "type": "string"
+     },
+     "event": {
+      "default": "payout",
+      "title": "Event",
+      "type": "string"
+     },
+     "task": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Task"
+     },
+     "stage": {
+      "default": "prototype",
+      "title": "Stage",
+      "type": "string"
+     }
+    },
+    "required": [
+     "country"
+    ],
+    "type": "object",
+    "title": "plan_verificationArguments",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [],
+ "prompts": []
+}

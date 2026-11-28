@@ -1,0 +1,310 @@
+{
+ "server": "Tidy Byte Tools API",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "base64",
+   "title": "Base64 encode or decode",
+   "description": "Turn text into Base64, or Base64 back into text. URL-safe and data URIs work too.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/base64"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "cron_parse",
+   "title": "Parse a cron expression",
+   "description": "Explain a 5- or 6-field cron string and list the next fire times in UTC.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/cron-parse"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "date_timezone",
+   "title": "Normalize dates",
+   "description": "Parse a messy date and convert it to a timezone you choose.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/date-timezone"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "gtin_checksum",
+   "title": "GTIN / EAN / UPC checksum",
+   "description": "Check or fill the check digit on a barcode number.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/gtin-checksum"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "hash",
+   "title": "Hash text",
+   "description": "SHA-256, SHA-1, MD5, and SHA-512 checksums of text.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/hash"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "html_sanitize",
+   "title": "Sanitize HTML",
+   "description": "Strip scripts and unsafe markup. Keeps a short allow-list of tags.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/html-sanitize"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "id_generate",
+   "title": "Make IDs",
+   "description": "Create a UUID, ULID, or NanoID.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/id-generate"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "json_format",
+   "title": "Format or minify JSON",
+   "description": "Pretty-print or shrink valid JSON.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/json-format"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "json_repair",
+   "title": "Repair JSON",
+   "description": "Fix broken or incomplete JSON, including text from language models.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/json-repair"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "json_shaper",
+   "title": "Shape text into JSON",
+   "description": "Turn key-value lines, CSV, or a Markdown table into clean JSON.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/json-shaper"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "jwt_decode",
+   "title": "Decode a JWT",
+   "description": "Read a JWT header and payload. This does not check the signature.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/jwt-decode"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "md_chunk",
+   "title": "Chunk Markdown",
+   "description": "Split Markdown into heading-aware chunks for search and RAG.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/md-chunk"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "sql_format",
+   "title": "Format SQL",
+   "description": "Pretty-print a SQL query. This is a lightweight formatter, not a full SQL parser.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/sql-format"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "text_diff",
+   "title": "Diff two texts",
+   "description": "Line-level diff of two strings, plus a unified patch.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/text-diff"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "unicode",
+   "title": "Normalize Unicode",
+   "description": "NFC, NFD, NFKC, or NFKD normalization, plus a character count.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/unicode"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "unit_convert",
+   "title": "Convert units",
+   "description": "Convert length, mass, temperature, volume, time, area, speed, and data-size units.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/unit-convert"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "url_codec",
+   "title": "URL encode or decode",
+   "description": "Percent-encode or decode a string or query map.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/url-codec"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "xml_json",
+   "title": "XML ↔ JSON",
+   "description": "Convert XML to JSON, or a JSON object back to XML.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/xml-json"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "yaml_json",
+   "title": "YAML ↔ JSON",
+   "description": "Convert a common YAML subset to JSON, or JSON to YAML.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "POST body for /v1/yaml-json"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

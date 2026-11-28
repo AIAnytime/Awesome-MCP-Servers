@@ -1,0 +1,202 @@
+{
+ "server": "Cassette Game Finder",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "get_game",
+   "title": "Get one game",
+   "description": "Everything Cassette knows about one game: its description, facts, price, demo, maker, screenshots, store page and play link. Use it before you recommend a game you only know from a list.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "game": {
+      "description": "The game's slug, as returned by search_games.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "game"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_genres",
+   "title": "List genres and tags",
+   "description": "The genres and the most used tags of the games on Cassette, with how many games each has, and the genres of the community games. Use it to choose words for search_games, or to see what Cassette has before you promise anything.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_games",
+   "title": "Search games",
+   "description": "Find games on Cassette that fit what a person wants. Every game comes with facts (devices, players, session length, age rating, download size, whether an account is needed and whether saves follow the player), its store page and a link that opens it. Returns hosted games first, then community games from other sites. An empty result is an answer: tell the person nothing fits.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "device": {
+      "description": "The device the person will play on. Games built for it come first.",
+      "enum": [
+       "phone",
+       "tablet",
+       "desktop"
+      ],
+      "type": "string"
+     },
+     "free": {
+      "description": "Only games that cost nothing.",
+      "type": "boolean"
+     },
+     "genre": {
+      "description": "One genre from list_genres.",
+      "type": "string"
+     },
+     "includeCommunity": {
+      "description": "With a query, also list matching community games from other sites (default true). They are left out when you filter by multiplayer, age or size, which they carry no facts for.",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "How many games, 8 by default.",
+      "maximum": 20,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "maxAge": {
+      "description": "The highest age rating allowed (0, 7, 12, 16 or 18): the youngest player's age rounded down to one of those.",
+      "maximum": 18,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "maxPriceUsd": {
+      "description": "The most they will pay, in US dollars. Free games always pass; 0 means free only.",
+      "minimum": 0,
+      "type": "number"
+     },
+     "maxSizeMb": {
+      "description": "The largest download, in megabytes (for slow connections or phones).",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "multiplayer": {
+      "description": "Only games with a multiplayer mode: any, on one screen (local) or over the internet (online).",
+      "enum": [
+       "any",
+       "local",
+       "online"
+      ],
+      "type": "string"
+     },
+     "query": {
+      "description": "What they are after, in a few plain words: a mood, a kind of game, a name ('relaxing puzzle', 'kart racing', 'factory automation'). Matched against title, tagline, description, tags and genres. Leave it out to list the most played games that pass the filters.",
+      "maxLength": 200,
+      "type": "string"
+     },
+     "sort": {
+      "description": "relevance (the default with a query) or trending (the default without one), new, or top (most played).",
+      "enum": [
+       "relevance",
+       "trending",
+       "new",
+       "top"
+      ],
+      "type": "string"
+     },
+     "tag": {
+      "description": "One tag from list_genres.",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "similar_games",
+   "title": "Games like this one",
+   "description": "Games like a given game, by the genres and tags they share (a genre counts three, a tag one). The same game always gets the same answer. Takes the same filters as search_games.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "device": {
+      "description": "The device the person will play on. Games built for it come first.",
+      "enum": [
+       "phone",
+       "tablet",
+       "desktop"
+      ],
+      "type": "string"
+     },
+     "free": {
+      "description": "Only games that cost nothing.",
+      "type": "boolean"
+     },
+     "game": {
+      "description": "The game's slug, as returned by search_games.",
+      "type": "string"
+     },
+     "limit": {
+      "description": "How many, 6 by default.",
+      "maximum": 12,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "maxAge": {
+      "description": "The highest age rating allowed (0, 7, 12, 16 or 18): the youngest player's age rounded down to one of those.",
+      "maximum": 18,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "maxPriceUsd": {
+      "description": "The most they will pay, in US dollars. Free games always pass; 0 means free only.",
+      "minimum": 0,
+      "type": "number"
+     },
+     "maxSizeMb": {
+      "description": "The largest download, in megabytes (for slow connections or phones).",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "multiplayer": {
+      "description": "Only games with a multiplayer mode: any, on one screen (local) or over the internet (online).",
+      "enum": [
+       "any",
+       "local",
+       "online"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "game"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

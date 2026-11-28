@@ -1,0 +1,900 @@
+{
+ "server": "House AI",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "change_flooring",
+   "title": "Try new flooring",
+   "description": "Replace the floor in a room photo with new flooring, to preview a renovation (for example 'light oak hardwood', 'large gray porcelain tile', 'herringbone'). Uses one House AI design credit.",
+   "inputSchema": {
+    "properties": {
+     "floor_style": {
+      "description": "The new floor in plain words, for example 'white oak herringbone'.",
+      "maxLength": 120,
+      "title": "Floor Style",
+      "type": "string"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "floor_style"
+    ],
+    "type": "object",
+    "title": "change_flooringArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "empty_room",
+   "title": "Empty a room",
+   "description": "Remove the furniture and clutter from a room photo to see the empty space, for decluttering, moving or planning a new layout. Uses one House AI design credit.",
+   "inputSchema": {
+    "properties": {
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "type": "object",
+    "title": "empty_roomArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "find_furniture_and_decor",
+   "title": "Find furniture and home decor",
+   "description": "Search House AI's shop for real furniture and home decor you can buy, like sofas, rugs, lamps, coffee tables, beds or wall art, optionally under a budget. Returns products with prices, sellers and links.",
+   "inputSchema": {
+    "properties": {
+     "search": {
+      "description": "What to find, for example 'boucle accent chair' or 'jute rug'.",
+      "maxLength": 64,
+      "minLength": 2,
+      "title": "Search",
+      "type": "string"
+     },
+     "max_price_usd": {
+      "anyOf": [
+       {
+        "exclusiveMinimum": 0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional budget per item, in US dollars.",
+      "title": "Max Price Usd"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "maxLength": 2,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Two-letter country code for local stores and prices, for example 'US', 'GB', 'AU'.",
+      "title": "Country"
+     },
+     "limit": {
+      "default": 8,
+      "description": "How many products to return.",
+      "maximum": 24,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "search"
+    ],
+    "type": "object",
+    "title": "find_furniture_and_decorArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "furnish_empty_room",
+   "title": "Furnish an empty room",
+   "description": "Virtual staging: furnish and decorate an empty or bare room from a photo in a chosen style, for a new home, a rental or a listing. Uses one House AI design credit.",
+   "inputSchema": {
+    "properties": {
+     "style": {
+      "description": "Design style, for example 'Japandi' or 'mid-century modern'.",
+      "maxLength": 80,
+      "title": "Style",
+      "type": "string"
+     },
+     "notes": {
+      "anyOf": [
+       {
+        "maxLength": 600,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Anything specific the user asked for, in their words (for example 'keep the fireplace').",
+      "title": "Notes"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "style"
+    ],
+    "type": "object",
+    "title": "furnish_empty_roomArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_design_style",
+   "title": "Get a design style's details",
+   "description": "Details for one House AI design style: its color palette, materials, furniture, textiles, lighting, decor and what to avoid. Use it to explain a style (for example 'what is Japandi?') or to plan a room makeover before redesigning.",
+   "inputSchema": {
+    "properties": {
+     "style": {
+      "description": "The style name, for example 'Japandi' or 'modern farmhouse'.",
+      "maxLength": 80,
+      "title": "Style",
+      "type": "string"
+     },
+     "space": {
+      "default": "interior",
+      "description": "Which catalog to look in.",
+      "enum": [
+       "interior",
+       "exterior",
+       "landscaping"
+      ],
+      "title": "Space",
+      "type": "string"
+     }
+    },
+    "required": [
+     "style"
+    ],
+    "type": "object",
+    "title": "get_design_styleArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_house_ai_app_link",
+   "title": "Get the House AI app",
+   "description": "A link to download the House AI interior design app for iPhone and Android, where the user's designs are saved and they can keep editing rooms, shop the look and try more styles.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "title": "get_house_ai_app_linkArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_my_credits",
+   "title": "Check my House AI design credits",
+   "description": "How many House AI designs the user can still make today or this plan period.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "title": "get_my_creditsArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_photo_upload_link",
+   "title": "Get a photo upload link",
+   "description": "Make a private link where the user can upload a photo of their room, house or yard from their phone or computer. Use it when the user wants a redesign but hasn't attached a photo and this app can't pass attached photos to tools. After they say it's uploaded, pass the upload_id to the redesign tool.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object",
+    "title": "get_photo_upload_linkArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_my_designs",
+   "title": "List my House AI designs",
+   "description": "The user's recent House AI designs (room redesigns, exteriors, paint and flooring previews), newest first, with image links.",
+   "inputSchema": {
+    "properties": {
+     "limit": {
+      "default": 10,
+      "description": "How many designs to return.",
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "type": "object",
+    "title": "list_my_designsArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "paint_walls",
+   "title": "Try a new wall paint color",
+   "description": "Repaint the walls in a photo of a room or house with a new paint color, to preview a color before painting (for example 'sage green', 'warm white with black trim'). Uses one House AI design credit.",
+   "inputSchema": {
+    "properties": {
+     "color": {
+      "description": "The paint color in plain words, for example 'soft sage green'.",
+      "maxLength": 120,
+      "title": "Color",
+      "type": "string"
+     },
+     "space": {
+      "default": "interior",
+      "description": "Inside walls or the outside of the house.",
+      "enum": [
+       "interior",
+       "exterior"
+      ],
+      "title": "Space",
+      "type": "string"
+     },
+     "room_type": {
+      "anyOf": [
+       {
+        "maxLength": 60,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional, for example 'bedroom' or 'house facade'.",
+      "title": "Room Type"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "color"
+    ],
+    "type": "object",
+    "title": "paint_wallsArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "redesign_exterior",
+   "title": "Redesign a house exterior or yard",
+   "description": "AI exterior design and landscaping: restyle the outside of a house or building for curb appeal (siding, paint, trim, roof color, front door) or redesign a yard, patio or garden, from a photo. Returns a photorealistic image of the new design. Uses one House AI design credit.",
+   "inputSchema": {
+    "properties": {
+     "style": {
+      "description": "Exterior or landscaping style, for example 'modern farmhouse', 'Mediterranean', 'English garden'.",
+      "maxLength": 80,
+      "title": "Style",
+      "type": "string"
+     },
+     "focus": {
+      "default": "building",
+      "description": "'building' restyles the house or facade; 'landscaping' redesigns the yard or garden.",
+      "enum": [
+       "building",
+       "landscaping"
+      ],
+      "title": "Focus",
+      "type": "string"
+     },
+     "building_type": {
+      "anyOf": [
+       {
+        "maxLength": 60,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "For 'building': 'house', 'apartment facade', 'swimming pool' or 'commercial building'.",
+      "title": "Building Type"
+     },
+     "color_palette": {
+      "anyOf": [
+       {
+        "maxLength": 60,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional palette, for example 'warm tones' or 'earth tones'.",
+      "title": "Color Palette"
+     },
+     "notes": {
+      "anyOf": [
+       {
+        "maxLength": 600,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Anything specific the user asked for, in their words (for example 'keep the fireplace').",
+      "title": "Notes"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "style"
+    ],
+    "type": "object",
+    "title": "redesign_exteriorArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "redesign_room",
+   "title": "Redesign a room from a photo",
+   "description": "AI interior design: redesign, redecorate or remodel a room from a photo of it, in a chosen style (for example a Japandi living room, a modern farmhouse kitchen or a cozy bedroom makeover). Keeps the room's layout and returns a photorealistic image of the new design. Uses one House AI design credit. Needs a photo: attached in chat, a public link, or an upload_id from get_photo_upload_link.",
+   "inputSchema": {
+    "properties": {
+     "style": {
+      "description": "Design style, for example 'Japandi', 'Scandinavian', 'coastal'. See search_design_styles.",
+      "maxLength": 80,
+      "title": "Style",
+      "type": "string"
+     },
+     "room_type": {
+      "anyOf": [
+       {
+        "maxLength": 60,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The room, for example 'living room', 'kitchen', 'bedroom', 'bathroom', 'home office'.",
+      "title": "Room Type"
+     },
+     "color_palette": {
+      "anyOf": [
+       {
+        "maxLength": 60,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional palette, for example 'warm tones', 'earth tones', 'monochrome'.",
+      "title": "Color Palette"
+     },
+     "renovation": {
+      "default": false,
+      "description": "True for a bigger remodel that can change finishes and fixtures; false keeps the room's structure.",
+      "title": "Renovation",
+      "type": "boolean"
+     },
+     "notes": {
+      "anyOf": [
+       {
+        "maxLength": 600,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Anything specific the user asked for, in their words (for example 'keep the fireplace').",
+      "title": "Notes"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "style"
+    ],
+    "type": "object",
+    "title": "redesign_roomArguments"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_design_styles",
+   "title": "Browse interior and exterior design styles",
+   "description": "Browse House AI's interior design, exterior and landscaping styles (Japandi, Scandinavian, mid-century modern, coastal, farmhouse, industrial and more). Use it when someone is deciding how to redecorate, remodel or restyle a room, a house front or a yard, or wants style ideas. Returns style names with a short description; pass a name to the redesign tools.",
+   "inputSchema": {
+    "properties": {
+     "space": {
+      "default": "interior",
+      "description": "Rooms inside, the outside of a building, or a yard or garden.",
+      "enum": [
+       "interior",
+       "exterior",
+       "landscaping"
+      ],
+      "title": "Space",
+      "type": "string"
+     },
+     "query": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Optional words to match, like 'warm wood' or 'coastal'.",
+      "title": "Query"
+     }
+    },
+    "type": "object",
+    "title": "search_design_stylesArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "shop_this_look",
+   "title": "Shop the look from a design",
+   "description": "Find real products that match an item in a room photo or a House AI design, for example the sofa, rug or pendant light in a redesign. Pass the design's image_url and the item to find.",
+   "inputSchema": {
+    "properties": {
+     "item": {
+      "description": "The item to match, for example 'sofa', 'rug', 'pendant light'.",
+      "maxLength": 60,
+      "minLength": 2,
+      "title": "Item",
+      "type": "string"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "maxLength": 2,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "Two-letter country code for local stores, for example 'US'.",
+      "title": "Country"
+     },
+     "photo": {
+      "type": "object",
+      "description": "The room or house photo the user attached in chat. Filled in by the app, not typed.",
+      "properties": {
+       "download_url": {
+        "type": "string"
+       },
+       "file_id": {
+        "type": "string"
+       },
+       "mime_type": {
+        "type": "string"
+       },
+       "file_name": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "download_url",
+       "file_id"
+      ],
+      "additionalProperties": false
+     },
+     "photo_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "A public https link to the photo, if the user gave one instead of attaching it.",
+      "title": "Photo Url"
+     },
+     "photo_upload_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "description": "The upload_id from get_photo_upload_link, once the user says the photo is uploaded.",
+      "title": "Photo Upload Id"
+     }
+    },
+    "required": [
+     "item"
+    ],
+    "type": "object",
+    "title": "shop_this_lookArguments"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ],
+ "resources": [
+  {
+   "description": "Shows a House AI room or exterior design.",
+   "mimeType": "text/html;profile=mcp-app",
+   "name": "house-ai-design",
+   "title": "House AI design",
+   "uri": "ui://house-ai/design-v1.html"
+  }
+ ],
+ "prompts": []
+}

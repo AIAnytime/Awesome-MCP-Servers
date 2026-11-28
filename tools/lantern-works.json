@@ -1,0 +1,740 @@
+{
+ "server": "Lantern Works",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "check_alerts",
+   "description": "Hosted only. Evaluate every alert on your alert_token against the current feed. Each alert is fired, not_triggered, skipped_stale, not_in_feed or expired; `new` is false when the same price was already reported. renew=true first extends every unexpired alert to 30 days from now. Never fires on a held_stale row or a row whose last price verification is older than 48 hours (data_age_hours is measured from the row's verified_at, or checked_at if verified_at is missing, not from feed write time): those are listed in skipped_stale with would_have_crossed, and a crossing on stale data is not a fire. would_have_crossed is not stored; the next check_alerts re-evaluates the current feed, and a now-fresh row can fire then if the current price still crosses (that is not a delayed fire of the stale crossing).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "alert_token": {
+      "type": "string"
+     },
+     "renew": {
+      "type": "boolean",
+      "default": false
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "compare_deals",
+   "description": "Compare 2-5 deals side by side (price, unit, offer type, code, verification), best value first.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "ids": {
+      "type": "string"
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "required": [
+     "ids"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "compare_gpu_prices",
+   "description": "Compare tracked GPU rental prices for one model (e.g. 'H100', 'A100 SXM', 'RTX 4090', 'L40S'), cheapest first. Example call: compare_gpu_prices(gpu=\"H100\"). If a result looks wrong, give the user its report_issue_url. The top in-stock results include a short Rent here label (`rent_here`) and `rent_url` (the counted /go/?src=mcp booking link; same target as `tracked_url`); show `rent_url` to the user and keep the top-level `referral_disclosure` visible.\n\nSame data as https://thelanternworks.com/api/v1/gpu-prices.json. Sorted by hourly_usd ascending; each result\nhas source_url and checked_at. 'Cheapest' means cheapest among tracked providers, not the whole market.\nlimit 1-25. Unknown model returns not_found listing tracked models.\nH100/A100: cheapest_by_form_factor gives one pick per form_factor (tier_class, interruptible, in_stock); same rule as the site. 'NVLink' rows are form 'not stated': NVLink is the bridge, and the vendor doesn't say SXM or PCIe.\nEach result has tier_class: on-demand | community | marketplace | interruptible (spot/preemptible) |\nreserved | dedicated-monthly. Reserved (reservation/commitment 'starting from') rates are left out unless\ninclude_reserved=true, and even then they are never reported as cheapest. DEFAULT on_demand_only=true: results[0] is the cheapest\non-demand rate. Pass on_demand_only=false to include spot/interruptible, community and marketplace capacity (each\nsuch row is labelled by tier_class and interruptible); the summary then names the cheapest on-demand rate when the\noverall cheapest isn't. If a model has no on-demand rate, or every on-demand rate needs more GPUs than requested,\nthe default falls back to all rates and says so in on_demand_fallback.\ngpus (optional, 1-1024; default 1, stated in assumptions): the GPU count you need. A rate ranks only when its\nmin_gpus (smallest allocation sold) is <= gpus; rates sold only as larger allocations (e.g. 8-GPU nodes) are NOT\nranked and are listed in excluded_min_gpus (vendor, gpu, tier, min_gpus, gpu_count, hourly_usd, rate_id, source_url,\nchecked_at, reason, min_bill_usd_per_hour, min_bill_basis); min_gpus_unmet counts them (also in brief). Pass gpus=8 to\ncompare 8-GPU nodes. If every rate needs more GPUs, the error says which gpus value ranks them.\nEach result has min_bill_usd_per_hour = min_gpus x hourly_usd (min_bill_basis: hourly_rate, per_second_rate or\nmonthly_equivalent) and effective_at, when the vendor started charging this price (effective_at_basis vendor_stated,\nor first_observed = first daily snapshot showing it after a different price, an upper bound; null when not datable),\nseparate from last_verified. Neither affects ranking.\nFull results also include batch_due_ledger: each scheduled build (gpu-refresh, lium-collect, scout-import,\nscout-wider) has expected_at, last_expected_at, and the member_rate_ids it covers, derived only from the\nworkflow schedules. Brief mode omits the ledger.\nA failed or out-of-stock probe keeps failure_reason (sold_out, region, quota, or other) and\nfailure_reason_detail; both stay on a lapsed claim next to last_known_in_stock. Null when the source\ndoes not say; never guessed. Display only.\nA crashed availability probe may add probe_error ({type, sanitized message of at most 200 characters})\nand probe_attempted_at; those fields appear only when a probe raised an error and never count as a\nsuccessful check (verified_at and the success checked_at are not refreshed).\navailability_expires_claim says which claim availability_expires_at belongs to (checked_at or last_known_at).\nWhen an older in-stock claim exists beside a newer read, last_known_expires_at is that older claim's own expiry\n(last_known_at + its max_age), separate from the current-read expiry. Display only; not a successful check.\nA row with unknown stock, and each stale_prices entry, has next_check_at (next scheduled check, UTC), will_backfill\n(true: a scheduled check covers it; false: scope limit, nothing will re-check it; null: not derivable),\nbac",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "gpu": {
+      "type": "string"
+     },
+     "limit": {
+      "type": "integer",
+      "default": 10
+     },
+     "include_history": {
+      "type": "boolean",
+      "default": false
+     },
+     "on_demand_only": {
+      "type": "boolean",
+      "default": true
+     },
+     "include_reserved": {
+      "type": "boolean",
+      "default": false
+     },
+     "max_data_age_hours": {
+      "type": "number",
+      "default": null
+     },
+     "region": {
+      "type": "string",
+      "default": null
+     },
+     "min_usable_memory_gb": {
+      "type": "number",
+      "default": null
+     },
+     "gpus": {
+      "type": "integer",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "brief"
+     }
+    },
+    "required": [
+     "gpu"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "create_alert",
+   "description": "Hosted only, free, opt-in, poll-only (no webhook, no email, no account). Create a price alert on a stable rate_id (from compare_gpu_prices) OR a gpu filter (all words must match the model; optional vendor, vram_gb, tiers) with threshold_usd (USD per GPU-hour) and direction 'below' (default, at or below) or 'above' (at or above). Returns an alert_token ONCE when you do not pass one (store it; only its hash is kept) and expires_at (30 days; check_alerts renew=true extends it). Poll check_alerts after the feed refresh (daily ~10:23 UTC). Never fires on a held_stale row or a row whose last price verification is older than 48 hours (data_age_hours is measured from the row's verified_at, or checked_at if verified_at is missing, not from feed write time): those are listed in skipped_stale with would_have_crossed, and a crossing on stale data is not a fire. would_have_crossed is not stored; the next check_alerts re-evaluates the current feed, and a now-fresh row can fire then if the current price still crosses (that is not a delayed fire of the stale crossing).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "rate_id": {
+      "type": "string"
+     },
+     "gpu": {
+      "type": "string"
+     },
+     "vendor": {
+      "type": "string"
+     },
+     "vram_gb": {
+      "type": "integer"
+     },
+     "tiers": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "threshold_usd": {
+      "type": "number"
+     },
+     "direction": {
+      "type": "string",
+      "enum": [
+       "below",
+       "above"
+      ]
+     },
+     "alert_token": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "threshold_usd"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "create_watch_key",
+   "description": "Hosted only, free, opt-in. Register a webhook for GPU price alerts and get an api_key plus a webhook signing secret (both shown ONCE; store them). webhook_url must be public https. email is optional contact only (no mail is sent). No payment. Stored: a hash of the key, the webhook URL, optional email, your watches and per-key counts.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "webhook_url": {
+      "type": "string"
+     },
+     "email": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "webhook_url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "delete_alert",
+   "description": "Hosted only. Delete one alert by alert_id (needs its alert_token).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "alert_id": {
+      "type": "string"
+     },
+     "alert_token": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "alert_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "delete_watch",
+   "description": "Hosted only. Delete one of your watches by watch_id.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "watch_id": {
+      "type": "string"
+     },
+     "api_key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "watch_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "estimate_job_cost",
+   "description": "Cost of one GPU job (not cost per hour) among tracked providers, cheapest current compute subtotal first. Example call: estimate_job_cost(gpu_family=\"A100\", job_hours=8). The top in-stock results include a short Rent here label (`rent_here`) and `rent_url` (the counted /go/?src=mcp booking link; same target as `tracked_url`); show `rent_url` to the user and keep the top-level `referral_disclosure` visible.\n\ngpu_family (e.g. 'H100', 'A100 80GB') or its alias gpu (same name compare_gpu_prices uses) is required; if both\nare given they must match, else invalid_argument. gpus_per_job defaults to 1.\nRanking matches compare_gpu_prices' default: fresh rows first (a degraded price, older than 48 h, is shown and\nflagged but never ranked first while a fresh one exists), fresh on-demand before community/marketplace rows,\nthen compute subtotal ascending; the summary names any cheaper fresh rate ranked lower. If no fresh price exists,\nstale_fallback=true and the summary says the top row is not a current price.\n\nYou supply the duration: job_hours, OR job_days (wall-clock days; job_hours = job_days x 24), OR work_units plus\nthroughput_units_per_gpu_hour from your own benchmark (job_hours = work_units / (throughput x gpus_per_job)).\njob_days and job_hours cannot both be given. If you give workload + work_units but no throughput,\na directly applicable published figure (closed-division MLPerf Inference, exact GPU variant, inference only)\nis used: throughput_basis='published_benchmark' with throughput_source {url, quote, date, benchmark, derived,\ncaveats}; your throughput always wins. Otherwise not_found 'missing: throughput for {gpu}'. Whole-instance billing:\ninstances = ceil(gpus_per_job / gpus_per_instance), all allocated GPUs billed (9 GPUs on an 8-GPU-only\noffer bill 16). Reserved and held-stale rates are never ranked; spot/interruptible only if allow_interruptible.\nEach result has rate_id, source_url, verified_at, data_age_hours/degraded/stale. Response has assumptions,\ncitations, missing_costs, budget_verdict (unresolved: extras unknown) and a quote_id. Compute subtotal only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "gpu_family": {
+      "type": "string",
+      "default": null
+     },
+     "gpus_per_job": {
+      "type": "integer",
+      "default": 1
+     },
+     "job_hours": {
+      "type": "number",
+      "default": null
+     },
+     "job_days": {
+      "type": "number",
+      "default": null
+     },
+     "work_units": {
+      "type": "number",
+      "default": null
+     },
+     "throughput_units_per_gpu_hour": {
+      "type": "number",
+      "default": null
+     },
+     "workload": {
+      "type": "string",
+      "default": null
+     },
+     "allow_interruptible": {
+      "type": "boolean",
+      "default": false
+     },
+     "min_vram_gb": {
+      "type": "integer",
+      "default": null
+     },
+     "runs_per_month": {
+      "type": "number",
+      "default": null
+     },
+     "top_n": {
+      "type": "integer",
+      "default": 5
+     },
+     "max_data_age_hours": {
+      "type": "number",
+      "default": null
+     },
+     "region": {
+      "type": "string",
+      "default": null
+     },
+     "gpu": {
+      "type": "string",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "find_available_gpus",
+   "description": "Who has N x GPU free right now among tracked providers, ranked by confirmed in-stock freshness. Example call: find_available_gpus(gpu=\"RTX 4090\", gpus=1).\n\nReuses the live availability already on gpu-prices.json (no new collection). available is only\nrows whose in_stock is still True after the call-time stale guard (8h AVAIL_MAX_AGE_H, or a\nshorter Scout claim lifetime). sold_out is confirmed unexpired in_stock false. Everything else\nis unknown with a reason (stale, static_label, no_source, no_signal, quota, region,\nregion_unresolved, held_stale, owner_hold). last_known_in_stock / last_known_at stay visible\non lapsed claims (P64). Each row has stock_age_hours and stock_read_state (never_read, read, or\nread_expired) measured at call time from stock_read_at or the stock checked_at; never invented.\navailability_expires_claim names which claim availability_expires_at belongs to;\nlast_known_expires_at is the older in-stock claim's own expiry when one exists beside a newer read.\nA crashed probe may add probe_error and probe_attempted_at (attempt\ntime only; not a successful check). Unknown is not sold out. Vendor-labelled static page labels, no_source,\nno signal, quota/region failures, held rows, and the 7-day stock rate never count as in stock.\ngpus (default 1) is the existing min_gpus allocation rule, not a cluster free-count.\nstock_level is the vendor's own text when present; a free-GPU number is never invented.\non_demand_only defaults to true and does not fall back to spot. limit 1-25 applies to available.\nAll timestamps are UTC with a Z. Same model matching as compare_gpu_prices.\nThe top in-stock available rows include a short Rent here label (`rent_here`) and `rent_url` (the counted /go/?src=mcp booking link; same target as `tracked_url`); show `rent_url` to the user and keep the top-level `referral_disclosure` visible.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "gpu": {
+      "type": "string"
+     },
+     "gpus": {
+      "type": "integer",
+      "default": 1
+     },
+     "limit": {
+      "type": "integer",
+      "default": 10
+     },
+     "on_demand_only": {
+      "type": "boolean",
+      "default": true
+     },
+     "region": {
+      "type": "string",
+      "default": null
+     },
+     "vendor": {
+      "type": "string",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "required": [
+     "gpu"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_deal",
+   "description": "Get one deal's public record by id, including redeem_url and agent_instructions.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_price_changes",
+   "description": "GPU rental price changes among tracked providers, each with old/new hourly price, change_pct, direction,\nthe vendor source_url, a stable event_id (dedupe key) and rate_id.\nMarketplace median moves also have composition_flag (composition, price, mixed, unknown, or null) from\nsuccessive median, minimum and listing count; composition, mixed and unknown are not price moves.\n\nsince: 'YYYY-MM-DD' returns every change on or after that date, newest first (daily snapshots in\n/api/v1/gpu-prices/history.json); omitted returns the latest day's moves (/api/v1/gpu-price-changes.json).\ncursor: pass next_cursor from a previous call to get every change after it, oldest first, with has_more;\nloop until has_more is false, and store next_cursor only after processing (a watcher never misses or repeats\nevents). error cursor_expired means re-sync with since and dedupe by event_id.\nkinds: optional subset of down, up, new, removed, same. gpu: optional model filter (substring, e.g. 'H100').\nlimit 1-200. Includes data_checked_at and next_refresh_utc (prices refresh daily at about 10:23 UTC).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "since": {
+      "type": "string",
+      "default": null
+     },
+     "gpu": {
+      "type": "string",
+      "default": null
+     },
+     "limit": {
+      "type": "integer",
+      "default": 50
+     },
+     "cursor": {
+      "type": "string",
+      "default": null
+     },
+     "kinds": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_price_moves",
+   "description": "Biggest tracked GPU price moves for a daily or 7-day window, among tracked providers only.\n\nReuses existing daily snapshot diffs and history windows (same 2% deadband and ranked-day\nrules as get_price_trend). Held/stale days stay out of the math. Missing snapshot days are\nnot invented. Current sold_out does not blank a historical move. At request time a live\nstock claim is passed through stale_guard (P64) so staleness is visible; that does not\nchange pct. period is daily (default) or weekly. limit 1-25 (default 10). Optional gpu,\nvendor, and direction (up/down) filters. All timestamps are UTC with a Z.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "period": {
+      "type": "string",
+      "default": "daily"
+     },
+     "limit": {
+      "type": "integer",
+      "default": 10
+     },
+     "gpu": {
+      "type": "string",
+      "default": null
+     },
+     "vendor": {
+      "type": "string",
+      "default": null
+     },
+     "direction": {
+      "type": "string",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_price_trend",
+   "description": "7-day and 30-day price trend for one stable rate_id (from compare_gpu_prices), among tracked providers only.\n\nReuses the existing daily snapshots in /api/v1/gpu-prices/history.json: percent change, direction (up/down/flat),\nand how many ranked snapshot days were in the window. A trend is never computed from held_stale, no_source,\nor stale (older than 48 hours / undated) current rows; then trend is null with trend_reason. Current\nsold_out does not blank windows: they use the same verified-day history math as compare_gpu_prices.\nA window with too few ranked days is returned with reason insufficient_points; a window longer than the\narchive is window_exceeds_history. Missing snapshot days are not invented. All timestamps are UTC with a Z.\nwindows defaults to [7, 30].",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "rate_id": {
+      "type": "string"
+     },
+     "windows": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "required": [
+     "rate_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "list_watches",
+   "description": "Hosted only. Your watches and per-key alert counts.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "api_key": {
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "optimize_agent_stack",
+   "description": "Estimate a monthly stack cost from a short description of the agent being built.\n\ndescription: free text, e.g. 'scrapes 20k JS pages/month via 5 GB residential proxies, 3k search queries,\nsummarizes with an LLM, budget $300/mo'. Parsed deterministically (keywords/regex, no LLM) into components:\ngpu, scraping, proxy, search, llm_api, email, hosting, database, monitoring. Optional fields override the parse:\ngpu_hours (GPU-hours/month), gpu_model ('H100', 'A100', 'RTX 4090'), model_size_b (billions of params; sets a\nminimum VRAM using FP16 x 1.2), scrape_pages, js_rendering, proxy_gb, search_queries, emails_sent, llm_api,\nmonthly_budget_usd. Each component gets the cheapest option with a cited price among tracked providers, with\ncalc, source_url, verified_at, referral_disclosure (set when the link is a referral link) and manual-signup\nnotes. Components with no cited price say 'no sourced price tracked' (nothing is estimated). Totals show the\nmath and say whether they are complete. Pulled listings are excluded. Every option has data_age_hours, degraded (> 48 h) and stale (> 7 days); GPU prices older than 168 h never rank by default (listed in the line's stale_prices); max_data_age_hours replaces that default and drops older options (excluded_too_old counts them). Same data as optimize_stack,\ncompare_gpu_prices and the deal feed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "description": {
+      "type": "string",
+      "default": ""
+     },
+     "workload": {
+      "type": "string",
+      "default": null
+     },
+     "gpu_hours": {
+      "type": "number",
+      "default": null
+     },
+     "gpu_model": {
+      "type": "string",
+      "default": null
+     },
+     "model_size_b": {
+      "type": "number",
+      "default": null
+     },
+     "scrape_pages": {
+      "type": "number",
+      "default": null
+     },
+     "js_rendering": {
+      "type": "boolean",
+      "default": null
+     },
+     "proxy_gb": {
+      "type": "number",
+      "default": null
+     },
+     "search_queries": {
+      "type": "number",
+      "default": null
+     },
+     "emails_sent": {
+      "type": "number",
+      "default": null
+     },
+     "llm_api": {
+      "type": "boolean",
+      "default": null
+     },
+     "monthly_budget_usd": {
+      "type": "number",
+      "default": null
+     },
+     "exclude_manual_signup": {
+      "type": "boolean",
+      "default": false
+     },
+     "max_data_age_hours": {
+      "type": "number",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "optimize_stack",
+   "description": "Cheapest suitable stack among tracked providers for monthly needs (set the quantities you need, rest 0).\n\nscrape_pages: pages/month without JS rendering. scrape_pages_js: pages/month needing JS rendering.\nproxy_gb: residential proxy GB/month. emails_sent: transactional emails/month. search_queries: search API\nqueries/month. gpu_hours: GPU-hours/month (1 GPU), optionally gpu_model e.g. 'H100', 'A100', 'RTX 4090'.\nEach line has the chosen plan, monthly_cost_usd, calc, vendor quote, source_url, checked_at and assumptions,\nplus alternatives. A vendor price that isn't published is 'unknown' (never estimated). manual_signup_only=true\nmeans a human must sign up (never automate it); exclude_manual_signup=true drops those plans. Same data as\nhttps://thelanternworks.com/api/v1/stack-pricing.json and /tools/stack-optimizer/.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "scrape_pages": {
+      "type": "integer",
+      "default": 0
+     },
+     "scrape_pages_js": {
+      "type": "integer",
+      "default": 0
+     },
+     "proxy_gb": {
+      "type": "number",
+      "default": 0
+     },
+     "emails_sent": {
+      "type": "integer",
+      "default": 0
+     },
+     "search_queries": {
+      "type": "integer",
+      "default": 0
+     },
+     "gpu_hours": {
+      "type": "number",
+      "default": 0
+     },
+     "gpu_model": {
+      "type": "string",
+      "default": null
+     },
+     "exclude_manual_signup": {
+      "type": "boolean",
+      "default": false
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "rebuild_quote",
+   "description": "Reopen a past quote. Pass the `receipt` object returned by optimize_stack, optimize_agent_stack or\nestimate_job_cost. Returns receipt_intact (unkeyed sha256 matches), reproduced (true only if each line's subtotal\nrecomputes AND its rate_id and price match the pinned feed revision or that date's published daily snapshot;\n\"arithmetic_only\" with provenance_verified=false when that can't be confirmed), per-line provenance, and\nrevalidation against today's feed: per GPU line unchanged | price_changed | evidence_changed | held_today |\nnot_in_feed_today (flat plans: not_revalidated), with revision 'same' or 'new'. Nothing is re-ranked.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "receipt": {
+      "type": "object"
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "required": [
+     "receipt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_deals",
+   "description": "Search agent work-stack deals (compute, search, email, unblock, hosting...).\n\noffer_type: verified_discount | listed_discount (not confirmed; verified_at null) | free_tier | trial | standard_referral | credit_only_referral.\nmax_price excludes deals with unknown price. limit 1-25. Pass next_cursor back as cursor to page.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "default": null
+     },
+     "category": {
+      "type": "string",
+      "default": null
+     },
+     "offer_type": {
+      "type": "string",
+      "default": null
+     },
+     "max_price": {
+      "type": "number",
+      "default": null
+     },
+     "tags": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "default": null
+     },
+     "limit": {
+      "type": "integer",
+      "default": 10
+     },
+     "cursor": {
+      "type": "string",
+      "default": null
+     },
+     "mode": {
+      "type": "string",
+      "default": "full"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "watch_price",
+   "description": "Hosted only. Alert your webhook (signed POST) after the daily refresh when a tracked rate for `gpu` crosses at or below max_hourly_usd, or a change of a watched kind (down/up/new; default down) lands at or below it. Only ELIGIBLE rates match (same contract as compare/estimate): every word of gpu must match the model; 'A100 80GB' or vram_gb=80 never matches a 40GB row; tiers (on-demand, community, marketplace, interruptible/spot, dedicated-monthly, reserved; default all but reserved) never matches another class; a row confirmed sold out never matches (in_stock='require' also skips unknown stock). region: code from availability.available_regions; a rate with no unexpired region evidence stays unresolved and never matches. Each event is delivered at most once per watch (dedupe on event_id). Pass api_key or an Authorization: Bearer header.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "gpu": {
+      "type": "string"
+     },
+     "max_hourly_usd": {
+      "type": "number"
+     },
+     "region": {
+      "type": "string"
+     },
+     "vram_gb": {
+      "type": "integer"
+     },
+     "tiers": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "in_stock": {
+      "type": "string",
+      "enum": [
+       "exclude_sold_out",
+       "require"
+      ]
+     },
+     "kinds": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "down",
+        "up",
+        "new"
+       ]
+      }
+     },
+     "api_key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "gpu",
+     "max_hourly_usd"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

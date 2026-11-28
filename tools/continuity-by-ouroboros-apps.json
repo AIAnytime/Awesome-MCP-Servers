@@ -1,0 +1,469 @@
+{
+ "server": "Continuity by Ouroboros Apps",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "continuity_audit",
+   "title": "continuity audit",
+   "description": "Returns locked canon and style_drift for a short proposed scene. style_drift flags a POV or tense switch, or a banned phrase, when locked writing style states them on labeled lines (POV:, Tense:, Banned:). It does not judge tone or story type, save the scene, or approve it. Other contradictions still need comparison against locked_canon.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "proposedText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12000
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+     }
+    },
+    "required": [
+     "projectId",
+     "proposedText"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_story_project",
+   "title": "create story project",
+   "description": "Creates a new private story project requested by the user. Does not save canon or scenes.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "description": {
+      "type": "string",
+      "maxLength": 5000
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_canon_history",
+   "title": "get canon history",
+   "description": "Returns previous and new content for a saved canon entry, newest first, without changing data.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "canonEntryId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+     }
+    },
+    "required": [
+     "canonEntryId"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_continuity_context",
+   "title": "get continuity context",
+   "description": "Retrieves relevant canon, story-level tone, story type, and writing style, recent approved scenes, and the latest provisional checkpoint. The request parameter is a brief scene or topic query, not a chat transcript. story_level is the whole project and is returned again when the latest checkpoint is resumed. Ranked canon is a selection, not the complete story bible.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "request": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 40,
+      "default": 20
+     }
+    },
+    "required": [
+     "projectId",
+     "request"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_approved_scenes",
+   "title": "list approved scenes",
+   "description": "Lists approved scene summaries in story order with offset-based pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+     }
+    },
+    "required": [
+     "projectId"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_story_checkpoints",
+   "title": "list story checkpoints",
+   "description": "Returns provisional checkpoints and the project's story-level tone, story type, and writing style, so resuming a checkpoint keeps those categories. Checkpoints remain notes and do not approve or revise canon. The result is {checkpoints, story_level, guidance}. Page older checkpoints with offset; story_level is included on every page.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+     }
+    },
+    "required": [
+     "projectId"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_story_projects",
+   "title": "list story projects",
+   "description": "Lists the authenticated user's saved story projects with their IDs and offset-based pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000,
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "record_approved_scene",
+   "title": "record approved scene",
+   "description": "Stores a concise summary of a user-approved scene. An occupied scene number is preserved unless replaceExisting is true for a user-requested replacement. Identical retries return the saved scene.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "sceneNumber": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 2147483647
+     },
+     "title": {
+      "type": "string",
+      "maxLength": 200
+     },
+     "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12000
+     },
+     "continuityNotes": {
+      "type": "string",
+      "maxLength": 5000
+     },
+     "replaceExisting": {
+      "type": "boolean",
+      "default": false
+     }
+    },
+    "required": [
+     "projectId",
+     "sceneNumber",
+     "summary"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "save_story_checkpoint",
+   "title": "save story checkpoint",
+   "description": "Saves user-authorized story progress as provisional notes, separate from canon, approved scenes, tone, story type, and writing style. Accepts focused story state, unresolved ideas, and next steps rather than full transcripts or unrelated personal data. The same checkpointId makes retries idempotent.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "checkpointId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "storyState": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 6000
+     },
+     "openThreads": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 500
+      },
+      "maxItems": 20,
+      "default": []
+     },
+     "nextSteps": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 500
+      },
+      "maxItems": 10,
+      "default": []
+     }
+    },
+    "required": [
+     "projectId",
+     "checkpointId",
+     "title",
+     "storyState"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "search_story_canon",
+   "title": "search story canon",
+   "description": "Searches saved canon by literal title or content text. An empty query browses entries with offset-based pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "query": {
+      "type": "string",
+      "maxLength": 200,
+      "default": ""
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000,
+      "default": 0
+     }
+    },
+    "required": [
+     "projectId"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "upsert_canon_entry",
+   "title": "upsert canon entry",
+   "description": "Saves user-approved facts or canon revisions, including story-level TONE, STORY_TYPE, and WRITING_STYLE. TONE is mood. STORY_TYPE is genre, audience, and format. WRITING_STYLE is POV, tense, voice, dialogue, banned phrases, and approved examples; put parseable lines in content such as 'POV: third person limited', 'Tense: past', and 'Banned: very, suddenly'. LOCKED entries change only after the author approves them. Existing entries require their current expectedRevision; conflicting edits fail without overwriting. Identical retries preserve revision history.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "CHARACTER",
+       "RELATIONSHIP",
+       "APPEARANCE",
+       "ABILITY",
+       "LOCATION",
+       "WORLD_RULE",
+       "TIMELINE",
+       "PLOT_THREAD",
+       "ITEM",
+       "FACTION",
+       "TONE",
+       "STORY_TYPE",
+       "WRITING_STYLE",
+       "OTHER"
+      ]
+     },
+     "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "LOCKED",
+       "DEVELOPING",
+       "UNKNOWN",
+       "RETIRED"
+      ]
+     },
+     "content": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12000
+     },
+     "tags": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "maxLength": 80
+      },
+      "maxItems": 30,
+      "default": []
+     },
+     "revisionReason": {
+      "type": "string",
+      "maxLength": 1000
+     },
+     "expectedRevision": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+     },
+     "canon": {
+      "type": "boolean",
+      "description": "false marks a temporary, alternate, or what-if entry as non-canon. Omit to keep the current value; new entries default to canon."
+     },
+     "expiresAt": {
+      "anyOf": [
+       {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 40
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "description": "Optional ISO 8601 date or datetime after which a non-canon or temporary entry expires. Omit to keep, null to clear."
+     }
+    },
+    "required": [
+     "projectId",
+     "kind",
+     "title",
+     "status",
+     "content"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

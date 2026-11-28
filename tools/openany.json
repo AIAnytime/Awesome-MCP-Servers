@@ -1,0 +1,231 @@
+{
+ "server": "OpenAny",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "get_account",
+   "title": "Get OpenAny account status",
+   "description": "Read your available balance, API key allowance, and signup-credit status with the OpenAny credential on the connection. Without a key, return public eligibility rules and setup instructions. No business call or charge. Eligible Agent newcomers automatically receive $0.10 in credit. Qualifying referrals automatically credit the inviter.",
+   "inputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+     "lang": {
+      "default": "en",
+      "enum": [
+       "en",
+       "zh",
+       "ja",
+       "ar"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_api",
+   "title": "Get API or model details",
+   "description": "Read one model or API selected from search_apis. For an API, returns the exact input_schema, public examples, pricing and api_version. For a model, returns the chat completions input shape, model_id, and catalog pricing when the model catalog provides it. Read this before executing. Discovery does not run a paid call, and displayed pricing is not a price lock. Call run_api only after the user confirms this live price. Discovery and price checks are free; execution needs an OpenAny API key. Eligible Agent newcomers automatically receive $0.10 in credit.",
+   "inputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+     "api": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "required": [
+     "api"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "openany_overview",
+   "title": "OpenAny overview",
+   "description": "Return live catalog counts from the current snapshot. No arguments. Does not call the paid gateway. api_count and model_count are totals. apis_by_provider and apis_by_category group data APIs. models_by_modality groups model ids by primary modality: chat/reasoning, image, video, and audio. example_questions lists ready-to-ask questions in en and zh for categories the snapshot can still serve. On a first or vague message, present that intro and do not search yet. Then search_apis, get_api, and run_api only after the user confirms the live price. Eligible Agent newcomers automatically receive $0.10 in credit. Qualifying referrals automatically credit the inviter.",
+   "inputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "run_api",
+   "title": "Run an API or model call",
+   "description": "Execute one selected OpenAny API, or send one selected model to chat completions. Requires the caller's OpenAny API key on the MCP connection as Authorization: Bearer <key>. A call with no key is rejected locally and does not reach the gateway. Never ask the user to paste the key into chat; use the client's secure secret settings. First call get_api. Call this only after the user confirms the live price. Discovery and price checks are free; execution needs an OpenAny API key. Pass its api and api_version, and input that matches input_schema. Model calls can incur charges. Supports finite JSON, UTF-8 plain text and Markdown. Optional output only changes presentation: raw (default), structural summary, or compact for JSON objects/arrays with explicit items_path for nested arrays. A timeout after dispatch has unknown execution or charging state: do not retry automatically.",
+   "inputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+     "api": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+     },
+     "api_version": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+     },
+     "input": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "output": {
+      "additionalProperties": false,
+      "properties": {
+       "fields": {
+        "description": "Literal object keys at root object or selected array items. Does not change upstream fields or pricing.",
+        "items": {
+         "maxLength": 128,
+         "minLength": 1,
+         "type": "string"
+        },
+        "maxItems": 20,
+        "minItems": 1,
+        "type": "array",
+        "uniqueItems": true
+       },
+       "items_path": {
+        "description": "RFC6901 pointer relative to response data. Required to clip a nested array; empty selects a root array.",
+        "maxLength": 512,
+        "type": "string"
+       },
+       "max_items": {
+        "description": "Returned array limit, default 10 in compact mode. Requires root array or items_path.",
+        "maximum": 100,
+        "minimum": 1,
+        "type": "integer"
+       },
+       "mode": {
+        "default": "raw",
+        "enum": [
+         "raw",
+         "compact",
+         "summary"
+        ],
+        "type": "string"
+       }
+      },
+      "type": "object"
+     }
+    },
+    "required": [
+     "api",
+     "api_version",
+     "input"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_apis",
+   "title": "Search APIs and models",
+   "description": "Searches OpenAny's current catalog of data APIs and AI models by keyword. Get live catalog counts from openany_overview. Use when the user wants keyword or SEO research (Google, Bing, SERP, search volume, keyword difficulty, DataForSEO), social posts or accounts on Xiaohongshu (小红书, RedNote), Douyin (抖音, TikTok China), Weibo (微博), TikTok, X (Twitter), Instagram or YouTube, cryptocurrency prices or on-chain data (CoinGecko, DefiLlama, DexScreener, Polymarket), lead or company data (Hunter email finder, Qichacha/企查查, Crustdata), finance or legal research, or to generate chat, image, video or audio with models such as GPT, Claude, Gemini, DeepSeek, Qwen, Midjourney, Veo or Kling. After a match, call get_api to inspect schema and price; call run_api only after the user confirms the live price. Discovery and price checks are free; execution needs an OpenAny API key. Eligible Agent newcomers automatically receive $0.10 in credit.",
+   "inputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+     "capability": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+     },
+     "category": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+     },
+     "cursor": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+     },
+     "data_platform": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+     },
+     "data_product": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+     },
+     "kind": {
+      "maxLength": 16,
+      "minLength": 1,
+      "type": "string"
+     },
+     "limit": {
+      "default": 5,
+      "maximum": 10,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "provider": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+     },
+     "query": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "description": "Public read-only ownership record for agent-tools.cloud.",
+   "mimeType": "application/json",
+   "name": "ownership",
+   "title": "Ownership",
+   "uri": "agent-tools://ownership"
+  }
+ ],
+ "prompts": [
+  {
+   "description": "Introduce OpenAny and suggest questions the user can ask.",
+   "name": "openany-start",
+   "title": "开始使用 OpenAny / Get started with OpenAny"
+  }
+ ]
+}

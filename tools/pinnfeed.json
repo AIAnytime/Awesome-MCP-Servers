@@ -1,0 +1,184 @@
+{
+ "server": "PinnFeed",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "get_account",
+   "description": "Your PinnFeed plan, limits (sports, rate, daily quota, data delay) and requests used today. Call first to know what you can query.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "name": "get_closing_odds",
+   "description": "Closing odds (last prematch price before kickoff) for an event, for closing-line-value analysis. Builder plan and above.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "event_id"
+    ],
+    "properties": {
+     "event_id": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  {
+   "name": "get_drops",
+   "description": "Biggest odds drops (prices shortening) in the last N minutes: from/to decimal price and drop %. Useful to spot steam and sharp money.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "sport": {
+      "type": "string",
+      "description": "Sport slug: soccer, tennis, basketball, hockey, american-football, baseball, rugby, mma, boxing, volleyball-handball, esports, golf, cricket. Comma-separate for several."
+     },
+     "live": {
+      "type": "boolean"
+     },
+     "minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 60,
+      "default": 15
+     },
+     "min_pct": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 90,
+      "default": 3
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "default": 25
+     }
+    }
+   }
+  },
+  {
+   "name": "get_event",
+   "description": "One event with all its markets and prices by event id.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "event_id"
+    ],
+    "properties": {
+     "event_id": {
+      "type": "integer"
+     },
+     "main_only": {
+      "type": "boolean",
+      "default": false
+     }
+    }
+   }
+  },
+  {
+   "name": "get_live_odds",
+   "description": "Current in-play Pinnacle odds for a sport (decimal + American prices, no-vig fair odds, margin, max stake). Main markets by default.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "sport"
+    ],
+    "properties": {
+     "sport": {
+      "type": "string",
+      "description": "Sport slug: soccer, tennis, basketball, hockey, american-football, baseball, rugby, mma, boxing, volleyball-handball, esports, golf, cricket. Comma-separate for several."
+     },
+     "q": {
+      "type": "string",
+      "description": "Optional team/league text filter."
+     },
+     "market": {
+      "type": "string",
+      "description": "moneyline, spread, total, team_total (comma-separated)."
+     },
+     "main_only": {
+      "type": "boolean",
+      "default": true
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 10,
+      "description": "Max events."
+     }
+    }
+   }
+  },
+  {
+   "name": "get_prematch_odds",
+   "description": "Current prematch (pre-game) Pinnacle odds for a sport: only events that have not kicked off yet, with open markets, soonest first. Same fields as get_live_odds; each market has updatedAt (last price change, ISO 8601 UTC) and the response has asOf.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "sport"
+    ],
+    "properties": {
+     "sport": {
+      "type": "string",
+      "description": "Sport slug: soccer, tennis, basketball, hockey, american-football, baseball, rugby, mma, boxing, volleyball-handball, esports, golf, cricket. Comma-separate for several."
+     },
+     "q": {
+      "type": "string"
+     },
+     "market": {
+      "type": "string"
+     },
+     "main_only": {
+      "type": "boolean",
+      "default": true
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 10
+     }
+    }
+   }
+  },
+  {
+   "name": "list_sports",
+   "description": "All sports with live and prematch event counts and whether each is in your plan.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "name": "search_events",
+   "description": "Find events (fixtures) by sport, team or league text, live or prematch (prematch = not kicked off yet; live first, then soonest first). Returns ids, teams, league, start time, score/clock when live. No prices: use get_event or get_*_odds for prices.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "sport": {
+      "type": "string",
+      "description": "Sport slug: soccer, tennis, basketball, hockey, american-football, baseball, rugby, mma, boxing, volleyball-handball, esports, golf, cricket. Comma-separate for several."
+     },
+     "q": {
+      "type": "string",
+      "description": "Team or league text, e.g. \"Arsenal\" or \"Premier League\"."
+     },
+     "live": {
+      "type": "boolean",
+      "description": "true = in-play only, false = prematch only, omit = both."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "default": 25
+     }
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,1155 @@
+{
+ "server": "MCP Toolbelt",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "address_normalize",
+   "title": "Address Normalize",
+   "description": "Normalize a free-form US postal address to USPS Publication 28 style, deterministically (rule tables, no AI): uppercase, standard street-suffix, directional and unit abbreviations (Street -> ST, Suite -> STE, North -> N), state names to 2-letter codes, ZIP/ZIP+4 cleanup, and a parsed breakdown (house number, street, unit, city, state, ZIP). Formatting only — it does not verify the address is deliverable. Non-US addresses get whitespace cleanup only.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "Full address on one line or several, e.g. '1600 Pennsylvania Avenue Northwest, Washington, District of Columbia 20500'"
+     },
+     "country": {
+      "type": "string",
+      "description": "ISO country code (default US; only US gets full normalization)"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ai_crawler_policy_check",
+   "title": "AI Crawler Policy Check",
+   "description": "Report, per AI crawler, whether a site allows or blocks it: parses robots.txt with RFC 9309 rules (most-specific user-agent group, longest-match Allow/Disallow, * and $ wildcards) for 29 AI agents including GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-Web, anthropic-ai, Google-Extended, PerplexityBot, CCBot, Bytespider, Applebot-Extended, Meta-ExternalAgent, Amazonbot and cohere-ai. Also reads the page's meta robots / X-Robots-Tag noai and noimageai hints and checks /llms.txt (and /llms-full.txt). Optional extra paths to test. Deterministic parsing, no AI. For a scored AI-readiness report use ai_readiness_audit; for raw robots/sitemap contents use check_robots_sitemap.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Any URL on the site (origin is derived from it); its path is also tested"
+     },
+     "paths": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Optional extra paths to test per bot, e.g. ['/blog/', '/api/'] (max 10)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "ai_readiness_audit",
+   "title": "AI Readiness Audit",
+   "description": "Score how ready a website is for AI agents and LLM-driven discovery, 0-100 with a letter grade: robots.txt presence, explicit AI-crawler policy (GPTBot, ClaudeBot, CCBot, PerplexityBot, and 8 more), llms.txt presence and structure, structured data (JSON-LD) and Open Graph basics, agent/payment discovery files (/.well-known/x402, /openapi.json), sitemap presence, and title/meta basics. The bundle to run before/after making a site agent-friendly — for raw robots/sitemap contents only, use check_robots_sitemap; for classic search SEO only, use seo_audit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Any URL on the site to audit (origin is derived from it)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "archived_page_lookup",
+   "title": "Archived Page Lookup",
+   "description": "Find the Internet Archive Wayback Machine snapshot of a URL closest to a given date (default: now): capture time, how many days off it is, the viewable snapshot URL, a raw-content URL (original bytes, no Wayback toolbar), HTTP status, MIME type and content digest, plus a few next-closest captures. Defaults to successful (HTTP 200) captures only. Uses the public CDX index with an availability-API fallback. Good for seeing what a page said on a past date or proving when content changed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Page or domain to look up, e.g. example.com or https://example.com/pricing"
+     },
+     "date": {
+      "type": "string",
+      "description": "Target date: ISO (2015-01-01 or 2015-01-01T12:00:00Z) or Wayback timestamp (20150101). Default now"
+     },
+     "onlySuccessful": {
+      "type": "boolean",
+      "description": "Only consider HTTP 200 captures (default true)"
+     },
+     "alternatives": {
+      "type": "number",
+      "description": "How many next-closest captures to include, 0-10 (default 4)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "broken_link_check",
+   "title": "Broken Link Check",
+   "description": "Find broken links two ways. Default (crawl mode): crawl a site starting from a URL (same-origin pages only, bounded by maxPages) and check every linked URL for broken status codes, returning each broken link with the page(s) it was found on. Sitemap mode (viaSitemap: true): parse the site's sitemap.xml (following one level of sitemap-index nesting) and check the status of every URL listed in it instead. Note: some external sites (e.g. social platforms) block automated HEAD/GET requests and may show up as false positives.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Starting URL to crawl — or, in sitemap mode, the sitemap.xml URL or any page URL on the site"
+     },
+     "maxPages": {
+      "type": "number",
+      "description": "Max same-origin pages to crawl in crawl mode (default 20, capped at 50)"
+     },
+     "checkExternal": {
+      "type": "boolean",
+      "description": "Crawl mode only: also check links pointing off-site (default true; crawling never follows off-site links)"
+     },
+     "viaSitemap": {
+      "type": "boolean",
+      "description": "Check the URLs listed in the site's sitemap.xml instead of crawling pages (default false)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "check_open_ports",
+   "title": "Check Open Ports",
+   "description": "TCP-connect scan a host for open ports, plus network intel on the host's resolved IPs (ASN, network owner, BGP prefix, country — via Team Cymru). Defaults to a list of ~20 common service ports (SSH, HTTP/S, mail, DBs, etc.) if none are given. For checking your own infrastructure's exposure — capped at 100 ports per call.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "host": {
+      "type": "string",
+      "description": "Hostname or IP to scan (no scheme)"
+     },
+     "ports": {
+      "type": "array",
+      "items": {
+       "type": "number"
+      },
+      "description": "Specific ports to check. Defaults to a common-ports list. Max 100 ports per call."
+     }
+    },
+    "required": [
+     "host"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "check_robots_sitemap",
+   "title": "Robots and Sitemap Check",
+   "description": "Check a site's robots.txt and sitemap.xml in one call: raw contents (truncated), sitemap presence, an AI-crawler policy analysis (explicit rules for GPTBot, ClaudeBot, CCBot, PerplexityBot, Google-Extended, Bytespider, Amazonbot and other AI crawlers, vs wildcard/default), and llms.txt presence. For a scored, whole-site AI-readiness report use ai_readiness_audit instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Any URL on the site to check (origin is derived from it)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "csv_to_json",
+   "title": "CSV to JSON",
+   "description": "Convert CSV to JSON with a strict RFC 4180 parser: quoted fields, escaped quotes, embedded newlines, CRLF, BOM. Auto-detects the delimiter (comma, semicolon, tab, pipe) or takes one; uses the first row as keys by default (or returns arrays), and optionally infers numbers, booleans and empty-as-null. Pass CSV text or a URL to fetch (max 2 MB, 10,000 rows returned; truncation is flagged). Deterministic, no AI.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "csv": {
+      "type": "string",
+      "description": "CSV text (provide csv OR url)"
+     },
+     "url": {
+      "type": "string",
+      "description": "Public URL of a CSV file to fetch instead"
+     },
+     "delimiter": {
+      "type": "string",
+      "description": "Field delimiter: ',', ';', '|', or 'tab' (default auto-detect)"
+     },
+     "header": {
+      "type": "boolean",
+      "description": "Treat the first row as column names and return objects (default true); false returns arrays"
+     },
+     "inferTypes": {
+      "type": "boolean",
+      "description": "Convert numbers, true/false, and empty cells to null (default true); false keeps every value a string"
+     },
+     "skipEmptyLines": {
+      "type": "boolean",
+      "description": "Drop blank lines (default true)"
+     },
+     "maxRows": {
+      "type": "number",
+      "description": "Maximum data rows to return, up to 10,000 (default 10,000)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "dns_propagation_check",
+   "title": "DNS Propagation Check",
+   "description": "Query a DNS record for a domain against several major public resolvers (Google, Cloudflare, Quad9, OpenDNS) in parallel and compare the answers. Flags mismatches, which usually mean propagation is still in progress after a DNS change.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to query, e.g. example.com"
+     },
+     "recordType": {
+      "type": "string",
+      "description": "Record type: A, AAAA, MX, TXT, NS, or CNAME (default A)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "domain_availability_check",
+   "title": "Domain Availability Check",
+   "description": "Check whether a domain is registered, plus scan common typo-squat variants (adjacent-key substitution, letter omission/doubling, transposition) across popular TLDs (.com, .net, .org, .io, .co, .ai, .app, .dev) for brand-protection or domain-flipping research. WHOIS-based; capped at 40 variants checked per call for latency.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to check, e.g. example.com"
+     },
+     "checkSquats": {
+      "type": "boolean",
+      "description": "Also scan typo-squat variants (default true)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "domain_health_check",
+   "title": "Domain Health Check",
+   "description": "Check a domain's registration expiry (via WHOIS) and DNS health: nameservers, A/AAAA, MX, SPF, and DMARC records. Flags common misconfigurations. WHOIS + DNS only — for the WHOIS record alone use whois_lookup; for deliverability detail (DKIM, DNSBL, PTR) use email_deliverability_check; for all of it plus SEO in one report use domain_report.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to check, e.g. example.com (no scheme/path)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "domain_report",
+   "title": "Domain Report",
+   "description": "Bundle: runs seo_audit, domain_health_check (WHOIS + DNS: nameservers, A/AAAA, MX, SPF, DMARC), and email_deliverability_check (DKIM, SPF lookup-count, DMARC strength, DNSBL) against a domain in one call, one charge. Cheaper than calling the three tools separately. Each sub-check reports independently, so a failure in one doesn't void the others.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to report on, e.g. example.com (no scheme/path)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "email_address_validate",
+   "title": "Email Address Validate",
+   "description": "Validate a single email address: RFC syntax check, MX record lookup on the domain, disposable/temporary-email-provider detection, and role-account detection (info@, admin@, etc.). Per-address check — different from email_deliverability_check, which audits a whole domain's sending reputation (SPF/DKIM/DMARC/PTR/DNSBL).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "email": {
+      "type": "string",
+      "description": "Email address to validate"
+     }
+    },
+    "required": [
+     "email"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "email_deliverability_check",
+   "title": "Email Deliverability Check",
+   "description": "Deep-dive email deliverability check for a domain: MX records + reverse-DNS (PTR) on each MX host, common DKIM selector probing, SPF lookup-count (RFC 7208 caps at 10), DMARC policy strength, and DNSBL blacklist lookups (Spamhaus Zen, SpamCop, Barracuda) on MX IPs. Note: public-resolver DNSBL queries are frequently rate-limited or blocked by Spamhaus, so a `listed: null` result means \"unknown\", not \"clean\" — treat null results as inconclusive, not as a clean bill of health.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to check, e.g. example.com"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "exposed_files_check",
+   "title": "Exposed Files Check",
+   "description": "Probe a site for publicly exposed sensitive files attackers scan for: /.env and variants, /.git/config and /.git/HEAD, /.svn/entries, docker-compose files, /.aws/credentials, /.ssh/id_rsa, database dumps (backup.sql, db.sql, dump.sql), backup archives, phpinfo pages, .DS_Store, and similar. Reports ONLY reachability metadata (path, status, content type, size) — file contents are never returned or stored. A random-nonexistent-path baseline filters out SPA/catch-all false positives. For auditing your own sites' exposure.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Any URL on the site to probe (origin is derived from it)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "favicon_manifest_check",
+   "title": "Favicon and Manifest Check",
+   "description": "Check a site's browser/OS chrome and PWA metadata: every <link rel=icon> favicon plus /favicon.ico, apple-touch-icon(s), and the web app manifest (fetched and parsed: name, short_name, start_url, display, theme_color, background_color, icons with sizes/purpose), each with its HTTP status, plus the theme-color meta tag. Flags broken icon links and missing 192/512 manifest icons. Deterministic HTML/JSON parsing, no AI. For a whole-page SEO audit (which includes a lighter version of this) use seo_audit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Page to check, usually the homepage, e.g. https://example.com"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "github_repo_health_check",
+   "title": "GitHub Repo Health Check",
+   "description": "Check a GitHub repository's health signals: stars, forks, open issues, license, archived/disabled status, and days since last push. Flags likely-abandoned or unlicensed repos. Useful before depending on a repo.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "owner": {
+      "type": "string",
+      "description": "Repository owner (user or org)"
+     },
+     "repo": {
+      "type": "string",
+      "description": "Repository name"
+     }
+    },
+    "required": [
+     "owner",
+     "repo"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "html_to_pdf",
+   "title": "HTML to PDF",
+   "description": "Render a URL or a raw HTML string to a PDF in headless Chromium (print-quality, selectable text). Options: paper format (A4, Letter, Legal, A3, A5, Tabloid), landscape, print backgrounds, margins, and scale. Returns a short-lived download URL (valid 1 hour) with byte size, page count and SHA-256; set includeBase64 for the PDF inline (up to 3 MB). Raw HTML up to 2 MB; any external resources it loads go through the same private-address block. Pure rendering, no AI.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Page to render (provide url OR html)"
+     },
+     "html": {
+      "type": "string",
+      "description": "Raw HTML document to render instead of a URL (max 2 MB)"
+     },
+     "format": {
+      "type": "string",
+      "enum": [
+       "A4",
+       "Letter",
+       "Legal",
+       "A3",
+       "A5",
+       "Tabloid"
+      ],
+      "description": "Paper size (default A4)"
+     },
+     "landscape": {
+      "type": "boolean",
+      "description": "Landscape orientation (default false)"
+     },
+     "printBackground": {
+      "type": "boolean",
+      "description": "Include CSS backgrounds and colors (default true)"
+     },
+     "margin": {
+      "type": "string",
+      "description": "CSS margin applied to all sides, e.g. '1cm', '0.5in', '10mm' (default '1cm')"
+     },
+     "scale": {
+      "type": "number",
+      "description": "Render scale, 0.1-2 (default 1)"
+     },
+     "waitUntil": {
+      "type": "string",
+      "enum": [
+       "load",
+       "domcontentloaded",
+       "networkidle0",
+       "networkidle2"
+      ],
+      "description": "When loading counts as finished (default load)"
+     },
+     "includeBase64": {
+      "type": "boolean",
+      "description": "Also return the PDF as base64 in the response (default false; omitted if over 3 MB)"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "image_resize",
+   "title": "Image Resize",
+   "description": "Download an image from a URL and resize it with libvips (sharp): set width and/or height, fit mode (inside keeps aspect ratio within the box, cover crops to fill, contain letterboxes, fill stretches), output format (PNG, JPEG, WebP, AVIF) and quality. Honors EXIF rotation. Input up to 15 MB / 50 megapixels, output up to 4096px per side. Returns a short-lived download URL (valid 1 hour) with final dimensions and byte size; set includeBase64 for the bytes inline (up to 3 MB). Deterministic, no AI.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Public URL of the source image (PNG, JPEG, WebP, AVIF, GIF, TIFF, SVG)"
+     },
+     "width": {
+      "type": "number",
+      "description": "Target width in pixels, 1-4096 (give width, height, or both)"
+     },
+     "height": {
+      "type": "number",
+      "description": "Target height in pixels, 1-4096"
+     },
+     "fit": {
+      "type": "string",
+      "enum": [
+       "inside",
+       "cover",
+       "contain",
+       "fill",
+       "outside"
+      ],
+      "description": "How to fit both dimensions (default inside = keep aspect ratio, no crop)"
+     },
+     "format": {
+      "type": "string",
+      "enum": [
+       "png",
+       "jpeg",
+       "webp",
+       "avif"
+      ],
+      "description": "Output format (default: same family as the source, PNG otherwise)"
+     },
+     "quality": {
+      "type": "number",
+      "description": "JPEG/WebP/AVIF quality 1-100 (default 82)"
+     },
+     "withoutEnlargement": {
+      "type": "boolean",
+      "description": "Never upscale a smaller source (default false)"
+     },
+     "background": {
+      "type": "string",
+      "description": "Hex color for contain padding / JPEG flattening, e.g. #ffffff (default white)"
+     },
+     "includeBase64": {
+      "type": "boolean",
+      "description": "Also return the image as base64 in the response (default false; omitted if over 3 MB)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "mcp_server_probe",
+   "title": "MCP Server Probe",
+   "description": "Probe a remote MCP server end-to-end: performs the initialize handshake, captures server info and protocol version, lists its tools, and grades tool-quality the way directories like Glama do — description coverage and depth, input-schema completeness, and naming consistency — with a 0-100 score, letter grade, and per-tool detail. Use it to vet an MCP server before connecting an agent (or paying per call) to it.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The MCP server endpoint URL, e.g. https://example.com/mcp"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "package_vulnerability_check",
+   "title": "Package Vulnerability Check",
+   "description": "Look up a package (optionally pinned to a version) against OSV.dev's aggregated vulnerability database (GitHub Advisories, PyPA, RustSec, Go vuln DB, etc.) for known CVEs/advisories. Supports npm, PyPI, crates.io, RubyGems, Go, Maven, NuGet, and Packagist ecosystems. Useful before adding a dependency.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "ecosystem": {
+      "type": "string",
+      "enum": [
+       "npm",
+       "pypi",
+       "cargo",
+       "rubygems",
+       "go",
+       "maven",
+       "nuget",
+       "packagist"
+      ],
+      "description": "Package ecosystem"
+     },
+     "name": {
+      "type": "string",
+      "description": "Package name"
+     },
+     "version": {
+      "type": "string",
+      "description": "Optional exact version to check; omit to check the package generally"
+     }
+    },
+    "required": [
+     "ecosystem",
+     "name"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "page_performance_check",
+   "title": "Page Performance Check",
+   "description": "Fetch a URL and measure time-to-first-byte, total fetch time, and response size from this server. Flags missing compression, missing Cache-Control, oversized payloads, and slow TTFB. Lightweight raw-timing check — for Google Lighthouse scores, Core Web Vitals, and real-user field data use pagespeed_insights instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to measure"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "pagespeed_insights",
+   "title": "PageSpeed Insights",
+   "description": "Run Google's real PageSpeed Insights (Lighthouse + Chrome UX Report) against a URL: performance score, Core Web Vitals (LCP, CLS, INP/TBT), and real-user field data where available. The authoritative, Google-measured score — for a quick raw TTFB/size timing check from this server use page_performance_check instead. Works without an API key at low volume; set GOOGLE_PAGESPEED_API_KEY server-side for higher throughput.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to test"
+     },
+     "strategy": {
+      "type": "string",
+      "enum": [
+       "mobile",
+       "desktop"
+      ],
+      "description": "Device strategy (default mobile)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "phone_validate",
+   "title": "Phone Validate",
+   "description": "Validate and format a phone number with Google's libphonenumber metadata: valid/possible for its region, E.164, international and national formats, tel: URI, country, and line type (MOBILE, FIXED_LINE, TOLL_FREE, VOIP, …). Pass defaultCountry for numbers written without a +country code. Offline metadata check — it does not dial or confirm the line is in service. Companion to email_address_validate.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "phone": {
+      "type": "string",
+      "description": "Phone number in any common format, e.g. +1 650-253-0000 or (650) 253-0000"
+     },
+     "defaultCountry": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country to assume when the number has no + prefix, e.g. US, GB, DE"
+     }
+    },
+    "required": [
+     "phone"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "redirect_chain_check",
+   "title": "Redirect Chain Check",
+   "description": "Follow a URL through every HTTP redirect hop and report the full chain, final destination, and issues like redirect loops, too many hops, or HTTPS-to-HTTP downgrades.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The starting URL to trace"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "safe_browsing_check",
+   "title": "Safe Browsing Check",
+   "description": "Check a URL against Google Safe Browsing's malware/phishing/unwanted-software/PUA blocklists. Requires GOOGLE_SAFE_BROWSING_API_KEY to be configured server-side (free Google Cloud API key).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to check"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "security_headers_audit",
+   "title": "Security Headers Audit",
+   "description": "Fetch a URL and audit its response headers in one pass: security headers (HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) with a score, PLUS its CORS policy (the probe sends a foreign Origin header and flags wildcard-origin + credentials combinations and arbitrary-origin reflection). Header-level checks on a single response — for server/TLS-level checks use ssl_cert_check or ssl_labs_grade instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to audit"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "seo_audit",
+   "title": "SEO Audit",
+   "description": "Fetch a URL and run a full on-page SEO audit: title/meta description length, canonical tag, Open Graph + Twitter Card tags, html lang attribute, viewport meta, heading structure, image alt-text coverage, internal/external link counts and generic-anchor-text detection, robots meta (noindex/nofollow), structured data (JSON-LD) presence, robots.txt/sitemap.xml presence, and site chrome (favicon, apple-touch-icon, web app manifest, theme-color). Whole-page audit — for raw extracted data only use structured_data_extract, for the platform/framework use tech_stack_fingerprint.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to audit"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "smtp_server_check",
+   "title": "SMTP Server Check",
+   "description": "Live-probe a mail server over SMTP: connects to port 25 (or a given port), reads the banner, issues EHLO and lists advertised capabilities (STARTTLS, AUTH mechanisms, SIZE, 8BITMIME, PIPELINING), then upgrades via STARTTLS when offered and reports the TLS protocol and certificate (issuer, expiry). The server-side complement to email_deliverability_check (which reads DNS records only and never connects). No mail is sent and no relay attempt is made.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "host": {
+      "type": "string",
+      "description": "Mail server hostname, e.g. mail.example.com — or a bare domain, in which case its lowest-priority-number MX host is probed"
+     },
+     "port": {
+      "type": "number",
+      "description": "SMTP port (default 25)"
+     }
+    },
+    "required": [
+     "host"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "ssl_cert_check",
+   "title": "SSL Certificate Check",
+   "description": "Connect to a host over TLS and report its certificate's expiry date, days remaining, issuer, and subject. Fast facts only — for a full graded TLS assessment (protocols, ciphers, vulnerabilities) use ssl_labs_grade instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "hostname": {
+      "type": "string",
+      "description": "Hostname to check, e.g. papacasper.com (no scheme/path)"
+     },
+     "port": {
+      "type": "number",
+      "description": "TLS port to connect to (default 443)"
+     }
+    },
+    "required": [
+     "hostname"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "ssl_labs_grade",
+   "title": "SSL Labs Grade",
+   "description": "Full SSL Labs-style TLS assessment: overall letter grade, protocol support (TLS 1.0-1.3), cipher strength, certificate chain issues, and known vulnerabilities (Heartbleed, POODLE, etc.) for each endpoint. Use this for a deep grade; use ssl_cert_check instead for a fast expiry/issuer check. Slower (can take up to ~90s on a cold cache; SSL Labs caches results for 24h server-side).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "hostname": {
+      "type": "string",
+      "description": "Hostname to assess, e.g. example.com (no scheme/path)"
+     }
+    },
+    "required": [
+     "hostname"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "structured_data_extract",
+   "title": "Structured Data Extract",
+   "description": "Fetch a URL and extract structured data deterministically: JSON-LD blocks (each one also VALIDATED — @context/@type presence plus required fields for common schema.org types like Article, Product, Organization, FAQPage), OpenGraph/meta tags, and optional caller-supplied CSS-selector fields (e.g. { price: '.product-price', title: 'h1' }). No LLM involved — pure HTML parsing via CSS selectors, so results are exact matches only, not summarized or inferred. For a whole-page SEO audit (headings, links, images, meta lengths) use seo_audit instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to extract from"
+     },
+     "selectors": {
+      "type": "object",
+      "description": "Optional map of field name -> CSS selector (e.g. { price: '.product-price', headline: 'h1' }). Each field returns an array of matched, whitespace-normalized text values in document order.",
+      "additionalProperties": {
+       "type": "string"
+      }
+     },
+     "attr": {
+      "type": "string",
+      "description": "Optional HTML attribute to extract instead of text content (e.g. 'href', 'src', 'content'). Applies to all selector fields in this call."
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "subdomain_discovery",
+   "title": "Subdomain Discovery",
+   "description": "Enumerate a domain's subdomains from public Certificate Transparency logs (crt.sh, with a Cert Spotter fallback): every hostname that has ever appeared on a certificate for the domain. Passive reconnaissance - no packets are sent to the target. Useful for attack-surface reviews, migration inventories, and finding forgotten test/staging hosts.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to enumerate, e.g. example.com (no scheme/path)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "tech_stack_fingerprint",
+   "title": "Tech Stack Fingerprint",
+   "description": "Fetch a URL and fingerprint its likely tech stack from response headers (server, x-powered-by, x-generator) and HTML markers (generator meta tag, framework/CMS-specific script or class patterns). Answers 'what is this site built with?' — for on-page SEO/content signals use seo_audit, for raw structured data use structured_data_extract. Best-effort — not exhaustive, no additional paths are probed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to fingerprint"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "url_to_markdown",
+   "title": "URL to Markdown",
+   "description": "Fetch a URL and return its main text content as clean, readable plain text/markdown-ish output. Strips scripts, styles, and HTML tags.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The URL to fetch"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "vat_validate",
+   "title": "VAT Validate",
+   "description": "Validate an EU VAT number against the European Commission's official VIES service: checks the country-specific format first, then asks VIES whether the number is active for intra-EU trade and returns the registered business name and address when the member state shares them. Covers all EU states plus XI (Northern Ireland); Greece accepts GR or EL. If VIES or the member state's service is down, the call errors (API-key credits are refunded) instead of guessing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "vatNumber": {
+      "type": "string",
+      "description": "VAT number, ideally with its country prefix, e.g. IE6388047V or DE 123456789"
+     },
+     "countryCode": {
+      "type": "string",
+      "description": "2-letter EU country code if vatNumber has no prefix, e.g. DE"
+     }
+    },
+    "required": [
+     "vatNumber"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "website_screenshot",
+   "title": "Website Screenshot",
+   "description": "Render a URL in a real headless Chromium browser and capture a PNG screenshot — either the viewport or the full scrolling page (capped at 10,000px tall). Options: viewport width/height, device scale factor (retina), wait condition, and extra delay for late-loading content. Returns a short-lived download URL (valid 1 hour) plus pixel dimensions, byte size and SHA-256; set includeBase64 for the PNG inline (up to 3 MB). Private/internal addresses are blocked. Pure rendering, no AI. For load-time numbers use page_performance_check or pagespeed_insights instead.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "Page to capture, e.g. https://example.com (https:// is assumed if no scheme)"
+     },
+     "fullPage": {
+      "type": "boolean",
+      "description": "Capture the full scrolling page instead of just the viewport (default false; capped at 10,000px tall)"
+     },
+     "width": {
+      "type": "number",
+      "description": "Viewport width in CSS pixels, 320-1920 (default 1280)"
+     },
+     "height": {
+      "type": "number",
+      "description": "Viewport height in CSS pixels, 240-2160 (default 800)"
+     },
+     "deviceScaleFactor": {
+      "type": "number",
+      "description": "Device pixel ratio, 1-2 (default 1; 2 = retina)"
+     },
+     "waitUntil": {
+      "type": "string",
+      "enum": [
+       "load",
+       "domcontentloaded",
+       "networkidle0",
+       "networkidle2"
+      ],
+      "description": "When navigation counts as finished (default load)"
+     },
+     "delayMs": {
+      "type": "number",
+      "description": "Extra wait after load before capturing, 0-5000 ms (default 0)"
+     },
+     "includeBase64": {
+      "type": "boolean",
+      "description": "Also return the PNG as base64 in the response (default false; omitted if over 3 MB)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "websocket_endpoint_check",
+   "title": "WebSocket Endpoint Check",
+   "description": "Test a WebSocket endpoint (ws:// or wss://): attempts the handshake, reports success/failure, time-to-open in ms, and close code/reason. Useful for verifying a WebSocket server is reachable and completes its upgrade handshake before you wire real traffic to it.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "WebSocket URL to test, e.g. wss://example.com/socket"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "whois_lookup",
+   "title": "WHOIS Lookup",
+   "description": "Look up a domain's WHOIS registration record: registrar, creation and expiry dates, days remaining, name servers, and domain statuses, direct from the TLD registry. Registration data only — for DNS/mail health as well, use domain_health_check; for a combined report, use domain_report.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "description": "Bare domain to look up, e.g. example.com (no scheme/path)"
+     }
+    },
+    "required": [
+     "domain"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

@@ -1,0 +1,137 @@
+{
+ "server": "CheapCarRent Search",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "list_locations",
+   "title": "List cities and airports",
+   "description": "List the cities and airports CheapCarRent search accepts, with the exact spelling. Each row has country, countryCode, city, cityParam, iata when there is an airport, hasAirport, alsoAccepted spellings and the city page URL. Filter with country (two-letter code), query (city, country, alias or airport code; accents ignored) and airports_only. Pass countryCode as country and cityParam as city to search_cars, or pass iata. An unknown country code returns an error with the covered country codes. An empty list for a query means the place is not covered; do not guess another spelling.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "country": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2,
+      "description": "Two-letter country code, e.g. ES or GR. Only places in this country are listed."
+     },
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "City, country, alternative spelling or airport code to look for, e.g. Malaga or AGP. Accents are ignored; exact matches come first."
+     },
+     "airports_only": {
+      "type": "boolean",
+      "description": "true to list only places with an airport (rows that have an iata code)."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "search_cars",
+   "title": "Search cars",
+   "description": "Search current CheapCarRent car rental offers for one place and dates. This is the same city preview as the website, with pick-up and return at 12:00. Each offer has its price in its own currency and priceEur, the same day price in EUR; offers are sorted by priceEur, cheapest first. A rental can run up to 30 days, and pick-up must be within 365 days. The result is one page of at most 8 offers, not the whole market. An empty page is a normal result, not a failure. Prices are not a guaranteed quote. Use each offer URL on https://cheapcarent.com for the live price and that offer's terms. The online booking fee is 17%. The rest of the rental is paid at pick-up. Pass one location only: pickup, or country plus city, or iata.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pickup": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Free-text place name, e.g. Barcelona. Use only when list_locations gave no exact match; prefer country + city or iata."
+     },
+     "country": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2,
+      "description": "countryCode from list_locations, e.g. ES. Pass together with city."
+     },
+     "city": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "cityParam from list_locations, e.g. barcelona. Pass together with country."
+     },
+     "iata": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3,
+      "description": "Three-letter airport code from list_locations, e.g. BCN. Use instead of country + city."
+     },
+     "pickup_date": {
+      "type": "string",
+      "description": "Pick-up date, YYYY-MM-DD. Today or later, within 365 days."
+     },
+     "return_date": {
+      "type": "string",
+      "description": "Return date, YYYY-MM-DD. 1 to 30 days after pickup_date."
+     },
+     "pickup_time": {
+      "type": "string",
+      "const": "12:00",
+      "description": "Pick-up time. Only 12:00 is supported; may be left out."
+     },
+     "return_time": {
+      "type": "string",
+      "const": "12:00",
+      "description": "Return time. Only 12:00 is supported; may be left out."
+     },
+     "driver_age": {
+      "type": "integer",
+      "minimum": 18,
+      "maximum": 99,
+      "description": "Driver's age in years, 18 to 99. Accepted but not used for prices: the preview is priced for a standard adult driver; age terms are on each offer's page."
+     },
+     "currency": {
+      "type": "string",
+      "const": "EUR",
+      "description": "Only EUR is accepted. Offers keep their own currency in price; priceEur is always in EUR."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8,
+      "description": "How many offers to return, 1 to 8. Default 8."
+     },
+     "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "How many of the cheapest offers to skip, for the next page. Default 0."
+     },
+     "partner": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{3,40}$",
+      "description": "Partner code from the CheapCarRent affiliate program, e.g. viatico. Only for an app or agent that has one; leave out otherwise. With it, every offer and city URL goes through the partner tracking link, so a booking made from it is credited to the partner."
+     },
+     "partner_sub_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,80}$",
+      "description": "Optional channel label for the partner report, e.g. chat_app. Letters, digits, underscores, hyphens; only with partner."
+     }
+    },
+    "required": [
+     "pickup_date",
+     "return_date"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

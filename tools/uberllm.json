@@ -1,0 +1,466 @@
+{
+ "server": "UberLLM",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "balance",
+   "title": "Balance",
+   "description": "Your balance in US dollars: what you can spend now and what is held for requests and jobs still running.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "edit_image",
+   "title": "Edit an image",
+   "description": "Change a picture you give (image_url or input_images, as https:// links or data: URIs) following a prompt, with an editing model. Spends from your balance.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "An image model id."
+     },
+     "prompt": {
+      "type": "string",
+      "description": "What to make."
+     },
+     "n": {
+      "type": "integer",
+      "description": "How many pictures, 1 to 10. Default 1."
+     },
+     "size": {
+      "type": "string",
+      "description": "Width x height, e.g. 1024x1024, when the model lists sizes."
+     },
+     "aspect_ratio": {
+      "type": "string",
+      "description": "Shape, e.g. 16:9, when the model lists aspect ratios."
+     },
+     "max_cost": {
+      "type": "number",
+      "description": "Optional: leave it out unless the user set a budget. To cap the cost, send quote's max_cost_usd (what is held while it runs), never its cost_usd: a max_cost below what can be held is refused before anything is spent."
+     },
+     "return_image": {
+      "type": "boolean",
+      "description": "Also return the pictures themselves in the answer, so you can look at them."
+     },
+     "kit": {
+      "type": "string",
+      "description": "The id (kit_...) or name of one of your brand kits (list_kits): its pictures, style notes and voice go into this request, so the same character, product or look comes back from any model."
+     },
+     "options": {
+      "type": "object",
+      "description": "Any other option from get_model's parameters schema.",
+      "additionalProperties": true
+     },
+     "image_url": {
+      "type": "string",
+      "description": "The picture to change: an https:// link or a data: URI."
+     },
+     "input_images": {
+      "type": [
+       "null",
+       "array"
+      ],
+      "items": {
+       "type": "string"
+      },
+      "description": "Several pictures to work from (https:// links or data: URIs)."
+     }
+    },
+    "required": [
+     "model",
+     "prompt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "generate_image",
+   "title": "Make an image",
+   "description": "Make pictures from a prompt. Spends from your balance; the answer carries the links and what it cost (usage.cost_usd). The links open in any browser for 6 hours: show them to the user.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "An image model id."
+     },
+     "prompt": {
+      "type": "string",
+      "description": "What to make."
+     },
+     "n": {
+      "type": "integer",
+      "description": "How many pictures, 1 to 10. Default 1."
+     },
+     "size": {
+      "type": "string",
+      "description": "Width x height, e.g. 1024x1024, when the model lists sizes."
+     },
+     "aspect_ratio": {
+      "type": "string",
+      "description": "Shape, e.g. 16:9, when the model lists aspect ratios."
+     },
+     "max_cost": {
+      "type": "number",
+      "description": "Optional: leave it out unless the user set a budget. To cap the cost, send quote's max_cost_usd (what is held while it runs), never its cost_usd: a max_cost below what can be held is refused before anything is spent."
+     },
+     "return_image": {
+      "type": "boolean",
+      "description": "Also return the pictures themselves in the answer, so you can look at them."
+     },
+     "kit": {
+      "type": "string",
+      "description": "The id (kit_...) or name of one of your brand kits (list_kits): its pictures, style notes and voice go into this request, so the same character, product or look comes back from any model."
+     },
+     "options": {
+      "type": "object",
+      "description": "Any other option from get_model's parameters schema.",
+      "additionalProperties": true
+     }
+    },
+    "required": [
+     "model",
+     "prompt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_job",
+   "title": "Get a job",
+   "description": "The status of a video or music job, its progress and, once it succeeded, the links to its files and what it cost.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "job_id": {
+      "type": "string",
+      "description": "The job id start_video or start_music returned."
+     }
+    },
+    "required": [
+     "job_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_model",
+   "title": "Get a model",
+   "description": "One model: its price, what it makes and, for an image, video, music or speech model, a JSON Schema of the options a request takes (parameters).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "The model id, e.g. bytedance/seedance-2-0-fast-image-to-video."
+     }
+    },
+    "required": [
+     "model"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_kits",
+   "title": "List my brand kits",
+   "description": "Your brand kits: named sets of reference pictures (faces, products), style notes and a voice. Pass a kit's id or name as kit to generate_image, edit_image, start_video or start_music to keep the same character, product or look across models. Make and edit kits at https://martllm.com/dashboard/kits.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_library",
+   "title": "List my library",
+   "description": "Files kept in your library (pictures, videos and audio you made, when the account keeps a library), newest first. Filter by kind (image, video, audio), model, project id or none, and pass next_cursor to page. Each file has a download link that works for an hour; a picture's id (file_...) can be the source image of a new request.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "description": "Only files of this kind: image, video or audio.",
+      "enum": [
+       "image",
+       "video",
+       "audio"
+      ]
+     },
+     "model": {
+      "type": "string",
+      "description": "Only files made with this model id."
+     },
+     "project": {
+      "type": "string",
+      "description": "Only files in this project id, or none for files in no project."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "The next_cursor of the previous page."
+     },
+     "limit": {
+      "type": "integer",
+      "description": "How many files, 1 to 200 (60 when left out)."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_models",
+   "title": "List models",
+   "description": "Models you can call right now, with their price. Filter by type (chat, image, video, music, speech, transcription) and by words in the id or name.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "Only models of this type: chat, image, video, music, speech or transcription.",
+      "enum": [
+       "chat",
+       "image",
+       "video",
+       "music",
+       "speech",
+       "transcription"
+      ]
+     },
+     "search": {
+      "type": "string",
+      "description": "Only models whose id or name contains these words, e.g. seedance or kling."
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "quote",
+   "title": "Quote a request",
+   "description": "Check an image, video, music or text-to-speech request against the model and price it, without making anything or spending. Returns the listed price (cost_usd; the bill is what the provider charges, which can be less or more) and what is held while it runs (max_cost_usd: it is never billed more). To cap a request, pass max_cost_usd as its max_cost (cost_usd is too low and is refused).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "The model id."
+     },
+     "prompt": {
+      "type": "string",
+      "description": "What to make."
+     },
+     "options": {
+      "type": "object",
+      "description": "The rest of the request, as get_model's parameters schema describes it, e.g. {\"duration_seconds\": 5, \"image_url\": \"https://...\"}.",
+      "additionalProperties": true
+     }
+    },
+    "required": [
+     "model"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "start_music",
+   "title": "Start a music track",
+   "description": "Start making music or a sound effect with a music model. Returns a job; call wait_job with its id until it is done. Spends from your balance when the track is made; a failed job costs nothing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "A music model id."
+     },
+     "prompt": {
+      "type": "string",
+      "description": "What to make."
+     },
+     "duration_seconds": {
+      "type": "number",
+      "description": "Length in seconds, when get_model lists lengths."
+     },
+     "max_cost": {
+      "type": "number",
+      "description": "Optional: leave it out unless the user set a budget. To cap the cost, send quote's max_cost_usd (what is held while it runs), never its cost_usd: a max_cost below what can be held is refused before anything is spent."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "description": "Send the same key when you retry, so a retry never starts or pays for a second track."
+     },
+     "kit": {
+      "type": "string",
+      "description": "The id (kit_...) or name of one of your brand kits (list_kits): its style notes (and voice, where the model has it) go into this request."
+     },
+     "options": {
+      "type": "object",
+      "description": "Any other option from get_model's parameters schema.",
+      "additionalProperties": true
+     }
+    },
+    "required": [
+     "model",
+     "prompt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "start_video",
+   "title": "Start a video",
+   "description": "Start making a video. Returns a job; call wait_job with its id until it is done. Spends from your balance when the video is made; a failed job costs nothing.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "model": {
+      "type": "string",
+      "description": "A video model id."
+     },
+     "prompt": {
+      "type": "string",
+      "description": "What to make."
+     },
+     "image_url": {
+      "type": "string",
+      "description": "The first frame (https:// link or data: URI); needed by image-to-video models."
+     },
+     "end_image_url": {
+      "type": "string",
+      "description": "The last frame, for models that make a transition."
+     },
+     "duration_seconds": {
+      "type": "number",
+      "description": "Length in seconds; one of the lengths get_model lists."
+     },
+     "resolution": {
+      "type": "string",
+      "description": "e.g. 720p, when the model lists resolutions."
+     },
+     "aspect_ratio": {
+      "type": "string",
+      "description": "e.g. 16:9, when the model lists aspect ratios."
+     },
+     "max_cost": {
+      "type": "number",
+      "description": "Optional: leave it out unless the user set a budget. To cap the cost, send quote's max_cost_usd (what is held while it runs), never its cost_usd: a max_cost below what can be held is refused before anything is spent."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "description": "Send the same key when you retry, so a retry never starts or pays for a second video."
+     },
+     "kit": {
+      "type": "string",
+      "description": "The id (kit_...) or name of one of your brand kits (list_kits): its pictures, style notes and voice go into this request, so the same character, product or look comes back from any model."
+     },
+     "options": {
+      "type": "object",
+      "description": "Any other option from get_model's parameters schema.",
+      "additionalProperties": true
+     }
+    },
+    "required": [
+     "model",
+     "prompt"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "wait_job",
+   "title": "Wait for a job",
+   "description": "Wait until a video or music job ends, for at most timeout_seconds (50 at most). Returns the job; if done is false, call wait_job again.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "job_id": {
+      "type": "string",
+      "description": "The job id start_video or start_music returned."
+     },
+     "timeout_seconds": {
+      "type": "integer",
+      "description": "How long to wait, 1 to 50 seconds. Default 50."
+     }
+    },
+    "required": [
+     "job_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

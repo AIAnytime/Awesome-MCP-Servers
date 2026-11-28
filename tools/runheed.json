@@ -1,0 +1,394 @@
+{
+ "server": "Runheed",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "runheed_create_project",
+   "title": "Create a project",
+   "description": "Creates a project in the workspace and returns its DSN: the value an app sets as the RUNHEED_DSN environment variable so that runheed.init() reports its errors to this project.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Project name, usually the app or service name, for example shop-api"
+     },
+     "platform": {
+      "description": "The app's platform",
+      "type": "string",
+      "enum": [
+       "node",
+       "python",
+       "react",
+       "react-native",
+       "ios",
+       "android",
+       "other"
+      ]
+     },
+     "slug": {
+      "description": "Optional URL-safe slug; derived from the name when left out",
+      "type": "string",
+      "maxLength": 50,
+      "pattern": "^[a-z0-9-]+$"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_get_error",
+   "title": "Get an error",
+   "description": "Returns one error group in full: message, status, counts, first and last seen, environment, agent context, the top stack frames and the latest breadcrumbs. If the error came back after it was marked resolved, it also shows the note it was resolved with, so you can see what the last fix tried. For a resolved error it reports whether the fix held: events since, releases deployed since and whether the fixing commit is live.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "errorId": {
+      "type": "string",
+      "description": "The error ID to get details for"
+     }
+    },
+    "required": [
+     "errorId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_get_error_context",
+   "title": "Get error context",
+   "description": "Returns everything recorded around an error: every breadcrumb, platform, runtime, OS, environment, release, the affected user, the agent session and extra data.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "errorId": {
+      "type": "string",
+      "description": "The error ID to get context for"
+     }
+    },
+    "required": [
+     "errorId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_get_project_health",
+   "title": "Get project health",
+   "description": "Returns a 0 to 100 health score for a project (or the whole workspace), errors in the last 24 hours, the unresolved count, the error rate, recent issues and recommendations.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "description": "Project id or slug (e.g. shop-api); all projects if not specified",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_get_recent",
+   "title": "Get recent errors",
+   "description": "Returns the error groups seen most recently, newest first, with status, type, message, route, top stack frame, event count, last-seen time and ID.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "limit": {
+      "default": 10,
+      "description": "Number of recent errors to return",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 50
+     },
+     "projectId": {
+      "description": "Filter by project id or slug (e.g. shop-api)",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_get_trends",
+   "title": "Get error trends",
+   "description": "Returns error statistics for the last 24 hours, 7 days or 30 days: total, new and resolved counts, the most frequent errors and the hourly error rate.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "period": {
+      "default": "24h",
+      "description": "Time period to analyze",
+      "type": "string",
+      "enum": [
+       "24h",
+       "7d",
+       "30d"
+      ]
+     },
+     "projectId": {
+      "description": "Filter by project id or slug (e.g. shop-api)",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_ignore_error",
+   "title": "Ignore an error",
+   "description": "Marks one error group ignored (errorId), or up to 100 at once (errorIds), for known or expected errors such as browser noise, so new occurrences stop alerting. Returns what changed.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "errorId": {
+      "description": "The error ID to ignore",
+      "type": "string"
+     },
+     "errorIds": {
+      "description": "Several error IDs to ignore with the same reason (up to 100)",
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "reason": {
+      "description": "Reason for ignoring this error",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_list_projects",
+   "title": "List projects",
+   "description": "Lists the workspace's projects with each project's ID, slug, platform and DSN (the value an app sets as RUNHEED_DSN to report errors).",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_merge_errors",
+   "title": "Merge duplicate errors",
+   "description": "Merges error groups that are the same bug into one: their events move to the target group (targetId) and new events with their fingerprints join it too. With groupByMessagePrefix, new events of the target's type whose message starts with that text also join it, for messages that differ only by an ID or a number. Returns what was merged.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "targetId": {
+      "type": "string",
+      "description": "The error group to keep"
+     },
+     "errorIds": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Error groups to merge into the target (same project)"
+     },
+     "groupByMessagePrefix": {
+      "description": "Optional message prefix: new events of the target's type whose message starts with it are grouped into the target",
+      "type": "string"
+     }
+    },
+    "required": [
+     "targetId",
+     "errorIds"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_resolve_error",
+   "title": "Resolve an error",
+   "description": "Marks one error group resolved (errorId), or up to 100 at once (errorIds) for duplicates fixed by the same change, with an optional note such as the fixing commit. A group reopens on its own if the error happens again. Returns what changed.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "errorId": {
+      "description": "The error ID to resolve",
+      "type": "string"
+     },
+     "errorIds": {
+      "description": "Several error IDs to resolve with the same note (up to 100)",
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "comment": {
+      "description": "Optional comment about the fix",
+      "type": "string"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_search_errors",
+   "title": "Search errors",
+   "description": "Searches the workspace's error groups by text (type, message, route, file or extra data), status, project and release (including only the errors a release introduced). Returns each matching group with its status, type, message, route, top stack frame, event count, last-seen time and ID.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "query": {
+      "description": "Text to find in the error type, message, route, stack frames or extra data, for example a route or a file name",
+      "type": "string"
+     },
+     "status": {
+      "description": "Filter by error status",
+      "type": "string",
+      "enum": [
+       "unresolved",
+       "resolved",
+       "ignored"
+      ]
+     },
+     "projectId": {
+      "description": "Filter by project id or slug (e.g. shop-api)",
+      "type": "string"
+     },
+     "release": {
+      "description": "Only errors with an event from this release (the release value the app passes to init, often a commit SHA)",
+      "type": "string"
+     },
+     "newInRelease": {
+      "description": "With release: only errors that first appeared in that release, to check what a deploy introduced",
+      "type": "boolean"
+     },
+     "limit": {
+      "default": 20,
+      "description": "Maximum number of errors to return",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_send_test_event",
+   "title": "Send a test event",
+   "description": "Sends one test error (RunheedTestEvent) to a project through the normal ingest path, which shows whether the project and its send key work. The test error appears in the recent errors and can be resolved like any other.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "projectId": {
+      "type": "string",
+      "description": "Project id or slug"
+     }
+    },
+    "required": [
+     "projectId"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "runheed_unignore_error",
+   "title": "Stop ignoring an error",
+   "description": "Moves one ignored error group (errorId), or up to 100 (errorIds), back to unresolved, so new occurrences alert again. Returns what changed.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+     "errorId": {
+      "description": "The error ID to unignore",
+      "type": "string"
+     },
+     "errorIds": {
+      "description": "Several error IDs to unignore (up to 100)",
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

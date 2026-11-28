@@ -1,0 +1,190 @@
+{
+ "server": "Callejear Germany",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "callejear_compare_streets",
+   "title": "Straßenkontexte gegenüberstellen",
+   "description": "Zwei bis fünf historische Straßenkontexte nebeneinander. Wegen ungeprüfter Identität und Quelldaten keine Rangfolge oder belastbare Differenzbewertung.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "street_ids": {
+      "minItems": 2,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "pattern": "^de:legacy:[a-f0-9]{12}$"
+      }
+     },
+     "dimensions": {
+      "minItems": 1,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "services.supermarkets",
+        "services.pharmacies",
+        "services.bakeries",
+        "services.cafes"
+       ]
+      }
+     }
+    },
+    "required": [
+     "street_ids"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "callejear_get_coverage",
+   "title": "Abdeckung Deutschland",
+   "description": "Zahlen und Grenzen des historischen Katalogs aller 16 Bundesländer. Keine Garantie amtlicher Vollständigkeit, aktueller Veröffentlichung oder Indexierung.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "city_id": {
+      "type": "string",
+      "pattern": "^\\d{12}$"
+     }
+    },
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "callejear_get_street_context",
+   "title": "Straßenkontext lesen",
+   "description": "Partielle historische OSM-Beobachtungen im 500-m-Luftlinienradius des gespeicherten Mittelpunkts. Keine aktuelle Versorgungsgarantie. Null ist unbekannt, kein Nullbestand.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "street_id": {
+      "type": "string",
+      "pattern": "^de:legacy:[a-f0-9]{12}$"
+     },
+     "dimensions": {
+      "minItems": 1,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "services.supermarkets",
+        "services.pharmacies",
+        "services.bakeries",
+        "services.cafes"
+       ]
+      }
+     }
+    },
+    "required": [
+     "street_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "callejear_search_municipalities",
+   "title": "Gemeinde suchen",
+   "description": "Gemeinde nach Namen oder historischem 12-stelligem Verwaltungsschlüssel suchen. Kein amtlich validierter 8-stelliger AGS. Gleichnamige Gemeinden nach Bundesland unterscheiden.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+     },
+     "limit": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "callejear_search_streets",
+   "title": "Straße suchen",
+   "description": "Textsuche innerhalb einer Gemeinde. Historische Datensatz-ID, keine Garantie einer eindeutigen realen Straße. Kataloglinks sind nicht live geprüft.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+     },
+     "limit": {
+      "default": 5,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+     },
+     "city_id": {
+      "type": "string",
+      "pattern": "^\\d{12}$"
+     }
+    },
+    "required": [
+     "query",
+     "city_id"
+    ],
+    "additionalProperties": false
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

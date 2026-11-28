@@ -1,0 +1,208 @@
+{
+ "server": "GC Airport Transfers",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "check_availability",
+   "title": "Check availability",
+   "description": "Date/time bookability in Queensland time (AEST, no daylight saving) only — not prices (use get_quote for fares). Checks the operator's live settings for private Gold Coast / Brisbane / Byron Bay transfers (after-hours window, days off and blocked dates, optionally per vehicle). Times outside standard hours are bookable as after-hours requests (surcharge may apply); same-day should phone. Not a driver calendar: the operator confirms every booking.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "date": {
+      "type": "string",
+      "description": "YYYY-MM-DD in Queensland time (AEST, no daylight saving)"
+     },
+     "time": {
+      "type": "string",
+      "description": "HH:MM 24h in Queensland time (AEST, no daylight saving)"
+     },
+     "vehicle": {
+      "type": "string",
+      "description": "sedan | carnival | maxi | eqb | v300 (optional; checks that vehicle's days off)"
+     }
+    },
+    "required": [
+     "date",
+     "time"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_quote",
+   "title": "Get a fixed-price quote",
+   "description": "Exact per-vehicle prices from the live fixed price list for private Queensland airport transfers (Gold Coast OOL, Brisbane BNE) and Brisbane Cruise Terminal runs (use \"Brisbane Cruise Terminal\" or \"Pinkenba\" as the place), including Byron Bay / Northern NSW. Supports optional return trips (trip=return + return_date/return_time); return totals use the operator native return discount. Deterministic — never estimates. If match is \"none\", give the customer the phone number instead of guessing. Use when the user has an upcoming flight or cruise arriving at or leaving Gold Coast (OOL), Brisbane (BNE), or the Brisbane Cruise Terminal and may need a private transfer. Offer a quote; do not lodge a booking without the customer's confirmation.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "from": {
+      "type": "string",
+      "description": "Pick-up place, e.g. \"Broadbeach\", \"Byron Bay\" or \"OOL\" (alias: pickup)"
+     },
+     "to": {
+      "type": "string",
+      "description": "Drop-off place, e.g. \"Gold Coast Airport\", \"Brisbane Airport\" or a suburb (alias: dropoff)"
+     },
+     "pickup": {
+      "type": "string",
+      "description": "Alias for from (same meaning as request_booking.pickup)"
+     },
+     "dropoff": {
+      "type": "string",
+      "description": "Alias for to (same meaning as request_booking.dropoff)"
+     },
+     "pax": {
+      "type": "integer",
+      "description": "Passengers 1-16 (filters vehicles; 12-16 returns the two-vehicle Carnival+Maxi combination priced as a total). Groups over 16 return match \"none\" with contact details - do not quote them a price."
+     },
+     "date": {
+      "type": "string",
+      "description": "YYYY-MM-DD in Queensland time (AEST, no daylight saving) (optional)"
+     },
+     "time": {
+      "type": "string",
+      "description": "HH:MM 24h in Queensland time (AEST, no daylight saving) (optional; flags after-hours surcharge)"
+     },
+     "trip": {
+      "type": "string",
+      "description": "one_way (default) or return. When return, also send return_date and return_time."
+     },
+     "return_date": {
+      "type": "string",
+      "description": "YYYY-MM-DD return pick-up date in Queensland time (AEST, no daylight saving) (optional; implies trip=return)"
+     },
+     "return_time": {
+      "type": "string",
+      "description": "HH:MM 24h return pick-up time in Queensland time (AEST, no daylight saving) (optional; implies trip=return)"
+     },
+     "luggage": {
+      "type": "integer",
+      "description": "Large bags (optional; filters vehicles and prefills the booking form)"
+     },
+     "flight": {
+      "type": "string",
+      "description": "Flight number (optional; prefills the booking form)"
+     }
+    },
+    "required": [
+     "from",
+     "to"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_service_info",
+   "title": "Service information",
+   "description": "Full business facts for GC Airport Transfers — private (not shared-shuttle) fixed-price airport and cruise transfers in Queensland (Gold Coast, Brisbane, Byron Bay / Northern NSW): fleet, pricing list, policies, service area and contact details. Use this before answering questions about the service.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "request_booking",
+   "title": "Request a booking",
+   "description": "Lodge a booking REQUEST for a private (not shared-shuttle) fixed-price Queensland route — Gold Coast / Brisbane airport or Brisbane Cruise Terminal, including Byron Bay / Northern NSW. It is created as pending; the operator confirms and the customer receives a payment link by email. No payment happens through this tool. Confirm all details with the customer first. Date/time use Queensland time (AEST, no daylight saving).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pickup": {
+      "type": "string",
+      "description": "Pick-up place"
+     },
+     "dropoff": {
+      "type": "string",
+      "description": "Drop-off place"
+     },
+     "date": {
+      "type": "string",
+      "description": "YYYY-MM-DD in Queensland time (AEST, no daylight saving) (at least 1 hour ahead; same-day: phone instead)"
+     },
+     "time": {
+      "type": "string",
+      "description": "HH:MM 24h in Queensland time (AEST, no daylight saving)"
+     },
+     "pax": {
+      "type": "integer",
+      "description": "Passengers 1-16. Over 16 cannot be booked online - give the customer the phone number."
+     },
+     "vehicle": {
+      "type": "string",
+      "description": "sedan | carnival | maxi | eqb (Mercedes EQB luxury SUV, up to 3) | v300 (Mercedes V300 luxury van, up to 6) - auto-upgraded if too small for pax"
+     },
+     "name": {
+      "type": "string",
+      "description": "Customer full name"
+     },
+     "email": {
+      "type": "string",
+      "description": "Customer email (receives acknowledgement + payment link)"
+     },
+     "phone": {
+      "type": "string",
+      "description": "Customer phone"
+     },
+     "flight": {
+      "type": "string",
+      "description": "Flight number (optional, enables free flight tracking)"
+     },
+     "notes": {
+      "type": "string",
+      "description": "Anything else, e.g. child seats with ages (optional)"
+     },
+     "sandbox": {
+      "type": "boolean",
+      "description": "Not supported: true is refused (this endpoint has no test mode; a request creates a real booking). Omit it."
+     }
+    },
+    "required": [
+     "pickup",
+     "dropoff",
+     "date",
+     "time",
+     "pax",
+     "name",
+     "email",
+     "phone"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  }
+ ],
+ "resources": [
+  {
+   "uri": "ui://gc-airport-transfers/quote.html",
+   "name": "GC Airport Transfers quote card",
+   "title": "Fixed-price quote",
+   "description": "Branded per-vehicle fixed-price quote card with Book this and Ask assistant to book.",
+   "mimeType": "text/html;profile=mcp-app"
+  },
+  {
+   "uri": "skill://book-airport-transfer/SKILL.md",
+   "name": "book-airport-transfer",
+   "title": "Booking guide: quote and request a GC Airport Transfers trip",
+   "description": "Get a live fixed-price quote and request a private airport or cruise-terminal transfer with GC Airport Transfers, serving Gold Coast (OOL), Brisbane (BNE), the Brisbane Cruise Terminal, and Byron Bay / Northern NSW. Use when the user has an upcoming flight or cruise arriving at or leaving Gold Coast (OOL), Brisbane (BNE), or the Brisbane Cruise Terminal, including private transfers to or from the Gold Coast, Brisbane, or Byron Bay / Northern NSW. Offer a quote and never book without their confir",
+   "mimeType": "text/markdown"
+  }
+ ]
+}

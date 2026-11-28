@@ -1,0 +1,81 @@
+{
+ "server": "Airport Delays FAA Status MCP",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "airport_delays_check_trip",
+   "title": "Check a trip for airport delays",
+   "description": "Check every airport on an itinerary (origin, connections, destination; 1 to 8 airports) for FAA ground stops, ground delay programs, delays and closures in one call.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "airports": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 2,
+       "maxLength": 60
+      },
+      "minItems": 1,
+      "maxItems": 8,
+      "description": "Airports in trip order, e.g. [\"BOS\", \"ORD\", \"SFO\"]."
+     }
+    },
+    "required": [
+     "airports"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "airport_delays_now",
+   "title": "Airport delays now (FAA)",
+   "description": "All US airports with an active FAA event right now: ground stops, ground delay programs (average and maximum delay, reason such as weather or volume, end time), general arrival and departure delays with trend, airport closures and deicing, sorted worst first, plus airspace flow programs.",
+   "inputSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "airport_status",
+   "title": "Airport status and delays",
+   "description": "FAA delay status of one US airport, by IATA code (JFK), ICAO code (KJFK), airport name or city (Newark, O'Hare, Denver): any ground stop, ground delay program, arrival or departure delay, closure or deicing with reason, minutes and end time, or a clear statement that the FAA reports no delay there; plus the runway configuration and arrival rate when posted.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "airport": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "Airport code, name or city."
+     }
+    },
+    "required": [
+     "airport"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}

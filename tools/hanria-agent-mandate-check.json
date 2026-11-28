@@ -1,0 +1,634 @@
+{
+ "server": "HANRIA Agent Mandate Check",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "check_action",
+   "title": "Check an agent action against a mandate",
+   "description": "Call this before your agent does something consequential (sends, pays, deletes, publishes, installs or changes access). Pass mandate (the operator's rules; the first matching clause decides) and action (kind, verb, target, optional counterparty and amount). Returns permit, deny or escalate with the governing clause, a reason, an action digest and a signed receipt; treat error as deny. Advisory: it cannot stop an action, and it keeps no request content. To check a new mandate first, call validate_mandate. Examples: inputSchema. Docs: https://hanria.ai/llms.txt",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mandate": {
+      "title": "HANRIA mandate",
+      "description": "An operator-authored statement of what an agent may do. Written by a person, read by an agent, evaluated locally. A mandate is advisory: it describes intended authority and supports a local check, but it does not enforce anything. Enforcement requires a component that exclusively holds the credentials and can refuse.",
+      "type": "object",
+      "required": [
+       "schema_version",
+       "mandate_id",
+       "purpose",
+       "default",
+       "clauses"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "schema_version": {
+        "const": "0.2-draft",
+        "description": "Draft. The shape may change while the runtime is in development."
+       },
+       "mandate_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Stable identifier for this mandate. Appears in every decision record made against it."
+       },
+       "issued_by": {
+        "type": "string",
+        "description": "Who wrote this mandate. Free text; not authenticated by anything in this skill."
+       },
+       "purpose": {
+        "type": "string",
+        "minLength": 1,
+        "description": "What the agent is authorized to accomplish, in the operator's own words. Not evaluated mechanically; it is the human-readable statement against which a reviewer judges whether the clauses actually express the intent."
+       },
+       "not_valid_after": {
+        "type": "string",
+        "format": "date-time",
+        "description": "RFC 3339 timestamp. After this instant every action is denied. Absent means no expiry, which is discouraged: an unbounded mandate is the condition that lets delegated authority outlive the task it was granted for."
+       },
+       "default": {
+        "enum": [
+         "deny",
+         "escalate"
+        ],
+        "description": "What happens when no clause matches. 'permit' is deliberately not an option: a mandate that permits by default cannot express a limit."
+       },
+       "requires_human": {
+        "type": "array",
+        "description": "Operation kinds that always require a person, even where a clause permits them. These escalate rather than permit.",
+        "items": {
+         "enum": [
+          "file",
+          "process",
+          "package",
+          "network",
+          "device",
+          "credential_use",
+          "transaction",
+          "administrative"
+         ]
+        },
+        "minItems": 0
+       },
+       "clauses": {
+        "type": "array",
+        "minItems": 1,
+        "description": "Evaluated in order. The first matching clause decides. A request matching no clause takes the mandate default.",
+        "items": {
+         "type": "object",
+         "required": [
+          "id",
+          "effect",
+          "match"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "id": {
+           "type": "string",
+           "minLength": 1,
+           "description": "Identifier for this clause. Returned with every decision so a reviewer can see which sentence of the mandate was relied on."
+          },
+          "effect": {
+           "enum": [
+            "permit",
+            "deny",
+            "escalate"
+           ],
+           "description": "What this clause does when it matches."
+          },
+          "note": {
+           "type": "string",
+           "description": "Why this clause exists. Carried into the decision record verbatim."
+          },
+          "match": {
+           "type": "object",
+           "required": [
+            "kind"
+           ],
+           "additionalProperties": false,
+           "description": "All present conditions must hold for the clause to match.",
+           "properties": {
+            "kind": {
+             "type": "array",
+             "minItems": 1,
+             "description": "Operation kinds this clause covers.",
+             "items": {
+              "enum": [
+               "file",
+               "process",
+               "package",
+               "network",
+               "device",
+               "credential_use",
+               "transaction",
+               "administrative"
+              ]
+             }
+            },
+            "verb": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "Permitted verbs, matched case-insensitively and exactly. Absent means any verb.",
+             "minItems": 1
+            },
+            "target_prefix": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "The operation target must begin with one of these strings. Absent means any target. Prefix matching is deliberately literal: it does not resolve symlinks, normalize paths, or understand hostnames, so a target is compared as written.",
+             "minItems": 1
+            },
+            "counterparty": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "Permitted counterparties, matched exactly. Absent means any counterparty.",
+             "minItems": 1
+            },
+            "max_amount": {
+             "type": "object",
+             "required": [
+              "value",
+              "currency"
+             ],
+             "additionalProperties": false,
+             "description": "Ceiling for an operation carrying an amount. A request above it does not match this clause.",
+             "properties": {
+              "value": {
+               "type": "string",
+               "description": "Decimal as a string, to avoid float error."
+              },
+              "currency": {
+               "type": "string"
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      },
+      "$comment": "A mandate names what may be done, not the means of doing it, and must never contain a credential, secret, key or token. The checker refuses a mandate carrying recognizable credential material rather than evaluating it, because anything in a clause note is copied into the decision record. That detection is a heuristic and cannot be complete."
+     },
+     "action": {
+      "title": "HANRIA action request",
+      "description": "A typed description of a proposed operation, submitted by an agent to a local HANRIA runtime. MUST NOT contain credentials, secrets, private keys, or tokens.",
+      "type": "object",
+      "required": [
+       "schema_version",
+       "requested_by",
+       "operation",
+       "justification"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "schema_version": {
+        "const": "0.1-draft",
+        "description": "Draft. The runtime does not exist; this shape may change."
+       },
+       "requested_by": {
+        "type": "object",
+        "required": [
+         "agent"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "agent": {
+          "type": "string",
+          "description": "Identifier of the requesting agent."
+         },
+         "session": {
+          "type": "string",
+          "description": "Optional session or task identifier."
+         },
+         "on_behalf_of": {
+          "type": "string",
+          "description": "Optional identifier of the human or system the agent acts for."
+         }
+        }
+       },
+       "operation": {
+        "type": "object",
+        "required": [
+         "kind",
+         "verb",
+         "target"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "kind": {
+          "enum": [
+           "file",
+           "process",
+           "package",
+           "network",
+           "device",
+           "credential_use",
+           "transaction",
+           "administrative"
+          ]
+         },
+         "target": {
+          "type": "string",
+          "description": "What the operation acts on. A path, host, package name, or resource identifier. NEVER a secret. Required for the same reason as the verb.",
+          "minLength": 1
+         },
+         "verb": {
+          "type": "string",
+          "description": "What is to be done to the target, e.g. read, write, execute, install, connect, sign, transfer. Required: an operation named only by its kind does not describe a proposed action well enough to be judged.",
+          "minLength": 1
+         },
+         "parameters": {
+          "type": "object",
+          "description": "Non-secret parameters. A runtime MUST reject any request whose parameters appear to contain a credential."
+         },
+         "amount": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "value": {
+            "type": "string",
+            "description": "Decimal as a string, to avoid float error.",
+            "minLength": 1
+           },
+           "currency": {
+            "type": "string",
+            "minLength": 1
+           }
+          },
+          "required": [
+           "value",
+           "currency"
+          ],
+          "description": "An amount. Both fields are required: a bare amount object describes nothing a ceiling could be compared against."
+         },
+         "counterparty": {
+          "type": "string"
+         }
+        }
+       },
+       "justification": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Why the agent believes this is within its mandate. Free text, for the record."
+       },
+       "mandate_ref": {
+        "type": "string",
+        "description": "Optional reference to the owner-defined mandate the agent believes authorizes this."
+       },
+       "idempotency_key": {
+        "type": "string",
+        "description": "Optional. Lets a runtime refuse a duplicate rather than perform an operation twice."
+       }
+      },
+      "$comment": "Forbidden anywhere in an instance: credential, secret, private_key, token, password, api_key. A runtime is expected to refuse a request containing them rather than strip them."
+     }
+    },
+    "required": [
+     "mandate",
+     "action"
+    ],
+    "additionalProperties": false,
+    "examples": [
+     {
+      "mandate": {
+       "schema_version": "0.2-draft",
+       "mandate_id": "minimal-permit",
+       "purpose": "Permit one file action.",
+       "default": "deny",
+       "clauses": [
+        {
+         "id": "permit-file",
+         "effect": "permit",
+         "match": {
+          "kind": [
+           "file"
+          ]
+         }
+        }
+       ]
+      },
+      "action": {
+       "schema_version": "0.1-draft",
+       "requested_by": {
+        "agent": "example-agent"
+       },
+       "operation": {
+        "kind": "file",
+        "verb": "read",
+        "target": "/tmp/example"
+       },
+       "justification": "Read the permitted file."
+      }
+     },
+     {
+      "mandate": {
+       "schema_version": "0.2-draft",
+       "mandate_id": "example-payments",
+       "purpose": "Permit small transfers to one named recipient on a test network.",
+       "default": "escalate",
+       "clauses": [
+        {
+         "id": "small-transfers",
+         "effect": "permit",
+         "match": {
+          "kind": [
+           "transaction"
+          ],
+          "verb": [
+           "transfer"
+          ],
+          "target_prefix": [
+           "eip155:11155111/0x1111111111111111111111111111111111111111/"
+          ],
+          "counterparty": [
+           "0x2222222222222222222222222222222222222222"
+          ],
+          "max_amount": {
+           "value": "100",
+           "currency": "USDC"
+          }
+         }
+        }
+       ]
+      },
+      "action": {
+       "schema_version": "0.1-draft",
+       "requested_by": {
+        "agent": "example-agent"
+       },
+       "operation": {
+        "kind": "transaction",
+        "verb": "transfer",
+        "target": "eip155:11155111/0x1111111111111111111111111111111111111111/transfer",
+        "counterparty": "0x2222222222222222222222222222222222222222",
+        "amount": {
+         "value": "25",
+         "currency": "USDC"
+        }
+       },
+       "justification": "Pay the invoiced supplier."
+      }
+     }
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "validate_mandate",
+   "title": "Check a mandate for errors",
+   "description": "Call this after writing or editing a mandate, before relying on it. Returns valid true or false with the reason: schema errors, clauses that can never run because an earlier clause already decides them, unbounded prefixes, credential material, and expiry. An invalid mandate makes every check_action call answer error. Once per mandate version is enough; there is no need to call it before every check_action. Free, and it keeps no request content. Docs: https://hanria.ai/llms.txt",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mandate": {
+      "title": "HANRIA mandate",
+      "description": "An operator-authored statement of what an agent may do. Written by a person, read by an agent, evaluated locally. A mandate is advisory: it describes intended authority and supports a local check, but it does not enforce anything. Enforcement requires a component that exclusively holds the credentials and can refuse.",
+      "type": "object",
+      "required": [
+       "schema_version",
+       "mandate_id",
+       "purpose",
+       "default",
+       "clauses"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "schema_version": {
+        "const": "0.2-draft",
+        "description": "Draft. The shape may change while the runtime is in development."
+       },
+       "mandate_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Stable identifier for this mandate. Appears in every decision record made against it."
+       },
+       "issued_by": {
+        "type": "string",
+        "description": "Who wrote this mandate. Free text; not authenticated by anything in this skill."
+       },
+       "purpose": {
+        "type": "string",
+        "minLength": 1,
+        "description": "What the agent is authorized to accomplish, in the operator's own words. Not evaluated mechanically; it is the human-readable statement against which a reviewer judges whether the clauses actually express the intent."
+       },
+       "not_valid_after": {
+        "type": "string",
+        "format": "date-time",
+        "description": "RFC 3339 timestamp. After this instant every action is denied. Absent means no expiry, which is discouraged: an unbounded mandate is the condition that lets delegated authority outlive the task it was granted for."
+       },
+       "default": {
+        "enum": [
+         "deny",
+         "escalate"
+        ],
+        "description": "What happens when no clause matches. 'permit' is deliberately not an option: a mandate that permits by default cannot express a limit."
+       },
+       "requires_human": {
+        "type": "array",
+        "description": "Operation kinds that always require a person, even where a clause permits them. These escalate rather than permit.",
+        "items": {
+         "enum": [
+          "file",
+          "process",
+          "package",
+          "network",
+          "device",
+          "credential_use",
+          "transaction",
+          "administrative"
+         ]
+        },
+        "minItems": 0
+       },
+       "clauses": {
+        "type": "array",
+        "minItems": 1,
+        "description": "Evaluated in order. The first matching clause decides. A request matching no clause takes the mandate default.",
+        "items": {
+         "type": "object",
+         "required": [
+          "id",
+          "effect",
+          "match"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "id": {
+           "type": "string",
+           "minLength": 1,
+           "description": "Identifier for this clause. Returned with every decision so a reviewer can see which sentence of the mandate was relied on."
+          },
+          "effect": {
+           "enum": [
+            "permit",
+            "deny",
+            "escalate"
+           ],
+           "description": "What this clause does when it matches."
+          },
+          "note": {
+           "type": "string",
+           "description": "Why this clause exists. Carried into the decision record verbatim."
+          },
+          "match": {
+           "type": "object",
+           "required": [
+            "kind"
+           ],
+           "additionalProperties": false,
+           "description": "All present conditions must hold for the clause to match.",
+           "properties": {
+            "kind": {
+             "type": "array",
+             "minItems": 1,
+             "description": "Operation kinds this clause covers.",
+             "items": {
+              "enum": [
+               "file",
+               "process",
+               "package",
+               "network",
+               "device",
+               "credential_use",
+               "transaction",
+               "administrative"
+              ]
+             }
+            },
+            "verb": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "Permitted verbs, matched case-insensitively and exactly. Absent means any verb.",
+             "minItems": 1
+            },
+            "target_prefix": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "The operation target must begin with one of these strings. Absent means any target. Prefix matching is deliberately literal: it does not resolve symlinks, normalize paths, or understand hostnames, so a target is compared as written.",
+             "minItems": 1
+            },
+            "counterparty": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             },
+             "description": "Permitted counterparties, matched exactly. Absent means any counterparty.",
+             "minItems": 1
+            },
+            "max_amount": {
+             "type": "object",
+             "required": [
+              "value",
+              "currency"
+             ],
+             "additionalProperties": false,
+             "description": "Ceiling for an operation carrying an amount. A request above it does not match this clause.",
+             "properties": {
+              "value": {
+               "type": "string",
+               "description": "Decimal as a string, to avoid float error."
+              },
+              "currency": {
+               "type": "string"
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      },
+      "$comment": "A mandate names what may be done, not the means of doing it, and must never contain a credential, secret, key or token. The checker refuses a mandate carrying recognizable credential material rather than evaluating it, because anything in a clause note is copied into the decision record. That detection is a heuristic and cannot be complete."
+     }
+    },
+    "required": [
+     "mandate"
+    ],
+    "additionalProperties": false,
+    "examples": [
+     {
+      "mandate": {
+       "schema_version": "0.2-draft",
+       "mandate_id": "minimal-permit",
+       "purpose": "Permit one file action.",
+       "default": "deny",
+       "clauses": [
+        {
+         "id": "permit-file",
+         "effect": "permit",
+         "match": {
+          "kind": [
+           "file"
+          ]
+         }
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "uri": "hanria://mandates/payments-ceiling",
+   "name": "payments-ceiling",
+   "title": "Payments ceiling",
+   "description": "Permit bounded on-chain transfers to named recipients and escalate everything else.",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "hanria://mandates/file-sandbox",
+   "name": "file-sandbox",
+   "title": "File sandbox",
+   "description": "Deny sensitive directories and permit reads and writes under one bounded directory.",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "hanria://mandates/outbound-email",
+   "name": "outbound-email",
+   "title": "Outbound email",
+   "description": "Permit network posts only to one mail API prefix.",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "hanria://mandates/deploy-gate",
+   "name": "deploy-gate",
+   "title": "Deploy gate",
+   "description": "Escalate administrative deploys to a person.",
+   "mimeType": "application/json"
+  },
+  {
+   "uri": "hanria://mandates/read-only-research",
+   "name": "read-only-research",
+   "title": "Read only research",
+   "description": "Permit network gets to HTTPS targets and deny every other action.",
+   "mimeType": "application/json"
+  }
+ ],
+ "prompts": [
+  {
+   "name": "write_mandate",
+   "description": "Write a mandate from the closest validated HANRIA template."
+  }
+ ]
+}

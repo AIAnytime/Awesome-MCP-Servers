@@ -1,0 +1,35 @@
+{
+ "server": "Nova Research (CIVAI)",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "search__converse",
+   "description": "Reply conversationally when the request is ambiguous or needs clarification.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "reply_hint": {
+      "type": "string",
+      "description": "Optional hint for the conversational reply."
+     }
+    }
+   }
+  },
+  {
+   "name": "search__search",
+   "description": "Run live Google search and summarize results.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   }
+  }
+ ],
+ "resources": []
+}

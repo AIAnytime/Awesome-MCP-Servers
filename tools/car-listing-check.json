@@ -1,0 +1,490 @@
+{
+ "server": "Car Listing Check",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "check_car_listing",
+   "title": "Check Car Listing",
+   "description": "Use this when the user supplies a dealer vehicle listing and wants a best-practice score, missing data and prioritised fixes. Accepts at least a title (up to 300 characters) or description (up to 20,000), optional fields and up to 100 photo URL strings or a count. It does not fetch or scrape any website, verify vehicle facts or inspect images. Results are English; German and English keywords are recognised. Do not use for retrieving listings, valuations, vehicle inspections, media generation or legal advice. No images or videos are generated. No listing is stored or changed; operational call metrics are logged. Recommendations are not portal limits or legal advice.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "anyOf": [
+     {
+      "required": [
+       "title"
+      ]
+     },
+     {
+      "required": [
+       "description"
+      ]
+     }
+    ],
+    "properties": {
+     "title": {
+      "type": "string",
+      "description": "Listing title; at least title or description must be nonblank.",
+      "examples": [
+       "Volkswagen Golf 1.5 TSI Automatic"
+      ],
+      "minLength": 1,
+      "maxLength": 300
+     },
+     "description": {
+      "type": "string",
+      "description": "User supplied listing text; at least title or description must be nonblank.",
+      "examples": [
+       "Condition: minor wear. Service records available."
+      ],
+      "minLength": 1,
+      "maxLength": 20000
+     },
+     "fields": {
+      "type": "object",
+      "description": "Optional factual vehicle data; omitted values are unknown. Never inferred as verified.",
+      "examples": [
+       {
+        "make": "Volkswagen",
+        "model": "Golf",
+        "mileage": 42000,
+        "mileage_unit": "km"
+       }
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "make": {
+        "type": "string",
+        "description": "Manufacturer.",
+        "examples": [
+         "Volkswagen"
+        ],
+        "minLength": 1,
+        "maxLength": 120
+       },
+       "model": {
+        "type": "string",
+        "description": "Model.",
+        "examples": [
+         "Golf"
+        ],
+        "minLength": 1,
+        "maxLength": 180
+       },
+       "variant": {
+        "type": "string",
+        "description": "Trim or engine variant.",
+        "examples": [
+         "1.5 TSI"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "price": {
+        "type": "number",
+        "description": "Full asking price, not a monthly payment.",
+        "examples": [
+         18900
+        ],
+        "minimum": 0,
+        "maximum": 100000000
+       },
+       "currency": {
+        "type": "string",
+        "description": "Three-letter currency code.",
+        "examples": [
+         "EUR"
+        ],
+        "minLength": 1,
+        "maxLength": 3,
+        "pattern": "^[A-Z]{3}$"
+       },
+       "first_registration": {
+        "type": "string",
+        "description": "First registration month, YYYY-MM; not model year.",
+        "examples": [
+         "2021-06"
+        ],
+        "minLength": 1,
+        "maxLength": 7,
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+       },
+       "model_year": {
+        "type": "integer",
+        "description": "Model year, particularly useful in US listings.",
+        "examples": [
+         2021
+        ],
+        "minimum": 0,
+        "maximum": 2100
+       },
+       "mileage": {
+        "type": "number",
+        "description": "Odometer reading; zero is valid.",
+        "examples": [
+         42000
+        ],
+        "minimum": 0,
+        "maximum": 10000000
+       },
+       "mileage_unit": {
+        "type": "string",
+        "description": "Odometer unit.",
+        "examples": [
+         "km"
+        ],
+        "minLength": 1,
+        "maxLength": 300,
+        "enum": [
+         "km",
+         "mi"
+        ]
+       },
+       "fuel_type": {
+        "type": "string",
+        "description": "Fuel or energy source.",
+        "examples": [
+         "Petrol"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "power_kw": {
+        "type": "number",
+        "description": "Rated power in kW.",
+        "examples": [
+         110
+        ],
+        "minimum": 0,
+        "maximum": 3000
+       },
+       "power_hp": {
+        "type": "number",
+        "description": "Rated power in hp.",
+        "examples": [
+         150
+        ],
+        "minimum": 0,
+        "maximum": 4000
+       },
+       "transmission": {
+        "type": "string",
+        "description": "Transmission type.",
+        "examples": [
+         "Automatic"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "body_type": {
+        "type": "string",
+        "description": "Body style.",
+        "examples": [
+         "Hatchback"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "color": {
+        "type": "string",
+        "description": "Exterior colour.",
+        "examples": [
+         "Blue"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "doors": {
+        "type": "integer",
+        "description": "Door count.",
+        "examples": [
+         5
+        ],
+        "minimum": 0,
+        "maximum": 10
+       },
+       "seats": {
+        "type": "integer",
+        "description": "Seat count.",
+        "examples": [
+         5
+        ],
+        "minimum": 0,
+        "maximum": 100
+       },
+       "previous_owners": {
+        "type": "integer",
+        "description": "Previous owner count.",
+        "examples": [
+         1
+        ],
+        "minimum": 0,
+        "maximum": 100
+       },
+       "condition": {
+        "type": "string",
+        "description": "New or used vehicle.",
+        "examples": [
+         "used"
+        ],
+        "minLength": 1,
+        "maxLength": 300,
+        "enum": [
+         "new",
+         "used"
+        ]
+       },
+       "accident_free": {
+        "type": "boolean",
+        "description": "Seller supplied accident-free statement; false means do not claim accident-free.",
+        "examples": [
+         true
+        ]
+       },
+       "service_history": {
+        "type": "string",
+        "description": "Documented service history or explicitly unknown.",
+        "examples": [
+         "Service records available"
+        ],
+        "minLength": 1,
+        "maxLength": 1000
+       },
+       "inspection_due": {
+        "type": "string",
+        "description": "Inspection expiry, e.g. HU/TÜV or MOT.",
+        "examples": [
+         "2027-06"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "vin_provided": {
+        "type": "boolean",
+        "description": "Whether a VIN is supplied in the listing; do not send the VIN here.",
+        "examples": [
+         true
+        ]
+       },
+       "consumption": {
+        "type": "string",
+        "description": "Applicable consumption figures including units/test cycle.",
+        "examples": [
+         "WLTP combined 5.8 l/100 km"
+        ],
+        "minLength": 1,
+        "maxLength": 1000
+       },
+       "co2": {
+        "type": "string",
+        "description": "Applicable CO2 emissions including units/test cycle.",
+        "examples": [
+         "WLTP 132 g/km"
+        ],
+        "minLength": 1,
+        "maxLength": 1000
+       },
+       "energy_efficiency": {
+        "type": "string",
+        "description": "Applicable energy-efficiency/CO2 class.",
+        "examples": [
+         "D"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "location": {
+        "type": "string",
+        "description": "Town or region only; no precise address required.",
+        "examples": [
+         "Berlin"
+        ],
+        "minLength": 1,
+        "maxLength": 300
+       },
+       "known_damage": {
+        "type": "boolean",
+        "description": "Known damage requiring description and photos.",
+        "examples": [
+         true
+        ]
+       },
+       "contact_provided": {
+        "type": "boolean",
+        "description": "Whether an actionable contact or viewing route is present.",
+        "examples": [
+         true
+        ]
+       }
+      }
+     },
+     "image_urls": {
+      "type": "array",
+      "description": "Image URL strings only, never fetched. If supplied, their count takes precedence over photo_count.",
+      "examples": [
+       [
+        "https://example.org/front_3_4.jpg"
+       ]
+      ],
+      "items": {
+       "type": "string",
+       "description": "Unfetched image URL.",
+       "examples": [
+        "https://example.org/front_3_4.jpg"
+       ],
+       "minLength": 1,
+       "maxLength": 2048
+      },
+      "maxItems": 100
+     },
+     "photo_count": {
+      "type": "integer",
+      "description": "Photo count when image_urls are unavailable.",
+      "examples": [
+       12
+      ],
+      "minimum": 0,
+      "maximum": 100
+     },
+     "photo_order": {
+      "type": "array",
+      "description": "Shot labels in actual order; takes precedence over filename hints.",
+      "examples": [
+       [
+        "front_3_4",
+        "side",
+        "rear"
+       ]
+      ],
+      "items": {
+       "type": "string",
+       "description": "Recognised shot label.",
+       "examples": [
+        "front_3_4"
+       ],
+       "minLength": 1,
+       "maxLength": 300,
+       "enum": [
+        "front_3_4",
+        "side",
+        "rear",
+        "interior_front",
+        "dashboard",
+        "odometer",
+        "trunk",
+        "wheels",
+        "engine",
+        "damage"
+       ]
+      },
+      "maxItems": 100
+     },
+     "video_url": {
+      "type": "string",
+      "description": "Video URL string; presence only, never fetched.",
+      "examples": [
+       "https://example.org/walkaround.mp4"
+      ],
+      "minLength": 1,
+      "maxLength": 2048
+     },
+     "has_walkaround_video": {
+      "type": "boolean",
+      "description": "Seller reports an actual walkaround video.",
+      "examples": [
+       true
+      ]
+     },
+     "market": {
+      "type": "string",
+      "description": "Market guidance and language hint (de/DE/at/AT/ch/CH: German; us/uk: English). Explicit language wins. DE uses German guidance; AT/CH use generic guidance; no legal compliance determination.",
+      "examples": [
+       "generic"
+      ],
+      "minLength": 1,
+      "maxLength": 300,
+      "enum": [
+       "de",
+       "DE",
+       "at",
+       "AT",
+       "ch",
+       "CH",
+       "us",
+       "uk",
+       "generic"
+      ],
+      "default": "generic"
+     },
+     "language": {
+      "type": "string",
+      "description": "Input language: de/en overrides market and text detection. Auto or omitted uses market first, then German/English text heuristics; generic gives no language hint. Results remain English.",
+      "examples": [
+       "auto"
+      ],
+      "minLength": 1,
+      "maxLength": 300,
+      "enum": [
+       "auto",
+       "de",
+       "en"
+      ],
+      "default": "auto"
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_car_listing_checklist",
+   "title": "Car Listing Checklist",
+   "description": "Use this when the user wants a static dealer vehicle-listing checklist for Germany, the US, the UK or a generic market, optionally for a new or used vehicle. Returns recommended fields, photo order, title pattern and description structure in English. It does not fetch or scrape any website or verify vehicle facts, and is not legal advice. No images or videos are generated. No listing is stored or changed; operational call metrics are logged. Do not use for checking live portal rules, retrieving ads, vehicle inspections or generating images or videos.",
+   "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "market": {
+      "type": "string",
+      "description": "Market guidance; no legal compliance determination.",
+      "examples": [
+       "generic"
+      ],
+      "minLength": 1,
+      "maxLength": 300,
+      "enum": [
+       "de",
+       "us",
+       "uk",
+       "generic"
+      ],
+      "default": "generic"
+     },
+     "vehicle_condition": {
+      "type": "string",
+      "description": "Vehicle condition; omitted means both.",
+      "examples": [
+       "used"
+      ],
+      "minLength": 1,
+      "maxLength": 300,
+      "enum": [
+       "new",
+       "used"
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

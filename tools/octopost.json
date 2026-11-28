@@ -1,0 +1,5678 @@
+{
+ "server": "Octopost",
+ "checked": "2026-11-28",
+ "tools": [
+  {
+   "name": "add_feed",
+   "title": "Add an RSS feed",
+   "description": "Turn an RSS or Atom feed (a blog, newsletter, changelog) into posts. Octopost reads it right away (a site address works if the page links its feed), then checks it every 30 minutes by default. Each new item becomes a post from the template.\n\nThe first check posts only the feed's latest item, so adding a feed never floods the account. By default (mode \"hold\") each new item waits for a person to approve it: Octopost emails the owner Approve / Reject / Edit links, so tell the user to check their email. With mode \"queue\" new items join the posting queue and publish in queue slots. At most 10 posts a day per feed; the same text to the same network within 7 days is skipped; a blocked term holds the post. Posts are shortened to fit each network (excerpt first, then title; the link stays whole).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "The feed URL (or the site address, if its page links a feed)."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Networks each new item is posted to. Call list_accounts first."
+     },
+     "template": {
+      "type": "string",
+      "description": "Optional. Post text with {title}, {url} and {excerpt} (a plain-text summary of the item). Default \"{title} {url}\"."
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "hold",
+       "queue"
+      ],
+      "description": "Optional. \"hold\" (default): each item waits for approval. \"queue\": items join the queue."
+     },
+     "name": {
+      "type": "string",
+      "description": "Optional. Default: the feed's own title."
+     },
+     "check_every_minutes": {
+      "type": "number",
+      "description": "Optional. How often to check, 15 to 1440 minutes. Default 30."
+     },
+     "accounts": {
+      "anyOf": [
+       {
+        "type": "object",
+        "additionalProperties": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Optional. Account to post as: {\"twitter\": \"@handle\"} or one handle. Default: each network's default."
+     }
+    },
+    "required": [
+     "url",
+     "platforms"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "approve_queued_post",
+   "title": "Approve a pending queued post",
+   "description": "Approve a post that is waiting for approval. Approval is meant for a person: by default this tool refuses, and the post has to be approved from the email Octopost sent or the dashboard. It only works when the account owner turned on \"Let agents approve posts made by a different agent\" in Settings, and never for a post your own key or connection made. Only call it when the user explicitly asked you to approve that specific post. If it refuses, tell the user the post is waiting for them and to check their email. Once approved, a queue post publishes in its queue slot and a scheduled post at its time.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to approve."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "cancel_scheduled",
+   "title": "Cancel a scheduled post",
+   "description": "Cancel a scheduled post, converting it to a draft. The post is kept in Octopost but will NOT be published at the scheduled time.\n\nGive it a new time later with reschedule_post. To publish it right away instead, call publish_draft.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) of the scheduled post to cancel."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_connect_link",
+   "title": "Link for someone to connect their account",
+   "description": "Make a link that lets someone else (a client, a teammate) connect their own social account to THIS Octopost account with no Octopost login. Give them the url; each account they connect shows up in list_accounts. Works 7 days by default, for up to 5 accounts. The url is shown once.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "label": {
+      "type": "string",
+      "description": "Who it is for, shown on the link page."
+     },
+     "networks": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Only these networks. Omit for any."
+     },
+     "expires_in_days": {
+      "type": "number",
+      "description": "1 to 30 (default 7)."
+     },
+     "max_accounts": {
+      "type": "number",
+      "description": "1 to 25 (default 5)."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_post",
+   "title": "Publish a post now",
+   "description": "Create and publish a post to one or more social media platforms immediately.\n\nOctopost handles formatting, auth and uploads. Which networks work today is in the server instructions (and get_guide topic \"platforms\").\n\nPLATFORM CONTENT LIMITS (checked before anything is published: if the text or any segment is too long for one of the networks, the call fails with the count and nothing goes out):\n- Twitter/X: 280 chars (URLs count as 23 chars). Can't mix video with images.\n- Bluesky: 300 graphemes. Octopost auto-generates link facets. Up to 4 images or one MP4 video (3 min max), not both.\n- LinkedIn: 3,000 chars.\n- Threads: 500 chars.\n- Mastodon: ~500 chars (varies by server; checked when publishing).\n\nTIPS:\n- If a platform fails, the post still succeeds on other platforms — check the response for per-platform results.\n- A slow publish (Threads with media can take minutes) answers after ~20 s with status \"publishing\" and carries on: check it with get_post. Pass an idempotency_key; if a call times out with no postId, retry with the same key (you get the original post, never a second).\n- Use cross_link_enabled + primary_platform to post to one platform first, then share the link on others.\n- Polls are supported on Twitter (2-4 options, 5 min to 7 day duration) and Mastodon.\n\nAPPROVAL: if the account requires approval for every post (an owner setting), create_post saves the post as pending_approval instead of publishing and the result says so. Tell the user to approve it from the email Octopost sends; don't approve it yourself. To ask for a review yourself, use queue_post or schedule_post with needs_approval=true.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "content": {
+      "type": "string",
+      "description": "The post text. Keep under 280 chars if posting to Twitter."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Which platforms to post to. Call list_accounts first to see what's connected."
+     },
+     "media_urls": {
+      "type": "array",
+      "items": {
+       "anyOf": [
+        {
+         "type": "string",
+         "description": "Public image or video URL (or a media_url from create_upload)."
+        },
+        {
+         "type": "object",
+         "properties": {
+          "url": {
+           "type": "string",
+           "description": "Public image or video URL (or a media_url from create_upload)."
+          },
+          "alt": {
+           "type": "string",
+           "description": "Alt text: what the image shows, for people using screen readers (up to 1,000 characters)."
+          }
+         },
+         "required": [
+          "url"
+         ]
+        }
+       ]
+      },
+      "description": "Optional images (up to 4 for most platforms) or one video. Must be publicly reachable. Each item is a URL string or {url, alt} with alt text (recommended for images). For a file on your machine, call create_upload first."
+     },
+     "video_url": {
+      "type": "string",
+      "description": "Optional video URL. Can't be combined with images on Twitter."
+     },
+     "poll": {
+      "type": "object",
+      "properties": {
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "Poll choices (2-4 options, max 25 chars each for Twitter)."
+       },
+       "duration_minutes": {
+        "type": "number",
+        "description": "Poll duration in minutes. Twitter: 5-10080 (5 min to 7 days). Mastodon: converted to seconds automatically."
+       }
+      },
+      "required": [
+       "options",
+       "duration_minutes"
+      ],
+      "description": "Create a poll. Only works on Twitter and Mastodon."
+     },
+     "mastodon_visibility": {
+      "type": "string",
+      "enum": [
+       "public",
+       "unlisted",
+       "private",
+       "direct"
+      ],
+      "description": "Mastodon post visibility. \"public\" = visible to all, \"unlisted\" = not on public timelines, \"private\" = followers only, \"direct\" = mentioned users only. Default: public."
+     },
+     "content_warning": {
+      "type": "string",
+      "description": "Mastodon spoiler text / content warning. Post content will be hidden behind this text. Important in Mastodon culture for sensitive topics."
+     },
+     "tiktok": {
+      "type": "object",
+      "description": "Required for TikTok. Ask the user; no defaults.",
+      "properties": {
+       "privacy_level": {
+        "type": "string",
+        "enum": [
+         "PUBLIC_TO_EVERYONE",
+         "MUTUAL_FOLLOW_FRIENDS",
+         "FOLLOWER_OF_CREATOR",
+         "SELF_ONLY"
+        ]
+       },
+       "allow_comment": {
+        "type": "boolean"
+       },
+       "allow_duet": {
+        "type": "boolean"
+       },
+       "allow_stitch": {
+        "type": "boolean"
+       },
+       "your_brand": {
+        "type": "boolean"
+       },
+       "branded_content": {
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "privacy_level"
+      ]
+     },
+     "cross_link_enabled": {
+      "type": "boolean",
+      "description": "Enable cross-link publishing. Posts to primary_platform first, then shares the link to other platforms using the cross_link_template."
+     },
+     "primary_platform": {
+      "type": "string",
+      "enum": [
+       "twitter",
+       "threads",
+       "bluesky",
+       "linkedin",
+       "mastodon",
+       "instagram",
+       "facebook",
+       "pinterest",
+       "discord",
+       "slack",
+       "telegram"
+      ],
+      "description": "Which platform to post to first when cross_link_enabled is true. The post URL from this platform is shared to the others."
+     },
+     "cross_link_template": {
+      "type": "string",
+      "description": "Template for cross-link posts on secondary platforms. Variables: {platform} (primary platform name), {link} (post URL). Default: \"New post on {platform}: {link}\"."
+     },
+     "segments": {
+      "type": "array",
+      "description": "Optional thread reply segments (up to 24). Each becomes a reply in a chain on X/Threads/Bluesky/Mastodon; on LinkedIn the first post goes out with `content` and each segment is added as a comment on it. The whole thread publishes atomically. Canonical use case: put the main message in `content` and a URL in `segments: [{content: \"https://...\"}]` so the link gets attached as a reply — this avoids the algorithmic down-rank that standalone link posts get on Twitter and Threads.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "content": {
+         "type": "string",
+         "description": "Text of this reply segment."
+        },
+        "media_urls": {
+         "type": "array",
+         "items": {
+          "anyOf": [
+           {
+            "type": "string"
+           },
+           {
+            "type": "object",
+            "properties": {
+             "url": {
+              "type": "string"
+             },
+             "alt": {
+              "type": "string"
+             }
+            },
+            "required": [
+             "url"
+            ]
+           }
+          ]
+         },
+         "description": "Optional media for this segment only (URL strings or {url, alt})."
+        }
+       },
+       "required": [
+        "content"
+       ]
+      }
+     },
+     "first_comment": {
+      "type": "string",
+      "description": "Optional. Posted as the first reply right after the post (after the last segment of a thread): a reply on X, Bluesky, Mastodon and Threads, a comment on LinkedIn. Good for the link or the hashtags. Same length limits as the post (LinkedIn comments: 1,250). Its result is reported per network as results.<network>.firstComment and never changes whether the post itself counts as published."
+     },
+     "accounts": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "Optional. Which connected account to post as when a platform has more than one, e.g. {\"twitter\": \"@handle\"}. Values: the handle, or the id from list_accounts. Leave out to use the platform's default account (marked default in list_accounts)."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "description": "Optional. A unique string (e.g. a UUID) for this post. Retry a timed-out call with the same key and Octopost returns the original post instead of posting again."
+     },
+     "variants": {
+      "type": "object",
+      "description": "Optional. A different version of the post for some networks, keyed by network, e.g. {\"linkedin\": {\"content\": \"A longer take for LinkedIn\"}, \"twitter\": {\"content\": \"Short version\", \"segments\": [{\"content\": \"https://example.com\"}]}}. Each network listed gets its own content, segments and/or media_urls; anything it leaves out comes from the main post (segments: [] = a single post there, media_urls: [] = no media there). Every other network gets the main post. Each version is checked against the limit of its own network. Networks must also be in platforms. variants.instagram also takes instagram_post_type: feed (default; several images become a carousel), carousel (2-20 items), story (each item is its own story, in order; no caption) or reel (one video). With cross_link_enabled only the version for the primary network is used.",
+      "properties": {
+       "twitter": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "threads": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "bluesky": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "linkedin": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "mastodon": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "instagram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         },
+         "instagram_post_type": {
+          "type": "string",
+          "enum": [
+           "feed",
+           "carousel",
+           "story",
+           "reel"
+          ]
+         }
+        }
+       },
+       "facebook": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "pinterest": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "discord": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "slack": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "telegram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": false
+     },
+     "allow_duplicate": {
+      "type": "boolean",
+      "description": "Optional. Octopost refuses the same text to the same network within 7 days (the error names the earlier post). Set true only when posting it again is intended."
+     }
+    },
+    "required": [
+     "content",
+     "platforms"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "create_upload",
+   "title": "Get an upload URL for a local file",
+   "description": "Attach a file from your machine (screenshot, photo, video): this returns a one-time upload_url, good for 15 minutes and one file. Send the raw bytes to it, e.g. curl -T ./shot.png \"<upload_url>\" (PUT; no auth header needed). The response has media_url: pass it in media_urls (as the URL, or {url, alt} with alt text) on create_post / schedule_post / queue_post / update_post.\n\nAccepts JPEG, PNG, GIF, WebP, MP4, MOV, WebM (checked from the file's bytes). Size limit depends on the plan (max_bytes in the response). Files already on a public URL don't need this: pass the URL directly.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filename": {
+      "type": "string",
+      "description": "Optional. The local file name, used in the example command."
+     },
+     "size": {
+      "type": "number",
+      "description": "Optional. File size in bytes; checked against the plan limit up front."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_post",
+   "title": "Delete a post",
+   "description": "Delete a post from Octopost. For published posts, also attempts to delete from each platform via their APIs.\n\nPlatform deletion support:\n- Twitter: Full API deletion supported.\n- Bluesky: Full API deletion supported (deleteRecord).\n- LinkedIn: Full API deletion supported.\n- Mastodon: Full API deletion supported.\n- Threads: API deletion not supported — returns the post URL so the user can delete manually.\n\nThe post is ALWAYS removed from Octopost's database regardless of platform deletion results.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to delete."
+     },
+     "delete_from_platforms": {
+      "type": "boolean",
+      "description": "Whether to also delete from platforms (for published posts). Default: true. Set to false to only remove from Octopost."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_analytics",
+   "title": "Get post analytics",
+   "description": "How published posts did: likes, reposts, replies, quotes and (on X) views.\n\nTwo modes:\n- With post_id: that post's numbers per network, plus snapshots taken about 1 hour, 24 hours and 7 days after it went live.\n- Without post_id: a summary of posts published between from and to (default: the last 30 days): totals per network, per account (byAccount, by handle) and the top posts by engagement (likes + reposts + replies + quotes).\n\nNetworks: X gives likes, reposts, replies, quotes, bookmarks and views; Bluesky likes, reposts, replies and quotes; Mastodon likes (favourites), reposts (boosts) and replies. Threads and LinkedIn are not available yet. Octopost reads the numbers itself for 30 days after a post goes live, so they can be a few hours old; each result says when it was read. refresh: true reads fresh numbers first (once every 10 minutes).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "Optional. One post's numbers. Leave out for a summary."
+     },
+     "from": {
+      "type": "string",
+      "description": "Optional. Summary start, an ISO date like 2026-11-01. Default: 30 days ago."
+     },
+     "to": {
+      "type": "string",
+      "description": "Optional. Summary end, an ISO date. Default: now."
+     },
+     "platform": {
+      "type": "string",
+      "enum": [
+       "twitter",
+       "bluesky",
+       "mastodon"
+      ],
+      "description": "Optional. Only count this network in the summary."
+     },
+     "top": {
+      "type": "number",
+      "description": "Optional. How many top posts to list (0 to 50, default 5)."
+     },
+     "refresh": {
+      "type": "boolean",
+      "description": "Optional. Read fresh numbers from the networks before answering (once every 10 minutes)."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "get_guide",
+   "title": "Read the Octopost guide",
+   "description": "A guide to using Octopost: platform limits, best practices, content tips and features. Call it for:\n- Which platforms are supported and their limits\n- Formatting content for cross-platform posting\n- Media/image/video requirements per platform\n- Scheduling tips\n- How threads work on each platform",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "topic": {
+      "type": "string",
+      "enum": [
+       "overview",
+       "platforms",
+       "media",
+       "scheduling",
+       "threads",
+       "best-practices",
+       "queue"
+      ],
+      "description": "Specific topic to get help on. Omit for the full guide."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_post",
+   "title": "Get a post and its results",
+   "description": "Get everything about one post: status, full text, approval state and reviewer feedback, thread segments, per-network variants, media (with alt text), place in line and expected time, the account per network, results with links, and the last error. Use it to check whether a post went out everywhere.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID)"
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_queue_status",
+   "title": "Show the queue",
+   "description": "Your queue: on or paused, cadence, active hours, the line-up in send order (account and expected time per post), posts waiting for approval, and the evergreen repost due if it stays empty.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_usage",
+   "title": "Show plan usage",
+   "description": "How much of the plan is used: X post units this month (used, limit, remaining, when it resets; a post with a link costs 13 units, a plain post 1), and connected accounts vs the plan's limit. A null limit means unlimited. Check it before a batch of X posts so you don't hit the cap part way.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_accounts",
+   "title": "List connected accounts",
+   "description": "List all connected social media accounts. ALWAYS call this before create_post to see which platforms the user has connected.\n\nReturns each account's platform, handle, id, and whether it is the platform's default (used when a post names no account). A platform can have several accounts: pass \"accounts\" to create_post / queue_post / schedule_post to pick one. Only connected platforms can be posted to. Not every network is live yet: check the network status in the server instructions before promising a post.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_feeds",
+   "title": "List RSS feeds",
+   "description": "List the RSS/Atom feeds this account turns into posts: each feed's networks, template, mode (\"hold\" = every new item waits for a person to approve it, \"queue\" = new items join the posting queue), how often it is checked, when it was last checked, any error, and how many items it has seen and posted.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_posts",
+   "title": "List posts",
+   "description": "List posts: preview, status, account per network (postingAs), send time (sendAt; estimate: true = projected queue slot) and links. Filter by status, account, platform and send time (from/to), e.g. this week as @handle. Paged: pass next_cursor as cursor with the same filters. get_post has full details.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "status": {
+      "type": "string",
+      "enum": [
+       "published",
+       "scheduled",
+       "draft",
+       "queued",
+       "pending",
+       "partial",
+       "failed",
+       "retrying",
+       "needs_review"
+      ],
+      "description": "\"queued\" = in the queue, \"pending\" = waiting for approval, \"partial\" = live on some networks only. Omit for all."
+     },
+     "limit": {
+      "type": "number",
+      "description": "Posts per page (default 10, max 50)."
+     },
+     "account": {
+      "type": "string",
+      "description": "Handle or id from list_accounts."
+     },
+     "platform": {
+      "type": "string",
+      "description": "e.g. twitter"
+     },
+     "from": {
+      "type": "string",
+      "description": "Send time from, ISO (e.g. 2026-11-24)."
+     },
+     "to": {
+      "type": "string",
+      "description": "Send time to, ISO."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "send_time",
+       "created"
+      ],
+      "description": "send_time: earliest first (default for scheduled/queued). created: newest first."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "next_cursor from the previous call."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_presets",
+   "title": "List publishing presets",
+   "description": "List publishing presets: saved platform combinations (system presets plus the user's own) with their cross-link settings. The create tools take platforms, not a preset name, so pass a preset's `platforms` (and cross-link fields) to create_post / schedule_post / queue_post. Platforms Octopost doesn't support are left out of the list, and presets with none left are skipped.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_youtube_comments",
+   "title": "List comments on a YouTube video",
+   "description": "Read the comments on a YouTube video: each top-level comment with its author, text, likes, date, reply count and up to 5 replies, and by_you on comments the connected channel wrote. This only works for an account with a YouTube channel connected (list_accounts). Pass next_page_token back as page_token for more.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "video": {
+      "type": "string",
+      "description": "The video id or a link to the video."
+     },
+     "order": {
+      "type": "string",
+      "enum": [
+       "time",
+       "relevance"
+      ],
+      "description": "Optional. \"time\" (default, newest first) or \"relevance\"."
+     },
+     "max_results": {
+      "type": "number",
+      "description": "Optional. Comments per page, 1 to 100 (default 20)."
+     },
+     "page_token": {
+      "type": "string",
+      "description": "Optional. next_page_token from the previous call."
+     },
+     "search": {
+      "type": "string",
+      "description": "Optional. Only comments containing this text."
+     },
+     "account": {
+      "type": "string",
+      "description": "Optional. Which connected YouTube channel to read as (handle or id from list_accounts). Default: the default channel."
+     }
+    },
+    "required": [
+     "video"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "preview_post",
+   "title": "Check a post before sending it",
+   "description": "Dry run: what would happen if you sent this post, without saving or posting anything. Returns ok (would it go out), problems (fix these first) and warnings, character counts per network and part the way each network counts (X: links 23, emoji/CJK 2; Bluesky: graphemes), X units it would use vs what's left this month, media checks per network (counts, video, missing alt text), which connected account each network would post as, and guardrails (this connection's daily limit, same text posted recently, blocked terms that would hold it for approval).\n\nTakes the same arguments as create_post. Call it before a create_post / schedule_post / queue_post you're unsure about.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "content": {
+      "type": "string",
+      "description": "The post text."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Networks it would go to."
+     },
+     "media_urls": {
+      "type": "array",
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "object",
+         "properties": {
+          "url": {
+           "type": "string"
+          },
+          "alt": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "url"
+         ]
+        }
+       ]
+      },
+      "description": "Media it would carry: URLs or {url, alt}. See create_post."
+     },
+     "video_url": {
+      "type": "string",
+      "description": "Optional video URL."
+     },
+     "segments": {
+      "type": "array",
+      "description": "Thread reply segments, as on create_post.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "content": {
+         "type": "string"
+        },
+        "media_urls": {
+         "type": "array",
+         "items": {
+          "anyOf": [
+           {
+            "type": "string"
+           },
+           {
+            "type": "object",
+            "properties": {
+             "url": {
+              "type": "string"
+             },
+             "alt": {
+              "type": "string"
+             }
+            },
+            "required": [
+             "url"
+            ]
+           }
+          ]
+         }
+        }
+       },
+       "required": [
+        "content"
+       ]
+      }
+     },
+     "poll": {
+      "type": "object",
+      "properties": {
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "duration_minutes": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "options",
+       "duration_minutes"
+      ],
+      "description": "Poll, as on create_post."
+     },
+     "first_comment": {
+      "type": "string",
+      "description": "First comment, as on create_post. Its character counts per network are checked too."
+     },
+     "accounts": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "Optional. Which account per network when a platform has several, e.g. {\"twitter\": \"@handle\"}. See create_post."
+     },
+     "variants": {
+      "type": "object",
+      "description": "Optional. A different version per network, e.g. {\"linkedin\": {\"content\": \"...\"}}; what it leaves out comes from the main post. See create_post.",
+      "properties": {
+       "twitter": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "threads": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "bluesky": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "linkedin": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "mastodon": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "instagram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         },
+         "instagram_post_type": {
+          "type": "string",
+          "enum": [
+           "feed",
+           "carousel",
+           "story",
+           "reel"
+          ]
+         }
+        }
+       },
+       "facebook": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "pinterest": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "discord": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "slack": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "telegram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": false
+     },
+     "allow_duplicate": {
+      "type": "boolean",
+      "description": "Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post."
+     }
+    },
+    "required": [
+     "content",
+     "platforms"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "publish_draft",
+   "title": "Publish a saved post now",
+   "description": "Publish a post that's already saved in Octopost right now: a draft, a scheduled post (it goes out now instead of at its time) or a queued post (it skips the queue). Uses the post's own text, networks, media and thread segments. Returns per-network results like create_post (or status \"publishing\" if slow; see get_post).\n\nPosts waiting for human approval (pending) can't be published this way; a person approves them first. For a post that already went out and failed on some networks, use retry_failed.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID), from list_posts or the call that saved it."
+     },
+     "allow_duplicate": {
+      "type": "boolean",
+      "description": "Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "queue_post",
+   "title": "Add a post to the queue",
+   "description": "Add a post to your publishing queue. It will be published automatically during your active hours. Posts require platforms to be specified.\n\nHUMAN APPROVAL: set needs_approval=true when a person should review the post first (anything the user hasn't seen word for word). The post is held as \"pending\" and nothing is published until a person approves it. Octopost emails the account owner and any approvers one-tap Approve / Reject / Edit / Ask for changes links (batched, within about 5 minutes) and shows it in the dashboard. If they ask for changes, see resubmit_post. After queueing, tell the user: \"It's waiting for your approval; check your email.\" You can't approve your own posts. The account owner can also set auto-approve rules, in which case the result says the post was auto-approved.\n\nThe queue publishes posts in FIFO order (oldest first) at regular intervals during active hours (default: every 4 hours, 9am-8pm). Great for evergreen content and maintaining a regular posting cadence.\n\nSame platform limits and same options as create_post, which documents them in full.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "content": {
+      "type": "string",
+      "description": "The post text."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Which platforms to post to. Call list_accounts first to see what's connected."
+     },
+     "needs_approval": {
+      "type": "boolean",
+      "description": "If true, the post is held as \"pending\" until a person approves it from the emailed link or the dashboard. Default: false (some accounts require approval for every post anyway)."
+     },
+     "media_urls": {
+      "type": "array",
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "object",
+         "properties": {
+          "url": {
+           "type": "string"
+          },
+          "alt": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "url"
+         ]
+        }
+       ]
+      },
+      "description": "Optional images or one video: URLs or {url, alt}. See create_post."
+     },
+     "video_url": {
+      "type": "string",
+      "description": "Optional video URL."
+     },
+     "poll": {
+      "type": "object",
+      "properties": {
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "duration_minutes": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "options",
+       "duration_minutes"
+      ],
+      "description": "Poll, 2-4 options (Twitter and Mastodon only). See create_post."
+     },
+     "mastodon_visibility": {
+      "type": "string",
+      "enum": [
+       "public",
+       "unlisted",
+       "private",
+       "direct"
+      ],
+      "description": "Mastodon visibility. Default: public."
+     },
+     "content_warning": {
+      "type": "string",
+      "description": "Mastodon content warning."
+     },
+     "cross_link_enabled": {
+      "type": "boolean",
+      "description": "Post to primary_platform first, then share its link on the others. See create_post."
+     },
+     "primary_platform": {
+      "type": "string",
+      "enum": [
+       "twitter",
+       "threads",
+       "bluesky",
+       "linkedin",
+       "mastodon",
+       "instagram",
+       "facebook",
+       "pinterest",
+       "discord",
+       "slack",
+       "telegram"
+      ],
+      "description": "Which platform goes first when cross-linking."
+     },
+     "cross_link_template": {
+      "type": "string",
+      "description": "Cross-link text, with {platform} and {link}. See create_post."
+     },
+     "segments": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "content": {
+         "type": "string"
+        },
+        "media_urls": {
+         "type": "array",
+         "items": {
+          "anyOf": [
+           {
+            "type": "string"
+           },
+           {
+            "type": "object",
+            "properties": {
+             "url": {
+              "type": "string"
+             },
+             "alt": {
+              "type": "string"
+             }
+            },
+            "required": [
+             "url"
+            ]
+           }
+          ]
+         }
+        }
+       },
+       "required": [
+        "content"
+       ]
+      },
+      "description": "Optional thread replies (up to 24). See create_post."
+     },
+     "first_comment": {
+      "type": "string",
+      "description": "Optional. Posted as the first reply right after the post. See create_post."
+     },
+     "tiktok": {
+      "type": "object",
+      "description": "For TikTok. See create_post."
+     },
+     "accounts": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "Optional. Which account per network when a platform has several, e.g. {\"twitter\": \"@handle\"}. See create_post."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "description": "Optional. Unique string for this post: a retry with the same key returns the original post. See create_post."
+     },
+     "variants": {
+      "type": "object",
+      "description": "Optional. A different version per network, e.g. {\"linkedin\": {\"content\": \"...\"}}; what it leaves out comes from the main post. See create_post.",
+      "properties": {
+       "twitter": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "threads": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "bluesky": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "linkedin": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "mastodon": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "instagram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         },
+         "instagram_post_type": {
+          "type": "string",
+          "enum": [
+           "feed",
+           "carousel",
+           "story",
+           "reel"
+          ]
+         }
+        }
+       },
+       "facebook": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "pinterest": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "discord": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "slack": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "telegram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": false
+     },
+     "allow_duplicate": {
+      "type": "boolean",
+      "description": "Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post."
+     }
+    },
+    "required": [
+     "content",
+     "platforms"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "reject_queued_post",
+   "title": "Take a post out of the queue",
+   "description": "Take a queued post out of the queue and turn it back into a draft, with an optional note saying why (shown with the post). Nothing is published or deleted; edit it with update_post and queue it again, or delete it with delete_post. A post waiting for approval (pending) is for a person to approve or reject, so this refuses it; to withdraw a post you made, delete it.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to take out of the queue."
+     },
+     "note": {
+      "type": "string",
+      "description": "Optional. Why it was rejected (up to 500 characters)."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "remove_feed",
+   "title": "Remove an RSS feed",
+   "description": "Stop turning a feed into posts and forget which items it has seen. Posts the feed already made (published, queued or waiting for approval) are kept; delete those separately with delete_post if needed. Get the feed id from list_feeds.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "feed_id": {
+      "type": "string",
+      "description": "The feed id from list_feeds."
+     }
+    },
+    "required": [
+     "feed_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "reorder_queue",
+   "title": "Reorder the queue",
+   "description": "Set the order queued posts publish in. The posts you list go first, in that order; queued posts you leave out keep their current order after them. Pending-approval posts can be listed too: their place applies once approved. Call list_posts with status \"queued\" to see the queue.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_ids": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Post IDs in the order they should publish (first = next)."
+     }
+    },
+    "required": [
+     "post_ids"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "reply_to_youtube_comment",
+   "title": "Reply to a YouTube comment",
+   "description": "Post a public reply to a YouTube comment as the connected channel; it goes live right away. Get comment_id from list_youtube_comments. This only works for an account with a YouTube channel connected (list_accounts). Show the user the reply before posting it. Refused when the account holds agent posts for approval or the text has a blocked term.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "comment_id": {
+      "type": "string",
+      "description": "The comment_id from list_youtube_comments."
+     },
+     "text": {
+      "type": "string",
+      "description": "The reply, up to 10,000 characters."
+     },
+     "account": {
+      "type": "string",
+      "description": "Optional. Which connected YouTube channel replies (handle or id from list_accounts)."
+     }
+    },
+    "required": [
+     "comment_id",
+     "text"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "reschedule_post",
+   "title": "Reschedule a post",
+   "description": "Change the scheduled time of a post. The new time must be in the future. Works on both scheduled posts and drafts (effectively scheduling a draft).\n\nThe post will be published at the new time by Octopost's scheduler (checks every 60 seconds).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to reschedule."
+     },
+     "scheduled_for": {
+      "type": "string",
+      "description": "New time, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future."
+     }
+    },
+    "required": [
+     "post_id",
+     "scheduled_for"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "resubmit_post",
+   "title": "Send a revised post back for approval",
+   "description": "After a reviewer clicked \"Ask for changes\" (get_post: approval.state \"changes_requested\", approval.feedback says what to fix), revise the post with update_post, then call this to send it back for approval. It returns to its earlier time if still ahead, else the next queue slot after approval.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID)."
+     },
+     "reply": {
+      "type": "string",
+      "description": "Optional. What you changed, shown to the reviewer."
+     },
+     "scheduled_for": {
+      "type": "string",
+      "description": "Optional. New time, ISO 8601 with offset."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "retry_failed",
+   "title": "Retry failed networks",
+   "description": "Retry publishing to platforms that failed on a previous post. Only retries platforms that had errors — already-successful platforms are not re-published.\n\nCall get_post first to see which platforms failed and why. You can retry all failed platforms or specify specific ones.\n\nCommon failure reasons: expired tokens (user needs to re-connect), rate limits (wait and retry), network errors (usually transient).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to retry."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Specific platforms to retry. Omit to retry ALL failed platforms."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "schedule_post",
+   "title": "Schedule a post",
+   "description": "Schedule a post for future publishing. The Octopost scheduler will publish it at the specified time automatically.\n\nThe post is saved as a draft until the scheduled time, then published to all specified platforms.\n\nSame platform limits and same options as create_post, which documents them in full. Options are saved with the post and applied when it publishes.\n\nSet needs_approval=true to hold it for a person to approve first (same flow as queue_post).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "content": {
+      "type": "string",
+      "description": "The post text"
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Which platforms to post to"
+     },
+     "scheduled_for": {
+      "type": "string",
+      "description": "When to publish, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future."
+     },
+     "needs_approval": {
+      "type": "boolean",
+      "description": "If true, the post is held until a person approves it (Octopost emails them a one-tap link). Approved before scheduled_for: it publishes then; approved later: it publishes right away. Default: false."
+     },
+     "media_urls": {
+      "type": "array",
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "object",
+         "properties": {
+          "url": {
+           "type": "string"
+          },
+          "alt": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "url"
+         ]
+        }
+       ]
+      },
+      "description": "Optional images or one video: URLs or {url, alt}. See create_post."
+     },
+     "video_url": {
+      "type": "string",
+      "description": "Optional video URL."
+     },
+     "poll": {
+      "type": "object",
+      "properties": {
+       "options": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "duration_minutes": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "options",
+       "duration_minutes"
+      ],
+      "description": "Poll, 2-4 options (Twitter and Mastodon only). See create_post."
+     },
+     "mastodon_visibility": {
+      "type": "string",
+      "enum": [
+       "public",
+       "unlisted",
+       "private",
+       "direct"
+      ],
+      "description": "Mastodon visibility. Default: public."
+     },
+     "content_warning": {
+      "type": "string",
+      "description": "Mastodon content warning."
+     },
+     "cross_link_enabled": {
+      "type": "boolean",
+      "description": "Post to primary_platform first, then share its link on the others. See create_post."
+     },
+     "primary_platform": {
+      "type": "string",
+      "enum": [
+       "twitter",
+       "threads",
+       "bluesky",
+       "linkedin",
+       "mastodon",
+       "instagram",
+       "facebook",
+       "pinterest",
+       "discord",
+       "slack",
+       "telegram"
+      ],
+      "description": "Which platform goes first when cross-linking."
+     },
+     "cross_link_template": {
+      "type": "string",
+      "description": "Cross-link text, with {platform} and {link}. See create_post."
+     },
+     "segments": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "content": {
+         "type": "string"
+        },
+        "media_urls": {
+         "type": "array",
+         "items": {
+          "anyOf": [
+           {
+            "type": "string"
+           },
+           {
+            "type": "object",
+            "properties": {
+             "url": {
+              "type": "string"
+             },
+             "alt": {
+              "type": "string"
+             }
+            },
+            "required": [
+             "url"
+            ]
+           }
+          ]
+         }
+        }
+       },
+       "required": [
+        "content"
+       ]
+      },
+      "description": "Optional thread replies (up to 24). See create_post."
+     },
+     "first_comment": {
+      "type": "string",
+      "description": "Optional. Posted as the first reply right after the post. See create_post."
+     },
+     "tiktok": {
+      "type": "object",
+      "description": "For TikTok. See create_post."
+     },
+     "accounts": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "description": "Optional. Which account per network when a platform has several, e.g. {\"twitter\": \"@handle\"}. See create_post."
+     },
+     "idempotency_key": {
+      "type": "string",
+      "description": "Optional. Unique string for this post: a retry with the same key returns the original post. See create_post."
+     },
+     "variants": {
+      "type": "object",
+      "description": "Optional. A different version per network, e.g. {\"linkedin\": {\"content\": \"...\"}}; what it leaves out comes from the main post. See create_post.",
+      "properties": {
+       "twitter": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "threads": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "bluesky": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "linkedin": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "mastodon": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "instagram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         },
+         "instagram_post_type": {
+          "type": "string",
+          "enum": [
+           "feed",
+           "carousel",
+           "story",
+           "reel"
+          ]
+         }
+        }
+       },
+       "facebook": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "pinterest": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "discord": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "slack": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "telegram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": false
+     },
+     "allow_duplicate": {
+      "type": "boolean",
+      "description": "Optional. true to send text already sent to that network within 7 days (refused otherwise). See create_post."
+     }
+    },
+    "required": [
+     "content",
+     "platforms",
+     "scheduled_for"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "set_evergreen",
+   "title": "Mark a post evergreen",
+   "description": "Mark a post evergreen (or not). When the posting queue runs empty, Octopost posts an evergreen post again in the empty queue slot, picking the one that has rested longest. The same post goes out at most once every 30 days, and never while the same text is on (or going to) the same network within those 30 days, so X's rule against repeating a recent post is respected. A draft or scheduled post can be marked now and becomes eligible once it has been published. Only works while the queue is on (update_queue_settings).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID)."
+     },
+     "evergreen": {
+      "type": "boolean",
+      "description": "true to mark it evergreen, false to stop re-posting it."
+     }
+    },
+    "required": [
+     "post_id",
+     "evergreen"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "split_thread",
+   "title": "Split long text into a thread",
+   "description": "Split long text into thread parts that fit every network you name, breaking at paragraphs, then sentences, then words. Counts the way each network does (X: links are 23, emoji 2; Bluesky: graphemes). Nothing is saved or posted. Pass the result straight to create_post / schedule_post / queue_post as content + segments.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "The full text to split."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "Networks the thread will go to. Every part fits all of them."
+     },
+     "numbering": {
+      "type": "boolean",
+      "description": "Add \" 1/N\" to the end of each part. Default false."
+     }
+    },
+    "required": [
+     "text",
+     "platforms"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "update_post",
+   "title": "Edit an unpublished post",
+   "description": "Update a post's content, platforms, scheduled time, attached media, or thread reply segments. Only works on unpublished posts (drafts, scheduled, queued, and pending).\n\nAny field you omit is preserved as-is. Pass `media_urls: []` to clear all attached media; pass new media_urls or video_url to replace it. For already-published posts, you'll need to delete and re-create.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "post_id": {
+      "type": "string",
+      "description": "The post ID (UUID) to update."
+     },
+     "content": {
+      "type": "string",
+      "description": "New post text. Omit to keep existing content."
+     },
+     "platforms": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "twitter",
+        "threads",
+        "bluesky",
+        "linkedin",
+        "mastodon",
+        "instagram",
+        "facebook",
+        "pinterest",
+        "discord",
+        "slack",
+        "telegram"
+       ]
+      },
+      "description": "New platform list. Omit to keep existing platforms."
+     },
+     "scheduled_for": {
+      "type": "string",
+      "description": "New scheduled time, ISO 8601. With a timezone offset or Z, e.g. 2026-11-04T09:00:00-05:00 or 2026-11-04T14:00:00Z (a time without one is rejected). Must be in the future. Omit to keep the existing schedule."
+     },
+     "media_urls": {
+      "type": "array",
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "object",
+         "properties": {
+          "url": {
+           "type": "string"
+          },
+          "alt": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "url"
+         ]
+        }
+       ]
+      },
+      "description": "New media for the main post (URL strings or {url, alt}; see create_post). Replaces existing media. Pass an empty array [] to remove all media. Omit to keep existing media unchanged."
+     },
+     "video_url": {
+      "type": "string",
+      "description": "New video URL to attach to the main post. Replaces existing media. Omit to keep existing media unchanged."
+     },
+     "segments": {
+      "type": "array",
+      "description": "New thread reply segments (up to 24; see create_post). Pass an empty array to remove existing thread replies and revert to a single post. Omit to keep existing segments.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "content": {
+         "type": "string"
+        },
+        "media_urls": {
+         "type": "array",
+         "items": {
+          "anyOf": [
+           {
+            "type": "string"
+           },
+           {
+            "type": "object",
+            "properties": {
+             "url": {
+              "type": "string"
+             },
+             "alt": {
+              "type": "string"
+             }
+            },
+            "required": [
+             "url"
+            ]
+           }
+          ]
+         }
+        }
+       },
+       "required": [
+        "content"
+       ]
+      }
+     },
+     "variants": {
+      "type": "object",
+      "description": "A different version per network; format on create_post. Here an object replaces every variant; pass null or {} to remove them. Omit to keep them (a network you drop from platforms loses its variant).",
+      "properties": {
+       "twitter": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "threads": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "bluesky": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "linkedin": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "mastodon": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "instagram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         },
+         "instagram_post_type": {
+          "type": "string",
+          "enum": [
+           "feed",
+           "carousel",
+           "story",
+           "reel"
+          ]
+         }
+        }
+       },
+       "facebook": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "pinterest": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "discord": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "slack": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       },
+       "telegram": {
+        "type": "object",
+        "properties": {
+         "content": {
+          "type": "string"
+         },
+         "segments": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "content": {
+             "type": "string"
+            },
+            "media_urls": {
+             "type": "array",
+             "items": {
+              "anyOf": [
+               {
+                "type": "string"
+               },
+               {
+                "type": "object",
+                "properties": {
+                 "url": {
+                  "type": "string"
+                 },
+                 "alt": {
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "url"
+                ]
+               }
+              ]
+             }
+            }
+           },
+           "required": [
+            "content"
+           ]
+          }
+         },
+         "media_urls": {
+          "type": "array",
+          "items": {
+           "anyOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "object",
+             "properties": {
+              "url": {
+               "type": "string"
+              },
+              "alt": {
+               "type": "string"
+              }
+             },
+             "required": [
+              "url"
+             ]
+            }
+           ]
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": false
+     },
+     "first_comment": {
+      "type": "string",
+      "description": "New first comment (posted as a reply right after the post; see create_post). Pass an empty string to remove it. Omit to keep the existing one."
+     },
+     "tiktok": {
+      "type": "object",
+      "description": "For TikTok. See create_post."
+     }
+    },
+    "required": [
+     "post_id"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  },
+  {
+   "name": "update_queue_settings",
+   "title": "Change queue settings",
+   "description": "Change your queue settings: how often to post, active hours, timezone, or pause/resume the queue.\n\nDefaults: publish every 4 hours, active 9am-8pm, timezone America/New_York. The queue only publishes during active hours. The exact minute within each interval is randomized so posts look natural.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable (pause) the queue."
+     },
+     "interval_hours": {
+      "type": "number",
+      "description": "Hours between each queued post (e.g. 4 = one post every 4 hours)."
+     },
+     "start_hour": {
+      "type": "number",
+      "description": "Start of active hours (0-23). Posts only publish after this hour."
+     },
+     "end_hour": {
+      "type": "number",
+      "description": "End of active hours (0-23). Posts stop publishing at this hour."
+     },
+     "timezone": {
+      "type": "string",
+      "description": "IANA timezone string (e.g. \"America/New_York\", \"Europe/London\")."
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": true
+   }
+  }
+ ]
+}
