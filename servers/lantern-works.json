@@ -3,6 +3,6 @@
   "url": "https://github.com/connormatthewdouglas/agent-work-stack-deals",
   "category": "cloud-data",
   "transport": "http",
-  "description": "Free, keyless GPU rental price comparison with cited rates and job-cost estimates. The local uvx package is read-only; the hosted endpoint adds optional price watches and alerts. Install: `uvx lantern-works-deals-mcp` · [Docs](https://thelanternworks.com/for-agents/)",
+  "description": "Free, keyless GPU rental price comparison, refreshed regularly, with each price's age shown, cited rates and job-cost estimates. The local uvx package is read-only; the hosted endpoint adds optional price watches and alerts. Install: `uvx lantern-works-deals-mcp` · [Docs](https://thelanternworks.com/for-agents/)",
   "endpoint": "https://lantern-works-mcp.lantern-works.workers.dev/mcp"
 }
